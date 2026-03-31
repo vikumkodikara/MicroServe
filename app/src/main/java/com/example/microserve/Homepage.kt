@@ -16,7 +16,7 @@ class Homepage : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
-        
+
         binding = ActivityHomepageBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
@@ -33,42 +33,28 @@ class Homepage : AppCompatActivity() {
     }
 
     private fun setupClickListeners() {
-        // Navigation to PostAddActivity
-        binding.postServiceBtn.setOnClickListener {
-            startActivity(Intent(this, PostAddActivity::class.java))
+        // Quick Action buttons
+        binding.quickRequestsBtn.setOnClickListener {
+            showToast("Requests clicked")
         }
 
-        binding.navPost.setOnClickListener {
-            startActivity(Intent(this, PostAddActivity::class.java))
+        binding.quickServicesBtn.setOnClickListener {
+            showToast("Services clicked")
         }
 
-        // Header buttons
-        binding.settingsBtn.setOnClickListener {
-            showToast("Settings clicked")
+        binding.quickTransactionsBtn.setOnClickListener {
+            showToast("Transactions clicked")
         }
 
-        binding.menuBtn.setOnClickListener {
-            showToast("Menu clicked")
-        }
-
-        // Action Chips
-        binding.requestServiceBtn.setOnClickListener {
-            showToast("Request a Service clicked")
-        }
-
-        binding.postJobBtn.setOnClickListener {
+        binding.quickFeedbacksBtn.setOnClickListener {
             startActivity(Intent(this, EditPostActivity::class.java))
         }
 
-        // Bottom Navigation
-        binding.navRequest.setOnClickListener {
-            showToast("Navigation: Request")
+        binding.quickUsersBtn.setOnClickListener {
+            startActivity(Intent(this, PostAddActivity::class.java))
         }
 
-        binding.navService.setOnClickListener {
-            showToast("Navigation: Service")
-        }
-
+        // Bottom Navigation actions
         binding.navHome.setOnClickListener {
             showToast("Navigation: Home")
         }
@@ -76,14 +62,9 @@ class Homepage : AppCompatActivity() {
         binding.navProfile.setOnClickListener {
             showToast("Navigation: Profile")
         }
-        
-        // Cards
-        binding.servicesCard.setOnClickListener {
-            showToast("Services Card clicked")
-        }
-        
-        binding.jobCard.setOnClickListener {
-            showToast("Previous Job clicked")
+
+        binding.navSettings.setOnClickListener {
+            showToast("Navigation: Settings")
         }
     }
 
