@@ -106,13 +106,16 @@ class ServicesActivity : AppCompatActivity() {
     }
 
     private fun setupRecyclerView() {
-        serviceAdapter = ServiceAdapter(emptyList()) { service, action ->
-            when (action) {
-                "block" -> handleBlockService(service)
-                "delete" -> handleDeleteService(service)
-                "confirm" -> handleConfirmService(service)
+        serviceAdapter = ServiceAdapter(
+            items = emptyList(),
+            onAction = { service, action ->
+                when (action) {
+                    "block" -> handleBlockService(service)
+                    "delete" -> handleDeleteService(service)
+                    "confirm" -> handleConfirmService(service)
+                }
             }
-        }
+        )
 
         binding.rvServices.layoutManager = LinearLayoutManager(this)
         binding.rvServices.adapter = serviceAdapter
@@ -162,8 +165,24 @@ class ServicesActivity : AppCompatActivity() {
     }
 
     private fun handleConfirmService(service: ServiceStore.Service) {
+        val provider = UserStore.getUserByName(this, service.providerName)
+            ?: UserStore.addUser(
+                context = this,
+                name = service.providerName,
+                email = "provider_${System.currentTimeMillis()}@microserve.local",
+                phone = service.contact,
+                type = UserStore.TYPE_PROVIDER
+            )
+
+        TransactionStore.addPendingTransaction(
+            context = this,
+            providerUserId = provider.id,
+            providerName = provider.name,
+            amount = TransactionStore.estimateAmountForService(service.category)
+        )
+
         ServiceStore.updateServiceStatus(this, service.id, ServiceStore.STATUS_COMPLETED)
-        Toast.makeText(this, "Service moved to completed", Toast.LENGTH_SHORT).show()
+        Toast.makeText(this, "Service moved to transactions (Pending)", Toast.LENGTH_SHORT).show()
         loadPendingServices()
     }
 

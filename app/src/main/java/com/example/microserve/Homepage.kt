@@ -53,6 +53,7 @@ class Homepage : AppCompatActivity() {
 
         binding.quickTransactionsBtn.setOnClickListener {
             showToast("Opening transaction records")
+            startActivity(Intent(this, TransactionsActivity::class.java))
         }
 
         binding.quickFeedbacksBtn.setOnClickListener {
@@ -118,8 +119,13 @@ class Homepage : AppCompatActivity() {
 
     private fun fetchDashboardMetricsFromDatabase(): DashboardMetrics? {
         val pendingCount = RequestStore.getPendingRequests(this).size
-        val activeServicesCount = ServiceStore.getActiveServices(this).size
-        return DashboardMetrics(requests = pendingCount, completed = activeServicesCount)
+        val completedTransactions = TransactionStore.getSuccessCount(this)
+        val totalRevenue = TransactionStore.getTotalSuccessAmount(this).toInt()
+        return DashboardMetrics(
+            requests = pendingCount,
+            completed = completedTransactions,
+            revenue = totalRevenue
+        )
     }
 
     private fun showToast(message: String) {

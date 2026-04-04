@@ -19,7 +19,8 @@ object UserStore {
         val type: String = TYPE_REQUESTER, // PROVIDER, REQUESTER, ADMIN
         val status: String = STATUS_ACTIVE, // ACTIVE, BANNED, INACTIVE
         val createdAt: Long = System.currentTimeMillis(),
-        val isProvider: Boolean = false
+        val isProvider: Boolean = false,
+        val cashPoints: Int = 0
     )
 
     private const val PREF_NAME = "user_store"
@@ -74,6 +75,10 @@ object UserStore {
         return getAllUsers(context).firstOrNull { it.id == userId }
     }
 
+    fun getUserByName(context: Context, name: String): User? {
+        return getAllUsers(context).firstOrNull { it.name.equals(name, ignoreCase = true) }
+    }
+
     fun addUser(
         context: Context,
         name: String,
@@ -122,6 +127,24 @@ object UserStore {
         return updateUserStatus(context, userId, STATUS_BANNED)
     }
 
+    fun addCashPoints(context: Context, userId: String, amount: Int): Boolean {
+        if (amount <= 0) return false
+
+        val current = getAllUsers(context)
+        var changed = false
+        val updated = current.map {
+            if (it.id == userId) {
+                changed = true
+                it.copy(cashPoints = it.cashPoints + amount)
+            } else {
+                it
+            }
+        }
+
+        if (changed) saveAll(context, updated)
+        return changed
+    }
+
     private fun saveAll(context: Context, users: List<User>) {
         val jsonArray = JSONArray()
         users.forEach { user -> jsonArray.put(user.toJson()) }
@@ -141,7 +164,8 @@ object UserStore {
             type = optString("type", TYPE_REQUESTER),
             status = optString("status", STATUS_ACTIVE),
             createdAt = optLong("createdAt", System.currentTimeMillis()),
-            isProvider = optBoolean("isProvider", false)
+            isProvider = optBoolean("isProvider", false),
+            cashPoints = optInt("cashPoints", 0)
         )
     }
 
@@ -155,6 +179,7 @@ object UserStore {
             put("status", status)
             put("createdAt", createdAt)
             put("isProvider", isProvider)
+            put("cashPoints", cashPoints)
         }
     }
 }

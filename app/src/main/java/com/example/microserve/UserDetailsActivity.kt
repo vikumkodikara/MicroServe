@@ -46,11 +46,15 @@ class UserDetailsActivity : AppCompatActivity() {
             val type = getStringExtra("USER_TYPE") ?: "User"
             val status = getStringExtra("USER_STATUS") ?: "Active"
 
+            val freshUser = userId?.let { UserStore.getUserById(this@UserDetailsActivity, it) }
+            val cashPoints = freshUser?.cashPoints ?: 0
+
             binding.tvUserName.text = userName ?: "Unknown"
             binding.tvUserEmail.text = email
             binding.tvUserPhone.text = phone
             binding.tvUserType.text = type
             binding.tvUserStatus.text = status
+            binding.tvUserCashPoints.text = cashPoints.toString()
 
             // Set status badge background color
             val statusBg = when (status) {
