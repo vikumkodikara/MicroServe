@@ -72,14 +72,12 @@ class TransactionDetailsActivity : AppCompatActivity() {
         binding.tvStatus.text = item.status
 
         if (item.status.equals(TransactionStore.STATUS_SUCCESS, ignoreCase = true)) {
-            binding.tvHeaderLine1.text = "Transaction"
-            binding.tvHeaderLine2.text = "Success"
+            binding.tvHeaderLine1.text = "Transaction Success"
             binding.tvStatus.setBackgroundResource(R.drawable.txn_success_tag_bg)
             binding.tvStatus.setTextColor(resources.getColor(R.color.white, null))
             binding.btnTransfer.visibility = View.GONE
         } else {
-            binding.tvHeaderLine1.text = "Transfer"
-            binding.tvHeaderLine2.text = "Money"
+            binding.tvHeaderLine1.text = "Transfer Money"
             binding.tvStatus.setBackgroundResource(R.drawable.txn_pending_tag_bg)
             binding.tvStatus.setTextColor(resources.getColor(android.R.color.black, null))
             binding.btnTransfer.visibility = View.VISIBLE
