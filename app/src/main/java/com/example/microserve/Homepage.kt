@@ -43,6 +43,7 @@ class Homepage : AppCompatActivity() {
     private fun setupClickListeners() {
         binding.quickRequestsBtn.setOnClickListener {
             showToast("Opening service requests")
+            startActivity(Intent(this, RequestersActivity::class.java))
         }
 
         binding.quickServicesBtn.setOnClickListener {

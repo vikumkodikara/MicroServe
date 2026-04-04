@@ -25,6 +25,12 @@
         <activity
             android:name=".EditPostActivity"
             android:exported="false" />
+        <activity
+            android:name=".RequesterDetailsActivity"
+            android:exported="false" />
+        <activity
+            android:name=".RequestersActivity"
+            android:exported="false" />
     </application>
 
 </manifest>
