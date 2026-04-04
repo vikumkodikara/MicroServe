@@ -184,27 +184,24 @@ class UsersActivity : AppCompatActivity() {
     }
 
     private fun setupBottomNavigation() {
-        binding.bottomNavigation.setOnItemSelectedListener { menuItem ->
-            when (menuItem.itemId) {
-                R.id.nav_home -> {
-                    startActivity(Intent(this, Homepage::class.java))
-                    finish()
-                    true
-                }
-                R.id.nav_profile -> {
-                    startActivity(Intent(this, AdminProfileActivity::class.java))
-                    finish()
-                    true
-                }
-                R.id.nav_settings -> {
-                    startActivity(Intent(this, SettingsActivity::class.java))
-                    finish()
-                    true
-                }
-                else -> false
-            }
+        val homeTab = findViewById<android.widget.LinearLayout>(R.id.navTabHome)
+        val profileTab = findViewById<android.widget.LinearLayout>(R.id.navTabProfile)
+        val settingsTab = findViewById<android.widget.LinearLayout>(R.id.navTabSettings)
+        val bubbleIcon = findViewById<android.widget.ImageView>(R.id.navBubbleIcon)
+
+        homeTab.setOnClickListener {
+            startActivity(Intent(this, Homepage::class.java))
+            finish()
         }
-        binding.bottomNavigation.selectedItemId = R.id.nav_profile
+        profileTab.setOnClickListener {
+            startActivity(Intent(this, AdminProfileActivity::class.java))
+            finish()
+        }
+        settingsTab.setOnClickListener {
+            startActivity(Intent(this, SettingsActivity::class.java))
+            finish()
+        }
+        bubbleIcon.setImageResource(R.drawable.ic_nav_profile)
     }
 
     // ── User Adapter ────────────────────────────────────────────────────
