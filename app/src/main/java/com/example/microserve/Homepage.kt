@@ -7,68 +7,127 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
-import com.example.microserve.databinding.ActivityHomepageBinding
+import com.example.microserve.databinding.ActivityAdminDashboardBinding
 
 class Homepage : AppCompatActivity() {
 
-    private lateinit var binding: ActivityHomepageBinding
+    private lateinit var binding: ActivityAdminDashboardBinding
+    private var currentMetrics = DashboardMetrics()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
 
-        binding = ActivityHomepageBinding.inflate(layoutInflater)
+        binding = ActivityAdminDashboardBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         setupWindowInsets()
         setupClickListeners()
+        setupBottomNavigation()
+        refreshMetrics()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        refreshMetrics()
     }
 
     private fun setupWindowInsets() {
         ViewCompat.setOnApplyWindowInsetsListener(binding.main) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
+            v.setPadding(systemBars.left, 0, systemBars.right, systemBars.bottom)
             insets
         }
     }
 
     private fun setupClickListeners() {
-        // Quick Action buttons
         binding.quickRequestsBtn.setOnClickListener {
-            showToast("Requests clicked")
+            showToast("Opening service requests")
         }
 
         binding.quickServicesBtn.setOnClickListener {
-            showToast("Services clicked")
+            showToast("Opening services management")
         }
 
         binding.quickTransactionsBtn.setOnClickListener {
-            showToast("Transactions clicked")
+            showToast("Opening transaction records")
         }
 
         binding.quickFeedbacksBtn.setOnClickListener {
+            showToast("Opening feedback management")
             startActivity(Intent(this, EditPostActivity::class.java))
         }
 
         binding.quickUsersBtn.setOnClickListener {
+            showToast("Opening user management")
             startActivity(Intent(this, PostAddActivity::class.java))
         }
 
-        // Bottom Navigation actions
-        binding.navHome.setOnClickListener {
-            showToast("Navigation: Home")
+        binding.statRequestsCard.setOnClickListener {
+            showToast("Total service requests: ${currentMetrics.requests}")
         }
 
-        binding.navProfile.setOnClickListener {
-            showToast("Navigation: Profile")
+        binding.statCompletedCard.setOnClickListener {
+            showToast("Completed transactions: ${currentMetrics.completed}")
         }
 
-        binding.navSettings.setOnClickListener {
-            showToast("Navigation: Settings")
+        binding.statFeedbacksCard.setOnClickListener {
+            showToast("Total feedback submissions: ${currentMetrics.feedbacks}")
         }
+
+        binding.statRevenueCard.setOnClickListener {
+            showToast("Current revenue: Rs.${currentMetrics.revenue}")
+        }
+    }
+
+    private fun setupBottomNavigation() {
+        binding.bottomNavigation.setOnItemSelectedListener { menuItem ->
+            when (menuItem.itemId) {
+                R.id.nav_home -> {
+                    showToast("Navigating to Home")
+                    true
+                }
+                R.id.nav_profile -> {
+                    showToast("Navigating to Profile")
+                    true
+                }
+                R.id.nav_settings -> {
+                    showToast("Navigating to Settings")
+                    true
+                }
+                else -> false
+            }
+        }
+        binding.bottomNavigation.selectedItemId = R.id.nav_home
+    }
+
+    private fun refreshMetrics() {
+        val dbMetrics = fetchDashboardMetricsFromDatabase()
+        currentMetrics = dbMetrics ?: DashboardMetrics()
+        updateMetricsUi(currentMetrics)
+    }
+
+    private fun updateMetricsUi(metrics: DashboardMetrics) {
+        binding.requestsCount.text = metrics.requests.toString()
+        binding.completedCount.text = metrics.completed.toString()
+        binding.feedbacksCount.text = metrics.feedbacks.toString()
+        binding.revenueCount.text = "Rs.${metrics.revenue}"
+    }
+
+    private fun fetchDashboardMetricsFromDatabase(): DashboardMetrics? {
+        // TODO: Replace with real database read (Room/Firebase/API).
+        // Return null until database integration is ready.
+        return null
     }
 
     private fun showToast(message: String) {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
     }
+
+    data class DashboardMetrics(
+        val requests: Int = 0,
+        val completed: Int = 0,
+        val feedbacks: Int = 0,
+        val revenue: Int = 0
+    )
 }
