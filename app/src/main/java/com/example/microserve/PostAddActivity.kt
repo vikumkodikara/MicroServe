@@ -38,9 +38,9 @@ class PostAddActivity : AppCompatActivity() {
         }
 
         binding.postBtn.setOnClickListener {
-            val name = binding.providerNameET.text.toString()
-            val location = binding.locationET.text.toString()
-            val contact = binding.contactET.text.toString()
+            val name = binding.providerNameET.text.toString().trim()
+            val location = binding.locationET.text.toString().trim()
+            val contact = binding.contactET.text.toString().trim()
             val category = binding.categorySpinner.selectedItem.toString()
 
             if (category == "-Select-") {
@@ -48,7 +48,14 @@ class PostAddActivity : AppCompatActivity() {
             } else if (name.isEmpty() || location.isEmpty() || contact.isEmpty()) {
                 Toast.makeText(this, "Please fill all fields", Toast.LENGTH_SHORT).show()
             } else {
-                Toast.makeText(this, "Ad Posted Successfully!", Toast.LENGTH_LONG).show()
+                RequestStore.addRequest(
+                    context = this,
+                    category = category,
+                    requesterName = name,
+                    contact = contact,
+                    location = location
+                )
+                Toast.makeText(this, "Request submitted successfully!", Toast.LENGTH_LONG).show()
                 finish()
             }
         }

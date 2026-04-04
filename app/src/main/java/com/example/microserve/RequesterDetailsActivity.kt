@@ -15,6 +15,7 @@ import com.example.microserve.databinding.ActivityRequesterDetailsBinding
 class RequesterDetailsActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityRequesterDetailsBinding
+    private var requestId: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -38,6 +39,7 @@ class RequesterDetailsActivity : AppCompatActivity() {
 
     private fun populateDetails() {
         with(intent) {
+            requestId = getStringExtra("REQUEST_ID")
             binding.tvTitle.text = getStringExtra("TITLE") ?: "N/A"
             binding.tvCategory.text = getStringExtra("CATEGORY") ?: "N/A"
             binding.tvRequesterName.text = getStringExtra("REQUESTER_NAME") ?: "N/A"
@@ -56,14 +58,35 @@ class RequesterDetailsActivity : AppCompatActivity() {
         val requesterName = intent.getStringExtra("REQUESTER_NAME") ?: "this user"
 
         binding.btnBlockUser.setOnClickListener {
-            // TODO: integrate with real block logic (API call / DB update)
-            Toast.makeText(this, "Blocked $requesterName", Toast.LENGTH_SHORT).show()
+            val id = requestId
+            if (id.isNullOrBlank()) {
+                Toast.makeText(this, "Unable to update request", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+
+            val updated = RequestStore.markRequestCompleted(this, id)
+            if (updated) {
+                Toast.makeText(this, "Marked as completed", Toast.LENGTH_SHORT).show()
+                finish()
+            } else {
+                Toast.makeText(this, "Already completed", Toast.LENGTH_SHORT).show()
+            }
         }
 
         binding.btnDeleteUser.setOnClickListener {
-            // TODO: integrate with real delete logic (API call / DB delete)
-            Toast.makeText(this, "Deleted $requesterName", Toast.LENGTH_SHORT).show()
-            finish()
+            val id = requestId
+            if (id.isNullOrBlank()) {
+                Toast.makeText(this, "Unable to delete request", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+
+            val deleted = RequestStore.deleteRequest(this, id)
+            if (deleted) {
+                Toast.makeText(this, "Deleted $requesterName", Toast.LENGTH_SHORT).show()
+                finish()
+            } else {
+                Toast.makeText(this, "Request not found", Toast.LENGTH_SHORT).show()
+            }
         }
     }
 

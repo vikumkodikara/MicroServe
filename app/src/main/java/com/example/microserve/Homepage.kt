@@ -116,9 +116,8 @@ class Homepage : AppCompatActivity() {
     }
 
     private fun fetchDashboardMetricsFromDatabase(): DashboardMetrics? {
-        // TODO: Replace with real database read (Room/Firebase/API).
-        // Return null until database integration is ready.
-        return null
+        val pendingCount = RequestStore.getPendingRequests(this).size
+        return DashboardMetrics(requests = pendingCount)
     }
 
     private fun showToast(message: String) {
