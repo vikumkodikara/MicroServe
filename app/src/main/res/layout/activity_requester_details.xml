@@ -13,7 +13,7 @@
     <FrameLayout
         android:id="@+id/detailsHeaderFrame"
         android:layout_width="match_parent"
-        android:layout_height="180dp"
+        android:layout_height="160dp"
         android:background="@drawable/sub_header_gradient">
 
         <LinearLayout
@@ -52,7 +52,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Requester"
+                        android:text="Requester Details"
                         android:textColor="#FFFFFF"
                         android:textSize="28sp"
                         android:textStyle="bold" />
@@ -60,10 +60,11 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Details"
+                        android:layout_marginTop="4dp"
+                        android:text="Service request information"
                         android:textColor="#FFFFFF"
-                        android:textSize="28sp"
-                        android:textStyle="bold" />
+                        android:textSize="13sp"
+                        android:alpha="0.8" />
 
                 </LinearLayout>
 
@@ -114,7 +115,7 @@
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:text="Title"
-                            android:textColor="#2D3436"
+                            android:textColor="@color/admin_text_primary"
                             android:textSize="15sp"
                             android:textStyle="bold" />
 
@@ -124,7 +125,7 @@
                             android:layout_height="wrap_content"
                             android:layout_weight="1.6"
                             android:text="Need House Cleaning"
-                            android:textColor="#2D3436"
+                            android:textColor="@color/admin_text_primary"
                             android:textSize="15sp" />
 
                     </LinearLayout>
@@ -147,7 +148,7 @@
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:text="Category"
-                            android:textColor="#2D3436"
+                            android:textColor="@color/admin_text_primary"
                             android:textSize="15sp"
                             android:textStyle="bold" />
 
@@ -157,7 +158,7 @@
                             android:layout_height="wrap_content"
                             android:layout_weight="1.6"
                             android:text="Cleaning"
-                            android:textColor="#2D3436"
+                            android:textColor="@color/admin_text_primary"
                             android:textSize="15sp" />
 
                     </LinearLayout>
@@ -180,7 +181,7 @@
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:text="Requester"
-                            android:textColor="#2D3436"
+                            android:textColor="@color/admin_text_primary"
                             android:textSize="15sp"
                             android:textStyle="bold" />
 
@@ -190,7 +191,7 @@
                             android:layout_height="wrap_content"
                             android:layout_weight="1.6"
                             android:text="Amila Darshana"
-                            android:textColor="#2D3436"
+                            android:textColor="@color/admin_text_primary"
                             android:textSize="15sp" />
 
                     </LinearLayout>
@@ -213,7 +214,7 @@
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:text="Location"
-                            android:textColor="#2D3436"
+                            android:textColor="@color/admin_text_primary"
                             android:textSize="15sp"
                             android:textStyle="bold" />
 
@@ -223,7 +224,7 @@
                             android:layout_height="wrap_content"
                             android:layout_weight="1.6"
                             android:text="Malabe"
-                            android:textColor="#2D3436"
+                            android:textColor="@color/admin_text_primary"
                             android:textSize="15sp" />
 
                     </LinearLayout>
@@ -247,7 +248,7 @@
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:text="Status"
-                            android:textColor="#2D3436"
+                            android:textColor="@color/admin_text_primary"
                             android:textSize="15sp"
                             android:textStyle="bold" />
 
@@ -285,7 +286,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="14dp"
                         android:text="Description"
-                        android:textColor="#2D3436"
+                        android:textColor="@color/admin_text_primary"
                         android:textSize="15sp"
                         android:textStyle="bold" />
 
@@ -295,7 +296,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="8dp"
                         android:text="Looking for Home cleaning Service for our Malabe home. There are 4 Rooms and One washroom readmore...."
-                        android:textColor="#636E72"
+                        android:textColor="@color/admin_text_secondary"
                         android:textSize="14sp"
                         android:lineSpacingExtra="3dp" />
 
@@ -324,7 +325,7 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:text="Contact"
-                        android:textColor="#2D3436"
+                        android:textColor="@color/admin_text_primary"
                         android:textSize="15sp"
                         android:textStyle="bold" />
 
@@ -334,7 +335,7 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1.6"
                         android:text="+94 77 123 4567"
-                        android:textColor="#6C5CE7"
+                        android:textColor="@color/admin_primary_purple"
                         android:textSize="15sp" />
 
                 </LinearLayout>
