@@ -5,9 +5,10 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginHorizontal="16dp"
-    android:layout_marginVertical="10dp"
+    android:layout_marginVertical="8dp"
     android:clickable="true"
     android:focusable="true"
+    android:foreground="?attr/selectableItemBackground"
     app:cardBackgroundColor="#FFFFFF"
     app:cardCornerRadius="16dp"
     app:cardElevation="4dp">
@@ -21,18 +22,18 @@
 
         <!-- Profile Avatar Circle -->
         <androidx.cardview.widget.CardView
-            android:layout_width="56dp"
-            android:layout_height="56dp"
-            android:layout_marginEnd="12dp"
+            android:layout_width="52dp"
+            android:layout_height="52dp"
+            android:layout_marginEnd="14dp"
             app:cardBackgroundColor="@color/admin_primary_purple"
-            app:cardCornerRadius="28dp">
+            app:cardCornerRadius="26dp">
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:gravity="center"
                 android:text="👤"
-                android:textSize="28sp" />
+                android:textSize="26sp" />
 
         </androidx.cardview.widget.CardView>
 
@@ -49,7 +50,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="User Name"
-                android:textColor="#2D3436"
+                android:textColor="@color/admin_text_primary"
                 android:textSize="15sp"
                 android:textStyle="bold" />
 
@@ -60,7 +61,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="4dp"
                 android:text="email@example.com"
-                android:textColor="#636E72"
+                android:textColor="@color/admin_text_secondary"
                 android:textSize="12sp" />
 
         </LinearLayout>
@@ -72,8 +73,8 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="12dp"
             android:background="@drawable/active_tag_bg"
-            android:paddingHorizontal="16dp"
-            android:paddingVertical="6dp"
+            android:paddingHorizontal="14dp"
+            android:paddingVertical="5dp"
             android:text="Active"
             android:textColor="#FFFFFF"
             android:textSize="12sp"
