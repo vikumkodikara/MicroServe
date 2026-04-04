@@ -142,7 +142,7 @@
                         <ImageView
                             android:layout_width="36dp"
                             android:layout_height="36dp"
-                            android:src="@android:drawable/ic_dialog_info"
+                            android:src="@drawable/ic_setting_notification"
                             app:tint="@color/admin_purple_dark" />
 
                         <TextView
@@ -173,7 +173,7 @@
                         <ImageView
                             android:layout_width="36dp"
                             android:layout_height="36dp"
-                            android:src="@android:drawable/ic_menu_gallery"
+                            android:src="@drawable/ic_setting_darkmode"
                             app:tint="@color/admin_purple_dark" />
 
                         <TextView
@@ -208,7 +208,7 @@
                         <ImageView
                             android:layout_width="36dp"
                             android:layout_height="36dp"
-                            android:src="@android:drawable/ic_menu_set_as"
+                            android:src="@drawable/ic_setting_language"
                             app:tint="@color/admin_purple_dark" />
 
                         <TextView
@@ -250,7 +250,7 @@
                         <ImageView
                             android:layout_width="36dp"
                             android:layout_height="36dp"
-                            android:src="@android:drawable/ic_menu_help"
+                            android:src="@drawable/ic_setting_help"
                             app:tint="@color/admin_purple_dark" />
 
                         <TextView
@@ -284,7 +284,7 @@
                         <ImageView
                             android:layout_width="36dp"
                             android:layout_height="36dp"
-                            android:src="@android:drawable/ic_lock_lock"
+                            android:src="@drawable/ic_setting_privacy"
                             app:tint="@color/admin_purple_dark" />
 
                         <TextView
