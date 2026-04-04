@@ -48,6 +48,21 @@ class PostAddActivity : AppCompatActivity() {
             } else if (name.isEmpty() || location.isEmpty() || contact.isEmpty()) {
                 Toast.makeText(this, "Please fill all fields", Toast.LENGTH_SHORT).show()
             } else {
+                // Create/register user if not exists
+                val existingUser = UserStore.getAllUsers(this)
+                    .firstOrNull { it.name.equals(name, ignoreCase = true) }
+                
+                if (existingUser == null) {
+                    UserStore.addUser(
+                        context = this,
+                        name = name,
+                        email = "provider_${System.currentTimeMillis()}@microserve.local",
+                        phone = contact,
+                        type = UserStore.TYPE_PROVIDER
+                    )
+                }
+
+                // Add the service
                 ServiceStore.addService(
                     context = this,
                     category = category,

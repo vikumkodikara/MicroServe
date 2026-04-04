@@ -62,7 +62,7 @@ class Homepage : AppCompatActivity() {
 
         binding.quickUsersBtn.setOnClickListener {
             showToast("Opening user management")
-            startActivity(Intent(this, PostAddActivity::class.java))
+            startActivity(Intent(this, UsersActivity::class.java))
         }
 
         binding.statRequestsCard.setOnClickListener {

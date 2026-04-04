@@ -37,6 +37,12 @@
         <activity
             android:name=".RequestServiceActivity"
             android:exported="false" />
+        <activity
+            android:name=".UsersActivity"
+            android:exported="false" />
+        <activity
+            android:name=".UserDetailsActivity"
+            android:exported="false" />
     </application>
 
 </manifest>
