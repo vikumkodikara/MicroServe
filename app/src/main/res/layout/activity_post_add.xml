@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/dark_purple"
+    android:background="@color/admin_purple_dark"
     tools:context=".PostAddActivity">
 
     <!-- Header -->
@@ -27,10 +27,23 @@
         android:layout_marginTop="24dp"
         android:text="Post Your Service"
         android:textColor="@color/white"
-        android:textSize="32sp"
+        android:textSize="30sp"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/backBtn" />
+
+    <TextView
+        android:id="@+id/subtitleText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="6dp"
+        android:text="Add a new service listing"
+        android:textColor="@color/white"
+        android:textSize="14sp"
+        android:alpha="0.8"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/titleText" />
 
     <ImageView
         android:layout_width="150dp"
@@ -43,10 +56,10 @@
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_marginTop="32dp"
+        android:layout_marginTop="24dp"
         android:background="@drawable/post_form_bg"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/titleText">
+        app:layout_constraintTop_toBottomOf="@id/subtitleText">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -58,7 +71,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Your Business Name"
-                android:textColor="@color/black"
+                android:textColor="@color/admin_text_primary"
                 android:textSize="16sp"
                 android:textStyle="bold" />
 
@@ -75,7 +88,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
                 android:text="Name of the Service Provider"
-                android:textColor="@color/black"
+                android:textColor="@color/admin_text_primary"
                 android:textSize="16sp"
                 android:textStyle="bold" />
 
@@ -87,14 +100,16 @@
                 android:background="@drawable/edittext_bg"
                 android:hint="Enter name"
                 android:inputType="textPersonName"
-                android:paddingHorizontal="12dp" />
+                android:paddingHorizontal="12dp"
+                android:textColor="@color/admin_text_primary"
+                android:textColorHint="@color/admin_text_secondary" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
                 android:text="Add Image"
-                android:textColor="@color/black"
+                android:textColor="@color/admin_text_primary"
                 android:textSize="16sp"
                 android:textStyle="bold" />
 
@@ -110,7 +125,7 @@
                     android:layout_height="48dp"
                     android:layout_gravity="center"
                     android:src="@android:drawable/ic_menu_gallery"
-                    app:tint="@color/text_gray" />
+                    app:tint="@color/admin_text_secondary" />
             </FrameLayout>
 
             <TextView
@@ -118,7 +133,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
                 android:text="Location"
-                android:textColor="@color/black"
+                android:textColor="@color/admin_text_primary"
                 android:textSize="16sp"
                 android:textStyle="bold" />
 
@@ -130,14 +145,16 @@
                 android:background="@drawable/edittext_bg"
                 android:hint="Enter location"
                 android:inputType="text"
-                android:paddingHorizontal="12dp" />
+                android:paddingHorizontal="12dp"
+                android:textColor="@color/admin_text_primary"
+                android:textColorHint="@color/admin_text_secondary" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
                 android:text="Contact"
-                android:textColor="@color/black"
+                android:textColor="@color/admin_text_primary"
                 android:textSize="16sp"
                 android:textStyle="bold" />
 
@@ -149,7 +166,9 @@
                 android:background="@drawable/edittext_bg"
                 android:hint="Enter contact number"
                 android:inputType="phone"
-                android:paddingHorizontal="12dp" />
+                android:paddingHorizontal="12dp"
+                android:textColor="@color/admin_text_primary"
+                android:textColorHint="@color/admin_text_secondary" />
 
             <Button
                 android:id="@+id/postBtn"
@@ -157,11 +176,12 @@
                 android:layout_height="55dp"
                 android:layout_marginTop="32dp"
                 android:layout_marginBottom="24dp"
-                android:backgroundTint="@color/primary_purple"
+                android:background="@drawable/primary_button_bg"
+                android:stateListAnimator="@null"
                 android:text="Post Service"
                 android:textColor="@color/white"
-                android:textStyle="bold"
-                app:cornerRadius="12dp" />
+                android:textSize="16sp"
+                android:textStyle="bold" />
 
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>

@@ -1,174 +1,213 @@
-# Modern Admin Dashboard - Implementation Summary
+# Admin Panel UI - Current Status (April 2026)
 
-## Overview
-A modern, visually appealing admin panel dashboard for the MicroServe microservice app, supporting both service providers and requesters with real-time metrics and quick navigation.
+## Scope
+This document summarizes the Admin Panel UI – all screens, data connections, and design conventions.
 
-## Features Implemented
+## Design System
 
-### 1. **Purple Gradient Header** 
-- Eye-catching gradient background from light purple (#7C5CE6) to dark purple (#5F3DC4)
-- Large "Admin Panel" title with Dashboard subtitle
-- 200dp height for prominence
-- Rounded bottom corners (24dp radius)
+### Theme Colors (from `admin_colors.xml`)
+| Token | Color | Usage |
+|-------|-------|-------|
+| `admin_primary_purple` | #6C5CE7 | Primary accent, quick action icons |
+| `admin_purple_dark` | #5F3DC4 | Headers, buttons, status bar |
+| `admin_purple_light` | #A29BFE | Secondary accent, empty stars |
+| `admin_stat_blue` | #5F5CE6 | Requests stat card |
+| `admin_stat_cyan` | #66BB6A | Feedbacks stat card |
+| `admin_stat_orange` | #F39C12 | Revenue stat card, star ratings |
+| `admin_text_primary` | #2D3436 | Primary text |
+| `admin_text_secondary` | #636E72 | Subtitles, descriptions |
+| `admin_bg_light` | #F8F9FA | Screen backgrounds |
 
-### 2. **Key Metrics Dashboard**
-Four colorful stat cards displaying:
-- **Service Requests**: 50 (Blue background)
-- **Completed Transactions**: 700 (Purple background)  
-- **Feedbacks**: 70 (Green/Cyan background)
-- **Revenue**: ₹78K (Blue background)
+### Component Standards
+- **Sub-page headers**: 160dp height, `sub_header_gradient`, back arrow ‹, title 28sp bold, subtitle 13sp alpha 0.8
+- **List item cards**: white, 16dp corner radius, 4dp elevation, `selectableItemBackground` ripple
+- **Detail cards**: white, 20dp corner radius, 5dp elevation
+- **Buttons**: `block_button_bg` (purple gradient, 32dp radius), `delete_user_button_bg` (red, 32dp radius)
+- **Tab buttons**: `tab_active_bg`/`tab_inactive_bg`, 24dp radius pills
+- **Status pills**: `pending_tag_bg` (green), `active_tag_bg` (green), rounded 20dp
+- **Empty states**: Emoji icon (60sp) + bold title (18sp) + description (14sp)
 
-Each card is:
-- Clickable for detailed views
-- Color-coded for visual hierarchy
-- Displays label and large number
-- Has elevation shadow for depth
+---
 
-### 3. **Quick Actions Bar**
-Five action buttons in a 2-column grid:
-- **Requests** - Navigate to service requests management
-- **Services** - Manage available services
-- **Transactions** - View transaction history
-- **Feedbacks** - Review customer feedback
-- **Users** - Manage system users
+## Implemented Admin Screens
 
-Features:
-- Large icons (36dp)
-- Light gray background cards
-- Rounded corners (16dp)
-- Proper spacing and shadow
-- Full touch target area
+### 1. Admin Dashboard (Home)
+- File: `app/src/main/res/layout/activity_admin_dashboard.xml`
+- Activity: `app/src/main/java/com/example/microserve/Homepage.kt`
+- Includes:
+   - Gradient header (200dp)
+   - Metrics cards: Requests, Completed, Feedbacks, Revenue
+   - Quick actions: Requests, Services, Transactions, Feedbacks, Users
+   - Bottom navigation (Home/Profile/Settings)
+- Current data source (local DB layer):
+   - Requests -> `RequestStore.getPendingRequests(...)`
+   - Completed -> `TransactionStore.getSuccessCount(...)`
+   - Feedbacks -> `FeedbackStore.getFeedbackCount(...)`
+   - Revenue -> `TransactionStore.getTotalSuccessAmount(...)`
 
-### 4. **Bottom Navigation**
-Material Design BottomNavigationView with three tabs:
-- **Home** - Dashboard home view
-- **Profile** - User profile page
-- **Settings** - Application settings
+### 2. Requesters Management
+- List: `app/src/main/res/layout/activity_requesters.xml`
+- Item: `app/src/main/res/layout/item_requester.xml`
+- Details: `app/src/main/res/layout/activity_requester_details.xml`
+- Activities: `RequestersActivity.kt`, `RequesterDetailsActivity.kt`
+- Store: `RequestStore.kt`
+- Behavior:
+   - Shows all pending service requests
+   - Card-based list with category tag + status pill
+   - Detail view with title, category, requester, location, status, description
+   - Contact info card with purple-accented phone number
+   - Block/Delete user actions
+   - Data persists in local request store
 
-Features:
-- Elegant purple styling (#5F3DC4)
-- White icons and labels
-- Rounded top corners
-- Easy one-hand navigation
+### 3. Services Management
+- List: `app/src/main/res/layout/activity_services.xml`
+- Item: `app/src/main/res/layout/item_service_card.xml`
+- Activity: `ServicesActivity.kt`
+- Store: `ServiceStore.kt`
+- Behavior:
+   - Tab filtering: Current Services / Pending Services
+   - Service cards with title, category tag, location, status badge
+   - Block/Delete action buttons per service card
+   - Empty state with description
 
-### 5. **Modern Design Elements**
-- Smooth scrollable content using NestedScrollView
-- CardView components with proper elevation
-- Material Design principles throughout
-- Consistent color palette (purples, blues, greens)
-- 12dp padding for comfortable spacing
-- 16dp border radius on cards for modern look
+### 4. Transactions Management
+- List: `app/src/main/res/layout/activity_transactions.xml`
+- Item: `app/src/main/res/layout/item_transaction.xml`
+- Details: `app/src/main/res/layout/activity_transaction_details.xml`
+- Dialog: `app/src/main/res/layout/dialog_transaction_success.xml`
+- Activities: `TransactionsActivity.kt`, `TransactionDetailsActivity.kt`
+- Store: `TransactionStore.kt`
+- Behavior:
+   - Tab filtering: Pending / Success
+   - Transaction cards with provider name, amount, date, txn ID, status
+   - Detail view with row-based layout, transfer button for pending
+   - Success dialog with checkmark icon
+   - Credits user cash points on successful transfer
 
-## File Structure Created/Modified
+### 5. Users Management
+- List: `app/src/main/res/layout/activity_users.xml`
+- Item: `app/src/main/res/layout/item_user_card.xml`
+- Details: `app/src/main/res/layout/activity_user_details.xml`
+- Activities: `UsersActivity.kt`, `UserDetailsActivity.kt`
+- Store: `UserStore.kt`
+- Behavior:
+   - Tab filtering: All / Providers / Requesters / Active / Inactive
+   - User cards with avatar circle, name, email, status badge
+   - Detail view with profile card, email, cash points, phone, status
+   - Ban/Delete user actions
 
-### Drawable Resources
-- `admin_header_gradient.xml` - Purple gradient for header
-- `admin_stat_blue_card.xml` - Blue stat card background
-- `admin_stat_purple_card.xml` - Purple stat card background
-- `admin_stat_cyan_card.xml` - Cyan/green stat card background
-- `admin_bottom_nav_bg.xml` - Bottom navigation styling
+### 6. Feedback Management
+- File: `app/src/main/res/layout/activity_feedbacks.xml`
+- Item file: `app/src/main/res/layout/item_feedback.xml`
+- Activity: `app/src/main/java/com/example/microserve/FeedbacksActivity.kt`
+- Store: `app/src/main/java/com/example/microserve/FeedbackStore.kt`
+- Behavior:
+   - Shows all feedback records in card format
+   - Orange star rating rendering (filled/empty)
+   - Delete feedback action per card
+   - Data persists in local store and updates dashboard feedback count
 
-### Color Resources
-- `admin_colors.xml` - Complete color palette for the dashboard
+### 7. Settings
+- File: `app/src/main/res/layout/activity_settings.xml`
+- Activity: `app/src/main/java/com/example/microserve/SettingsActivity.kt`
+- Preferences: `app/src/main/java/com/example/microserve/AppPreferences.kt`
+- Behavior:
+   - Notifications toggle (persisted)
+   - Dark mode toggle (persisted + applied immediately)
+   - Language selection (persisted)
+   - Help / Privacy / Terms actions
+   - Profile card opens Admin Profile screen
 
-### Layout Files
-- `activity_admin_dashboard.xml` - Main dashboard layout
+### 8. Admin Profile (Editable)
+- File: `app/src/main/res/layout/activity_admin_profile.xml`
+- Activity: `app/src/main/java/com/example/microserve/AdminProfileActivity.kt`
+- Input style: `app/src/main/res/drawable/admin_profile_input_bg.xml`
+- Store integration: `app/src/main/java/com/example/microserve/UserStore.kt`
+- Behavior:
+   - Editable username and email
+   - Current password validation required
+   - Optional password change with confirm check
+   - Save writes to local user database and updates other admin UI views
 
-### Menu Resources
-- `admin_bottom_nav_menu.xml` - Bottom navigation menu items
+### 9. Post Service (Provider Form)
+- File: `app/src/main/res/layout/activity_post_add.xml`
+- Activity: `PostAddActivity.kt`
+- Behavior:
+   - Purple header with subtitle
+   - Form fields: category, provider name, image, location, contact
+   - Gradient submit button
 
-### Activity
-- `Homepage.kt` - Updated with proper event handling for all components
+### 10. Request Service (Requester Form)
+- File: `app/src/main/res/layout/activity_request_service.xml`
+- Activity: `RequestServiceActivity.kt`
+- Behavior:
+   - Purple header with subtitle
+   - Form fields: name, title, category, contact, location, description
+   - Gradient submit button
 
-## Interaction Flow
+### 11. Edit Post
+- File: `app/src/main/res/layout/activity_edit_post.xml`
+- Activity: `EditPostActivity.kt`
+- Behavior:
+   - Gradient header matching admin sub-page style
+   - Card-wrapped form with delete button
+   - Edit fields: category, provider name, image, location, contact
+   - Save changes button
 
-1. **User opens dashboard**
-   - Purple header displays with "Admin Panel"
-   - Dynamic metrics load from updateMetrics()
+## Bottom Navigation Status
 
-2. **User interacts with stat cards**
-   - Clicking any stat card shows a toast with current value
-   - Ready for navigation to detailed views
+- Bottom nav is active and wired on all admin pages.
+- Routes:
+   - Home -> `Homepage`
+   - Profile -> `AdminProfileActivity`
+   - Settings -> `SettingsActivity`
 
-3. **Quick Action buttons**
-   - Requests, Services, Transactions: Show toast (ready for navigation)
-   - Feedbacks: Navigates to EditPostActivity
-   - Users: Navigates to PostAddActivity
+## Theme/Dark Mode Status
 
-4. **Bottom Navigation**
-   - Home: Default tab, shows dashboard
-   - Profile: Navigation ready for implementation
-   - Settings: Navigation ready for implementation
+- App-level dark mode is applied using:
+   - `app/src/main/java/com/example/microserve/MicroServeApp.kt`
+   - Manifest registration in `app/src/main/AndroidManifest.xml`
+- Toggle state is saved in `AppPreferences` and persists after app restart.
 
-## Styling Specifics
+## Local Database Layer Used by Admin UI
 
-### Colors Used
-```
-Purple Theme:
-- Primary: #6C5CE7
-- Dark: #5F3DC4
-- Light: #A29BFE
+- `RequestStore` -> request metrics and request management screens
+- `TransactionStore` -> completed count, revenue metrics, transaction screens
+- `FeedbackStore` -> feedback list and feedback count
+- `UserStore` -> admin profile read/write and user-related screens
+- `ServiceStore` -> service listings and management
 
-Stat Cards:
-- Blue: #5F5CE6
-- Purple: #6C5CE7
-- Cyan: #66BB6A (Green-based cyan)
+## Current Functional Summary
 
-Text:
-- Primary (Dark): #2D3436
-- Secondary: #636E72
-- White: #FFFFFF
-```
+- Dashboard metrics are live from local stores.
+- All sub-screens (Requesters, Services, Transactions, Users, Feedbacks) use consistent admin design system.
+- All list cards have touch ripple effects.
+- All screens use theme color references instead of hardcoded hex values.
+- All headers are 160dp with gradient, back arrow, title + subtitle.
+- All empty states have emoji icon + title + description text.
+- Settings screen actions are working.
+- Dark mode is functional and persistent.
+- Profile tab opens editable Admin Account Setting and saves to local DB.
+- Post/Request/Edit forms use consistent purple theme with gradient buttons.
+- Transaction success dialog has proper styling with checkmark icon.
 
-### Dimensions
-- Header height: 200dp
-- Stat card height: 80dp
-- Quick action card height: 100dp
-- Corner radius (cards): 16dp
-- Elevation: 3-4dp for subtle depth
+## Manifest Entries (Admin-related)
 
-## Dynamic Data Integration
+- `Homepage`
+- `FeedbacksActivity`
+- `SettingsActivity`
+- `AdminProfileActivity`
+- `RequestersActivity`
+- `RequesterDetailsActivity`
+- `ServicesActivity`
+- `TransactionsActivity`
+- `TransactionDetailsActivity`
+- `UsersActivity`
+- `UserDetailsActivity`
+- `PostAddActivity`
+- `EditPostActivity`
+- `RequestServiceActivity`
 
-The `updateMetrics()` function in Homepage.kt can be connected to:
-- Real-time API calls for live data
-- Local database queries
-- Firebase realtime listeners
-- ViewModel LiveData observers
+## Build Validation
 
-Replace hardcoded values with actual data sources:
-```kotlin
-binding.requestsCount.text = requests.toString()
-binding.completedCount.text = completed.toString()
-binding.feedbacksCount.text = feedbacks.toString()
-binding.revenueCount.text = formatCurrency(revenue)
-```
-
-## Navigation Setup
-
-Update click listeners to open appropriate activities:
-```kotlin
-binding.quickRequestsBtn.setOnClickListener {
-    startActivity(Intent(this, RequestsActivity::class.java))
-}
-```
-
-## Future Enhancements
-
-1. Add real-time data refresh with SwipeRefreshLayout
-2. Implement analytics charts in stat cards
-3. Add animations on screen load
-4. Connect metrics to backend API
-5. Implement profile and settings pages
-6. Add offline data caching
-7. Implement role-based dashboard views
-
-## Testing Checklist
-
-- ✅ Header displays correctly
-- ✅ All 4 stat cards render with proper colors
-- ✅ All 5 quick action buttons are visible and clickable
-- ✅ Bottom navigation tabs show correctly
-- ✅ ScrollView handles content properly
-- ✅ All click listeners are connected
-- ✅ Responsive layout on different screen sizes
-- ✅ Proper padding and spacing throughout
+- Latest verification: `:app:compileDebugKotlin` -> **BUILD SUCCESSFUL**.

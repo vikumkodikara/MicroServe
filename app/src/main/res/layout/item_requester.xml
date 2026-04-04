@@ -25,7 +25,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Need House Cleaning"
-            android:textColor="#2D3436"
+            android:textColor="@color/admin_text_primary"
             android:textSize="16sp"
             android:textStyle="bold" />
 
@@ -58,7 +58,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:text="Mobile: Outdoor · Service"
-            android:textColor="#636E72"
+            android:textColor="@color/admin_text_secondary"
             android:textSize="13sp" />
 
         <!-- Divider -->

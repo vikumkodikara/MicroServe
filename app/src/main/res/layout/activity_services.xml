@@ -13,7 +13,7 @@
     <FrameLayout
         android:id="@+id/servicesHeaderFrame"
         android:layout_width="match_parent"
-        android:layout_height="180dp"
+        android:layout_height="160dp"
         android:background="@drawable/sub_header_gradient">
 
         <LinearLayout
@@ -44,13 +44,30 @@
                     android:clickable="true"
                     android:focusable="true" />
 
-                <TextView
+                <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Services"
-                    android:textColor="#FFFFFF"
-                    android:textSize="28sp"
-                    android:textStyle="bold" />
+                    android:orientation="vertical"
+    android:clipChildren="false">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Services"
+                        android:textColor="#FFFFFF"
+                        android:textSize="28sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp"
+                        android:text="Manage all listed services"
+                        android:textColor="#FFFFFF"
+                        android:textSize="13sp"
+                        android:alpha="0.8" />
+
+                </LinearLayout>
 
             </LinearLayout>
 
@@ -64,14 +81,14 @@
         android:gravity="center"
         android:orientation="horizontal"
         android:paddingHorizontal="16dp"
-        android:paddingVertical="16dp"
-        android:spacing="12dp">
+        android:paddingVertical="14dp">
 
         <Button
             android:id="@+id/tabCurrentServices"
             android:layout_width="0dp"
-            android:layout_height="48dp"
+            android:layout_height="46dp"
             android:layout_weight="1"
+            android:layout_marginEnd="6dp"
             android:background="@drawable/tab_active_bg"
             android:text="Current Services"
             android:textColor="@color/white"
@@ -82,8 +99,9 @@
         <Button
             android:id="@+id/tabPendingServices"
             android:layout_width="0dp"
-            android:layout_height="48dp"
+            android:layout_height="46dp"
             android:layout_weight="1"
+            android:layout_marginStart="6dp"
             android:background="@drawable/tab_inactive_bg"
             android:text="Pending Services"
             android:textColor="@color/admin_text_primary"
@@ -101,7 +119,7 @@
         android:layout_weight="1"
         android:clipToPadding="false"
         android:overScrollMode="never"
-        android:paddingTop="8dp"
+        android:paddingTop="4dp"
         android:paddingBottom="12dp"
         tools:listitem="@layout/item_service_card" />
 
@@ -131,17 +149,19 @@
             android:textSize="18sp"
             android:textStyle="bold" />
 
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="6dp"
+            android:gravity="center"
+            android:paddingHorizontal="40dp"
+            android:text="Service listings will appear here"
+            android:textColor="@color/admin_text_secondary"
+            android:textSize="14sp" />
+
     </LinearLayout>
 
     <!-- ═══════════ BOTTOM NAVIGATION ═══════════ -->
-    <com.google.android.material.bottomnavigation.BottomNavigationView
-        android:id="@+id/bottomNavigation"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@drawable/admin_bottom_nav_bg"
-        android:elevation="10dp"
-        app:itemIconTint="@color/white"
-        app:itemTextColor="@color/white"
-        app:menu="@menu/admin_bottom_nav_menu" />
+    <include layout="@layout/view_admin_bottom_nav" />
 
 </LinearLayout>

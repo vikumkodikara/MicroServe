@@ -72,14 +72,12 @@ class TransactionDetailsActivity : AppCompatActivity() {
         binding.tvStatus.text = item.status
 
         if (item.status.equals(TransactionStore.STATUS_SUCCESS, ignoreCase = true)) {
-            binding.tvHeaderLine1.text = "Transaction"
-            binding.tvHeaderLine2.text = "Success"
+            binding.tvHeaderLine1.text = "Transaction Success"
             binding.tvStatus.setBackgroundResource(R.drawable.txn_success_tag_bg)
             binding.tvStatus.setTextColor(resources.getColor(R.color.white, null))
             binding.btnTransfer.visibility = View.GONE
         } else {
-            binding.tvHeaderLine1.text = "Transfer"
-            binding.tvHeaderLine2.text = "Money"
+            binding.tvHeaderLine1.text = "Transfer Money"
             binding.tvStatus.setBackgroundResource(R.drawable.txn_pending_tag_bg)
             binding.tvStatus.setTextColor(resources.getColor(android.R.color.black, null))
             binding.btnTransfer.visibility = View.VISIBLE
@@ -122,17 +120,23 @@ class TransactionDetailsActivity : AppCompatActivity() {
     }
 
     private fun setupBottomNavigation() {
-        binding.bottomNavigation.setOnItemSelectedListener { menuItem ->
-            when (menuItem.itemId) {
-                R.id.nav_home -> {
-                    startActivity(Intent(this, Homepage::class.java))
-                    finishAffinity()
-                    true
-                }
-                R.id.nav_profile -> true
-                R.id.nav_settings -> true
-                else -> false
-            }
+        val homeTab = findViewById<android.widget.LinearLayout>(R.id.navTabHome)
+        val profileTab = findViewById<android.widget.LinearLayout>(R.id.navTabProfile)
+        val settingsTab = findViewById<android.widget.LinearLayout>(R.id.navTabSettings)
+        val bubbleIcon = findViewById<android.widget.ImageView>(R.id.navBubbleIcon)
+
+        homeTab.setOnClickListener {
+            startActivity(Intent(this, Homepage::class.java))
+            finishAffinity()
         }
+        profileTab.setOnClickListener {
+            startActivity(Intent(this, AdminProfileActivity::class.java))
+            finish()
+        }
+        settingsTab.setOnClickListener {
+            startActivity(Intent(this, SettingsActivity::class.java))
+            finish()
+        }
+        bubbleIcon.setImageResource(R.drawable.ic_nav_home)
     }
 }

@@ -5,9 +5,10 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginHorizontal="16dp"
-    android:layout_marginVertical="10dp"
+    android:layout_marginVertical="8dp"
     android:clickable="true"
     android:focusable="true"
+    android:foreground="?attr/selectableItemBackground"
     app:cardBackgroundColor="#FFFFFF"
     app:cardCornerRadius="16dp"
     app:cardElevation="4dp">
@@ -24,7 +25,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Service Title"
-            android:textColor="#2D3436"
+            android:textColor="@color/admin_text_primary"
             android:textSize="16sp"
             android:textStyle="bold" />
 
@@ -57,7 +58,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:text="Location"
-            android:textColor="#636E72"
+            android:textColor="@color/admin_text_secondary"
             android:textSize="13sp" />
 
         <!-- Divider -->
@@ -89,19 +90,26 @@
 
         </LinearLayout>
 
+        <!-- Divider -->
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginTop="12dp"
+            android:background="#F0EDED" />
+
         <!-- Action Buttons Row -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="14dp"
-            android:orientation="horizontal"
-            android:spacing="10dp">
+            android:layout_marginTop="12dp"
+            android:orientation="horizontal">
 
             <Button
                 android:id="@+id/btnServiceAction1"
                 android:layout_width="0dp"
                 android:layout_height="44dp"
                 android:layout_weight="1"
+                android:layout_marginEnd="6dp"
                 android:background="@drawable/block_button_bg"
                 android:text="Block"
                 android:textColor="#FFFFFF"
@@ -114,6 +122,7 @@
                 android:layout_width="0dp"
                 android:layout_height="44dp"
                 android:layout_weight="1"
+                android:layout_marginStart="6dp"
                 android:background="@drawable/delete_user_button_bg"
                 android:text="Delete"
                 android:textColor="#FFFFFF"

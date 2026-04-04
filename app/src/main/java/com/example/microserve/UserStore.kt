@@ -16,6 +16,7 @@ object UserStore {
         val name: String,
         val email: String,
         val phone: String,
+        val password: String = DEFAULT_PASSWORD,
         val type: String = TYPE_REQUESTER, // PROVIDER, REQUESTER, ADMIN
         val status: String = STATUS_ACTIVE, // ACTIVE, BANNED, INACTIVE
         val createdAt: Long = System.currentTimeMillis(),
@@ -33,6 +34,13 @@ object UserStore {
     const val STATUS_ACTIVE = "Active"
     const val STATUS_BANNED = "Banned"
     const val STATUS_INACTIVE = "Inactive"
+
+    const val DEFAULT_PASSWORD = "admin123"
+
+    data class UpdateAdminResult(
+        val success: Boolean,
+        val message: String
+    )
 
     fun getAllUsers(context: Context): List<User> {
         val prefs = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE)
@@ -84,6 +92,7 @@ object UserStore {
         name: String,
         email: String,
         phone: String,
+        password: String = DEFAULT_PASSWORD,
         type: String = TYPE_REQUESTER
     ): User {
         val newUser = User(
@@ -91,6 +100,7 @@ object UserStore {
             name = name.trim(),
             email = email.trim(),
             phone = phone.trim(),
+            password = password,
             type = type,
             status = STATUS_ACTIVE
         )
@@ -145,6 +155,56 @@ object UserStore {
         return changed
     }
 
+    fun getOrCreateAdminUser(context: Context): User {
+        val existing = getAllUsers(context).firstOrNull { it.type.equals(TYPE_ADMIN, ignoreCase = true) }
+        if (existing != null) return existing
+
+        return addUser(
+            context = context,
+            name = "Admin",
+            email = "admin@microserve.local",
+            phone = "+94 70 000 0000",
+            password = DEFAULT_PASSWORD,
+            type = TYPE_ADMIN
+        )
+    }
+
+    fun updateAdminProfile(
+        context: Context,
+        adminId: String,
+        name: String,
+        email: String,
+        currentPassword: String,
+        newPassword: String?
+    ): UpdateAdminResult {
+        val current = getAllUsers(context)
+        val admin = current.firstOrNull { it.id == adminId && it.type.equals(TYPE_ADMIN, ignoreCase = true) }
+            ?: return UpdateAdminResult(false, "Admin user not found")
+
+        if (admin.password != currentPassword) {
+            return UpdateAdminResult(false, "Current password is incorrect")
+        }
+
+        val nextPassword = newPassword?.trim().takeUnless { it.isNullOrBlank() } ?: admin.password
+        val trimmedName = name.trim()
+        val trimmedEmail = email.trim()
+
+        val updated = current.map {
+            if (it.id == admin.id) {
+                it.copy(
+                    name = trimmedName,
+                    email = trimmedEmail,
+                    password = nextPassword
+                )
+            } else {
+                it
+            }
+        }
+
+        saveAll(context, updated)
+        return UpdateAdminResult(true, "Profile updated successfully")
+    }
+
     private fun saveAll(context: Context, users: List<User>) {
         val jsonArray = JSONArray()
         users.forEach { user -> jsonArray.put(user.toJson()) }
@@ -161,6 +221,7 @@ object UserStore {
             name = optString("name", "Unknown User"),
             email = optString("email", ""),
             phone = optString("phone", ""),
+            password = optString("password", DEFAULT_PASSWORD),
             type = optString("type", TYPE_REQUESTER),
             status = optString("status", STATUS_ACTIVE),
             createdAt = optLong("createdAt", System.currentTimeMillis()),
@@ -175,6 +236,7 @@ object UserStore {
             put("name", name)
             put("email", email)
             put("phone", phone)
+            put("password", password)
             put("type", type)
             put("status", status)
             put("createdAt", createdAt)
