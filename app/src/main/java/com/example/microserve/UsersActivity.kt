@@ -192,10 +192,15 @@ class UsersActivity : AppCompatActivity() {
                     true
                 }
                 R.id.nav_profile -> true
-                R.id.nav_settings -> true
+                R.id.nav_settings -> {
+                    startActivity(Intent(this, SettingsActivity::class.java))
+                    finish()
+                    true
+                }
                 else -> false
             }
         }
+        binding.bottomNavigation.selectedItemId = R.id.nav_profile
     }
 
     // ── User Adapter ────────────────────────────────────────────────────

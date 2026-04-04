@@ -129,10 +129,19 @@ class TransactionDetailsActivity : AppCompatActivity() {
                     finishAffinity()
                     true
                 }
-                R.id.nav_profile -> true
-                R.id.nav_settings -> true
+                R.id.nav_profile -> {
+                    startActivity(Intent(this, UsersActivity::class.java))
+                    finish()
+                    true
+                }
+                R.id.nav_settings -> {
+                    startActivity(Intent(this, SettingsActivity::class.java))
+                    finish()
+                    true
+                }
                 else -> false
             }
         }
+        binding.bottomNavigation.selectedItemId = R.id.nav_home
     }
 }

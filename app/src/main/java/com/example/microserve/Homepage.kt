@@ -87,15 +87,14 @@ class Homepage : AppCompatActivity() {
         binding.bottomNavigation.setOnItemSelectedListener { menuItem ->
             when (menuItem.itemId) {
                 R.id.nav_home -> {
-                    showToast("Navigating to Home")
                     true
                 }
                 R.id.nav_profile -> {
-                    showToast("Navigating to Profile")
+                    startActivity(Intent(this, UsersActivity::class.java))
                     true
                 }
                 R.id.nav_settings -> {
-                    showToast("Navigating to Settings")
+                    startActivity(Intent(this, SettingsActivity::class.java))
                     true
                 }
                 else -> false

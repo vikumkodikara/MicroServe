@@ -112,10 +112,19 @@ class UserDetailsActivity : AppCompatActivity() {
                     finishAffinity()
                     true
                 }
-                R.id.nav_profile -> true
-                R.id.nav_settings -> true
+                R.id.nav_profile -> {
+                    startActivity(Intent(this, UsersActivity::class.java))
+                    finishAffinity()
+                    true
+                }
+                R.id.nav_settings -> {
+                    startActivity(Intent(this, SettingsActivity::class.java))
+                    finishAffinity()
+                    true
+                }
                 else -> false
             }
         }
+        binding.bottomNavigation.selectedItemId = R.id.nav_profile
     }
 }
