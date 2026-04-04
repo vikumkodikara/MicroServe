@@ -158,7 +158,7 @@ class FeedbacksActivity : AppCompatActivity() {
             holder.tvMessage.text = item.message
             holder.tvDate.text = formatDate(item.createdAt)
 
-            val filledColor = resources.getColor(R.color.admin_purple_dark, null)
+            val filledColor = resources.getColor(R.color.admin_stat_orange, null)
             val emptyColor = resources.getColor(R.color.admin_purple_light, null)
             holder.stars.forEachIndexed { index, imageView ->
                 if (index < item.rating) {
