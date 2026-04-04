@@ -154,7 +154,7 @@ class TransactionsActivity : AppCompatActivity() {
                     true
                 }
                 R.id.nav_profile -> {
-                    startActivity(Intent(this, UsersActivity::class.java))
+                    startActivity(Intent(this, AdminProfileActivity::class.java))
                     finish()
                     true
                 }

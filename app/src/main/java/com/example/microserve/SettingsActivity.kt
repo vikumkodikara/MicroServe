@@ -29,6 +29,11 @@ class SettingsActivity : AppCompatActivity() {
         setupClickListeners()
     }
 
+    override fun onResume() {
+        super.onResume()
+        bindAdminProfileCard()
+    }
+
     private fun setupWindowInsets() {
         ViewCompat.setOnApplyWindowInsetsListener(binding.settingsRoot) { _, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
@@ -50,7 +55,7 @@ class SettingsActivity : AppCompatActivity() {
                     true
                 }
                 R.id.nav_profile -> {
-                    startActivity(Intent(this, UsersActivity::class.java))
+                    startActivity(Intent(this, AdminProfileActivity::class.java))
                     finish()
                     true
                 }
@@ -65,18 +70,19 @@ class SettingsActivity : AppCompatActivity() {
         binding.switchNotifications.isChecked = AppPreferences.isNotificationsEnabled(this)
         binding.switchDarkMode.isChecked = AppPreferences.isDarkModeEnabled(this)
         binding.tvLanguageValue.text = AppPreferences.getLanguage(this)
+        bindAdminProfileCard()
         initializingSwitches = false
+    }
+
+    private fun bindAdminProfileCard() {
+        val admin = UserStore.getOrCreateAdminUser(this)
+        binding.tvSettingsAdminName.text = admin.name
+        binding.tvSettingsEditProfile.text = admin.email
     }
 
     private fun setupClickListeners() {
         binding.profileCard.setOnClickListener {
-            startActivity(Intent(this, UserDetailsActivity::class.java).apply {
-                putExtra("USER_NAME", "Admin")
-                putExtra("USER_EMAIL", "admin@microserve.local")
-                putExtra("USER_PHONE", "+94 70 000 0000")
-                putExtra("USER_TYPE", UserStore.TYPE_ADMIN)
-                putExtra("USER_STATUS", UserStore.STATUS_ACTIVE)
-            })
+            startActivity(Intent(this, AdminProfileActivity::class.java))
         }
 
         binding.switchNotifications.setOnCheckedChangeListener { _, isChecked ->
