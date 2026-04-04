@@ -48,6 +48,7 @@ class Homepage : AppCompatActivity() {
 
         binding.quickServicesBtn.setOnClickListener {
             showToast("Opening services management")
+            startActivity(Intent(this, ServicesActivity::class.java))
         }
 
         binding.quickTransactionsBtn.setOnClickListener {
@@ -117,7 +118,8 @@ class Homepage : AppCompatActivity() {
 
     private fun fetchDashboardMetricsFromDatabase(): DashboardMetrics? {
         val pendingCount = RequestStore.getPendingRequests(this).size
-        return DashboardMetrics(requests = pendingCount)
+        val activeServicesCount = ServiceStore.getActiveServices(this).size
+        return DashboardMetrics(requests = pendingCount, completed = activeServicesCount)
     }
 
     private fun showToast(message: String) {

@@ -31,6 +31,9 @@
         <activity
             android:name=".RequestersActivity"
             android:exported="false" />
+        <activity
+            android:name=".ServicesActivity"
+            android:exported="false" />
     </application>
 
 </manifest>

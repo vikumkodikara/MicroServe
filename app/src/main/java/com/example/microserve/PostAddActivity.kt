@@ -48,14 +48,14 @@ class PostAddActivity : AppCompatActivity() {
             } else if (name.isEmpty() || location.isEmpty() || contact.isEmpty()) {
                 Toast.makeText(this, "Please fill all fields", Toast.LENGTH_SHORT).show()
             } else {
-                RequestStore.addRequest(
+                ServiceStore.addService(
                     context = this,
                     category = category,
-                    requesterName = name,
+                    providerName = name,
                     contact = contact,
                     location = location
                 )
-                Toast.makeText(this, "Request submitted successfully!", Toast.LENGTH_LONG).show()
+                Toast.makeText(this, "Service posted successfully!", Toast.LENGTH_LONG).show()
                 finish()
             }
         }

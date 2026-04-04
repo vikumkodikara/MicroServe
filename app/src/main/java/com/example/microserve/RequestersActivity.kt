@@ -31,6 +31,7 @@ class RequestersActivity : AppCompatActivity() {
 
         setupWindowInsets()
         setupBackButton()
+        initializeSampleDataIfNeeded()
         setupRecyclerView()
         setupBottomNavigation()
     }
@@ -38,6 +39,16 @@ class RequestersActivity : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
         loadPendingRequests()
+    }
+
+    private fun initializeSampleDataIfNeeded() {
+        val allRequests = RequestStore.getAllRequests(this)
+        if (allRequests.isEmpty()) {
+            // Add sample requests for demo
+            RequestStore.addRequest(this, "Plumbing & Pipe Fixing", "Kasun Fernando", "+94 70 456 7890", "Malabe")
+            RequestStore.addRequest(this, "Logo & Branding Design", "Savindi Rathnayaka", "+94 76 345 6789", "Kurunegala")
+            RequestStore.addRequest(this, "House Cleaning Service", "Amila Darshana", "+94 77 123 4567", "Kandy")
+        }
     }
 
     private fun setupWindowInsets() {
