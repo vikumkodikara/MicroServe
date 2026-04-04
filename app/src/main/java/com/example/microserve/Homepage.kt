@@ -43,14 +43,17 @@ class Homepage : AppCompatActivity() {
     private fun setupClickListeners() {
         binding.quickRequestsBtn.setOnClickListener {
             showToast("Opening service requests")
+            startActivity(Intent(this, RequestersActivity::class.java))
         }
 
         binding.quickServicesBtn.setOnClickListener {
             showToast("Opening services management")
+            startActivity(Intent(this, ServicesActivity::class.java))
         }
 
         binding.quickTransactionsBtn.setOnClickListener {
             showToast("Opening transaction records")
+            startActivity(Intent(this, TransactionsActivity::class.java))
         }
 
         binding.quickFeedbacksBtn.setOnClickListener {
@@ -60,7 +63,7 @@ class Homepage : AppCompatActivity() {
 
         binding.quickUsersBtn.setOnClickListener {
             showToast("Opening user management")
-            startActivity(Intent(this, PostAddActivity::class.java))
+            startActivity(Intent(this, UsersActivity::class.java))
         }
 
         binding.statRequestsCard.setOnClickListener {
@@ -115,9 +118,14 @@ class Homepage : AppCompatActivity() {
     }
 
     private fun fetchDashboardMetricsFromDatabase(): DashboardMetrics? {
-        // TODO: Replace with real database read (Room/Firebase/API).
-        // Return null until database integration is ready.
-        return null
+        val pendingCount = RequestStore.getPendingRequests(this).size
+        val completedTransactions = TransactionStore.getSuccessCount(this)
+        val totalRevenue = TransactionStore.getTotalSuccessAmount(this).toInt()
+        return DashboardMetrics(
+            requests = pendingCount,
+            completed = completedTransactions,
+            revenue = totalRevenue
+        )
     }
 
     private fun showToast(message: String) {

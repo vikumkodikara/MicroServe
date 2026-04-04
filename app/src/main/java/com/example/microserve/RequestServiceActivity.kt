@@ -5,16 +5,20 @@ import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import com.example.microserve.databinding.ActivityPostAddBinding
+import com.example.microserve.databinding.ActivityRequestServiceBinding
 
-class PostAddActivity : AppCompatActivity() {
+/**
+ * Form for customers to REQUEST services.
+ * Data saves to RequestStore and appears in admin RequestersActivity.
+ */
+class RequestServiceActivity : AppCompatActivity() {
 
-    private lateinit var binding: ActivityPostAddBinding
+    private lateinit var binding: ActivityRequestServiceBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
-        binding = ActivityPostAddBinding.inflate(layoutInflater)
+        binding = ActivityRequestServiceBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         setupSpinner()
@@ -22,7 +26,7 @@ class PostAddActivity : AppCompatActivity() {
     }
 
     private fun setupSpinner() {
-        val categories = arrayOf("-Select-", "Plumbing", "Electrical", "House Painting", "Carpentry", "Cleaning")
+        val categories = arrayOf("-Select-", "Plumbing", "Electrical", "House Painting", "Carpentry", "Cleaning", "Graphic Design", "Welding")
         val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, categories)
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         binding.categorySpinner.adapter = adapter
@@ -33,20 +37,18 @@ class PostAddActivity : AppCompatActivity() {
             finish()
         }
 
-        binding.addImageBtn.setOnClickListener {
-            Toast.makeText(this, "Opening Gallery...", Toast.LENGTH_SHORT).show()
-        }
-
-        binding.postBtn.setOnClickListener {
-            val name = binding.providerNameET.text.toString().trim()
-            val location = binding.locationET.text.toString().trim()
+        binding.requestBtn.setOnClickListener {
+            val title = binding.titleET.text.toString().trim()
+            val name = binding.nameET.text.toString().trim()
             val contact = binding.contactET.text.toString().trim()
+            val location = binding.locationET.text.toString().trim()
+            val description = binding.descriptionET.text.toString().trim()
             val category = binding.categorySpinner.selectedItem.toString()
 
             if (category == "-Select-") {
-                Toast.makeText(this, "Please select a category", Toast.LENGTH_SHORT).show()
-            } else if (name.isEmpty() || location.isEmpty() || contact.isEmpty()) {
-                Toast.makeText(this, "Please fill all fields", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Please select a service category", Toast.LENGTH_SHORT).show()
+            } else if (title.isEmpty() || name.isEmpty() || contact.isEmpty() || location.isEmpty()) {
+                Toast.makeText(this, "Please fill all required fields", Toast.LENGTH_SHORT).show()
             } else {
                 // Create/register user if not exists
                 val existingUser = UserStore.getAllUsers(this)
@@ -56,21 +58,23 @@ class PostAddActivity : AppCompatActivity() {
                     UserStore.addUser(
                         context = this,
                         name = name,
-                        email = "provider_${System.currentTimeMillis()}@microserve.local",
+                        email = "requester_${System.currentTimeMillis()}@microserve.local",
                         phone = contact,
-                        type = UserStore.TYPE_PROVIDER
+                        type = UserStore.TYPE_REQUESTER
                     )
                 }
 
-                // Add the service
-                ServiceStore.addService(
+                // Add the request
+                RequestStore.addRequest(
                     context = this,
                     category = category,
-                    providerName = name,
+                    requesterName = name,
                     contact = contact,
-                    location = location
+                    location = location,
+                    title = title,
+                    description = description
                 )
-                Toast.makeText(this, "Service posted successfully!", Toast.LENGTH_LONG).show()
+                Toast.makeText(this, "Service request submitted successfully!", Toast.LENGTH_LONG).show()
                 finish()
             }
         }

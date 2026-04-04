@@ -9,6 +9,7 @@
     <color name="admin_stat_blue">#5F5CE6</color>
     <color name="admin_stat_purple">#6C5CE7</color>
     <color name="admin_stat_cyan">#66BB6A</color>
+    <color name="admin_stat_orange">#F39C12</color>
     
     <!-- Quick Action Card Background -->
     <color name="admin_quick_action_bg">#F5F5F5</color>

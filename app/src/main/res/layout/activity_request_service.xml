@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/dark_purple"
-    tools:context=".PostAddActivity">
+    tools:context=".RequestServiceActivity">
 
     <!-- Header -->
     <ImageView
@@ -25,7 +25,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
         android:layout_marginTop="24dp"
-        android:text="Post Your Service"
+        android:text="Request a Service"
         android:textColor="@color/white"
         android:textSize="32sp"
         android:textStyle="bold"
@@ -57,7 +57,45 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Your Business Name"
+                android:text="Your Name"
+                android:textColor="@color/black"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+
+            <EditText
+                android:id="@+id/nameET"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginTop="8dp"
+                android:background="@drawable/edittext_bg"
+                android:hint="Enter your name"
+                android:inputType="textPersonName"
+                android:paddingHorizontal="12dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="Service Title"
+                android:textColor="@color/black"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+
+            <EditText
+                android:id="@+id/titleET"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginTop="8dp"
+                android:background="@drawable/edittext_bg"
+                android:hint="e.g., Need House Cleaning"
+                android:inputType="text"
+                android:paddingHorizontal="12dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="Service Category"
                 android:textColor="@color/black"
                 android:textSize="16sp"
                 android:textStyle="bold" />
@@ -74,44 +112,20 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
-                android:text="Name of the Service Provider"
+                android:text="Contact Number"
                 android:textColor="@color/black"
                 android:textSize="16sp"
                 android:textStyle="bold" />
 
             <EditText
-                android:id="@+id/providerNameET"
+                android:id="@+id/contactET"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:layout_marginTop="8dp"
                 android:background="@drawable/edittext_bg"
-                android:hint="Enter name"
-                android:inputType="textPersonName"
+                android:hint="Enter contact number"
+                android:inputType="phone"
                 android:paddingHorizontal="12dp" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:text="Add Image"
-                android:textColor="@color/black"
-                android:textSize="16sp"
-                android:textStyle="bold" />
-
-            <FrameLayout
-                android:id="@+id/addImageBtn"
-                android:layout_width="match_parent"
-                android:layout_height="100dp"
-                android:layout_marginTop="8dp"
-                android:background="@drawable/dashed_bg">
-
-                <ImageView
-                    android:layout_width="48dp"
-                    android:layout_height="48dp"
-                    android:layout_gravity="center"
-                    android:src="@android:drawable/ic_menu_gallery"
-                    app:tint="@color/text_gray" />
-            </FrameLayout>
 
             <TextView
                 android:layout_width="wrap_content"
@@ -136,29 +150,31 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
-                android:text="Contact"
+                android:text="Description"
                 android:textColor="@color/black"
                 android:textSize="16sp"
                 android:textStyle="bold" />
 
             <EditText
-                android:id="@+id/contactET"
+                android:id="@+id/descriptionET"
                 android:layout_width="match_parent"
-                android:layout_height="50dp"
+                android:layout_height="100dp"
                 android:layout_marginTop="8dp"
                 android:background="@drawable/edittext_bg"
-                android:hint="Enter contact number"
-                android:inputType="phone"
-                android:paddingHorizontal="12dp" />
+                android:hint="Describe your service request..."
+                android:inputType="textMultiLine"
+                android:gravity="top|start"
+                android:paddingHorizontal="12dp"
+                android:paddingVertical="8dp" />
 
             <Button
-                android:id="@+id/postBtn"
+                android:id="@+id/requestBtn"
                 android:layout_width="match_parent"
                 android:layout_height="55dp"
                 android:layout_marginTop="32dp"
                 android:layout_marginBottom="24dp"
                 android:backgroundTint="@color/primary_purple"
-                android:text="Post Service"
+                android:text="Submit Request"
                 android:textColor="@color/white"
                 android:textStyle="bold"
                 app:cornerRadius="12dp" />

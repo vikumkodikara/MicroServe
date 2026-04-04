@@ -25,6 +25,30 @@
         <activity
             android:name=".EditPostActivity"
             android:exported="false" />
+        <activity
+            android:name=".RequesterDetailsActivity"
+            android:exported="false" />
+        <activity
+            android:name=".RequestersActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ServicesActivity"
+            android:exported="false" />
+        <activity
+            android:name=".RequestServiceActivity"
+            android:exported="false" />
+        <activity
+            android:name=".UsersActivity"
+            android:exported="false" />
+        <activity
+            android:name=".UserDetailsActivity"
+            android:exported="false" />
+        <activity
+            android:name=".TransactionsActivity"
+            android:exported="false" />
+        <activity
+            android:name=".TransactionDetailsActivity"
+            android:exported="false" />
     </application>
 
 </manifest>
