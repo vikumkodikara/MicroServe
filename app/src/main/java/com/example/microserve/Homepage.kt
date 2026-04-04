@@ -58,7 +58,7 @@ class Homepage : AppCompatActivity() {
 
         binding.quickFeedbacksBtn.setOnClickListener {
             showToast("Opening feedback management")
-            startActivity(Intent(this, EditPostActivity::class.java))
+            startActivity(Intent(this, FeedbacksActivity::class.java))
         }
 
         binding.quickUsersBtn.setOnClickListener {
@@ -120,10 +120,12 @@ class Homepage : AppCompatActivity() {
     private fun fetchDashboardMetricsFromDatabase(): DashboardMetrics? {
         val pendingCount = RequestStore.getPendingRequests(this).size
         val completedTransactions = TransactionStore.getSuccessCount(this)
+        val totalFeedbacks = FeedbackStore.getFeedbackCount(this)
         val totalRevenue = TransactionStore.getTotalSuccessAmount(this).toInt()
         return DashboardMetrics(
             requests = pendingCount,
             completed = completedTransactions,
+            feedbacks = totalFeedbacks,
             revenue = totalRevenue
         )
     }

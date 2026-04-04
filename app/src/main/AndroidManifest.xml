@@ -49,6 +49,9 @@
         <activity
             android:name=".TransactionDetailsActivity"
             android:exported="false" />
+        <activity
+            android:name=".FeedbacksActivity"
+            android:exported="false" />
     </application>
 
 </manifest>
