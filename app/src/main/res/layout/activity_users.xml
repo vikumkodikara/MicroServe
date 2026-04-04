@@ -47,7 +47,8 @@
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical">
+                    android:orientation="vertical"
+    android:clipChildren="false">
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -205,14 +206,6 @@
     </LinearLayout>
 
     <!-- ═══════════ BOTTOM NAVIGATION ═══════════ -->
-    <com.google.android.material.bottomnavigation.BottomNavigationView
-        android:id="@+id/bottomNavigation"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@drawable/admin_bottom_nav_bg"
-        android:elevation="10dp"
-        app:itemIconTint="@color/white"
-        app:itemTextColor="@color/white"
-        app:menu="@menu/admin_bottom_nav_menu" />
+    <include layout="@layout/view_admin_bottom_nav" />
 
 </LinearLayout>
