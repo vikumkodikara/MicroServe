@@ -5,17 +5,25 @@ import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import com.example.microserve.databinding.ActivityPostAddBinding
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
+import com.example.microserve.databinding.ActivityRequestServiceBinding
 
-class PostAddActivity : AppCompatActivity() {
+class RequestServiceActivity : AppCompatActivity() {
 
-    private lateinit var binding: ActivityPostAddBinding
+    private lateinit var binding: ActivityRequestServiceBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
-        binding = ActivityPostAddBinding.inflate(layoutInflater)
+        binding = ActivityRequestServiceBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        ViewCompat.setOnApplyWindowInsetsListener(binding.root) { v, insets ->
+            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
+            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
+            insets
+        }
 
         setupSpinner()
         setupClickListeners()
@@ -33,22 +41,20 @@ class PostAddActivity : AppCompatActivity() {
             finish()
         }
 
-        binding.addImageBtn.setOnClickListener {
-            Toast.makeText(this, "Opening Gallery...", Toast.LENGTH_SHORT).show()
-        }
-
-        binding.postBtn.setOnClickListener {
-            val name = binding.providerNameET.text.toString()
-            val location = binding.locationET.text.toString()
-            val contact = binding.contactET.text.toString()
+        binding.requestBtn.setOnClickListener {
+            val name = binding.nameET.text.toString().trim()
+            val title = binding.titleET.text.toString().trim()
             val category = binding.categorySpinner.selectedItem.toString()
+            val contact = binding.contactET.text.toString().trim()
+            val location = binding.locationET.text.toString().trim()
+            val description = binding.descriptionET.text.toString().trim()
 
             if (category == "-Select-") {
                 Toast.makeText(this, "Please select a category", Toast.LENGTH_SHORT).show()
-            } else if (name.isEmpty() || location.isEmpty() || contact.isEmpty()) {
+            } else if (name.isEmpty() || title.isEmpty() || contact.isEmpty() || location.isEmpty() || description.isEmpty()) {
                 Toast.makeText(this, "Please fill all fields", Toast.LENGTH_SHORT).show()
             } else {
-                Toast.makeText(this, "Ad Posted Successfully!", Toast.LENGTH_LONG).show()
+                Toast.makeText(this, "Service Requested Successfully!", Toast.LENGTH_LONG).show()
                 finish()
             }
         }

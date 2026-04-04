@@ -20,10 +20,16 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".PostAddActivity"
+            android:name=".PostServiceActivity"
             android:exported="false" />
         <activity
             android:name=".EditPostActivity"
+            android:exported="false" />
+        <activity
+            android:name=".PostAdsActivity"
+            android:exported="false" />
+        <activity
+            android:name=".RequestServiceActivity"
             android:exported="false" />
     </application>
 
