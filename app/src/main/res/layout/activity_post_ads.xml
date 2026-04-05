@@ -25,8 +25,7 @@
             android:layout_height="34dp"
             android:contentDescription="Back"
             android:padding="6dp"
-            android:src="@android:drawable/ic_media_previous"
-            app:tint="@color/white" />
+            android:src="@drawable/back_arrow" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -60,7 +59,7 @@
         android:layout_marginBottom="16dp"
         android:background="@drawable/post_form_card"
         android:padding="2dp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/navContainer"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/headerContainer">
@@ -306,5 +305,179 @@
         </androidx.core.widget.NestedScrollView>
 
     </FrameLayout>
+
+    <!-- Bottom Navigation Custom Section (Post Active State) -->
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/navContainer"
+        android:layout_width="match_parent"
+        android:layout_height="115dp"
+        app:layout_constraintBottom_toBottomOf="parent">
+
+        <!-- Layer 1: Purple Base Bar -->
+        <ImageView
+            android:id="@+id/navBase"
+            android:layout_width="match_parent"
+            android:layout_height="70dp"
+            android:scaleType="fitXY"
+            android:src="@drawable/rectanglenav"
+            app:layout_constraintBottom_toBottomOf="parent" />
+
+        <!-- Layer 2: White Cutout Curve (Moved over POST) -->
+        <ImageView
+            android:id="@+id/navSubtract"
+            android:layout_width="120dp"
+            android:layout_height="80dp"
+            android:scaleType="fitCenter"
+            android:src="@drawable/subtractnav"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.75"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@id/navBase"
+            app:layout_constraintVertical_bias="0.0"
+            android:translationY="-15dp" />
+
+        <!-- Layer 3: Dark Circle for POST Icon -->
+        <ImageView
+            android:id="@+id/activeEllipse"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:src="@drawable/ellipsenav"
+            android:translationY="-30dp"
+            app:layout_constraintBottom_toBottomOf="@id/navSubtract"
+            app:layout_constraintEnd_toEndOf="@id/navSubtract"
+            app:layout_constraintStart_toStartOf="@id/navSubtract"
+            app:layout_constraintTop_toTopOf="@id/navSubtract" />
+
+        <!-- Layer 4: POST Icon (Floating) -->
+        <ImageView
+            android:id="@+id/navActiveIcon"
+            android:layout_width="38dp"
+            android:layout_height="38dp"
+            android:src="@drawable/navpost"
+            android:elevation="10dp"
+            android:translationY="-30dp"
+            app:layout_constraintBottom_toBottomOf="@id/activeEllipse"
+            app:layout_constraintEnd_toEndOf="@id/activeEllipse"
+            app:layout_constraintStart_toStartOf="@id/activeEllipse"
+            app:layout_constraintTop_toTopOf="@id/activeEllipse" />
+
+        <!-- Main Navigation row -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="70dp"
+            android:baselineAligned="false"
+            android:gravity="bottom"
+            android:orientation="horizontal"
+            android:paddingBottom="4dp"
+            android:weightSum="5"
+            app:layout_constraintBottom_toBottomOf="parent">
+
+            <LinearLayout
+                android:id="@+id/navRequest"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:clickable="true"
+                android:focusable="true">
+                <ImageView
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:src="@drawable/navrequest" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Request"
+                    android:textColor="@color/white"
+                    android:textSize="10sp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/navService"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:clickable="true"
+                android:focusable="true">
+                <ImageView
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:src="@drawable/navservice" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Service"
+                    android:textColor="@color/white"
+                    android:textSize="10sp" />
+            </LinearLayout>
+
+            <!-- Home Icon is now at NORMAL LEVEL -->
+            <LinearLayout
+                android:id="@+id/navHome"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:clickable="true"
+                android:focusable="true">
+                <ImageView
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:src="@drawable/navhome" />
+                <TextView
+                    android:id="@+id/homeLabel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Home"
+                    android:textColor="@color/white"
+                    android:textSize="10sp" />
+            </LinearLayout>
+
+            <!-- Post Label aligned with others (Icon is floating above) -->
+            <LinearLayout
+                android:id="@+id/navPost"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:orientation="vertical">
+                <TextView
+                    android:id="@+id/postLabel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Post"
+                    android:textColor="@color/white"
+                    android:textSize="10sp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/navProfile"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:clickable="true"
+                android:focusable="true">
+                <ImageView
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:src="@drawable/navprofile" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Profile"
+                    android:textColor="@color/white"
+                    android:textSize="10sp" />
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
