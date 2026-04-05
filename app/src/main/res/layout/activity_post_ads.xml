@@ -306,7 +306,7 @@
 
     </FrameLayout>
 
-    <!-- Bottom Navigation Custom Section (Post Focused Design) -->
+    <!-- Bottom Navigation Custom Section (Post Active State) -->
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/navContainer"
         android:layout_width="match_parent"
@@ -322,7 +322,7 @@
             android:src="@drawable/rectanglenav"
             app:layout_constraintBottom_toBottomOf="parent" />
 
-        <!-- Layer 2: White Cutout Curve (Centered over POST menu item) -->
+        <!-- Layer 2: White Cutout Curve (Moved over POST) -->
         <ImageView
             android:id="@+id/navSubtract"
             android:layout_width="120dp"
@@ -339,7 +339,7 @@
 
         <!-- Layer 3: Dark Circle for POST Icon -->
         <ImageView
-            android:id="@+id/postEllipse"
+            android:id="@+id/activeEllipse"
             android:layout_width="60dp"
             android:layout_height="60dp"
             android:src="@drawable/ellipsenav"
@@ -349,27 +349,27 @@
             app:layout_constraintStart_toStartOf="@id/navSubtract"
             app:layout_constraintTop_toTopOf="@id/navSubtract" />
 
-        <!-- Layer 4: POST Icon -->
+        <!-- Layer 4: POST Icon (Floating) -->
         <ImageView
-            android:id="@+id/navPostIcon"
+            android:id="@+id/navActiveIcon"
             android:layout_width="38dp"
             android:layout_height="38dp"
             android:src="@drawable/navpost"
             android:elevation="10dp"
             android:translationY="-30dp"
-            app:layout_constraintBottom_toBottomOf="@id/postEllipse"
-            app:layout_constraintEnd_toEndOf="@id/postEllipse"
-            app:layout_constraintStart_toStartOf="@id/postEllipse"
-            app:layout_constraintTop_toTopOf="@id/postEllipse" />
+            app:layout_constraintBottom_toBottomOf="@id/activeEllipse"
+            app:layout_constraintEnd_toEndOf="@id/activeEllipse"
+            app:layout_constraintStart_toStartOf="@id/activeEllipse"
+            app:layout_constraintTop_toTopOf="@id/activeEllipse" />
 
-        <!-- Main Navigation row with LEVELED titles -->
+        <!-- Main Navigation row -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="70dp"
             android:baselineAligned="false"
             android:gravity="bottom"
             android:orientation="horizontal"
-            android:paddingBottom="12dp"
+            android:paddingBottom="4dp"
             android:weightSum="5"
             app:layout_constraintBottom_toBottomOf="parent">
 
@@ -415,6 +415,7 @@
                     android:textSize="10sp" />
             </LinearLayout>
 
+            <!-- Home Icon is now at NORMAL LEVEL -->
             <LinearLayout
                 android:id="@+id/navHome"
                 android:layout_width="0dp"
@@ -429,6 +430,7 @@
                     android:layout_height="32dp"
                     android:src="@drawable/navhome" />
                 <TextView
+                    android:id="@+id/homeLabel"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Home"
@@ -436,8 +438,9 @@
                     android:textSize="10sp" />
             </LinearLayout>
 
-            <!-- Spacer/Placeholder for Active POST State -->
+            <!-- Post Label aligned with others (Icon is floating above) -->
             <LinearLayout
+                android:id="@+id/navPost"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
