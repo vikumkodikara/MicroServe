@@ -2,7 +2,6 @@ package com.example.microserve
 
 import android.content.Intent
 import android.os.Bundle
-import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
@@ -16,78 +15,42 @@ class Homepage : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
-        
+
         binding = ActivityHomepageBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        setupWindowInsets()
-        setupClickListeners()
-    }
-
-    private fun setupWindowInsets() {
-        ViewCompat.setOnApplyWindowInsetsListener(binding.main) { v, insets ->
+        ViewCompat.setOnApplyWindowInsetsListener(binding.root) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
+
+        setupClickListeners()
     }
 
     private fun setupClickListeners() {
-        // Navigation to PostAddActivity
-        binding.postServiceBtn.setOnClickListener {
-            startActivity(Intent(this, PostAddActivity::class.java))
-        }
-
-        binding.navPost.setOnClickListener {
-            startActivity(Intent(this, PostAddActivity::class.java))
-        }
-
-        // Header buttons
-        binding.settingsBtn.setOnClickListener {
-            showToast("Settings clicked")
-        }
-
-        binding.menuBtn.setOnClickListener {
-            showToast("Menu clicked")
-        }
-
-        // Action Chips
+        // Navigation to Request Service
         binding.requestServiceBtn.setOnClickListener {
-            showToast("Request a Service clicked")
+            startActivity(Intent(this, RequestServiceActivity::class.java))
         }
 
-        binding.postJobBtn.setOnClickListener {
-            startActivity(Intent(this, EditPostActivity::class.java))
+        // Navigation to Post Service
+        binding.postServiceBtn.setOnClickListener {
+            startActivity(Intent(this, PostServiceActivity::class.java))
         }
 
-        // Bottom Navigation
+        // Navigation to Post Ads (Fixed binding error)
+        binding.navPost.setOnClickListener {
+            startActivity(Intent(this, PostAdsActivity::class.java))
+        }
+        
+        // Navigation from Bottom Nav
         binding.navRequest.setOnClickListener {
-            showToast("Navigation: Request")
+            startActivity(Intent(this, RequestServiceActivity::class.java))
         }
-
+        
         binding.navService.setOnClickListener {
-            showToast("Navigation: Service")
+            startActivity(Intent(this, PostServiceActivity::class.java))
         }
-
-        binding.navHome.setOnClickListener {
-            showToast("Navigation: Home")
-        }
-
-        binding.navProfile.setOnClickListener {
-            showToast("Navigation: Profile")
-        }
-        
-        // Cards
-        binding.servicesCard.setOnClickListener {
-            showToast("Services Card clicked")
-        }
-        
-        binding.jobCard.setOnClickListener {
-            showToast("Previous Job clicked")
-        }
-    }
-
-    private fun showToast(message: String) {
-        Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
     }
 }

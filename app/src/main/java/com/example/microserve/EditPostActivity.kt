@@ -56,11 +56,13 @@ class EditPostActivity : AppCompatActivity() {
         val defaultCategory = intent.getStringExtra("category") ?: "Plumbing"
         val defaultName = intent.getStringExtra("provider_name") ?: "Sunil Perera"
         val defaultLocation = intent.getStringExtra("location") ?: "Galle"
-        val defaultContact = intent.getStringExtra("contact") ?: "0712345678"
+        val defaultContact = intent.getStringExtra("contact") ?: "072587456"
+        val defaultEmail = intent.getStringExtra("email") ?: "Sunil@gmail.com"
 
         binding.providerNameET.setText(defaultName)
         binding.locationET.setText(defaultLocation)
         binding.contactET.setText(defaultContact)
+        binding.emailET.setText(defaultEmail)
 
         val categoryPosition = (0 until binding.categorySpinner.count)
             .firstOrNull { binding.categorySpinner.getItemAtPosition(it) == defaultCategory }
@@ -82,21 +84,38 @@ class EditPostActivity : AppCompatActivity() {
             finish()
         }
 
-        binding.saveBtn.setOnClickListener {
-            val category = binding.categorySpinner.selectedItem.toString()
-            val name = binding.providerNameET.text.toString().trim()
-            val location = binding.locationET.text.toString().trim()
-            val contact = binding.contactET.text.toString().trim()
-
-            when {
-                category == "-Select-" -> showToast("Please select a category")
-                name.isEmpty() || location.isEmpty() || contact.isEmpty() -> showToast("Please fill all fields")
-                contact.length < 9 -> showToast("Please enter a valid contact number")
-                else -> {
-                    showToast("Post updated successfully")
-                    finish()
-                }
+        binding.okBtn.setOnClickListener {
+            if (validateFields()) {
+                showToast("Changes saved")
+                finish()
             }
+        }
+
+        binding.postBtn.setOnClickListener {
+            if (validateFields()) {
+                showToast("Post updated successfully")
+                finish()
+            }
+        }
+    }
+
+    private fun validateFields(): Boolean {
+        val category = binding.categorySpinner.selectedItem.toString()
+        val name = binding.providerNameET.text.toString().trim()
+        val location = binding.locationET.text.toString().trim()
+        val contact = binding.contactET.text.toString().trim()
+        val email = binding.emailET.text.toString().trim()
+
+        return when {
+            category == "-Select-" -> {
+                showToast("Please select a category")
+                false
+            }
+            name.isEmpty() || location.isEmpty() || contact.isEmpty() || email.isEmpty() -> {
+                showToast("Please fill all fields")
+                false
+            }
+            else -> true
         }
     }
 

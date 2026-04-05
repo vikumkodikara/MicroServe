@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white"
-    tools:context=".EditPostActivity">
+    tools:context=".RequestServiceActivity">
 
     <!-- Fixed Header -->
     <RelativeLayout
@@ -33,10 +33,20 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/backBtn"
             android:layout_marginTop="20dp"
-            android:text="Edit Post"
+            android:text="Request a\nService"
             android:textColor="@color/white"
             android:textSize="40sp"
             android:textStyle="bold" />
+
+        <ImageView
+            android:layout_width="140dp"
+            android:layout_height="140dp"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentBottom="true"
+            android:layout_marginEnd="26dp"
+            android:alpha="1.0"
+            android:contentDescription="Illustration"
+            android:src="@drawable/request" />
 
     </RelativeLayout>
 
@@ -66,21 +76,46 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
 
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/deleteBtn"
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Enter Your name"
+                    android:textColor="@color/black"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
+
+                <EditText
+                    android:id="@+id/nameET"
                     android:layout_width="match_parent"
                     android:layout_height="48dp"
-                    android:backgroundTint="#CC0000"
-                    android:text="Delete Post"
-                    android:textAllCaps="false"
-                    android:textColor="@color/white"
-                    app:cornerRadius="12dp" />
+                    android:layout_marginTop="8dp"
+                    android:background="@drawable/edittext_bg"
+                    android:paddingHorizontal="12dp"
+                    android:inputType="textPersonName" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="16dp"
-                    android:text="Service Category"
+                    android:text="Title"
+                    android:textColor="@color/black"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
+
+                <EditText
+                    android:id="@+id/titleET"
+                    android:layout_width="match_parent"
+                    android:layout_height="48dp"
+                    android:layout_marginTop="8dp"
+                    android:background="@drawable/edittext_bg"
+                    android:paddingHorizontal="12dp"
+                    android:inputType="text" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:text="Catagory"
                     android:textColor="@color/black"
                     android:textSize="16sp"
                     android:textStyle="bold" />
@@ -97,62 +132,19 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="16dp"
-                    android:text="Name of the Service Provider"
+                    android:text="Contact"
                     android:textColor="@color/black"
                     android:textSize="16sp"
                     android:textStyle="bold" />
 
                 <EditText
-                    android:id="@+id/providerNameET"
+                    android:id="@+id/contactET"
                     android:layout_width="match_parent"
                     android:layout_height="48dp"
                     android:layout_marginTop="8dp"
                     android:background="@drawable/edittext_bg"
-                    android:hint="Enter provider name"
-                    android:inputType="textPersonName"
                     android:paddingHorizontal="12dp"
-                    android:textColorHint="@color/text_gray" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
-                    android:text="Image"
-                    android:textColor="@color/black"
-                    android:textSize="16sp"
-                    android:textStyle="bold" />
-
-                <FrameLayout
-                    android:id="@+id/addImageBtn"
-                    android:layout_width="match_parent"
-                    android:layout_height="100dp"
-                    android:layout_marginTop="8dp"
-                    android:background="@drawable/dashed_bg">
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:gravity="center"
-                        android:orientation="horizontal"
-                        android:padding="8dp">
-
-                        <ImageView
-                            android:id="@+id/selectedImagePreview"
-                            android:layout_width="80dp"
-                            android:layout_height="80dp"
-                            android:scaleType="centerCrop"
-                            android:src="@android:drawable/ic_menu_gallery" />
-
-                        <TextView
-                            android:id="@+id/imageActionText"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="16dp"
-                            android:text="Change Image"
-                            android:textColor="@color/text_gray"
-                            android:textStyle="bold" />
-                    </LinearLayout>
-                </FrameLayout>
+                    android:inputType="phone" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -169,77 +161,38 @@
                     android:layout_height="48dp"
                     android:layout_marginTop="8dp"
                     android:background="@drawable/edittext_bg"
-                    android:hint="Enter location"
-                    android:inputType="textPostalAddress"
                     android:paddingHorizontal="12dp"
-                    android:textColorHint="@color/text_gray" />
+                    android:inputType="textPostalAddress" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="16dp"
-                    android:text="Contact"
+                    android:text="Description"
                     android:textColor="@color/black"
                     android:textSize="16sp"
                     android:textStyle="bold" />
 
                 <EditText
-                    android:id="@+id/contactET"
+                    android:id="@+id/descriptionET"
                     android:layout_width="match_parent"
-                    android:layout_height="48dp"
+                    android:layout_height="120dp"
                     android:layout_marginTop="8dp"
                     android:background="@drawable/edittext_bg"
-                    android:hint="Enter contact number"
-                    android:inputType="phone"
-                    android:paddingHorizontal="12dp"
-                    android:textColorHint="@color/text_gray" />
+                    android:gravity="top"
+                    android:padding="12dp"
+                    android:inputType="textMultiLine" />
 
-                <TextView
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/requestBtn"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
-                    android:text="Email"
-                    android:textColor="@color/black"
-                    android:textSize="16sp"
-                    android:textStyle="bold" />
-
-                <EditText
-                    android:id="@+id/emailET"
-                    android:layout_width="match_parent"
-                    android:layout_height="48dp"
-                    android:layout_marginTop="8dp"
-                    android:background="@drawable/edittext_bg"
-                    android:hint="Enter email"
-                    android:inputType="textEmailAddress"
-                    android:paddingHorizontal="12dp"
-                    android:textColorHint="@color/text_gray" />
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
                     android:layout_marginTop="24dp"
-                    android:gravity="center"
-                    android:orientation="horizontal">
-
-                    <com.google.android.material.button.MaterialButton
-                        android:id="@+id/okBtn"
-                        android:layout_width="100dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginEnd="16dp"
-                        android:backgroundTint="@color/brand_purple"
-                        android:text="Ok"
-                        android:textAllCaps="false"
-                        app:cornerRadius="20dp" />
-
-                    <com.google.android.material.button.MaterialButton
-                        android:id="@+id/postBtn"
-                        android:layout_width="100dp"
-                        android:layout_height="wrap_content"
-                        android:backgroundTint="@color/brand_purple"
-                        android:text="Post"
-                        android:textAllCaps="false"
-                        app:cornerRadius="20dp" />
-                </LinearLayout>
+                    android:backgroundTint="@color/brand_purple"
+                    android:text="Request"
+                    android:textAllCaps="false"
+                    app:cornerRadius="20dp" />
 
             </LinearLayout>
         </androidx.core.widget.NestedScrollView>
