@@ -290,35 +290,35 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/navContainer"
         android:layout_width="match_parent"
-        android:layout_height="110dp"
+        android:layout_height="100dp"
         app:layout_constraintBottom_toBottomOf="parent">
 
-        <!-- The Purple Bar with top rounded corners -->
+        <!-- The Purple Bar -->
         <View
             android:id="@+id/navBackground"
             android:layout_width="match_parent"
-            android:layout_height="70dp"
+            android:layout_height="65dp"
             android:background="@drawable/bottom_nav_background"
             app:layout_constraintBottom_toBottomOf="parent" />
 
-        <!-- The White "Concave" Curve effect (The dip) -->
+        <!-- The White "Concave" Curve effect - Matched exactly to Design -->
         <View
             android:id="@+id/homeCutout"
             android:layout_width="100dp"
             android:layout_height="100dp"
             android:background="@drawable/circle_purple"
-            android:backgroundTint="@color/white"
+            android:backgroundTint="@color/light_background"
             app:layout_constraintBottom_toTopOf="@id/navBackground"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@id/navBackground"
-            android:translationY="10dp" />
+            android:translationY="8dp" />
 
-        <!-- The Dark Purple Home Circle Button -->
+        <!-- The Dark Purple Home Circle Button (Smaller & Centered in curve) -->
         <LinearLayout
             android:id="@+id/navHome"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
+            android:layout_width="52dp"
+            android:layout_height="52dp"
             android:background="@drawable/circle_purple"
             android:elevation="8dp"
             android:gravity="center"
@@ -330,20 +330,19 @@
             app:layout_constraintTop_toTopOf="@id/homeCutout"
             android:translationY="-2dp">
             <ImageView
-                android:layout_width="32dp"
-                android:layout_height="32dp"
+                android:layout_width="28dp"
+                android:layout_height="28dp"
                 android:src="@drawable/navhome" />
         </LinearLayout>
 
-        <!-- Main Navigation row with LEVELED icons and text -->
+        <!-- Labels row - Titles are perfectly LEVELED -->
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="70dp"
-            android:baselineAligned="false"
+            android:layout_height="65dp"
             android:gravity="bottom"
             android:orientation="horizontal"
-            android:paddingBottom="8dp"
             android:weightSum="5"
+            android:paddingBottom="10dp"
             app:layout_constraintBottom_toBottomOf="parent">
 
             <LinearLayout
@@ -384,7 +383,7 @@
                     android:textSize="10sp" />
             </LinearLayout>
 
-            <!-- Home Label slotted in the middle, exactly level with others -->
+            <!-- Home label aligned exactly with others -->
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
