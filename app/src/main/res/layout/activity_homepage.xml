@@ -290,59 +290,66 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/navContainer"
         android:layout_width="match_parent"
-        android:layout_height="100dp"
+        android:layout_height="115dp"
         app:layout_constraintBottom_toBottomOf="parent">
 
-        <!-- The Purple Bar -->
-        <View
-            android:id="@+id/navBackground"
+        <!-- Layer 1: Purple Base Bar -->
+        <ImageView
+            android:id="@+id/navBase"
             android:layout_width="match_parent"
-            android:layout_height="65dp"
-            android:background="@drawable/bottom_nav_background"
+            android:layout_height="70dp"
+            android:scaleType="fitXY"
+            android:src="@drawable/rectanglenav"
             app:layout_constraintBottom_toBottomOf="parent" />
 
-        <!-- The White "Concave" Curve effect - Matched exactly to Design -->
-        <View
-            android:id="@+id/homeCutout"
-            android:layout_width="100dp"
-            android:layout_height="100dp"
-            android:background="@drawable/circle_purple"
-            android:backgroundTint="@color/light_background"
-            app:layout_constraintBottom_toTopOf="@id/navBackground"
+        <!-- Layer 2: White Cutout Curve -->
+        <ImageView
+            android:id="@+id/navSubtract"
+            android:layout_width="120dp"
+            android:layout_height="80dp"
+            android:scaleType="fitCenter"
+            android:src="@drawable/subtractnav"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@id/navBackground"
-            android:translationY="8dp" />
+            app:layout_constraintTop_toTopOf="@id/navBase"
+            app:layout_constraintVertical_bias="0.0"
+            android:translationY="-15dp" />
 
-        <!-- The Dark Purple Home Circle Button (Smaller & Centered in curve) -->
-        <LinearLayout
-            android:id="@+id/navHome"
-            android:layout_width="52dp"
-            android:layout_height="52dp"
-            android:background="@drawable/circle_purple"
-            android:elevation="8dp"
-            android:gravity="center"
-            android:clickable="true"
-            android:focusable="true"
-            app:layout_constraintBottom_toBottomOf="@id/homeCutout"
-            app:layout_constraintEnd_toEndOf="@id/homeCutout"
-            app:layout_constraintStart_toStartOf="@id/homeCutout"
-            app:layout_constraintTop_toTopOf="@id/homeCutout"
-            android:translationY="-2dp">
-            <ImageView
-                android:layout_width="28dp"
-                android:layout_height="28dp"
-                android:src="@drawable/navhome" />
-        </LinearLayout>
+        <!-- Layer 3: Dark Circle for Home Icon (Larger and slightly lower) -->
+        <ImageView
+            android:id="@+id/homeEllipse"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:src="@drawable/ellipsenav"
+            android:translationY="-30dp"
+            app:layout_constraintBottom_toBottomOf="@id/navSubtract"
+            app:layout_constraintEnd_toEndOf="@id/navSubtract"
+            app:layout_constraintStart_toStartOf="@id/navSubtract"
+            app:layout_constraintTop_toTopOf="@id/navSubtract" />
 
-        <!-- Labels row - Titles are perfectly LEVELED -->
+        <!-- Layer 4: Home Icon (Centered in Ellipse) -->
+        <ImageView
+            android:id="@+id/navHomeIcon"
+            android:layout_width="38dp"
+            android:layout_height="38dp"
+            android:src="@drawable/navhome"
+            android:elevation="10dp"
+            android:translationY="-30dp"
+            app:layout_constraintBottom_toBottomOf="@id/homeEllipse"
+            app:layout_constraintEnd_toEndOf="@id/homeEllipse"
+            app:layout_constraintStart_toStartOf="@id/homeEllipse"
+            app:layout_constraintTop_toTopOf="@id/homeEllipse" />
+
+        <!-- Main Navigation row with titles moved further DOWN -->
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="65dp"
+            android:layout_height="70dp"
+            android:baselineAligned="false"
             android:gravity="bottom"
             android:orientation="horizontal"
+            android:paddingBottom="4dp"
             android:weightSum="5"
-            android:paddingBottom="10dp"
             app:layout_constraintBottom_toBottomOf="parent">
 
             <LinearLayout
@@ -353,8 +360,8 @@
                 android:gravity="center"
                 android:orientation="vertical">
                 <ImageView
-                    android:layout_width="26dp"
-                    android:layout_height="26dp"
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
                     android:src="@drawable/navrequest" />
                 <TextView
                     android:layout_width="wrap_content"
@@ -372,8 +379,8 @@
                 android:gravity="center"
                 android:orientation="vertical">
                 <ImageView
-                    android:layout_width="26dp"
-                    android:layout_height="26dp"
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
                     android:src="@drawable/navservice" />
                 <TextView
                     android:layout_width="wrap_content"
@@ -383,8 +390,9 @@
                     android:textSize="10sp" />
             </LinearLayout>
 
-            <!-- Home label aligned exactly with others -->
+            <!-- Centered Home Label aligned with others -->
             <LinearLayout
+                android:id="@+id/navHomeContainer"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -407,8 +415,8 @@
                 android:gravity="center"
                 android:orientation="vertical">
                 <ImageView
-                    android:layout_width="26dp"
-                    android:layout_height="26dp"
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
                     android:src="@drawable/navpost" />
                 <TextView
                     android:layout_width="wrap_content"
@@ -426,8 +434,8 @@
                 android:gravity="center"
                 android:orientation="vertical">
                 <ImageView
-                    android:layout_width="26dp"
-                    android:layout_height="26dp"
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
                     android:src="@drawable/navprofile" />
                 <TextView
                     android:layout_width="wrap_content"
