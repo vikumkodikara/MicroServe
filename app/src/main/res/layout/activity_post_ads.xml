@@ -32,7 +32,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/backBtn"
             android:layout_marginTop="20dp"
-            android:text="Post Adds"
+            android:text="Post Ads"
             android:textColor="@color/white"
             android:textSize="40sp"
             android:textStyle="bold" />
@@ -78,7 +78,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Service Catagory"
+                    android:text="Service Category"
                     android:textColor="@color/black"
                     android:textSize="16sp"
                     android:textStyle="bold" />
