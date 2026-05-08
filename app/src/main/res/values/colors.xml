@@ -12,4 +12,9 @@
     <color name="dark_purple">#6D5A9E</color>
     <color name="light_background">#F8F9FA</color>
     <color name="text_gray">#757575</color>
+
+    <color name="brand_purple">#9C27B0</color>
+    <color name="chip_gray">#E0E0E0</color>
+    <color name="header_start">#513E8A</color>
+    <color name="header_end">#7C69C0</color>
 </resources>
