@@ -13,4 +13,23 @@
     <string name="privacy_policy">Privacy Policy</string>
     <string name="terms_of_services">Terms of Services</string>
     <string name="log_out">Log Out</string>
+
+    <!-- Edit Profile Strings -->
+    <string name="personal_info">Personal Info</string>
+    <string name="full_name">Full Name</string>
+    <string name="email_address">Email Address</string>
+    <string name="phone_number">Phone Number</string>
+    <string name="location_address">Location / Address</string>
+    <string name="save_changes">Save Changes</string>
+
+    <!-- Discover Screen Strings -->
+    <string name="discover_title">Discover</string>
+    <string name="search_hint">Search for friends or groups</string>
+    <string name="suggested_people">Suggested People</string>
+    <string name="recommended_groups">Recommended Groups</string>
+    <string name="follow_button">Follow</string>
+    <string name="join_button">JOIN</string>
+    <string name="dummy_person_name">Pasan Akuratiya</string>
+    <string name="dummy_group_name">The Book Club</string>
+    <string name="dummy_members_count">25.2k Members</string>
 </resources>

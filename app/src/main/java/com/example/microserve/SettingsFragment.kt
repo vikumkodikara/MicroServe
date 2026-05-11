@@ -28,7 +28,11 @@ class SettingsFragment : Fragment() {
         }
         
         view.findViewById<View>(R.id.tv_edit_profile).setOnClickListener {
-            Toast.makeText(requireContext(), "Edit Profile Clicked", Toast.LENGTH_SHORT).show()
+            startActivity(android.content.Intent(requireContext(), EditProfileActivity::class.java))
+        }
+
+        view.findViewById<View>(R.id.btn_personal_info).setOnClickListener {
+            startActivity(android.content.Intent(requireContext(), EditProfileActivity::class.java))
         }
     }
 }

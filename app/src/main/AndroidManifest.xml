@@ -31,6 +31,12 @@
         <activity
             android:name=".RequestServiceActivity"
             android:exported="false" />
+        <activity
+            android:name=".EditProfileActivity"
+            android:exported="false" />
+        <activity
+            android:name=".DiscoverActivity"
+            android:exported="false" />
     </application>
 
 </manifest>

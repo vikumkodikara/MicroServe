@@ -60,5 +60,10 @@ class Homepage : AppCompatActivity() {
                 .addToBackStack(null)
                 .commit()
         }
+
+        // Navigation to Discover Screen
+        binding.menuBtn.setOnClickListener {
+            startActivity(Intent(this, DiscoverActivity::class.java))
+        }
     }
 }
