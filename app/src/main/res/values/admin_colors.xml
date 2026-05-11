@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Purple Gradient Colors -->
+    <color name="admin_primary_purple">#6C5CE7</color>
+    <color name="admin_purple_dark">#5F3DC4</color>
+    <color name="admin_purple_light">#A29BFE</color>
+    
+    <!-- Stat Card Colors -->
+    <color name="admin_stat_blue">#5F5CE6</color>
+    <color name="admin_stat_purple">#6C5CE7</color>
+    <color name="admin_stat_cyan">#66BB6A</color>
+    <color name="admin_stat_orange">#F39C12</color>
+    
+    <!-- Quick Action Card Background -->
+    <color name="admin_quick_action_bg">#F5F5F5</color>
+    
+    <!-- Text Colors -->
+    <color name="admin_text_primary">#2D3436</color>
+    <color name="admin_text_secondary">#636E72</color>
+    <color name="admin_icon_color">#2D3436</color>
+    
+    <!-- Background Colors -->
+    <color name="admin_bg_light">#F8F9FA</color>
+    <color name="admin_nav_bg">#5F3DC4</color>
+    <color name="white_transparent">#FFFFFFFF</color>
+    
+    <!-- Shadow tint -->
+    <color name="shadow_dark">#1A000000</color>
+</resources>
