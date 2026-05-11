@@ -1,3 +1,16 @@
 <resources>
     <string name="app_name">MicroServe</string>
+    <string name="settings">Settings</string>
+    <string name="dummy_user_name">Nethmina Malshan</string>
+    <string name="edit_profile">Edit Profile</string>
+    <string name="personal_information">Personal Information</string>
+    <string name="saved_addresses">Saved Addresses</string>
+    <string name="payment_methods">Payment Methods</string>
+    <string name="notifications">Notifications</string>
+    <string name="dark_mode">Dark Mode</string>
+    <string name="language">Language</string>
+    <string name="get_help">Get Help</string>
+    <string name="privacy_policy">Privacy Policy</string>
+    <string name="terms_of_services">Terms of Services</string>
+    <string name="log_out">Log Out</string>
 </resources>

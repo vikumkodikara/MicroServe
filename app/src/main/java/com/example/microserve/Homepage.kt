@@ -52,5 +52,13 @@ class Homepage : AppCompatActivity() {
         binding.navService.setOnClickListener {
             startActivity(Intent(this, PostServiceActivity::class.java))
         }
+
+        // Navigation to SettingsFragment
+        binding.settingsBtn.setOnClickListener {
+            supportFragmentManager.beginTransaction()
+                .add(android.R.id.content, SettingsFragment())
+                .addToBackStack(null)
+                .commit()
+        }
     }
 }
