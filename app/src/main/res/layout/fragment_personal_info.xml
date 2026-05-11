@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     android:background="@color/light_background"
     android:fillViewport="true"
-    tools:context=".EditProfileActivity"
+    tools:context=".PersonalInfoFragment"
     tools:ignore="Typos">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -237,4 +237,5 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>
+
 

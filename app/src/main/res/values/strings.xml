@@ -32,4 +32,16 @@
     <string name="dummy_person_name">Pasan Akuratiya</string>
     <string name="dummy_group_name">The Book Club</string>
     <string name="dummy_members_count">25.2k Members</string>
+
+    <!-- Saved Address & Payment Methods Strings -->
+    <string name="saved_address_title">Saved Address</string>
+    <string name="payment_methods_title">Payment Methods</string>
+    <string name="add_new_address">Add New Address</string>
+    <string name="add_new_card">Add New Card</string>
+    <string name="home_title">Home</string>
+    <string name="home_address">No. 123/A, Temple Road,\nKaluthara</string>
+    <string name="work_title">Work Office</string>
+    <string name="work_address">Level 4, Tech Park, Colombo 03</string>
+    <string name="card_number">**** **** **** 4589</string>
+    <string name="card_expiry">Expires 12/26</string>
 </resources>

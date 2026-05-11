@@ -34,5 +34,19 @@ class SettingsFragment : Fragment() {
         view.findViewById<View>(R.id.btn_personal_info).setOnClickListener {
             startActivity(android.content.Intent(requireContext(), EditProfileActivity::class.java))
         }
+
+        view.findViewById<View>(R.id.btn_saved_addresses).setOnClickListener {
+            requireActivity().supportFragmentManager.beginTransaction()
+                .add(android.R.id.content, SavedAddressFragment())
+                .addToBackStack(null)
+                .commit()
+        }
+
+        view.findViewById<View>(R.id.btn_payment_methods).setOnClickListener {
+            requireActivity().supportFragmentManager.beginTransaction()
+                .add(android.R.id.content, PaymentMethodsFragment())
+                .addToBackStack(null)
+                .commit()
+        }
     }
 }
