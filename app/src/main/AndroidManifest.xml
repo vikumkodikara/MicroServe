@@ -21,12 +21,15 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".PostAddActivity"
+            android:name=".PostServiceActivity"
             android:exported="false" />
         <activity
             android:name=".EditPostActivity"
             android:exported="false" />
         <activity
+<<<<<<< HEAD
+            android:name=".PostAdsActivity"
+=======
             android:name=".RequesterDetailsActivity"
             android:exported="false" />
         <activity
@@ -34,11 +37,18 @@
             android:exported="false" />
         <activity
             android:name=".ServicesActivity"
+>>>>>>> origin/develop
             android:exported="false" />
         <activity
             android:name=".RequestServiceActivity"
             android:exported="false" />
         <activity
+<<<<<<< HEAD
+            android:name=".EditProfileActivity"
+            android:exported="false" />
+        <activity
+            android:name=".DiscoverActivity"
+=======
             android:name=".UsersActivity"
             android:exported="false" />
         <activity
@@ -58,6 +68,7 @@
             android:exported="false" />
         <activity
             android:name=".AdminProfileActivity"
+>>>>>>> origin/develop
             android:exported="false" />
     </application>
 
