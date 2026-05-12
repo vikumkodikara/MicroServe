@@ -8,8 +8,8 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
 
-    <color name="primary_purple">#8E7CC3</color>
-    <color name="dark_purple">#6D5A9E</color>
+    <color name="primary_purple">#6650a4</color>
+    <color name="dark_purple">#4a4458</color>
     <color name="light_background">#F8F9FA</color>
     <color name="text_gray">#757575</color>
 
@@ -17,4 +17,10 @@
     <color name="chip_gray">#E0E0E0</color>
     <color name="header_start">#513E8A</color>
     <color name="header_end">#7C69C0</color>
+    <!-- Discover Screen Colors -->
+    <color name="discover_bg_start">#1A1A2E</color>
+    <color name="discover_bg_end">#0A0A10</color>
+    <color name="teal_cyan">#00E5FF</color>
+    <color name="dark_gray_search">#2A2A3E</color>
+    <color name="search_hint">#888899</color>
 </resources>

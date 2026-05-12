@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <application
+        android:name=".MicroServeApp"
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
@@ -26,10 +27,48 @@
             android:name=".EditPostActivity"
             android:exported="false" />
         <activity
+<<<<<<< HEAD
             android:name=".PostAdsActivity"
+=======
+            android:name=".RequesterDetailsActivity"
+            android:exported="false" />
+        <activity
+            android:name=".RequestersActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ServicesActivity"
+>>>>>>> origin/develop
             android:exported="false" />
         <activity
             android:name=".RequestServiceActivity"
+            android:exported="false" />
+        <activity
+<<<<<<< HEAD
+            android:name=".EditProfileActivity"
+            android:exported="false" />
+        <activity
+            android:name=".DiscoverActivity"
+=======
+            android:name=".UsersActivity"
+            android:exported="false" />
+        <activity
+            android:name=".UserDetailsActivity"
+            android:exported="false" />
+        <activity
+            android:name=".TransactionsActivity"
+            android:exported="false" />
+        <activity
+            android:name=".TransactionDetailsActivity"
+            android:exported="false" />
+        <activity
+            android:name=".FeedbacksActivity"
+            android:exported="false" />
+        <activity
+            android:name=".SettingsActivity"
+            android:exported="false" />
+        <activity
+            android:name=".AdminProfileActivity"
+>>>>>>> origin/develop
             android:exported="false" />
     </application>
 
