@@ -358,7 +358,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@color/admin_bg_light"
-            android:clipToPadding="true"
+            android:clipToPadding="false"
             android:fillViewport="false"
             android:overScrollMode="never"
             android:scrollbars="none">
@@ -370,7 +370,7 @@
                 android:orientation="vertical"
                 android:paddingHorizontal="16dp"
                 android:paddingTop="54dp"
-                android:paddingBottom="24dp">
+                android:paddingBottom="@dimen/home_nav_scroll_bottom_padding">
 
             <!-- Reference-style job card: rounded photo block + typography -->
             <androidx.cardview.widget.CardView
@@ -471,6 +471,8 @@
             android:layout_height="wrap_content"
             android:layout_gravity="top"
             android:background="@color/admin_bg_light"
+            android:clickable="false"
+            android:focusable="false"
             android:orientation="vertical"
             android:paddingHorizontal="16dp"
             android:paddingTop="10dp"
@@ -492,7 +494,7 @@
         android:id="@+id/customBottomNav"
         layout="@layout/view_home_bottom_nav"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/home_nav_bar_height"
+        android:layout_height="wrap_content"
         android:clipChildren="false"
         android:clipToPadding="false"
         android:elevation="12dp" />

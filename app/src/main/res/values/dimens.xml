@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <dimen name="home_nav_bar_height">68dp</dimen>
-    <dimen name="home_nav_container_height">68dp</dimen>
+    <!-- 68dp bar + room for centre Home puck above the strip -->
+    <dimen name="home_nav_container_height">100dp</dimen>
+    <dimen name="home_nav_puck_overflow">32dp</dimen>
     <dimen name="home_nav_icon_size">26dp</dimen>
+    <dimen name="home_nav_scroll_bottom_padding">16dp</dimen>
+    <dimen name="home_nav_form_scroll_padding">12dp</dimen>
 </resources>

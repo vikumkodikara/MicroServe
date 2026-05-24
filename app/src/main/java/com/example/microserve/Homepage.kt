@@ -8,7 +8,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.doOnLayout
-import androidx.core.view.updatePadding
 import com.example.microserve.databinding.ActivityHomeBinding
 import java.text.SimpleDateFormat
 import java.util.Date
@@ -26,6 +25,7 @@ class Homepage : AppCompatActivity() {
         setContentView(binding.root)
 
         setupWindowInsets()
+        setupJobsScroll()
         setupDate()
         setupBannerToolsWatermarkScale()
         setupClickListeners()
@@ -47,12 +47,26 @@ class Homepage : AppCompatActivity() {
         }
     }
 
+    /** Sticky title sits over the list — forward drags so NestedScrollView still scrolls. */
+    private fun setupJobsScroll() {
+        binding.previouslyJobsSectionHeader.setOnTouchListener { _, event ->
+            binding.scrollView.dispatchTouchEvent(event)
+            true
+        }
+    }
+
     private fun setupWindowInsets() {
         ViewCompat.setOnApplyWindowInsetsListener(binding.main) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            // Pad content only — bottom nav stays full-width purple bar above gesture area
             v.setPadding(systemBars.left, 0, systemBars.right, 0)
-            findViewById<android.view.View>(R.id.customBottomNav)?.updatePadding(bottom = systemBars.bottom)
+            // Extend purple below the bar art — do not pad/squash the 68dp nav layers
+            findViewById<android.view.View>(R.id.navSystemBarSpacer)?.let { spacer ->
+                val lp = spacer.layoutParams
+                if (lp.height != systemBars.bottom) {
+                    lp.height = systemBars.bottom
+                    spacer.layoutParams = lp
+                }
+            }
             insets
         }
     }

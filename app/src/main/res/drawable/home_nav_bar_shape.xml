@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Purple bar with centre cradle notch (no subtractnav overlay needed) -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="360dp"
+    android:height="68dp"
+    android:viewportWidth="360"
+    android:viewportHeight="68">
+
+    <path
+        android:fillColor="#5F4B8A"
+        android:pathData="M0,68 L0,20 Q0,4 18,4 L118,4 C138,4 146,50 180,50 C214,50 222,4 242,4 L342,4 Q360,4 360,20 L360,68 Z" />
+</vector>
