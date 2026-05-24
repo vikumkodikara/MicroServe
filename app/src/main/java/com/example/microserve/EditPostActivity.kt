@@ -84,14 +84,7 @@ class EditPostActivity : AppCompatActivity() {
             finish()
         }
 
-        binding.okBtn.setOnClickListener {
-            if (validateFields()) {
-                showToast("Changes saved")
-                finish()
-            }
-        }
-
-        binding.postBtn.setOnClickListener {
+        binding.saveBtn.setOnClickListener {
             if (validateFields()) {
                 showToast("Post updated successfully")
                 finish()

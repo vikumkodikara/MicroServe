@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="home_nav_bar_height">68dp</dimen>
+    <dimen name="home_nav_container_height">68dp</dimen>
+    <dimen name="home_nav_icon_size">26dp</dimen>
+</resources>

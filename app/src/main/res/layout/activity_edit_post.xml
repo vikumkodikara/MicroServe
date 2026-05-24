@@ -42,29 +42,13 @@
                     android:clickable="true"
                     android:focusable="true" />
 
-                <LinearLayout
+                <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Edit Post"
-                        android:textColor="#FFFFFF"
-                        android:textSize="28sp"
-                        android:textStyle="bold" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="4dp"
-                        android:text="Update service details"
-                        android:textColor="#FFFFFF"
-                        android:textSize="13sp"
-                        android:alpha="0.8" />
-
-                </LinearLayout>
+                    android:text="Edit Post"
+                    android:textColor="#FFFFFF"
+                    android:textSize="28sp"
+                    android:textStyle="bold" />
 
             </LinearLayout>
 
@@ -105,17 +89,19 @@
 
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/deleteBtn"
-                        android:layout_width="match_parent"
-                        android:layout_height="48dp"
-                        android:background="@drawable/delete_user_button_bg"
+                        android:layout_width="wrap_content"
+                        android:layout_height="44dp"
+                        android:layout_gravity="center_horizontal"
                         android:insetTop="0dp"
                         android:insetBottom="0dp"
+                        android:paddingHorizontal="32dp"
                         android:text="Delete Post"
                         android:textAllCaps="false"
                         android:textColor="@color/white"
-                        android:textSize="16sp"
+                        android:textSize="15sp"
                         android:textStyle="bold"
-                        app:backgroundTint="@android:color/transparent"
+                        app:backgroundTint="#DC3545"
+                        app:cornerRadius="32dp"
                         app:rippleColor="#33FFFFFF"
                         app:strokeWidth="0dp" />
 
@@ -133,8 +119,9 @@
                         android:layout_width="match_parent"
                         android:layout_height="50dp"
                         android:layout_marginTop="8dp"
-                        android:background="@drawable/edittext_bg"
-                        android:paddingHorizontal="10dp" />
+                        android:background="@drawable/spinner_dropdown_bg"
+                        android:paddingHorizontal="10dp"
+                        android:spinnerMode="dropdown" />
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -257,6 +244,27 @@
                         android:background="@drawable/edittext_bg"
                         android:hint="Enter contact number"
                         android:inputType="phone"
+                        android:paddingHorizontal="14dp"
+                        android:textColor="@color/admin_text_primary"
+                        android:textColorHint="@color/admin_text_secondary" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp"
+                        android:text="Email"
+                        android:textColor="@color/admin_text_primary"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
+
+                    <EditText
+                        android:id="@+id/emailET"
+                        android:layout_width="match_parent"
+                        android:layout_height="56dp"
+                        android:layout_marginTop="8dp"
+                        android:background="@drawable/edittext_bg"
+                        android:hint="Enter email address"
+                        android:inputType="textEmailAddress"
                         android:paddingHorizontal="14dp"
                         android:textColor="@color/admin_text_primary"
                         android:textColorHint="@color/admin_text_secondary" />

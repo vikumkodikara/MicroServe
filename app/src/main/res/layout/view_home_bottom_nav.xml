@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Flat 68dp bar: gradient, 5 tabs (icon + label), centre Home with white ring puck -->
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/home_nav_bar_height"
+    android:background="@drawable/bottom_nav_background"
+    android:clipChildren="false"
+    android:clipToPadding="false"
+    android:elevation="10dp">
+
+    <LinearLayout
+        android:id="@+id/navBar"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:baselineAligned="false"
+        android:clipChildren="false"
+        android:clipToPadding="false"
+        android:gravity="bottom|center_horizontal"
+        android:orientation="horizontal"
+        android:paddingBottom="6dp"
+        android:weightSum="5">
+
+        <LinearLayout
+            android:id="@+id/navTabRequest"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:clickable="true"
+            android:focusable="true"
+            android:gravity="center_horizontal|bottom"
+            android:orientation="vertical">
+
+            <ImageView
+                android:id="@+id/navIconRequest"
+                android:layout_width="@dimen/home_nav_icon_size"
+                android:layout_height="@dimen/home_nav_icon_size"
+                android:contentDescription="@string/nav_request"
+                android:scaleType="fitCenter"
+                android:src="@drawable/home_nav_icon_request" />
+
+            <TextView
+                android:id="@+id/navLabelRequest"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                android:text="@string/nav_request"
+                android:textColor="@color/white"
+                android:textSize="10sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/navTabService"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:clickable="true"
+            android:focusable="true"
+            android:gravity="center_horizontal|bottom"
+            android:orientation="vertical">
+
+            <ImageView
+                android:id="@+id/navIconService"
+                android:layout_width="@dimen/home_nav_icon_size"
+                android:layout_height="@dimen/home_nav_icon_size"
+                android:contentDescription="@string/nav_service"
+                android:scaleType="fitCenter"
+                android:src="@drawable/home_nav_icon_service" />
+
+            <TextView
+                android:id="@+id/navLabelService"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                android:text="@string/nav_service"
+                android:textColor="@color/white"
+                android:textSize="10sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/navTabHome"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:clickable="true"
+            android:clipChildren="false"
+            android:clipToPadding="false"
+            android:focusable="true"
+            android:gravity="center_horizontal|bottom"
+            android:orientation="vertical">
+
+            <FrameLayout
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_marginTop="-12dp"
+                android:clipChildren="false">
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/home_nav_home_ring" />
+
+                <View
+                    android:layout_width="44dp"
+                    android:layout_height="44dp"
+                    android:layout_gravity="center"
+                    android:background="@drawable/home_nav_puck_fill" />
+
+                <ImageView
+                    android:id="@+id/navHomeIconInner"
+                    android:layout_width="@dimen/home_nav_icon_size"
+                    android:layout_height="@dimen/home_nav_icon_size"
+                    android:layout_gravity="center"
+                    android:contentDescription="@null"
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/navhome" />
+            </FrameLayout>
+
+            <TextView
+                android:id="@+id/navLabelHome"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                android:text="@string/nav_home"
+                android:textColor="@color/white"
+                android:textSize="10sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/navTabPost"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:clickable="true"
+            android:focusable="true"
+            android:gravity="center_horizontal|bottom"
+            android:orientation="vertical">
+
+            <ImageView
+                android:id="@+id/navIconPost"
+                android:layout_width="@dimen/home_nav_icon_size"
+                android:layout_height="@dimen/home_nav_icon_size"
+                android:contentDescription="@string/nav_post"
+                android:scaleType="fitCenter"
+                android:src="@drawable/navpost" />
+
+            <TextView
+                android:id="@+id/navLabelPost"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                android:text="@string/nav_post"
+                android:textColor="@color/white"
+                android:textSize="10sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/navTabProfile"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:clickable="true"
+            android:focusable="true"
+            android:gravity="center_horizontal|bottom"
+            android:orientation="vertical">
+
+            <ImageView
+                android:id="@+id/navIconProfile"
+                android:layout_width="@dimen/home_nav_icon_size"
+                android:layout_height="@dimen/home_nav_icon_size"
+                android:contentDescription="@string/nav_profile"
+                android:scaleType="fitCenter"
+                android:src="@drawable/navprofile" />
+
+            <TextView
+                android:id="@+id/navLabelProfile"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                android:text="@string/nav_profile"
+                android:textColor="@color/white"
+                android:textSize="10sp" />
+        </LinearLayout>
+    </LinearLayout>
+
+</FrameLayout>

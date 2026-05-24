@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Warm interior-style placeholder (first mock: living room preview) -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="rectangle">
+    <gradient
+        android:type="linear"
+        android:angle="90"
+        android:startColor="#EBE6E0"
+        android:centerColor="#D9D3CA"
+        android:endColor="#C8C2B8" />
+    <corners android:radius="16dp" />
+</shape>
