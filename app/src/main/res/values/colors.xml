@@ -23,4 +23,12 @@
     <color name="teal_cyan">#00E5FF</color>
     <color name="dark_gray_search">#2A2A3E</color>
     <color name="search_hint">#888899</color>
+
+    <!-- Matches bottom of rectanglenav — system-bar spacer under home nav -->
+    <color name="home_nav_inset_fill">#3A2B52</color>
+    <color name="login_button_lavender">#D199FF</color>
+    <color name="login_hint_gray">#B0B0B0</color>
+    <color name="login_link_gray">#B0B0B0</color>
+    <color name="login_auth_purple_top">#8778BF</color>
+    <color name="login_auth_purple_bottom">#483C72</color>
 </resources>

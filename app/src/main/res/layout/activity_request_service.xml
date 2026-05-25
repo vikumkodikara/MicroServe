@@ -1,209 +1,258 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/admin_purple_dark"
+    android:background="@color/admin_bg_light"
+    android:orientation="vertical"
     tools:context=".RequestServiceActivity">
 
-    <!-- Header -->
-    <ImageView
-        android:id="@+id/backBtn"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:layout_margin="16dp"
-        android:padding="8dp"
-        android:src="@android:drawable/ic_menu_revert"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:tint="@color/white" />
+    <!-- ═══════════ HEADER ═══════════ -->
+    <FrameLayout
+        android:id="@+id/headerContainer"
+        android:layout_width="match_parent"
+        android:layout_height="180dp"
+        android:background="@drawable/sub_header_gradient">
 
-    <TextView
-        android:id="@+id/titleText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="24dp"
-        android:layout_marginTop="24dp"
-        android:text="Request a Service"
-        android:textColor="@color/white"
-        android:textSize="30sp"
-        android:textStyle="bold"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/backBtn" />
+        <!-- Header Image (request.png) on the right -->
+        <ImageView
+            android:layout_width="140dp"
+            android:layout_height="140dp"
+            android:layout_gravity="end|center_vertical"
+            android:layout_marginEnd="8dp"
+            android:alpha="0.9"
+            android:contentDescription="Request illustration"
+            android:scaleType="fitCenter"
+            android:src="@drawable/request" />
 
-    <TextView
-        android:id="@+id/subtitleText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="24dp"
-        android:layout_marginTop="6dp"
-        android:text="Submit a new service request"
-        android:textColor="@color/white"
-        android:textSize="14sp"
-        android:alpha="0.8"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/titleText" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="bottom"
+            android:orientation="vertical"
+            android:paddingStart="20dp"
+            android:paddingEnd="20dp"
+            android:paddingBottom="24dp">
 
-    <ImageView
-        android:layout_width="150dp"
-        android:layout_height="150dp"
-        android:src="@mipmap/ic_launcher"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+            <!-- Back arrow -->
+            <TextView
+                android:id="@+id/backBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:clickable="true"
+                android:focusable="true"
+                android:paddingEnd="12dp"
+                android:text="‹"
+                android:textColor="#FFFFFF"
+                android:textSize="30sp"
+                android:textStyle="bold" />
 
-    <!-- Form Container -->
+            <!-- Title -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Request a\nService"
+                android:textColor="#FFFFFF"
+                android:textSize="28sp"
+                android:textStyle="bold"
+                android:lineSpacingExtra="2dp" />
+
+        </LinearLayout>
+    </FrameLayout>
+
+    <!-- ═══════════ SCROLLABLE FORM ═══════════ -->
     <androidx.core.widget.NestedScrollView
+        android:id="@+id/formScroll"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_marginTop="24dp"
-        android:background="@drawable/post_form_bg"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/subtitleText">
+        android:layout_weight="1"
+        android:clipToPadding="false"
+        android:overScrollMode="never"
+        android:fillViewport="true">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:padding="24dp">
+            android:paddingHorizontal="16dp"
+            android:paddingTop="20dp"
+            android:paddingBottom="24dp">
 
-            <TextView
-                android:layout_width="wrap_content"
+            <!-- ─── FORM CARD ─── -->
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Your Name"
-                android:textColor="@color/admin_text_primary"
-                android:textSize="16sp"
-                android:textStyle="bold" />
+                android:background="@drawable/form_card_bordered_bg"
+                android:elevation="3dp"
+                android:orientation="vertical">
 
-            <EditText
-                android:id="@+id/nameET"
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:layout_marginTop="8dp"
-                android:background="@drawable/edittext_bg"
-                android:hint="Enter your name"
-                android:inputType="textPersonName"
-                android:paddingHorizontal="12dp"
-                android:textColor="@color/admin_text_primary"
-                android:textColorHint="@color/admin_text_secondary" />
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="20dp">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:text="Service Title"
-                android:textColor="@color/admin_text_primary"
-                android:textSize="16sp"
-                android:textStyle="bold" />
+                    <!-- Enter Your name -->
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Enter Your name"
+                        android:textColor="@color/admin_text_primary"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
 
-            <EditText
-                android:id="@+id/titleET"
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:layout_marginTop="8dp"
-                android:background="@drawable/edittext_bg"
-                android:hint="e.g., Need House Cleaning"
-                android:inputType="text"
-                android:paddingHorizontal="12dp"
-                android:textColor="@color/admin_text_primary"
-                android:textColorHint="@color/admin_text_secondary" />
+                    <EditText
+                        android:id="@+id/nameET"
+                        android:layout_width="match_parent"
+                        android:layout_height="50dp"
+                        android:layout_marginTop="8dp"
+                        android:background="@drawable/edittext_bg"
+                        android:hint="Enter your name"
+                        android:inputType="textPersonName"
+                        android:paddingHorizontal="14dp"
+                        android:textColor="@color/admin_text_primary"
+                        android:textColorHint="@color/admin_text_secondary" />
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:text="Service Category"
-                android:textColor="@color/admin_text_primary"
-                android:textSize="16sp"
-                android:textStyle="bold" />
+                    <!-- Title -->
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp"
+                        android:text="Title"
+                        android:textColor="@color/admin_text_primary"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
 
-            <Spinner
-                android:id="@+id/categorySpinner"
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:layout_marginTop="8dp"
-                android:background="@drawable/edittext_bg"
-                android:padding="8dp" />
+                    <EditText
+                        android:id="@+id/titleET"
+                        android:layout_width="match_parent"
+                        android:layout_height="50dp"
+                        android:layout_marginTop="8dp"
+                        android:background="@drawable/edittext_bg"
+                        android:hint="Enter service title"
+                        android:inputType="text"
+                        android:paddingHorizontal="14dp"
+                        android:textColor="@color/admin_text_primary"
+                        android:textColorHint="@color/admin_text_secondary" />
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:text="Contact Number"
-                android:textColor="@color/admin_text_primary"
-                android:textSize="16sp"
-                android:textStyle="bold" />
+                    <!-- Category -->
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp"
+                        android:text="Category"
+                        android:textColor="@color/admin_text_primary"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
 
-            <EditText
-                android:id="@+id/contactET"
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:layout_marginTop="8dp"
-                android:background="@drawable/edittext_bg"
-                android:hint="Enter contact number"
-                android:inputType="phone"
-                android:paddingHorizontal="12dp"
-                android:textColor="@color/admin_text_primary"
-                android:textColorHint="@color/admin_text_secondary" />
+                    <Spinner
+                        android:id="@+id/categorySpinner"
+                        android:layout_width="match_parent"
+                        android:layout_height="50dp"
+                        android:layout_marginTop="8dp"
+                        android:background="@drawable/spinner_dropdown_bg"
+                        android:paddingHorizontal="10dp"
+                        android:spinnerMode="dropdown" />
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:text="Location"
-                android:textColor="@color/admin_text_primary"
-                android:textSize="16sp"
-                android:textStyle="bold" />
+                    <!-- Contact -->
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp"
+                        android:text="Contact"
+                        android:textColor="@color/admin_text_primary"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
 
-            <EditText
-                android:id="@+id/locationET"
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:layout_marginTop="8dp"
-                android:background="@drawable/edittext_bg"
-                android:hint="Enter location"
-                android:inputType="text"
-                android:paddingHorizontal="12dp"
-                android:textColor="@color/admin_text_primary"
-                android:textColorHint="@color/admin_text_secondary" />
+                    <EditText
+                        android:id="@+id/contactET"
+                        android:layout_width="match_parent"
+                        android:layout_height="50dp"
+                        android:layout_marginTop="8dp"
+                        android:background="@drawable/edittext_bg"
+                        android:hint="Enter contact number"
+                        android:inputType="phone"
+                        android:paddingHorizontal="14dp"
+                        android:textColor="@color/admin_text_primary"
+                        android:textColorHint="@color/admin_text_secondary" />
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:text="Description"
-                android:textColor="@color/admin_text_primary"
-                android:textSize="16sp"
-                android:textStyle="bold" />
+                    <!-- Location -->
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp"
+                        android:text="Location"
+                        android:textColor="@color/admin_text_primary"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
 
-            <EditText
-                android:id="@+id/descriptionET"
-                android:layout_width="match_parent"
-                android:layout_height="100dp"
-                android:layout_marginTop="8dp"
-                android:background="@drawable/edittext_bg"
-                android:hint="Describe your service request..."
-                android:inputType="textMultiLine"
-                android:gravity="top|start"
-                android:paddingHorizontal="12dp"
-                android:paddingVertical="8dp"
-                android:textColor="@color/admin_text_primary"
-                android:textColorHint="@color/admin_text_secondary" />
+                    <EditText
+                        android:id="@+id/locationET"
+                        android:layout_width="match_parent"
+                        android:layout_height="50dp"
+                        android:layout_marginTop="8dp"
+                        android:background="@drawable/edittext_bg"
+                        android:hint="Enter location"
+                        android:inputType="textPostalAddress"
+                        android:paddingHorizontal="14dp"
+                        android:textColor="@color/admin_text_primary"
+                        android:textColorHint="@color/admin_text_secondary" />
 
-            <Button
-                android:id="@+id/requestBtn"
-                android:layout_width="match_parent"
-                android:layout_height="55dp"
-                android:layout_marginTop="32dp"
-                android:layout_marginBottom="24dp"
-                android:background="@drawable/primary_button_bg"
-                android:stateListAnimator="@null"
-                android:text="Submit Request"
-                android:textColor="@color/white"
-                android:textSize="16sp"
-                android:textStyle="bold" />
+                    <!-- Description -->
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp"
+                        android:text="Description"
+                        android:textColor="@color/admin_text_primary"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
+
+                    <EditText
+                        android:id="@+id/descriptionET"
+                        android:layout_width="match_parent"
+                        android:layout_height="100dp"
+                        android:layout_marginTop="8dp"
+                        android:background="@drawable/edittext_bg"
+                        android:gravity="top|start"
+                        android:hint="Describe your service request..."
+                        android:inputType="textMultiLine"
+                        android:paddingHorizontal="14dp"
+                        android:paddingVertical="12dp"
+                        android:textColor="@color/admin_text_primary"
+                        android:textColorHint="@color/admin_text_secondary" />
+
+                    <!-- Submit Button -->
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/requestBtn"
+                        android:layout_width="match_parent"
+                        android:layout_height="54dp"
+                        android:layout_marginTop="24dp"
+                        android:background="@drawable/primary_button_bg"
+                        android:insetTop="0dp"
+                        android:insetBottom="0dp"
+                        android:text="Submit Request"
+                        android:textAllCaps="false"
+                        android:textColor="@color/white"
+                        android:textSize="16sp"
+                        android:textStyle="bold"
+                        app:backgroundTint="@android:color/transparent"
+                        app:rippleColor="#33FFFFFF"
+                        app:strokeWidth="0dp" />
+
+                </LinearLayout>
+
+            </LinearLayout>
 
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <!-- ═══════════ BOTTOM GRADIENT BAR ═══════════ -->
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="8dp"
+        android:background="@drawable/sub_header_gradient" />
+
+</LinearLayout>

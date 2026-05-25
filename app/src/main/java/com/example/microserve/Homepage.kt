@@ -7,134 +7,96 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
-import com.example.microserve.databinding.ActivityAdminDashboardBinding
+import androidx.core.view.doOnLayout
+import com.example.microserve.databinding.ActivityHomeBinding
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 
 class Homepage : AppCompatActivity() {
 
-    private lateinit var binding: ActivityAdminDashboardBinding
-    private var currentMetrics = DashboardMetrics()
+    private lateinit var binding: ActivityHomeBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
 
-        binding = ActivityAdminDashboardBinding.inflate(layoutInflater)
+        binding = ActivityHomeBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         setupWindowInsets()
+        setupJobsScroll()
+        setupDate()
+        setupBannerToolsWatermarkScale()
         setupClickListeners()
-        setupBottomNavigation()
-        refreshMetrics()
+        HomeBottomNavHelper.setup(this, HomeBottomNavHelper.TAB_HOME)
     }
 
-    override fun onResume() {
-        super.onResume()
-        refreshMetrics()
+    /**
+     * Blows up the soft tool watermark so it reads clearly in the shallow banner strip.
+     */
+    private fun setupBannerToolsWatermarkScale() {
+        binding.bannerToolsBackdrop.doOnLayout {
+            val iv = binding.bannerToolsBackdrop
+            if (iv.width == 0 || iv.height == 0) return@doOnLayout
+            iv.pivotX = iv.width * 0.5f
+            iv.pivotY = iv.height * 0.5f
+            val s = 2.35f
+            iv.scaleX = s
+            iv.scaleY = s
+        }
+    }
+
+    /** Sticky title sits over the list — forward drags so NestedScrollView still scrolls. */
+    private fun setupJobsScroll() {
+        binding.previouslyJobsSectionHeader.setOnTouchListener { _, event ->
+            binding.scrollView.dispatchTouchEvent(event)
+            true
+        }
     }
 
     private fun setupWindowInsets() {
         ViewCompat.setOnApplyWindowInsetsListener(binding.main) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            v.setPadding(systemBars.left, 0, systemBars.right, systemBars.bottom)
+            v.setPadding(systemBars.left, 0, systemBars.right, 0)
+            // Extend purple below the bar art — do not pad/squash the 68dp nav layers
+            findViewById<android.view.View>(R.id.navSystemBarSpacer)?.let { spacer ->
+                val lp = spacer.layoutParams
+                if (lp.height != systemBars.bottom) {
+                    lp.height = systemBars.bottom
+                    spacer.layoutParams = lp
+                }
+            }
             insets
         }
     }
 
-    private fun setupClickListeners() {
-        binding.quickRequestsBtn.setOnClickListener {
-            showToast("Opening service requests")
-            startActivity(Intent(this, RequestersActivity::class.java))
-        }
-
-        binding.quickServicesBtn.setOnClickListener {
-            showToast("Opening services management")
-            startActivity(Intent(this, ServicesActivity::class.java))
-        }
-
-        binding.quickTransactionsBtn.setOnClickListener {
-            showToast("Opening transaction records")
-            startActivity(Intent(this, TransactionsActivity::class.java))
-        }
-
-        binding.quickFeedbacksBtn.setOnClickListener {
-            showToast("Opening feedback management")
-            startActivity(Intent(this, FeedbacksActivity::class.java))
-        }
-
-        binding.quickUsersBtn.setOnClickListener {
-            showToast("Opening user management")
-            startActivity(Intent(this, UsersActivity::class.java))
-        }
-
-        binding.statRequestsCard.setOnClickListener {
-            showToast("Total service requests: ${currentMetrics.requests}")
-        }
-
-        binding.statCompletedCard.setOnClickListener {
-            showToast("Completed transactions: ${currentMetrics.completed}")
-        }
-
-        binding.statFeedbacksCard.setOnClickListener {
-            showToast("Total feedback submissions: ${currentMetrics.feedbacks}")
-        }
-
-        binding.statRevenueCard.setOnClickListener {
-            showToast("Current revenue: Rs.${currentMetrics.revenue}")
-        }
+    private fun setupDate() {
+        val dateFormat = SimpleDateFormat("EEEE, dd MMM", Locale.getDefault())
+        binding.dateText.text = dateFormat.format(Date())
     }
 
-    private fun setupBottomNavigation() {
-        val homeTab = findViewById<android.widget.LinearLayout>(R.id.navTabHome)
-        val profileTab = findViewById<android.widget.LinearLayout>(R.id.navTabProfile)
-        val settingsTab = findViewById<android.widget.LinearLayout>(R.id.navTabSettings)
-        val bubbleIcon = findViewById<android.widget.ImageView>(R.id.navBubbleIcon)
-
-        homeTab.setOnClickListener {
-            // Already on Home
-        }
-        profileTab.setOnClickListener {
-            startActivity(Intent(this, AdminProfileActivity::class.java))
-        }
-        settingsTab.setOnClickListener {
+    private fun setupClickListeners() {
+        // Settings button
+        binding.settingsBtn.setOnClickListener {
             startActivity(Intent(this, SettingsActivity::class.java))
         }
-        bubbleIcon.setImageResource(R.drawable.ic_nav_home)
-    }
 
-    private fun refreshMetrics() {
-        val dbMetrics = fetchDashboardMetricsFromDatabase()
-        currentMetrics = dbMetrics ?: DashboardMetrics()
-        updateMetricsUi(currentMetrics)
-    }
+        // Action chips
+        binding.chipPostService.setOnClickListener {
+            startActivity(Intent(this, PostServiceActivity::class.java))
+        }
 
-    private fun updateMetricsUi(metrics: DashboardMetrics) {
-        binding.requestsCount.text = metrics.requests.toString()
-        binding.completedCount.text = metrics.completed.toString()
-        binding.feedbacksCount.text = metrics.feedbacks.toString()
-        binding.revenueCount.text = "Rs.${metrics.revenue}"
-    }
+        binding.chipRequestService.setOnClickListener {
+            startActivity(Intent(this, RequestServiceActivity::class.java))
+        }
 
-    private fun fetchDashboardMetricsFromDatabase(): DashboardMetrics? {
-        val pendingCount = RequestStore.getPendingRequests(this).size
-        val completedTransactions = TransactionStore.getSuccessCount(this)
-        val totalFeedbacks = FeedbackStore.getFeedbackCount(this)
-        val totalRevenue = TransactionStore.getTotalSuccessAmount(this).toInt()
-        return DashboardMetrics(
-            requests = pendingCount,
-            completed = completedTransactions,
-            feedbacks = totalFeedbacks,
-            revenue = totalRevenue
-        )
+        binding.chipPostAds.setOnClickListener {
+            startActivity(Intent(this, PostAdsActivity::class.java))
+        }
     }
 
     private fun showToast(message: String) {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
     }
-
-    data class DashboardMetrics(
-        val requests: Int = 0,
-        val completed: Int = 0,
-        val feedbacks: Int = 0,
-        val revenue: Int = 0
-    )
 }
