@@ -61,5 +61,11 @@ class SettingsFragmentActivity : AppCompatActivity() {
                 startActivity(Intent(this, SavedAddressActivity::class.java))
             }
         } catch (_: Exception) { }
+
+        try {
+            findViewById<View>(R.id.btn_payment_methods).setOnClickListener {
+                startActivity(Intent(this, WalletActivity::class.java))
+            }
+        } catch (_: Exception) { }
     }
 }

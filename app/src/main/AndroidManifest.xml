@@ -87,7 +87,13 @@
             android:name=".SavedAddressActivity"
             android:exported="false" />
         <activity
+            android:name=".WalletActivity"
+            android:exported="false" />
+        <activity
             android:name=".SettingsFragmentActivity"
+            android:exported="false" />
+        <activity
+            android:name=".AddNewCardActivity"
             android:exported="false" />
     </application>
 

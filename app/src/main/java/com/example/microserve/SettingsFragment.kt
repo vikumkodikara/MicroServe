@@ -51,10 +51,7 @@ class SettingsFragment : Fragment() {
         }
 
         view.findViewById<View>(R.id.btn_payment_methods).setOnClickListener {
-            requireActivity().supportFragmentManager.beginTransaction()
-                .add(android.R.id.content, PaymentMethodsFragment())
-                .addToBackStack(null)
-                .commit()
+            startActivity(android.content.Intent(requireContext(), WalletActivity::class.java))
         }
     }
 }
