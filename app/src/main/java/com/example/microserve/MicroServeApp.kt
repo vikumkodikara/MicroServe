@@ -13,6 +13,7 @@ class MicroServeApp : Application() {
         FirebaseApp.initializeApp(this)
         enableFirestoreOfflineCache()
         applySavedTheme()
+        UserRepository.ensureAdminExists()
     }
 
     private fun enableFirestoreOfflineCache() {
