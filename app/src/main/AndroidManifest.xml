@@ -80,6 +80,12 @@
         <activity
             android:name=".AdminProfileActivity"
             android:exported="false" />
+        <activity
+            android:name=".PersonalInfoActivity"
+            android:exported="false" />
+        <activity
+            android:name=".SettingsFragmentActivity"
+            android:exported="false" />
     </application>
 
 </manifest>
