@@ -87,7 +87,6 @@ class LoginActivity : AppCompatActivity() {
             when {
                 email.isEmpty() -> toast(getString(R.string.login_error_username))
                 password.isEmpty() -> toast(getString(R.string.login_error_password))
-                isAdminCredentials(email, password) -> loginAsAdmin()
                 !Patterns.EMAIL_ADDRESS.matcher(email).matches() -> toast(getString(R.string.login_error_invalid_email))
                 else -> signInWithEmail(email, password)
             }
@@ -112,29 +111,6 @@ class LoginActivity : AppCompatActivity() {
 
         binding.googleSignInButton.setSize(SignInButton.SIZE_WIDE)
         binding.googleSignInButton.setColorScheme(SignInButton.COLOR_LIGHT)
-    }
-
-    private fun isAdminCredentials(email: String, password: String): Boolean {
-        val admin = UserStore.getOrCreateAdminUser(this)
-        return email.equals(admin.email, ignoreCase = true) && password == admin.password
-    }
-
-    private fun loginAsAdmin() {
-        val admin = UserStore.getOrCreateAdminUser(this)
-        val adminProfile = UserProfile(
-            uid = admin.id,
-            name = admin.name,
-            email = admin.email,
-            phone = admin.phone,
-            role = UserProfile.ROLE_ADMIN
-        )
-        AppPreferences.saveSession(this, adminProfile)
-        toast(getString(R.string.login_admin_success))
-        startActivity(
-            Intent(this, AdminDashboardActivity::class.java)
-                .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
-        )
-        finish()
     }
 
     private fun signInWithEmail(email: String, password: String) {
