@@ -105,7 +105,7 @@
                         android:fontFamily="sans-serif"
                         android:hint="@string/login_username_hint"
                         android:importantForAutofill="yes"
-                        android:inputType="text"
+                        android:inputType="textEmailAddress"
                         android:maxLines="1"
                         android:textColor="@color/black"
                         android:textColorHint="@color/login_hint_gray"
@@ -192,13 +192,11 @@
                         android:text="@string/login_button" />
                 </LinearLayout>
 
-                <com.google.android.material.button.MaterialButton
+                <com.google.android.gms.common.SignInButton
                     android:id="@+id/googleSignInButton"
-                    style="@style/Widget.MicroServe.LoginButton"
                     android:layout_width="0dp"
-                    android:layout_height="54dp"
+                    android:layout_height="48dp"
                     android:layout_marginTop="14dp"
-                    android:text="@string/login_google_button"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"

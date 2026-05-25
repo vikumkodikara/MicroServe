@@ -28,7 +28,9 @@
     <string name="login_password_hint">Password</string>
     <string name="login_button">Log in</string>
     <string name="sign_up_button">Sign Up</string>
-    <string name="login_google_button">Continue with Google</string>
+    <string name="login_google_button">Sign in with Google</string>
+    <string name="login_google_not_configured">Google sign-in is not configured. Add the web client ID in Firebase.</string>
+    <string name="login_admin_success">Welcome, Admin</string>
     <string name="login_forgot_password">Forgot your password?</string>
     <string name="login_forgot_password_soon">Password reset coming soon</string>
     <string name="login_error_username">Please enter your email</string>
