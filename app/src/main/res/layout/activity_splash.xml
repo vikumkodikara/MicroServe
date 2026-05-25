@@ -11,16 +11,42 @@
     <com.example.microserve.ParticleView
         android:id="@+id/particleView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        android:alpha="0" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
+        <!-- Outer neon ring — centered on logo -->
+        <View
+            android:id="@+id/neonRingOuter"
+            android:layout_width="280dp"
+            android:layout_height="280dp"
+            android:alpha="0"
+            android:background="@drawable/splash_neon_ring_outer"
+            app:layout_constraintBottom_toBottomOf="@id/splashLogo"
+            app:layout_constraintEnd_toEndOf="@id/splashLogo"
+            app:layout_constraintStart_toStartOf="@id/splashLogo"
+            app:layout_constraintTop_toTopOf="@id/splashLogo" />
+
+        <!-- Inner neon ring — centered on logo -->
+        <View
+            android:id="@+id/neonRingInner"
+            android:layout_width="210dp"
+            android:layout_height="210dp"
+            android:alpha="0"
+            android:background="@drawable/splash_neon_ring"
+            app:layout_constraintBottom_toBottomOf="@id/splashLogo"
+            app:layout_constraintEnd_toEndOf="@id/splashLogo"
+            app:layout_constraintStart_toStartOf="@id/splashLogo"
+            app:layout_constraintTop_toTopOf="@id/splashLogo" />
+
+        <!-- Purple glow — centered on logo -->
         <View
             android:id="@+id/splashGlow"
-            android:layout_width="220dp"
-            android:layout_height="220dp"
+            android:layout_width="300dp"
+            android:layout_height="300dp"
             android:alpha="0"
             android:background="@drawable/splash_logo_glow"
             app:layout_constraintBottom_toBottomOf="@id/splashLogo"
@@ -28,66 +54,84 @@
             app:layout_constraintStart_toStartOf="@id/splashLogo"
             app:layout_constraintTop_toTopOf="@id/splashLogo" />
 
+        <!-- Logo — ABSOLUTE CENTER of screen -->
         <ImageView
             android:id="@+id/splashLogo"
-            android:layout_width="130dp"
-            android:layout_height="130dp"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
             android:alpha="0"
             android:contentDescription="@string/cd_login_logo"
             android:scaleType="fitCenter"
             android:src="@drawable/logo"
-            app:layout_constraintBottom_toTopOf="@id/splashAppName"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.38"
-            app:layout_constraintVertical_chainStyle="packed" />
+            app:layout_constraintTop_toTopOf="parent" />
 
+        <!-- App name — below center logo -->
         <TextView
             android:id="@+id/splashAppName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="18dp"
+            android:layout_marginTop="24dp"
             android:alpha="0"
-            android:fontFamily="sans-serif-light"
+            android:fontFamily="sans-serif-medium"
             android:includeFontPadding="false"
-            android:letterSpacing="0.15"
+            android:letterSpacing="0.25"
             android:text="@string/app_name"
-            android:textColor="@color/white"
-            android:textSize="28sp"
+            android:textColor="#E0D4FA"
+            android:textSize="30sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/splashLogo" />
 
+        <!-- Tagline -->
         <TextView
             android:id="@+id/splashTagline"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="6dp"
+            android:layout_marginTop="8dp"
             android:alpha="0"
             android:fontFamily="sans-serif-light"
-            android:letterSpacing="0.08"
+            android:letterSpacing="0.12"
             android:text="Services at your doorstep"
-            android:textColor="#B0FFFFFF"
+            android:textColor="#80B39DDB"
             android:textSize="13sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/splashAppName" />
 
+        <!-- Loading bar near bottom -->
         <com.google.android.material.progressindicator.LinearProgressIndicator
             android:id="@+id/splashProgress"
-            android:layout_width="160dp"
+            android:layout_width="140dp"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="64dp"
+            android:layout_marginBottom="72dp"
             android:alpha="0"
             android:indeterminate="true"
-            app:indicatorColor="#B39DDB"
+            app:indicatorColor="#A084E8"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:trackColor="#22FFFFFF"
+            app:trackColor="#15B39DDB"
             app:trackCornerRadius="2dp"
             app:trackThickness="3dp" />
+
+        <!-- Footer text -->
+        <TextView
+            android:id="@+id/splashPowered"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="40dp"
+            android:alpha="0"
+            android:fontFamily="sans-serif-light"
+            android:letterSpacing="0.1"
+            android:text="AI-Powered Service Marketplace"
+            android:textColor="#50B39DDB"
+            android:textSize="11sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
