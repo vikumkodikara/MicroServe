@@ -23,14 +23,10 @@ class PostAdsActivity : AppCompatActivity() {
         activeTab = intent.getStringExtra(UserBottomNavHelper.EXTRA_ACTIVE_TAB)
             ?: UserBottomNavHelper.TAB_POST
 
-        ViewCompat.setOnApplyWindowInsetsListener(binding.root) { v, insets ->
-            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
-            insets
-        }
-
+        setupWindowInsets()
         setupSpinner()
         setupClickListeners()
+        UserBottomNavHelper.setup(this, activeTab)
     }
 
     override fun onNewIntent(intent: Intent) {
@@ -38,6 +34,21 @@ class PostAdsActivity : AppCompatActivity() {
         setIntent(intent)
         activeTab = intent.getStringExtra(UserBottomNavHelper.EXTRA_ACTIVE_TAB)
             ?: UserBottomNavHelper.TAB_POST
+        UserBottomNavHelper.setup(this, activeTab)
+    }
+
+    private fun setupWindowInsets() {
+        ViewCompat.setOnApplyWindowInsetsListener(binding.root) { _, insets ->
+            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
+            binding.headerContainer.setPadding(
+                binding.headerContainer.paddingLeft,
+                systemBars.top + 16,
+                binding.headerContainer.paddingRight,
+                binding.headerContainer.paddingBottom
+            )
+            findViewById<android.view.View>(R.id.navContainer)?.setPadding(0, 0, 0, systemBars.bottom)
+            insets
+        }
     }
 
     private fun setupSpinner() {
@@ -52,10 +63,8 @@ class PostAdsActivity : AppCompatActivity() {
             finish()
         }
 
-        // Navigate to EditPostActivity when clicking the Edit button in Previous Posts
         binding.editBtn.setOnClickListener {
             val intent = Intent(this, EditPostActivity::class.java)
-            // Passing sample data to pre-fill the edit screen
             intent.putExtra("category", "Plumbing")
             intent.putExtra("provider_name", "Sunil")
             intent.putExtra("location", "Galle")
