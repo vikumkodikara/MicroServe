@@ -67,7 +67,7 @@ object AdminBottomNavHelper {
         tabHome.setOnClickListener {
             if (currentTab != TAB_HOME) {
                 activity.startActivity(
-                    Intent(activity, Homepage::class.java)
+                    Intent(activity, AdminDashboardActivity::class.java)
                         .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP)
                 )
                 activity.finish()

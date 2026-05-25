@@ -152,7 +152,7 @@ class TransactionsActivity : AppCompatActivity() {
         val bubbleIcon = findViewById<android.widget.ImageView>(R.id.navBubbleIcon)
 
         homeTab.setOnClickListener {
-            startActivity(Intent(this, Homepage::class.java))
+            startActivity(Intent(this, AdminDashboardActivity::class.java))
             finish()
         }
         profileTab.setOnClickListener {
