@@ -12,12 +12,16 @@ import com.example.microserve.databinding.ActivityPostAdsBinding
 class PostAdsActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityPostAdsBinding
+    private var activeTab: String = UserBottomNavHelper.TAB_POST
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         binding = ActivityPostAdsBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        activeTab = intent.getStringExtra(UserBottomNavHelper.EXTRA_ACTIVE_TAB)
+            ?: UserBottomNavHelper.TAB_POST
 
         ViewCompat.setOnApplyWindowInsetsListener(binding.root) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
@@ -27,6 +31,13 @@ class PostAdsActivity : AppCompatActivity() {
 
         setupSpinner()
         setupClickListeners()
+    }
+
+    override fun onNewIntent(intent: Intent) {
+        super.onNewIntent(intent)
+        setIntent(intent)
+        activeTab = intent.getStringExtra(UserBottomNavHelper.EXTRA_ACTIVE_TAB)
+            ?: UserBottomNavHelper.TAB_POST
     }
 
     private fun setupSpinner() {
