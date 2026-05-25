@@ -1,0 +1,38 @@
+package com.example.microserve
+
+import com.google.firebase.firestore.IgnoreExtraProperties
+
+@IgnoreExtraProperties
+data class UserProfile(
+    val uid: String = "",
+    val name: String = "",
+    val email: String = "",
+    val phone: String = "",
+    val role: String = ROLE_USER,
+    val createdAt: Long = System.currentTimeMillis()
+) {
+    fun toMap(): Map<String, Any> {
+        return mapOf(
+            FIELD_UID to uid,
+            FIELD_NAME to name,
+            FIELD_EMAIL to email,
+            FIELD_PHONE to phone,
+            FIELD_ROLE to role,
+            FIELD_CREATED_AT to createdAt
+        )
+    }
+
+    companion object {
+        const val COLLECTION = "users"
+
+        const val ROLE_ADMIN = "admin"
+        const val ROLE_USER = "user"
+
+        const val FIELD_UID = "uid"
+        const val FIELD_NAME = "name"
+        const val FIELD_EMAIL = "email"
+        const val FIELD_PHONE = "phone"
+        const val FIELD_ROLE = "role"
+        const val FIELD_CREATED_AT = "createdAt"
+    }
+}
