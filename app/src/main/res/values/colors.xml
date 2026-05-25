@@ -15,8 +15,8 @@
 
     <color name="brand_purple">#9C27B0</color>
     <color name="chip_gray">#E0E0E0</color>
-    <color name="header_start">#513E8A</color>
-    <color name="header_end">#7C69C0</color>
+    <color name="header_start">#483C72</color>
+    <color name="header_end">#7A6BB3</color>
     <!-- Discover Screen Colors -->
     <color name="discover_bg_start">#1A1A2E</color>
     <color name="discover_bg_end">#0A0A10</color>
@@ -25,7 +25,7 @@
     <color name="search_hint">#888899</color>
 
     <!-- Matches bottom of rectanglenav — system-bar spacer under home nav -->
-    <color name="home_nav_inset_fill">#3A2B52</color>
+    <color name="home_nav_inset_fill">#483C72</color>
     <color name="login_button_lavender">#D199FF</color>
     <color name="login_hint_gray">#B0B0B0</color>
     <color name="login_link_gray">#B0B0B0</color>

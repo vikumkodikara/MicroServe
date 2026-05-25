@@ -49,7 +49,7 @@ object HomeBottomNavHelper {
 
         activity.findViewById<View>(R.id.navTabPost)?.setOnClickListener {
             navigate(activity, currentTab, TAB_POST) {
-                Intent(activity, PostServiceActivity::class.java)
+                Intent(activity, PostAdsActivity::class.java)
             }
         }
 
