@@ -27,6 +27,7 @@ class RequestMainActivity : AppCompatActivity() {
         seedSampleRequestsIfEmpty()
         setupCategoryGrid()
         setupClickListeners()
+        UserBottomNavHelper.setup(this, UserBottomNavHelper.TAB_REQUEST)
         refreshRequestsList()
     }
 
