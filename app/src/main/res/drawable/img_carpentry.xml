@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="83dp"
+    android:height="63dp"
+    android:viewportWidth="83"
+    android:viewportHeight="63">
+    <!-- Background -->
+    <path
+        android:fillColor="#795548"
+        android:pathData="M0,0h83v63h-83z"/>
+    <!-- Hammer icon -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M42,24l-4,4 6,6 4,-4 -6,-6zM33,30l-8,8c-0.6,0.6 -0.6,1.4 0,2l4,4c0.6,0.6 1.4,0.6 2,0l8,-8 -6,-6zM48,22l-2,-2 -2,2 -2,-2c-0.4,-0.4 -1,-0.4 -1.4,0l-1.4,1.4c-0.4,0.4 -0.4,1 0,1.4l8,8c0.4,0.4 1,0.4 1.4,0l1.4,-1.4c0.4,-0.4 0.4,-1 0,-1.4l-2,-2 2,-2 -2,-2z"
+        android:translateX="8"
+        android:translateY="6"/>
+</vector>
