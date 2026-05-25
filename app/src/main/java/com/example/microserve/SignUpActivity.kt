@@ -10,13 +10,11 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.example.microserve.databinding.ActivitySignUpBinding
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.firestore.FirebaseFirestore
 
 class SignUpActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivitySignUpBinding
     private lateinit var auth: FirebaseAuth
-    private lateinit var firestore: FirebaseFirestore
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -26,7 +24,6 @@ class SignUpActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         auth = FirebaseAuth.getInstance()
-        firestore = FirebaseFirestore.getInstance()
 
         setupWindowInsets()
         setupActions()
@@ -83,20 +80,26 @@ class SignUpActivity : AppCompatActivity() {
                     role = UserProfile.ROLE_USER
                 )
 
-                firestore.collection(UserProfile.COLLECTION)
-                    .document(user.uid)
-                    .set(profile.toMap())
-                    .addOnSuccessListener {
+                UserRepository.saveProfile(
+                    context = this,
+                    profile = profile,
+                    onSuccess = {
                         toast(getString(R.string.sign_up_success))
                         startActivity(
                             Intent(this, Homepage::class.java)
                                 .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
                         )
                         finish()
+                    },
+                    onFailure = { message ->
+                        toast(message)
+                        startActivity(
+                            Intent(this, Homepage::class.java)
+                                .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
+                        )
+                        finish()
                     }
-                    .addOnFailureListener { error ->
-                        toast(error.localizedMessage ?: "Unable to save profile")
-                    }
+                )
             }
             .addOnFailureListener { error ->
                 toast(error.localizedMessage ?: "Sign up failed")
