@@ -82,14 +82,7 @@ class EditPostActivity : AppCompatActivity() {
             finish()
         }
 
-        binding.okBtn.setOnClickListener {
-            if (validateFields()) {
-                showToast("Changes saved")
-                finish()
-            }
-        }
-
-        binding.postBtn.setOnClickListener {
+        binding.saveBtn.setOnClickListener {
             if (validateFields()) {
                 showToast("Post updated successfully")
                 finish()
@@ -102,14 +95,13 @@ class EditPostActivity : AppCompatActivity() {
         val name = binding.providerNameET.text.toString().trim()
         val location = binding.locationET.text.toString().trim()
         val contact = binding.contactET.text.toString().trim()
-        val email = binding.emailET.text.toString().trim()
 
         return when {
             category == "-Select-" -> {
                 showToast("Please select a category")
                 false
             }
-            name.isEmpty() || location.isEmpty() || contact.isEmpty() || email.isEmpty() -> {
+            name.isEmpty() || location.isEmpty() || contact.isEmpty() -> {
                 showToast("Please fill all fields")
                 false
             }
