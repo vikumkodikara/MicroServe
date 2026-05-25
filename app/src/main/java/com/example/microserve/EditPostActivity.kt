@@ -57,12 +57,10 @@ class EditPostActivity : AppCompatActivity() {
         val defaultName = intent.getStringExtra("provider_name") ?: "Sunil Perera"
         val defaultLocation = intent.getStringExtra("location") ?: "Galle"
         val defaultContact = intent.getStringExtra("contact") ?: "072587456"
-        val defaultEmail = intent.getStringExtra("email") ?: "Sunil@gmail.com"
 
         binding.providerNameET.setText(defaultName)
         binding.locationET.setText(defaultLocation)
         binding.contactET.setText(defaultContact)
-        binding.emailET.setText(defaultEmail)
 
         val categoryPosition = (0 until binding.categorySpinner.count)
             .firstOrNull { binding.categorySpinner.getItemAtPosition(it) == defaultCategory }
