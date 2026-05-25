@@ -24,13 +24,15 @@
 
     <!-- Login -->
     <string name="login_title">Login</string>
-    <string name="login_username_hint">Username</string>
+    <string name="login_username_hint">Email</string>
     <string name="login_password_hint">Password</string>
     <string name="login_button">Log in</string>
     <string name="sign_up_button">Sign Up</string>
+    <string name="login_google_button">Continue with Google</string>
     <string name="login_forgot_password">Forgot your password?</string>
     <string name="login_forgot_password_soon">Password reset coming soon</string>
-    <string name="login_error_username">Please enter your username</string>
+    <string name="login_error_username">Please enter your email</string>
+    <string name="login_error_invalid_email">Please enter a valid email</string>
     <string name="login_error_password">Please enter your password</string>
     <string name="cd_login_logo">MicroServe logo</string>
 
@@ -40,8 +42,10 @@
     <string name="sign_up_mobile_hint">Mobile</string>
     <string name="sign_up_create_button">Create</string>
     <string name="sign_up_already_have_account">Already have an account? Log in</string>
+    <string name="sign_up_error_name">Please enter your name</string>
     <string name="sign_up_error_email">Please enter your e-mail</string>
     <string name="sign_up_error_mobile">Please enter your mobile number</string>
+    <string name="sign_up_error_password_length">Password must be at least 6 characters</string>
     <string name="sign_up_success">Account created successfully</string>
 
     <!-- Edit Profile Strings -->
