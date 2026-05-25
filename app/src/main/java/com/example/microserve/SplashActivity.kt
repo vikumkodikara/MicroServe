@@ -2,12 +2,11 @@ package com.example.microserve
 
 import android.animation.AnimatorSet
 import android.animation.ObjectAnimator
-import android.animation.ValueAnimator
 import android.content.Intent
 import android.os.Bundle
-import android.view.animation.AccelerateDecelerateInterpolator
+import android.view.View
+import android.view.animation.AccelerateInterpolator
 import android.view.animation.DecelerateInterpolator
-import android.view.animation.LinearInterpolator
 import android.view.animation.OvershootInterpolator
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
@@ -19,7 +18,6 @@ class SplashActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivitySplashBinding
     private var navigated = false
-    private var animatorSet: AnimatorSet? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -38,114 +36,89 @@ class SplashActivity : AppCompatActivity() {
     }
 
     private fun startSplashSequence() {
-        val logo = binding.splashLogo
-        val glow = binding.splashGlow
-        val ringIn = binding.neonRingInner
-        val ringOut = binding.neonRingOuter
-        val name = binding.splashAppName
-        val tag = binding.splashTagline
+        val logoCard = binding.splashLogoCard
+        val circle = binding.purpleCircle
+        val appName = binding.splashAppName
+        val tagline = binding.splashTagline
         val progress = binding.splashProgress
-        val powered = binding.splashPowered
-        val particles = binding.particleView
 
-        logo.scaleX = 0.3f; logo.scaleY = 0.3f
-        glow.scaleX = 0.1f; glow.scaleY = 0.1f
-        ringIn.scaleX = 0.5f; ringIn.scaleY = 0.5f; ringIn.rotation = -30f
-        ringOut.scaleX = 0.3f; ringOut.scaleY = 0.3f; ringOut.rotation = 30f
-        name.translationY = 40f
-        tag.translationY = 25f
+        val screenW = resources.displayMetrics.widthPixels.toFloat()
+        val density = resources.displayMetrics.density
 
-        val anims = mutableListOf<android.animation.Animator>()
+        logoCard.scaleX = 0f
+        logoCard.scaleY = 0f
 
-        // Particles fade in
-        anims += ObjectAnimator.ofFloat(particles, "alpha", 0f, 0.7f).setDuration(1200)
+        val shiftLeft = 70f * density
 
-        // Glow bloom (200ms delay)
-        anims += anim(glow, "alpha", 0f, 0.9f, 800, 200, DecelerateInterpolator(1.5f))
-        anims += anim(glow, "scaleX", 0.1f, 1.15f, 1000, 200, DecelerateInterpolator(1.5f))
-        anims += anim(glow, "scaleY", 0.1f, 1.15f, 1000, 200, DecelerateInterpolator(1.5f))
+        // ── Phase 1: Logo pops up big in center ──
+        val phase1 = AnimatorSet()
+        phase1.playTogether(
+            ObjectAnimator.ofFloat(logoCard, "alpha", 0f, 1f).setDuration(300),
+            ObjectAnimator.ofFloat(logoCard, "scaleX", 0f, 1.12f).apply {
+                duration = 600; interpolator = OvershootInterpolator(2f)
+            },
+            ObjectAnimator.ofFloat(logoCard, "scaleY", 0f, 1.12f).apply {
+                duration = 600; interpolator = OvershootInterpolator(2f)
+            }
+        )
 
-        // Logo zoom in with overshoot (400ms delay)
-        anims += anim(logo, "alpha", 0f, 1f, 600, 400)
-        anims += anim(logo, "scaleX", 0.3f, 1f, 900, 400, OvershootInterpolator(1.2f))
-        anims += anim(logo, "scaleY", 0.3f, 1f, 900, 400, OvershootInterpolator(1.2f))
+        // ── Phase 2: Logo settles back to normal size ──
+        val phase2 = AnimatorSet()
+        phase2.playTogether(
+            ObjectAnimator.ofFloat(logoCard, "scaleX", 1.12f, 1f).setDuration(350),
+            ObjectAnimator.ofFloat(logoCard, "scaleY", 1.12f, 1f).setDuration(350)
+        )
+        phase2.interpolator = DecelerateInterpolator()
 
-        // Inner ring spin in (600ms delay)
-        anims += anim(ringIn, "alpha", 0f, 1f, 700, 600)
-        anims += anim(ringIn, "scaleX", 0.5f, 1f, 800, 600, DecelerateInterpolator())
-        anims += anim(ringIn, "scaleY", 0.5f, 1f, 800, 600, DecelerateInterpolator())
-        anims += anim(ringIn, "rotation", -30f, 0f, 800, 600)
+        // ── Phase 3: Purple circle expands to fill screen ──
+        val maxScale = (screenW * 3f) / (100f * density)
+        val phase3 = AnimatorSet()
+        phase3.playTogether(
+            ObjectAnimator.ofFloat(circle, "alpha", 0f, 1f).setDuration(200),
+            ObjectAnimator.ofFloat(circle, "scaleX", 1f, maxScale).setDuration(700),
+            ObjectAnimator.ofFloat(circle, "scaleY", 1f, maxScale).setDuration(700)
+        )
+        phase3.interpolator = AccelerateInterpolator(1.2f)
 
-        // Outer ring spin in (700ms delay)
-        anims += anim(ringOut, "alpha", 0f, 0.7f, 700, 700)
-        anims += anim(ringOut, "scaleX", 0.3f, 1f, 900, 700, DecelerateInterpolator())
-        anims += anim(ringOut, "scaleY", 0.3f, 1f, 900, 700, DecelerateInterpolator())
-        anims += anim(ringOut, "rotation", 30f, 0f, 900, 700)
+        // ── Phase 4: Logo slides a little bit to the left ──
+        val phase4 = AnimatorSet()
+        phase4.playTogether(
+            ObjectAnimator.ofFloat(logoCard, "translationX", 0f, -shiftLeft).setDuration(500),
+            ObjectAnimator.ofFloat(appName, "translationX", 0f, -shiftLeft).setDuration(500),
+            ObjectAnimator.ofFloat(tagline, "translationX", 0f, -shiftLeft).setDuration(500)
+        )
+        phase4.interpolator = DecelerateInterpolator(1.5f)
 
-        // App name slide up (1000ms delay)
-        anims += anim(name, "alpha", 0f, 1f, 500, 1000)
-        anims += anim(name, "translationY", 40f, 0f, 600, 1000, DecelerateInterpolator(1.5f))
+        // ── Phase 5: App name + tagline fade in to the right of logo ──
+        val phase5 = AnimatorSet()
+        phase5.playTogether(
+            ObjectAnimator.ofFloat(appName, "alpha", 0f, 1f).setDuration(400),
+            ObjectAnimator.ofFloat(appName, "translationY", 16f, 0f).apply {
+                duration = 450; interpolator = DecelerateInterpolator()
+            },
+            ObjectAnimator.ofFloat(tagline, "alpha", 0f, 1f).apply {
+                duration = 400; startDelay = 120
+            },
+            ObjectAnimator.ofFloat(tagline, "translationY", 16f, 0f).apply {
+                duration = 450; startDelay = 120; interpolator = DecelerateInterpolator()
+            }
+        )
 
-        // Tagline (1300ms delay)
-        anims += anim(tag, "alpha", 0f, 1f, 400, 1300)
-        anims += anim(tag, "translationY", 25f, 0f, 500, 1300)
+        // ── Phase 6: Loading bar appears ──
+        val phase6 = ObjectAnimator.ofFloat(progress, "alpha", 0f, 1f).setDuration(300)
 
-        // Loading bar (1500ms delay)
-        anims += anim(progress, "alpha", 0f, 1f, 400, 1500)
+        val fullSequence = AnimatorSet()
+        fullSequence.playSequentially(phase1, phase2, phase3, phase4, phase5, phase6)
+        fullSequence.start()
 
-        // Footer text (1700ms delay)
-        anims += anim(powered, "alpha", 0f, 1f, 400, 1700)
-
-        // Glow breathing pulse
-        anims += ObjectAnimator.ofFloat(glow, "scaleX", 1.15f, 0.95f, 1.1f, 0.98f, 1.05f).apply {
-            duration = 2500; startDelay = 1300; interpolator = AccelerateDecelerateInterpolator()
-        }
-        anims += ObjectAnimator.ofFloat(glow, "scaleY", 1.15f, 0.95f, 1.1f, 0.98f, 1.05f).apply {
-            duration = 2500; startDelay = 1300
-        }
-
-        // Continuous ring rotations
-        anims += ObjectAnimator.ofFloat(ringIn, "rotation", 0f, 360f).apply {
-            duration = 12000; startDelay = 1400; repeatCount = ValueAnimator.INFINITE
-            interpolator = LinearInterpolator()
-        }
-        anims += ObjectAnimator.ofFloat(ringOut, "rotation", 0f, -360f).apply {
-            duration = 18000; startDelay = 1500; repeatCount = ValueAnimator.INFINITE
-            interpolator = LinearInterpolator()
-        }
-
-        // Ring alpha pulse
-        anims += ObjectAnimator.ofFloat(ringIn, "alpha", 1f, 0.4f, 1f).apply {
-            duration = 2000; startDelay = 2000; repeatCount = ValueAnimator.INFINITE
-        }
-        anims += ObjectAnimator.ofFloat(ringOut, "alpha", 0.7f, 0.2f, 0.7f).apply {
-            duration = 3000; startDelay = 2200; repeatCount = ValueAnimator.INFINITE
-        }
-
-        animatorSet = AnimatorSet().apply {
-            playTogether(anims)
-            start()
-        }
-
-        binding.splashRoot.postDelayed({ goToLogin() }, 3800)
-    }
-
-    private fun anim(
-        target: android.view.View, prop: String,
-        from: Float, to: Float, dur: Long, delay: Long,
-        interp: android.view.animation.Interpolator? = null
-    ): ObjectAnimator {
-        return ObjectAnimator.ofFloat(target, prop, from, to).apply {
-            duration = dur; startDelay = delay
-            interp?.let { interpolator = it }
-        }
+        binding.splashRoot.postDelayed({ goToLogin() }, 4200)
     }
 
     private fun goToLogin() {
         if (navigated || isFinishing) return
         navigated = true
         binding.splashRoot.animate()
-            .alpha(0f).setDuration(500)
+            .alpha(0f).setDuration(400)
             .withEndAction {
                 startActivity(Intent(this, LoginActivity::class.java))
                 overridePendingTransition(R.anim.splash_fade_in, R.anim.splash_fade_out)
@@ -154,7 +127,7 @@ class SplashActivity : AppCompatActivity() {
     }
 
     override fun onDestroy() {
-        animatorSet?.cancel()
+        binding.splashRoot.handler?.removeCallbacksAndMessages(null)
         binding.splashRoot.animate().cancel()
         super.onDestroy()
     }
