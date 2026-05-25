@@ -12,7 +12,20 @@
           "package_name": "com.example.microserve"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "905624307478-anm7p7f1qttrfqt9p0448lha3g8m6lpd.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.microserve",
+            "certificate_hash": "de91c50548bf8e935fb8eb14e3cf4aad5a66d57b"
+          }
+        },
+        {
+          "client_id": "905624307478-ke4mf9eaubh4n9or8sk9o770i7r2l4al.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyBdv1FVdYRA_kf9D_14-dUp1Na6vbQAg9k"
@@ -20,7 +33,12 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "905624307478-ke4mf9eaubh4n9or8sk9o770i7r2l4al.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         }
       }
     }
