@@ -2,6 +2,7 @@ package com.example.microserve
 
 import android.content.Intent
 import android.os.Bundle
+import android.view.View
 import android.widget.ArrayAdapter
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
@@ -19,14 +20,25 @@ class PostAdsActivity : AppCompatActivity() {
         binding = ActivityPostAdsBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        ViewCompat.setOnApplyWindowInsetsListener(binding.root) { v, insets ->
-            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
-            insets
-        }
-
+        setupWindowInsets()
         setupSpinner()
         setupClickListeners()
+        HomeBottomNavHelper.setup(this, HomeBottomNavHelper.TAB_POST)
+    }
+
+    private fun setupWindowInsets() {
+        ViewCompat.setOnApplyWindowInsetsListener(binding.root) { v, insets ->
+            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
+            v.setPadding(systemBars.left, systemBars.top, systemBars.right, 0)
+            findViewById<View>(R.id.navSystemBarSpacer)?.let { spacer ->
+                val lp = spacer.layoutParams
+                if (lp.height != systemBars.bottom) {
+                    lp.height = systemBars.bottom
+                    spacer.layoutParams = lp
+                }
+            }
+            insets
+        }
     }
 
     private fun setupSpinner() {
@@ -41,10 +53,8 @@ class PostAdsActivity : AppCompatActivity() {
             finish()
         }
 
-        // Navigate to EditPostActivity when clicking the Edit button in Previous Posts
         binding.editBtn.setOnClickListener {
             val intent = Intent(this, EditPostActivity::class.java)
-            // Passing sample data to pre-fill the edit screen
             intent.putExtra("category", "Plumbing")
             intent.putExtra("provider_name", "Sunil")
             intent.putExtra("location", "Galle")

@@ -33,20 +33,12 @@ class PostServiceActivity : AppCompatActivity() {
         setupTimePickers()
         setupDaySelection()
         setupClickListeners()
-        HomeBottomNavHelper.setup(this, HomeBottomNavHelper.TAB_POST)
     }
 
     private fun applyWindowInsets() {
         ViewCompat.setOnApplyWindowInsetsListener(binding.main) { view, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            view.setPadding(systemBars.left, systemBars.top, systemBars.right, 0)
-            findViewById<View>(R.id.navSystemBarSpacer)?.let { spacer ->
-                val lp = spacer.layoutParams
-                if (lp.height != systemBars.bottom) {
-                    lp.height = systemBars.bottom
-                    spacer.layoutParams = lp
-                }
-            }
+            view.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
     }
