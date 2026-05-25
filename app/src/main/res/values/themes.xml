@@ -11,16 +11,16 @@
         <item name="colorOnSecondary">@color/white</item>
         <!-- Status bar blends with the purple header gradient -->
         <item name="android:statusBarColor">@color/white</item>
-        <!-- Navigation bar matches the bottom nav -->
-        <item name="android:navigationBarColor">#3A2B52</item>
+        <!-- Navigation bar matches the purple gradient -->
+        <item name="android:navigationBarColor">#483C72</item>
         <!-- Light status bar icons (white icons on dark purple bg) -->
         <item name="android:windowLightStatusBar" tools:targetApi="23">true</item>
     </style>
 
     <style name="Theme.MicroServe.Splash" parent="Theme.MicroServe">
         <item name="android:statusBarColor">@android:color/transparent</item>
-        <item name="android:navigationBarColor">#483C72</item>
-        <item name="android:windowLightStatusBar" tools:targetApi="23">false</item>
+        <item name="android:navigationBarColor">@color/white</item>
+        <item name="android:windowLightStatusBar" tools:targetApi="23">true</item>
     </style>
 
     <style name="Theme.MicroServe.Login" parent="Theme.MicroServe">
