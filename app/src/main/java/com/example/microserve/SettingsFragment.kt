@@ -43,14 +43,11 @@ class SettingsFragment : Fragment() {
         }
 
         view.findViewById<View>(R.id.btn_personal_info).setOnClickListener {
-            startActivity(android.content.Intent(requireContext(), EditProfileActivity::class.java))
+            startActivity(android.content.Intent(requireContext(), PersonalInfoActivity::class.java))
         }
 
         view.findViewById<View>(R.id.btn_saved_addresses).setOnClickListener {
-            requireActivity().supportFragmentManager.beginTransaction()
-                .add(android.R.id.content, SavedAddressFragment())
-                .addToBackStack(null)
-                .commit()
+            startActivity(android.content.Intent(requireContext(), SavedAddressActivity::class.java))
         }
 
         view.findViewById<View>(R.id.btn_payment_methods).setOnClickListener {

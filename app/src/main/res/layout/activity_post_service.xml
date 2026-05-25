@@ -377,7 +377,7 @@
     <View
         android:id="@+id/footerBar"
         android:layout_width="0dp"
-        android:layout_height="48dp"
+        android:layout_height="38dp"
         android:background="@drawable/footer_gradient_bar"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

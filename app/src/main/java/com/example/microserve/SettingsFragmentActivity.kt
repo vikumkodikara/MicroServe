@@ -53,7 +53,13 @@ class SettingsFragmentActivity : AppCompatActivity() {
         }
 
         findViewById<View>(R.id.btn_personal_info).setOnClickListener {
-            startActivity(Intent(this, EditProfileActivity::class.java))
+            startActivity(Intent(this, PersonalInfoActivity::class.java))
         }
+
+        try {
+            findViewById<View>(R.id.btn_saved_addresses).setOnClickListener {
+                startActivity(Intent(this, SavedAddressActivity::class.java))
+            }
+        } catch (_: Exception) { }
     }
 }
