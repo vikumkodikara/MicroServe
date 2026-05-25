@@ -86,4 +86,64 @@ object UserBottomNavHelper {
             navigateToTab(activity, currentTab, TAB_PROFILE)
         }
     }
+
+    private fun applyActiveTabState(
+        currentTab: String,
+        navSubtract: ImageView,
+        navActiveIcon: ImageView,
+        requestIcon: ImageView,
+        requestLabel: TextView,
+        serviceIcon: ImageView,
+        serviceLabel: TextView,
+        homeIcon: ImageView,
+        homeLabel: TextView,
+        postSpacer: View,
+        postLabel: TextView,
+        profileIcon: ImageView,
+        profileLabel: TextView
+    ) {
+        requestIcon.visibility = View.VISIBLE
+        requestLabel.visibility = View.VISIBLE
+        serviceIcon.visibility = View.VISIBLE
+        serviceLabel.visibility = View.VISIBLE
+        homeIcon.visibility = View.VISIBLE
+        homeLabel.visibility = View.VISIBLE
+        postSpacer.visibility = View.VISIBLE
+        postLabel.visibility = View.VISIBLE
+        profileIcon.visibility = View.VISIBLE
+        profileLabel.visibility = View.VISIBLE
+
+        val (bias, iconRes) = when (currentTab) {
+            TAB_REQUEST -> {
+                requestIcon.visibility = View.INVISIBLE
+                requestLabel.visibility = View.INVISIBLE
+                0.10f to R.drawable.navrequest
+            }
+            TAB_SERVICE -> {
+                serviceIcon.visibility = View.INVISIBLE
+                serviceLabel.visibility = View.INVISIBLE
+                0.30f to R.drawable.navservice
+            }
+            TAB_HOME -> {
+                homeIcon.visibility = View.INVISIBLE
+                homeLabel.visibility = View.INVISIBLE
+                0.50f to R.drawable.navhome
+            }
+            TAB_POST -> {
+                postSpacer.visibility = View.INVISIBLE
+                0.75f to R.drawable.navpost
+            }
+            TAB_PROFILE -> {
+                profileIcon.visibility = View.INVISIBLE
+                profileLabel.visibility = View.INVISIBLE
+                0.90f to R.drawable.navprofile
+            }
+            else -> 0.75f to R.drawable.navpost
+        }
+
+        val params = navSubtract.layoutParams as ConstraintLayout.LayoutParams
+        params.horizontalBias = bias
+        navSubtract.layoutParams = params
+        navActiveIcon.setImageResource(iconRes)
+    }
 }
