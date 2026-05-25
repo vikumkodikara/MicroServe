@@ -59,6 +59,12 @@
         <activity
             android:name=".AdminProfileActivity"
             android:exported="false" />
+        <activity
+            android:name=".RequestMainActivity"
+            android:exported="false" />
+        <activity
+            android:name=".CategoryDetailActivity"
+            android:exported="false" />
     </application>
 
 </manifest>
