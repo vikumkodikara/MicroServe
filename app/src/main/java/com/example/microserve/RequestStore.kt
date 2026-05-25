@@ -32,6 +32,17 @@ object RequestStore {
         return getAllRequests(context).filter { it.status.equals(STATUS_PENDING, ignoreCase = true) }
     }
 
+    fun getPendingRequestsByCategory(context: Context, categoryKeys: List<String>): List<UserRequest> {
+        if (categoryKeys.isEmpty()) return emptyList()
+        return getPendingRequests(context).filter { request ->
+            categoryKeys.any { key -> request.category.equals(key, ignoreCase = true) }
+        }
+    }
+
+    fun hasPendingRequestsForCategory(context: Context, categoryKeys: List<String>): Boolean {
+        return getPendingRequestsByCategory(context, categoryKeys).isNotEmpty()
+    }
+
     fun getAllRequests(context: Context): List<UserRequest> {
         val prefs = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE)
         val raw = prefs.getString(KEY_REQUESTS, null) ?: return emptyList()
