@@ -56,4 +56,7 @@ dependencies {
     implementation("com.google.firebase:firebase-firestore")
     
     implementation("com.google.android.gms:play-services-auth:21.3.0")
+    
+    // Glide for profile photo loading
+    implementation("com.github.bumptech.glide:glide:4.16.0")
 }
