@@ -120,6 +120,15 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun loginAsAdmin() {
+        val admin = UserStore.getOrCreateAdminUser(this)
+        val adminProfile = UserProfile(
+            uid = admin.id,
+            name = admin.name,
+            email = admin.email,
+            phone = admin.phone,
+            role = UserProfile.ROLE_ADMIN
+        )
+        AppPreferences.saveSession(this, adminProfile)
         toast(getString(R.string.login_admin_success))
         startActivity(
             Intent(this, AdminDashboardActivity::class.java)
