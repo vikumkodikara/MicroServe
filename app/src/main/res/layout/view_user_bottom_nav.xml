@@ -144,6 +144,31 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/navPost"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:clickable="true"
+            android:focusable="true"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <View
+                android:id="@+id/navPostSpacer"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:visibility="invisible" />
+
+            <TextView
+                android:id="@+id/navPostLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/nav_post"
+                android:textColor="@color/white"
+                android:textSize="10sp" />
+        </LinearLayout>
+
+        <LinearLayout
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
