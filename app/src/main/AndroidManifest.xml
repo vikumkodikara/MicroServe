@@ -21,10 +21,19 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".PostAddActivity"
+            android:name=".PostAdsActivity"
+            android:exported="false" />
+        <activity
+            android:name=".PostServiceActivity"
             android:exported="false" />
         <activity
             android:name=".EditPostActivity"
+            android:exported="false" />
+        <activity
+            android:name=".EditProfileActivity"
+            android:exported="false" />
+        <activity
+            android:name=".DiscoverActivity"
             android:exported="false" />
         <activity
             android:name=".RequesterDetailsActivity"

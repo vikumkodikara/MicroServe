@@ -10,10 +10,24 @@
         <item name="colorSecondaryVariant">@color/admin_purple_dark</item>
         <item name="colorOnSecondary">@color/white</item>
         <!-- Status bar blends with the purple header gradient -->
-        <item name="android:statusBarColor">@color/admin_purple_dark</item>
+        <item name="android:statusBarColor">@color/white</item>
         <!-- Navigation bar matches the bottom nav -->
         <item name="android:navigationBarColor">@color/admin_nav_bg</item>
         <!-- Light status bar icons (white icons on dark purple bg) -->
-        <item name="android:windowLightStatusBar" tools:targetApi="23">false</item>
+        <item name="android:windowLightStatusBar" tools:targetApi="23">true</item>
+    </style>
+
+    <style name="DayChip">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginEnd">8dp</item>
+        <item name="android:background">@drawable/day_chip_selector</item>
+        <item name="android:paddingHorizontal">12dp</item>
+        <item name="android:paddingVertical">6dp</item>
+        <item name="android:textColor">@color/black</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:gravity">center</item>
+        <item name="android:clickable">true</item>
+        <item name="android:focusable">true</item>
     </style>
 </resources>
