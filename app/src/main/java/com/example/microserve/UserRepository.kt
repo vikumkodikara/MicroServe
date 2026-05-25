@@ -20,10 +20,12 @@ object UserRepository {
             .set(profile.toMap())
             .addOnSuccessListener {
                 syncProfileToUserStore(context, profile)
+                AppPreferences.saveSession(context, profile)
                 onSuccess()
             }
             .addOnFailureListener { error ->
                 syncProfileToUserStore(context, profile)
+                AppPreferences.saveSession(context, profile)
                 onFailure(error.localizedMessage ?: "Unable to save profile")
             }
     }
@@ -52,10 +54,13 @@ object UserRepository {
                         name = doc.getString(UserProfile.FIELD_NAME).orEmpty(),
                         email = doc.getString(UserProfile.FIELD_EMAIL).orEmpty(),
                         phone = doc.getString(UserProfile.FIELD_PHONE).orEmpty(),
+                        photoUrl = doc.getString(UserProfile.FIELD_PHOTO_URL)
+                            ?: user.photoUrl?.toString().orEmpty(),
                         role = doc.getString(UserProfile.FIELD_ROLE) ?: UserProfile.ROLE_USER,
                         createdAt = doc.getLong(UserProfile.FIELD_CREATED_AT) ?: System.currentTimeMillis()
                     )
                     syncProfileToUserStore(context, profile)
+                    AppPreferences.saveSession(context, profile)
                     if (profile.role.equals(UserProfile.ROLE_ADMIN, ignoreCase = true)) {
                         onAdminRoute()
                     } else {
@@ -77,6 +82,7 @@ object UserRepository {
             .addOnFailureListener { error ->
                 val profile = buildProfile(user, fallbackName)
                 syncProfileToUserStore(context, profile)
+                AppPreferences.saveSession(context, profile)
                 onError(error.localizedMessage ?: "Unable to load profile")
                 onUserRoute()
             }
@@ -108,6 +114,7 @@ object UserRepository {
             name = name,
             email = user.email.orEmpty(),
             phone = user.phoneNumber.orEmpty(),
+            photoUrl = user.photoUrl?.toString().orEmpty(),
             role = UserProfile.ROLE_USER
         )
     }
