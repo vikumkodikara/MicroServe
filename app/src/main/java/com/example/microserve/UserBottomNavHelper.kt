@@ -146,4 +146,27 @@ object UserBottomNavHelper {
         navSubtract.layoutParams = params
         navActiveIcon.setImageResource(iconRes)
     }
+
+    private fun navigateToTab(activity: AppCompatActivity, currentTab: String, targetTab: String) {
+        if (currentTab == targetTab) return
+
+        val targetClass = when (targetTab) {
+            TAB_REQUEST -> RequestMainActivity::class.java
+            TAB_SERVICE -> PostServiceActivity::class.java
+            TAB_HOME, TAB_POST -> PostAdsActivity::class.java
+            TAB_PROFILE -> EditProfileActivity::class.java
+            else -> return
+        }
+
+        val intent = Intent(activity, targetClass)
+            .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP)
+
+        if (targetClass == PostAdsActivity::class.java) {
+            intent.putExtra(EXTRA_ACTIVE_TAB, targetTab)
+        }
+
+        activity.startActivity(intent)
+        activity.finish()
+        activity.overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
+    }
 }
