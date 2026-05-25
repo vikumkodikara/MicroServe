@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "905624307478",
+    "project_id": "microserve-b2e9e",
+    "storage_bucket": "microserve-b2e9e.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:905624307478:android:5b3a05f313eb8ddc203237",
+        "android_client_info": {
+          "package_name": "com.example.microserve"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBdv1FVdYRA_kf9D_14-dUp1Na6vbQAg9k"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
