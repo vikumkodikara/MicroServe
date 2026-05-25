@@ -14,4 +14,44 @@
         android:src="@drawable/rectanglenav"
         app:layout_constraintBottom_toBottomOf="parent" />
 
+    <ImageView
+        android:id="@+id/navSubtract"
+        android:layout_width="120dp"
+        android:layout_height="80dp"
+        android:contentDescription="@null"
+        android:scaleType="fitCenter"
+        android:src="@drawable/subtractnav"
+        android:translationY="-15dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.75"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@id/navBase"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <ImageView
+        android:id="@+id/activeEllipse"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:contentDescription="@null"
+        android:src="@drawable/ellipsenav"
+        android:translationY="-30dp"
+        app:layout_constraintBottom_toBottomOf="@id/navSubtract"
+        app:layout_constraintEnd_toEndOf="@id/navSubtract"
+        app:layout_constraintStart_toStartOf="@id/navSubtract"
+        app:layout_constraintTop_toTopOf="@id/navSubtract" />
+
+    <ImageView
+        android:id="@+id/navActiveIcon"
+        android:layout_width="38dp"
+        android:layout_height="38dp"
+        android:contentDescription="@null"
+        android:elevation="10dp"
+        android:src="@drawable/navpost"
+        android:translationY="-30dp"
+        app:layout_constraintBottom_toBottomOf="@id/activeEllipse"
+        app:layout_constraintEnd_toEndOf="@id/activeEllipse"
+        app:layout_constraintStart_toStartOf="@id/activeEllipse"
+        app:layout_constraintTop_toTopOf="@id/activeEllipse" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
