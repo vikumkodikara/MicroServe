@@ -12,4 +12,12 @@
     <color name="dark_purple">#6D5A9E</color>
     <color name="light_background">#F8F9FA</color>
     <color name="text_gray">#757575</color>
+    
+    <!-- Service Request App Colors (added) -->
+    <color name="purple_primary">#8778BF</color>
+    <color name="purple_dark">#483C72</color>
+    <color name="purple_medium">#7A6BB3</color>
+    <color name="purple_button">#7B6DB1</color>
+    <color name="off_white">#FFFCFC</color>
+    <color name="shadow">#40000000</color>
 </resources>
