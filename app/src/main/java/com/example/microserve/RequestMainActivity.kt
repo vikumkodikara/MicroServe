@@ -39,7 +39,7 @@ class RequestMainActivity : AppCompatActivity() {
         ViewCompat.setOnApplyWindowInsetsListener(binding.mainScrollView) { view, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             view.setPadding(0, systemBars.top, 0, 0)
-            binding.bottomNav.setPadding(0, 0, 0, systemBars.bottom)
+            findViewById<View>(R.id.navContainer)?.setPadding(0, 0, 0, systemBars.bottom)
             insets
         }
     }
@@ -142,29 +142,6 @@ class RequestMainActivity : AppCompatActivity() {
 
         binding.requestsButton.setOnClickListener {
             binding.mainScrollView.smoothScrollTo(0, binding.myRequestsLabel.top)
-        }
-
-        binding.requestTab.setOnClickListener {
-            // Already on Request screen
-        }
-
-        binding.serviceTab.setOnClickListener {
-            Toast.makeText(this, "Service screen coming soon", Toast.LENGTH_SHORT).show()
-        }
-
-        binding.homeTab.setOnClickListener {
-            startActivity(
-                Intent(this, Homepage::class.java)
-                    .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP)
-            )
-        }
-
-        binding.postTab.setOnClickListener {
-            startActivity(Intent(this, PostAddActivity::class.java))
-        }
-
-        binding.profileTab.setOnClickListener {
-            startActivity(Intent(this, AdminProfileActivity::class.java))
         }
     }
 
