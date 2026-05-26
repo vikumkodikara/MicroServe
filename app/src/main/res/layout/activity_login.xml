@@ -105,7 +105,7 @@
                         android:fontFamily="sans-serif"
                         android:hint="@string/login_username_hint"
                         android:importantForAutofill="yes"
-                        android:inputType="text"
+                        android:inputType="textEmailAddress"
                         android:maxLines="1"
                         android:textColor="@color/black"
                         android:textColorHint="@color/login_hint_gray"
@@ -169,7 +169,6 @@
                     android:layout_marginTop="32dp"
                     android:gravity="center"
                     android:orientation="horizontal"
-                    app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/forgotPasswordLink">
@@ -207,9 +206,41 @@
                         app:backgroundTint="@null" />
                 </LinearLayout>
 
+                <com.google.android.gms.common.SignInButton
+                    android:id="@+id/googleSignInButton"
+                    android:layout_width="0dp"
+                    android:layout_height="48dp"
+                    android:layout_marginTop="14dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/loginActionsRow" />
+
             </androidx.constraintlayout.widget.ConstraintLayout>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
+
+    <!-- Loading Overlay -->
+    <FrameLayout
+        android:id="@+id/loadingOverlay"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="#80FFFFFF"
+        android:clickable="true"
+        android:elevation="10dp"
+        android:focusable="true"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ProgressBar
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:indeterminateTint="@color/primary_purple" />
+    </FrameLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

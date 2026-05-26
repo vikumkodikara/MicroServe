@@ -13,6 +13,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.example.microserve.databinding.ActivitySplashBinding
+import com.google.firebase.auth.FirebaseAuth
 
 class SplashActivity : AppCompatActivity() {
 
@@ -111,16 +112,44 @@ class SplashActivity : AppCompatActivity() {
         fullSequence.playSequentially(phase1, phase2, phase3, phase4, phase5, phase6)
         fullSequence.start()
 
-        binding.splashRoot.postDelayed({ goToLogin() }, 4200)
+        binding.splashRoot.postDelayed({ navigateNext() }, 4200)
     }
 
-    private fun goToLogin() {
+    /**
+     * Routes to the correct screen based on session state:
+     * - If logged in as admin → AdminDashboard
+     * - If logged in as user → Homepage
+     * - Otherwise → Login
+     */
+    private fun navigateNext() {
         if (navigated || isFinishing) return
         navigated = true
-        binding.splashRoot.animate()
-            .alpha(0f).setDuration(400)
+
+        val hasSession = AppPreferences.isLoggedIn(this)
+        val hasFirebaseUser = FirebaseAuth.getInstance().currentUser != null
+        val role = AppPreferences.getSessionRole(this)
+
+        val target = when {
+            hasSession && hasFirebaseUser && role.equals(UserProfile.ROLE_ADMIN, ignoreCase = true) ->
+                AdminDashboardActivity::class.java
+            hasSession && hasFirebaseUser ->
+                Homepage::class.java
+            // Admin with local-only credentials (no Firebase Auth)
+            hasSession && role.equals(UserProfile.ROLE_ADMIN, ignoreCase = true) ->
+                AdminDashboardActivity::class.java
+            else ->
+                LoginActivity::class.java
+        }
+
+        val root = binding.splashRoot
+        root.animate()
+            .alpha(0f)
+            .setDuration(400)
             .withEndAction {
-                startActivity(Intent(this, LoginActivity::class.java))
+                startActivity(
+                    Intent(this, target)
+                        .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
+                )
                 overridePendingTransition(R.anim.splash_fade_in, R.anim.splash_fade_out)
                 finish()
             }.start()
