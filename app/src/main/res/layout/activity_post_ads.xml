@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white"
+    android:background="@color/light_background"
     android:clipChildren="false"
     android:clipToPadding="false"
     tools:context=".PostAdsActivity">
@@ -84,7 +84,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Service Catagory"
-                    android:textColor="@color/black"
+                    android:textColor="@color/admin_text_primary"
                     android:textSize="16sp"
                     android:textStyle="bold" />
 
@@ -101,7 +101,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="16dp"
                     android:text="Name of the Service Provider"
-                    android:textColor="@color/black"
+                    android:textColor="@color/admin_text_primary"
                     android:textSize="16sp"
                     android:textStyle="bold" />
 
@@ -114,14 +114,14 @@
                     android:hint="Enter provider name"
                     android:inputType="textPersonName"
                     android:paddingHorizontal="12dp"
-                    android:textColorHint="@color/text_gray" />
+                    android:textColor="@color/admin_text_primary" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="16dp"
                     android:text="Add Image"
-                    android:textColor="@color/black"
+                    android:textColor="@color/admin_text_primary"
                     android:textSize="16sp"
                     android:textStyle="bold" />
 
@@ -146,7 +146,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="16dp"
                     android:text="Location"
-                    android:textColor="@color/black"
+                    android:textColor="@color/admin_text_primary"
                     android:textSize="16sp"
                     android:textStyle="bold" />
 
@@ -159,14 +159,14 @@
                     android:hint="Enter location"
                     android:inputType="textPostalAddress"
                     android:paddingHorizontal="12dp"
-                    android:textColorHint="@color/text_gray" />
+                    android:textColor="@color/admin_text_primary" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="16dp"
                     android:text="Contact"
-                    android:textColor="@color/black"
+                    android:textColor="@color/admin_text_primary"
                     android:textSize="16sp"
                     android:textStyle="bold" />
 
@@ -179,14 +179,14 @@
                     android:hint="Enter contact number"
                     android:inputType="phone"
                     android:paddingHorizontal="12dp"
-                    android:textColorHint="@color/text_gray" />
+                    android:textColor="@color/admin_text_primary" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="16dp"
                     android:text="Email"
-                    android:textColor="@color/black"
+                    android:textColor="@color/admin_text_primary"
                     android:textSize="16sp"
                     android:textStyle="bold" />
 
@@ -199,7 +199,7 @@
                     android:hint="Enter email"
                     android:inputType="textEmailAddress"
                     android:paddingHorizontal="12dp"
-                    android:textColorHint="@color/text_gray" />
+                    android:textColor="@color/admin_text_primary" />
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/postBtn"
@@ -217,7 +217,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="24dp"
                     android:text="Previous Posts"
-                    android:textColor="@color/black"
+                    android:textColor="@color/admin_text_primary"
                     android:textSize="18sp"
                     android:textStyle="bold" />
 
@@ -228,7 +228,7 @@
                     android:layout_marginTop="12dp"
                     android:layout_marginBottom="8dp"
                     android:foreground="@drawable/previous_post_card_border"
-                    app:cardBackgroundColor="@color/white"
+                    app:cardBackgroundColor="@color/white_card_bg"
                     app:cardCornerRadius="16dp"
                     app:cardElevation="2dp"
                     app:contentPadding="12dp">
@@ -248,7 +248,7 @@
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
-                                android:background="#E0E0E0"
+                                android:background="@color/admin_quick_action_bg"
                                 android:orientation="vertical"
                                 android:padding="8dp">
 
@@ -256,7 +256,7 @@
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:text="Service - Plumbing"
-                                    android:textColor="@color/black"
+                                    android:textColor="@color/admin_text_primary"
                                     android:textSize="13sp"
                                     android:textStyle="bold" />
 
@@ -265,7 +265,7 @@
                                     android:layout_height="wrap_content"
                                     android:layout_marginTop="4dp"
                                     android:text="Name - Sunli"
-                                    android:textColor="@color/black"
+                                    android:textColor="@color/admin_text_primary"
                                     android:textSize="13sp" />
 
                                 <TextView
@@ -273,7 +273,7 @@
                                     android:layout_height="wrap_content"
                                     android:layout_marginTop="2dp"
                                     android:text="Contact - 072587456"
-                                    android:textColor="@color/black"
+                                    android:textColor="@color/admin_text_primary"
                                     android:textSize="13sp" />
 
                                 <TextView
@@ -281,7 +281,7 @@
                                     android:layout_height="wrap_content"
                                     android:layout_marginTop="2dp"
                                     android:text="Location - Galle"
-                                    android:textColor="@color/black"
+                                    android:textColor="@color/admin_text_primary"
                                     android:textSize="13sp" />
                             </LinearLayout>
 

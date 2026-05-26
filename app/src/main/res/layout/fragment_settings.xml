@@ -4,7 +4,7 @@
     android:id="@+id/settingsFragRoot"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#F0EDF5"
+    android:background="@color/admin_bg_light"
     android:clipChildren="false"
     android:orientation="vertical">
 
@@ -60,7 +60,7 @@
             android:layout_marginEnd="24dp"
             android:clickable="true"
             android:focusable="true"
-            app:cardBackgroundColor="#FFFFFF"
+            app:cardBackgroundColor="@color/white_card_bg"
             app:cardCornerRadius="20dp"
             app:cardElevation="6dp">
 
@@ -105,7 +105,7 @@
                         android:layout_height="wrap_content"
                         android:fontFamily="sans-serif-medium"
                         android:text="Nethmina Malshan"
-                        android:textColor="#1A1A1A"
+                        android:textColor="@color/admin_text_primary"
                         android:textSize="20sp" />
 
                     <TextView
@@ -116,7 +116,7 @@
                         android:clickable="true"
                         android:focusable="true"
                         android:text="Edit Profile"
-                        android:textColor="#7A6BB3"
+                        android:textColor="@color/admin_text_secondary"
                         android:textSize="15sp" />
                 </LinearLayout>
             </LinearLayout>
@@ -144,7 +144,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="24dp"
                 android:layout_marginEnd="24dp"
-                app:cardBackgroundColor="#FFFFFF"
+                app:cardBackgroundColor="@color/white_card_bg"
                 app:cardCornerRadius="20dp"
                 app:cardElevation="3dp">
 
@@ -180,7 +180,7 @@
                             android:layout_marginStart="14dp"
                             android:layout_weight="1"
                             android:text="Personal Information"
-                            android:textColor="#1A1A1A"
+                            android:textColor="@color/admin_text_primary"
                             android:textSize="15sp" />
 
                         <TextView
@@ -216,7 +216,7 @@
                             android:layout_marginStart="14dp"
                             android:layout_weight="1"
                             android:text="Saved Addresses"
-                            android:textColor="#1A1A1A"
+                            android:textColor="@color/admin_text_primary"
                             android:textSize="15sp" />
 
                         <TextView
@@ -252,7 +252,7 @@
                             android:layout_marginStart="14dp"
                             android:layout_weight="1"
                             android:text="Wallet"
-                            android:textColor="#1A1A1A"
+                            android:textColor="@color/admin_text_primary"
                             android:textSize="15sp" />
 
                         <TextView
@@ -271,7 +271,7 @@
                 android:layout_marginStart="24dp"
                 android:layout_marginTop="8dp"
                 android:layout_marginEnd="24dp"
-                app:cardBackgroundColor="#FFFFFF"
+                app:cardBackgroundColor="@color/white_card_bg"
                 app:cardCornerRadius="20dp"
                 app:cardElevation="3dp">
 
@@ -303,7 +303,7 @@
                             android:layout_marginStart="14dp"
                             android:layout_weight="1"
                             android:text="Notifications"
-                            android:textColor="#1A1A1A"
+                            android:textColor="@color/admin_text_primary"
                             android:textSize="15sp" />
 
                         <com.google.android.material.switchmaterial.SwitchMaterial
@@ -318,9 +318,6 @@
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="52dp"
-                        android:background="?attr/selectableItemBackground"
-                        android:clickable="true"
-                        android:focusable="true"
                         android:gravity="center_vertical"
                         android:orientation="horizontal"
                         android:paddingStart="20dp"
@@ -339,15 +336,15 @@
                             android:layout_marginStart="14dp"
                             android:layout_weight="1"
                             android:text="Dark Mode"
-                            android:textColor="#1A1A1A"
+                            android:textColor="@color/admin_text_primary"
                             android:textSize="15sp" />
 
-                        <TextView
+                        <com.google.android.material.switchmaterial.SwitchMaterial
+                            android:id="@+id/switchDarkMode"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="›"
-                            android:textColor="#BBBBBB"
-                            android:textSize="22sp" />
+                            app:thumbTint="#FFFFFF"
+                            app:trackTint="#7A6BB3" />
                     </LinearLayout>
 
                     <LinearLayout
@@ -374,7 +371,7 @@
                             android:layout_marginStart="14dp"
                             android:layout_weight="1"
                             android:text="Language"
-                            android:textColor="#1A1A1A"
+                            android:textColor="@color/admin_text_primary"
                             android:textSize="15sp" />
 
                         <TextView
@@ -393,7 +390,7 @@
                 android:layout_marginStart="24dp"
                 android:layout_marginTop="8dp"
                 android:layout_marginEnd="24dp"
-                app:cardBackgroundColor="#FFFFFF"
+                app:cardBackgroundColor="@color/white_card_bg"
                 app:cardCornerRadius="20dp"
                 app:cardElevation="3dp">
 
@@ -428,7 +425,7 @@
                             android:layout_marginStart="14dp"
                             android:layout_weight="1"
                             android:text="Get Help"
-                            android:textColor="#1A1A1A"
+                            android:textColor="@color/admin_text_primary"
                             android:textSize="15sp" />
 
                         <TextView
@@ -463,7 +460,7 @@
                             android:layout_marginStart="14dp"
                             android:layout_weight="1"
                             android:text="Privacy Policy"
-                            android:textColor="#1A1A1A"
+                            android:textColor="@color/admin_text_primary"
                             android:textSize="15sp" />
 
                         <TextView
@@ -498,7 +495,7 @@
                             android:layout_marginStart="14dp"
                             android:layout_weight="1"
                             android:text="Terms of Services"
-                            android:textColor="#1A1A1A"
+                            android:textColor="@color/admin_text_primary"
                             android:textSize="15sp" />
 
                         <TextView
@@ -530,12 +527,5 @@
 
         </LinearLayout>
     </ScrollView>
-
-    <!-- FIXED: Footer Bar -->
-    <View
-        android:id="@+id/footerBar"
-        android:layout_width="match_parent"
-        android:layout_height="48dp"
-        android:background="@drawable/footer_gradient_bar" />
 
 </LinearLayout>

@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white"
+    android:background="@color/light_background"
     android:clipChildren="false"
     android:clipToPadding="false"
     android:fitsSystemWindows="true"
@@ -61,7 +61,7 @@
             android:layout_marginStart="24dp"
             android:layout_marginTop="150dp"
             android:layout_marginEnd="24dp"
-            app:cardBackgroundColor="@color/white"
+            app:cardBackgroundColor="@color/white_card_bg"
             app:cardCornerRadius="20dp"
             app:cardElevation="10dp">
 
@@ -82,7 +82,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="My Points"
-                        android:textColor="#777777"
+                        android:textColor="@color/admin_text_secondary"
                         android:textSize="13sp" />
 
                     <TextView
@@ -92,7 +92,7 @@
                         android:layout_marginTop="4dp"
                         android:fontFamily="sans-serif-bold"
                         android:text="10500"
-                        android:textColor="#1A1A1A"
+                        android:textColor="@color/admin_text_primary"
                         android:textSize="32sp" />
                 </LinearLayout>
 
@@ -124,7 +124,7 @@
             android:clickable="true"
             android:focusable="true"
             android:foreground="?attr/selectableItemBackground"
-            app:cardBackgroundColor="@color/white"
+            app:cardBackgroundColor="@color/white_card_bg"
             app:cardCornerRadius="25dp"
             app:cardElevation="8dp">
 
@@ -134,7 +134,7 @@
                 android:layout_gravity="center_vertical"
                 android:layout_marginStart="24dp"
                 android:text="Add Points"
-                android:textColor="#1A1A1A"
+                android:textColor="@color/admin_text_primary"
                 android:textSize="15sp" />
         </androidx.cardview.widget.CardView>
 
@@ -146,7 +146,7 @@
             android:clickable="true"
             android:focusable="true"
             android:foreground="?attr/selectableItemBackground"
-            app:cardBackgroundColor="@color/white"
+            app:cardBackgroundColor="@color/white_card_bg"
             app:cardCornerRadius="25dp"
             app:cardElevation="8dp">
 
@@ -162,7 +162,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text="Cards"
-                    android:textColor="#1A1A1A"
+                    android:textColor="@color/admin_text_primary"
                     android:textSize="15sp" />
 
                 <ImageView

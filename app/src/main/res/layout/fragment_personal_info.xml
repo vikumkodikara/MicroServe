@@ -112,14 +112,14 @@
                     android:layout_marginStart="12dp"
                     android:layout_marginBottom="6dp"
                     android:text="Full Name"
-                    android:textColor="@color/black"
+                    android:textColor="@color/admin_text_primary"
                     android:textSize="13sp" />
 
                 <com.google.android.material.card.MaterialCardView
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
                     android:layout_marginBottom="18dp"
-                    app:cardBackgroundColor="@color/white"
+                    app:cardBackgroundColor="@color/white_card_bg"
                     app:cardCornerRadius="25dp"
                     app:cardElevation="2dp">
 
@@ -131,7 +131,7 @@
                         android:inputType="textPersonName"
                         android:paddingHorizontal="22dp"
                         android:text="Nethmina Malshan"
-                        android:textColor="@color/black"
+                        android:textColor="@color/admin_text_primary"
                         android:textSize="14sp" />
                 </com.google.android.material.card.MaterialCardView>
 
@@ -141,14 +141,14 @@
                     android:layout_marginStart="12dp"
                     android:layout_marginBottom="4dp"
                     android:text="Email Address"
-                    android:textColor="@color/black"
+                    android:textColor="@color/admin_text_primary"
                     android:textSize="13sp" />
 
                 <com.google.android.material.card.MaterialCardView
                     android:layout_width="match_parent"
                     android:layout_height="44dp"
                     android:layout_marginBottom="12dp"
-                    app:cardBackgroundColor="@color/white"
+                    app:cardBackgroundColor="@color/white_card_bg"
                     app:cardCornerRadius="22dp"
                     app:cardElevation="2dp">
 
@@ -160,7 +160,7 @@
                         android:inputType="textEmailAddress"
                         android:paddingHorizontal="22dp"
                         android:text="nethmina@gmail.com"
-                        android:textColor="@color/black"
+                        android:textColor="@color/admin_text_primary"
                         android:textSize="14sp" />
                 </com.google.android.material.card.MaterialCardView>
 
@@ -170,14 +170,14 @@
                     android:layout_marginStart="12dp"
                     android:layout_marginBottom="4dp"
                     android:text="Phone Number"
-                    android:textColor="@color/black"
+                    android:textColor="@color/admin_text_primary"
                     android:textSize="13sp" />
 
                 <com.google.android.material.card.MaterialCardView
                     android:layout_width="match_parent"
                     android:layout_height="44dp"
                     android:layout_marginBottom="12dp"
-                    app:cardBackgroundColor="@color/white"
+                    app:cardBackgroundColor="@color/white_card_bg"
                     app:cardCornerRadius="22dp"
                     app:cardElevation="2dp">
 
@@ -189,7 +189,7 @@
                         android:inputType="phone"
                         android:paddingHorizontal="22dp"
                         android:text="+94 77 123 4567"
-                        android:textColor="@color/black"
+                        android:textColor="@color/admin_text_primary"
                         android:textSize="14sp" />
                 </com.google.android.material.card.MaterialCardView>
 
@@ -199,14 +199,14 @@
                     android:layout_marginStart="12dp"
                     android:layout_marginBottom="4dp"
                     android:text="Location / Address"
-                    android:textColor="@color/black"
+                    android:textColor="@color/admin_text_primary"
                     android:textSize="13sp" />
 
                 <com.google.android.material.card.MaterialCardView
                     android:layout_width="match_parent"
                     android:layout_height="44dp"
                     android:layout_marginBottom="20dp"
-                    app:cardBackgroundColor="@color/white"
+                    app:cardBackgroundColor="@color/white_card_bg"
                     app:cardCornerRadius="22dp"
                     app:cardElevation="2dp">
 
@@ -218,7 +218,7 @@
                         android:inputType="textPostalAddress"
                         android:paddingHorizontal="22dp"
                         android:text="Kaluthara, Sri Lanka"
-                        android:textColor="@color/black"
+                        android:textColor="@color/admin_text_primary"
                         android:textSize="14sp" />
                 </com.google.android.material.card.MaterialCardView>
 

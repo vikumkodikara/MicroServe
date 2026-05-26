@@ -26,10 +26,12 @@ class SettingsFragmentActivity : AppCompatActivity() {
         ViewCompat.setOnApplyWindowInsetsListener(root) { _, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             header.setPadding(0, systemBars.top, 0, 0)
-            val lp = footer.layoutParams
-            lp.height = (48 * resources.displayMetrics.density).toInt() + systemBars.bottom
-            footer.layoutParams = lp
-            footer.setPadding(0, 0, 0, systemBars.bottom)
+            footer?.let { f ->
+                val lp = f.layoutParams
+                lp.height = (48 * resources.displayMetrics.density).toInt() + systemBars.bottom
+                f.layoutParams = lp
+                f.setPadding(0, 0, 0, systemBars.bottom)
+            }
             insets
         }
 
@@ -42,6 +44,22 @@ class SettingsFragmentActivity : AppCompatActivity() {
         } catch (_: Exception) { }
 
         findViewById<View>(R.id.btn_back).setOnClickListener { finish() }
+
+        val switchNotifications = findViewById<com.google.android.material.switchmaterial.SwitchMaterial>(R.id.switchNotifications)
+        switchNotifications.isChecked = AppPreferences.isNotificationsEnabled(this)
+        switchNotifications.setOnCheckedChangeListener { _, isChecked ->
+            AppPreferences.setNotificationsEnabled(this, isChecked)
+            Toast.makeText(this, if (isChecked) "Notifications enabled" else "Notifications disabled", Toast.LENGTH_SHORT).show()
+        }
+
+        val switchDarkMode = findViewById<com.google.android.material.switchmaterial.SwitchMaterial>(R.id.switchDarkMode)
+        switchDarkMode.isChecked = AppPreferences.isDarkModeEnabled(this)
+        switchDarkMode.setOnCheckedChangeListener { _, isChecked ->
+            AppPreferences.setDarkModeEnabled(this, isChecked)
+            androidx.appcompat.app.AppCompatDelegate.setDefaultNightMode(
+                if (isChecked) androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_YES else androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_NO
+            )
+        }
 
         findViewById<View>(R.id.btn_logout).setOnClickListener {
             Toast.makeText(this, "Logged out", Toast.LENGTH_SHORT).show()

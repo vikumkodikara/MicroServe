@@ -10,5 +10,5 @@
     android:paddingTop="10dp"
     android:paddingEnd="18dp"
     android:paddingBottom="10dp"
-    android:textColor="@color/black"
+    android:textColor="@color/admin_text_primary"
     android:textSize="14sp" />

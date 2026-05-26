@@ -72,7 +72,7 @@
                 android:layout_height="wrap_content"
                 android:clickable="true"
                 android:focusable="true"
-                app:cardBackgroundColor="@color/white"
+                app:cardBackgroundColor="@color/white_card_bg"
                 app:cardCornerRadius="20dp"
                 app:cardElevation="4dp">
 
@@ -124,7 +124,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="14dp"
-                app:cardBackgroundColor="@color/white"
+                app:cardBackgroundColor="@color/white_card_bg"
                 app:cardCornerRadius="20dp"
                 app:cardElevation="4dp">
 
