@@ -37,7 +37,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
                 android:fontFamily="sans-serif-bold"
-                android:text="Add new card"
+                android:text="Edit card"
                 android:textColor="#FFFFFF"
                 android:textSize="26sp" />
         </LinearLayout>
@@ -58,7 +58,6 @@
             android:paddingTop="36dp"
             android:paddingBottom="20dp">
 
-            <!-- Card Number Label -->
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -67,7 +66,6 @@
                 android:textSize="15sp"
                 android:textStyle="bold" />
 
-            <!-- Card Number Field -->
             <EditText
                 android:id="@+id/et_card_number"
                 android:layout_width="match_parent"
@@ -82,7 +80,6 @@
                 android:textColorHint="#C0A8D4"
                 android:textSize="14sp" />
 
-            <!-- Card Name Label -->
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -91,7 +88,6 @@
                 android:textSize="15sp"
                 android:textStyle="bold" />
 
-            <!-- Card Name Field -->
             <EditText
                 android:id="@+id/et_card_name"
                 android:layout_width="match_parent"
@@ -106,13 +102,11 @@
                 android:textColorHint="#C0A8D4"
                 android:textSize="14sp" />
 
-            <!-- Date and CVV Row -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
 
-                <!-- Date Section -->
                 <LinearLayout
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
@@ -144,7 +138,6 @@
                         android:textSize="14sp" />
                 </LinearLayout>
 
-                <!-- CVV Section -->
                 <LinearLayout
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
@@ -178,31 +171,51 @@
         </LinearLayout>
     </ScrollView>
 
-    <!-- Save Button -->
-    <com.google.android.material.card.MaterialCardView
-        android:id="@+id/btn_save"
+    <!-- Buttons -->
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="56dp"
-        android:layout_marginStart="24dp"
-        android:layout_marginEnd="24dp"
-        android:layout_marginBottom="24dp"
-        android:clickable="true"
-        android:focusable="true"
-        app:cardBackgroundColor="#4a4458"
-        app:cardCornerRadius="28dp"
-        app:cardElevation="6dp"
-        app:strokeColor="#7A6BB3"
-        app:strokeWidth="2dp">
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingHorizontal="24dp"
+        android:paddingBottom="16dp">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:text="Save"
-            android:textColor="@color/white"
+        <!-- Update Button -->
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/btn_update"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:layout_marginBottom="10dp"
+            android:clickable="true"
+            android:focusable="true"
+            app:cardBackgroundColor="#4a4458"
+            app:cardCornerRadius="28dp"
+            app:cardElevation="6dp"
+            app:strokeColor="#7A6BB3"
+            app:strokeWidth="2dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="Update Card"
+                android:textColor="@color/white"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+        </com.google.android.material.card.MaterialCardView>
+
+        <!-- Delete Button -->
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_delete"
+            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:text="Delete Card"
+            android:textAllCaps="false"
+            android:textColor="#E8675A"
             android:textSize="16sp"
-            android:textStyle="bold" />
-    </com.google.android.material.card.MaterialCardView>
+            app:cornerRadius="28dp"
+            app:strokeColor="#E8675A" />
+    </LinearLayout>
 
     <!-- Footer Bar -->
     <View

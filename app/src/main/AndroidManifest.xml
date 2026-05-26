@@ -124,6 +124,27 @@
         <activity
             android:name=".ContactUsActivity"
             android:exported="false" />
+        <activity
+            android:name=".MyCardsActivity"
+            android:exported="false" />
+        <activity
+            android:name=".EditCardActivity"
+            android:exported="false" />
+        <activity
+            android:name=".RequestMainActivity"
+            android:exported="false" />
+        <activity
+            android:name=".CreateRequestActivity"
+            android:exported="false" />
+        <activity
+            android:name=".CategoryDetailActivity"
+            android:exported="false" />
+        <activity
+            android:name=".PlaceBidActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ServiceMainActivity"
+            android:exported="false" />
     </application>
 
 </manifest>
