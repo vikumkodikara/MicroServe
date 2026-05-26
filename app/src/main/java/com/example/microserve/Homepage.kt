@@ -166,7 +166,7 @@ class Homepage : AppCompatActivity() {
         }
 
         binding.chipRequestService.setOnClickListener {
-            startActivity(Intent(this, RequestServiceActivity::class.java))
+            startActivity(Intent(this, RequestMainActivity::class.java))
         }
 
         binding.chipPostAds.setOnClickListener {

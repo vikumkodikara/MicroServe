@@ -13,10 +13,20 @@
     <color name="light_background">#F8F9FA</color>
     <color name="text_gray">#757575</color>
 
+    <!-- Service Request App Colors -->
+    <color name="purple_primary">#8778BF</color>
+    <color name="purple_dark">#483C72</color>
+    <color name="purple_medium">#7A6BB3</color>
+    <color name="purple_button">#7B6DB1</color>
+    <color name="off_white">#FFFCFC</color>
+    <color name="shadow">#40000000</color>
+
+    <!-- Main branch user app colors -->
     <color name="brand_purple">#9C27B0</color>
     <color name="chip_gray">#E0E0E0</color>
     <color name="header_start">#483C72</color>
     <color name="header_end">#7A6BB3</color>
+
     <!-- Discover Screen Colors -->
     <color name="discover_bg_start">#1A1A2E</color>
     <color name="discover_bg_end">#0A0A10</color>

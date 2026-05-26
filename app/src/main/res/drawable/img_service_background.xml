@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="264dp"
+    android:height="198dp"
+    android:viewportWidth="264"
+    android:viewportHeight="198">
+    <!-- Gradient background -->
+    <path
+        android:fillColor="#8778BF"
+        android:pathData="M0,0h264v198h-264z"/>
+    <!-- Decorative pattern -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:fillAlpha="0.1"
+        android:pathData="M50,50m-20,0a20,20 0,1 1,40 0a20,20 0,1 1,-40 0"/>
+    <path
+        android:fillColor="#FFFFFF"
+        android:fillAlpha="0.1"
+        android:pathData="M150,80m-30,0a30,30 0,1 1,60 0a30,30 0,1 1,-60 0"/>
+    <path
+        android:fillColor="#FFFFFF"
+        android:fillAlpha="0.1"
+        android:pathData="M220,130m-25,0a25,25 0,1 1,50 0a25,25 0,1 1,-50 0"/>
+</vector>
