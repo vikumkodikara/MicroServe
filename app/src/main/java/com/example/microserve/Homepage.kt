@@ -82,7 +82,7 @@ class Homepage : AppCompatActivity() {
 
     private fun setupClickListeners() {
         binding.settingsBtn.setOnClickListener {
-            startActivity(Intent(this, SettingsActivity::class.java))
+            startActivity(Intent(this, SettingsFragmentActivity::class.java))
         }
 
         binding.chipPostService.setOnClickListener {

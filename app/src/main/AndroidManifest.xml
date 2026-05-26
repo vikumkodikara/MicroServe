@@ -80,6 +80,21 @@
         <activity
             android:name=".AdminProfileActivity"
             android:exported="false" />
+        <activity
+            android:name=".PersonalInfoActivity"
+            android:exported="false" />
+        <activity
+            android:name=".SavedAddressActivity"
+            android:exported="false" />
+        <activity
+            android:name=".WalletActivity"
+            android:exported="false" />
+        <activity
+            android:name=".SettingsFragmentActivity"
+            android:exported="false" />
+        <activity
+            android:name=".AddNewCardActivity"
+            android:exported="false" />
     </application>
 
 </manifest>
