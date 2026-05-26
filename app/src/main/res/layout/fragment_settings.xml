@@ -489,7 +489,7 @@
                             android:layout_width="26dp"
                             android:layout_height="26dp"
                             android:importantForAccessibility="no"
-                            android:src="@android:drawable/ic_menu_agenda"
+                            android:src="@drawable/contract"
                             app:tint="#483C72" />
 
                         <TextView
