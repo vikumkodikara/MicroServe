@@ -50,4 +50,40 @@
     <string name="privacy_policy">පෞද්ගලිකත්ව ප්‍රතිපත්තිය</string>
     <string name="terms_of_services">සේවා කොන්දේසි</string>
     <string name="log_out">පිටවීම</string>
+    <string name="help_subtitle">හලෝ %1$s, අපි ඔබට උදව් කරන්නේ කෙසේද?</string>
+
+    <!-- Get Help Screen -->
+    <string name="get_help_title">උදව් ලබාගන්න</string>
+    <string name="search_help_hint">ගැටළු, මාතෘකා සොයන්න...</string>
+    <string name="help_bookings">වෙන්කිරීම්</string>
+    <string name="help_payments">ගෙවීම්</string>
+    <string name="help_account">ගිණුම</string>
+    <string name="help_safety_legal">ආරක්ෂාව සහ නීතිය</string>
+    <string name="help_still_need">තවම උදව් අවශ්‍යද?</string>
+    <string name="help_live_chat">සජීවී කතාබහ</string>
+    <string name="help_call_hotline">හොට්ලයින් ඇමතුම</string>
+
+    <!-- Personal Info Screen -->
+    <string name="personal_info_title">පුද්ගලික තොරතුරු</string>
+    <string name="edit_profile_btn">ගිණුම සංස්කරණය</string>
+
+    <!-- Privacy Policy Screen -->
+    <string name="privacy_policy_title">පෞද්ගලිකත්ව ප්‍රතිපත්තිය</string>
+    <string name="i_agree">එකඟ වෙනවා</string>
+
+    <!-- Terms of Service Screen -->
+    <string name="terms_of_service_title">සේවා කොන්දේසි</string>
+
+    <!-- Request Service Screen -->
+    <string name="request_a_service">සේවාවක්\nඉල්ලන්න</string>
+    <string name="enter_your_name_label">ඔබේ නම ඇතුලත් කරන්න</string>
+    <string name="title_label">මාතෘකාව</string>
+    <string name="category_label">වර්ගය</string>
+    <string name="contact_label">ඇමතුම</string>
+    <string name="location_label">ස්ථානය</string>
+    <string name="description_label">විස්තරය</string>
+    <string name="submit_request">ඉල්ලීම යොමු කරන්න</string>
+
+    <!-- Splash Screen -->
+    <string name="services_at_doorstep">ඔබේ දොර ළඟ සේවාවන්</string>
 </resources>

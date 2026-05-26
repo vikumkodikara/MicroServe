@@ -72,7 +72,7 @@
             android:alpha="0"
             android:fontFamily="sans-serif-light"
             android:letterSpacing="0.08"
-            android:text="Services at your doorstep"
+            android:text="@string/services_at_doorstep"
             android:textColor="#CCFFFFFF"
             android:textSize="12sp"
             app:layout_constraintStart_toStartOf="@id/splashAppName"

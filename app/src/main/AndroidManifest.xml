@@ -122,6 +122,15 @@
         <activity
             android:name=".AddNewCardActivity"
             android:exported="false" />
+            <activity
+            android:name=".GetHelpActivity"
+            android:exported="false" />
+        <activity
+            android:name=".PrivacyPolicyActivity"
+            android:exported="false" />
+        <activity
+            android:name=".TermsOfServicesActivity"
+            android:exported="false" />
     </application>
 
 </manifest>

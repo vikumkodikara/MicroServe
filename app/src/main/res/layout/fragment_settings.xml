@@ -403,6 +403,7 @@
                     android:paddingBottom="6dp">
 
                     <LinearLayout
+                        android:id="@+id/btn_get_help"
                         android:layout_width="match_parent"
                         android:layout_height="52dp"
                         android:background="?attr/selectableItemBackground"
@@ -438,6 +439,7 @@
                     </LinearLayout>
 
                     <LinearLayout
+                        android:id="@+id/btn_privacy_policy"
                         android:layout_width="match_parent"
                         android:layout_height="52dp"
                         android:background="?attr/selectableItemBackground"
@@ -473,6 +475,7 @@
                     </LinearLayout>
 
                     <LinearLayout
+                        android:id="@+id/btn_terms_of_service"
                         android:layout_width="match_parent"
                         android:layout_height="52dp"
                         android:background="?attr/selectableItemBackground"

@@ -87,6 +87,24 @@ class SettingsFragmentActivity : AppCompatActivity() {
         } catch (_: Exception) { }
 
         try {
+            findViewById<View>(R.id.btn_get_help).setOnClickListener {
+                startActivity(Intent(this, GetHelpActivity::class.java))
+            }
+        } catch (_: Exception) { }
+
+        try {
+            findViewById<View>(R.id.btn_privacy_policy).setOnClickListener {
+                startActivity(Intent(this, PrivacyPolicyActivity::class.java))
+            }
+        } catch (_: Exception) { }
+
+        try {
+            findViewById<View>(R.id.btn_terms_of_service).setOnClickListener {
+                startActivity(Intent(this, TermsOfServicesActivity::class.java))
+            }
+        } catch (_: Exception) { }
+
+        try {
             findViewById<View>(R.id.btn_language).setOnClickListener {
                 val dialog = com.google.android.material.bottomsheet.BottomSheetDialog(this)
                 val sheetView = layoutInflater.inflate(R.layout.dialog_select_language, null)

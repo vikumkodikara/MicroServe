@@ -47,7 +47,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
-                android:text="Personal Info"
+                android:text="@string/personal_info_title"
                 android:textColor="@color/white"
                 android:textSize="26sp"
                 android:textStyle="bold"
@@ -111,7 +111,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="12dp"
                     android:layout_marginBottom="6dp"
-                    android:text="Full Name"
+                    android:text="@string/full_name"
                     android:textColor="@color/admin_text_primary"
                     android:textSize="13sp" />
 
@@ -140,7 +140,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="12dp"
                     android:layout_marginBottom="4dp"
-                    android:text="Email Address"
+                    android:text="@string/email_address"
                     android:textColor="@color/admin_text_primary"
                     android:textSize="13sp" />
 
@@ -169,7 +169,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="12dp"
                     android:layout_marginBottom="4dp"
-                    android:text="Phone Number"
+                    android:text="@string/phone_number"
                     android:textColor="@color/admin_text_primary"
                     android:textSize="13sp" />
 
@@ -198,7 +198,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="12dp"
                     android:layout_marginBottom="4dp"
-                    android:text="Location / Address"
+                    android:text="@string/location_address"
                     android:textColor="@color/admin_text_primary"
                     android:textSize="13sp" />
 
@@ -229,7 +229,7 @@
                     android:fontFamily="sans-serif-medium"
                     android:insetTop="0dp"
                     android:insetBottom="0dp"
-                    android:text="Edit Profile"
+                    android:text="@string/edit_profile_btn"
                     android:textAllCaps="false"
                     android:textColor="@color/white"
                     android:textSize="16sp"

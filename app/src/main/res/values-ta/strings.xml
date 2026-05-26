@@ -50,4 +50,40 @@
     <string name="privacy_policy">தனியுரிமைக் கொள்கை</string>
     <string name="terms_of_services">சேவை விதிமுறைகள்</string>
     <string name="log_out">வெளியேறு</string>
+    <string name="help_subtitle">ஹலோ %1$s, நாங்கள் உங்களுக்கு எவ்வாறு உதவலாம்?</string>
+
+    <!-- Get Help Screen -->
+    <string name="get_help_title">உதவி பெற</string>
+    <string name="search_help_hint">சிக்கல்கள், தலைப்புகளை தேடுங்கள்...</string>
+    <string name="help_bookings">முன்பதிவுகள்</string>
+    <string name="help_payments">கொடுப்பனவுகள்</string>
+    <string name="help_account">கணக்கு</string>
+    <string name="help_safety_legal">பாதுகாப்பு &amp; சட்டம்</string>
+    <string name="help_still_need">இன்னும் உதவி வேண்டுமா?</string>
+    <string name="help_live_chat">நேரலை அரட்டை</string>
+    <string name="help_call_hotline">ஹாட்லைன் அழைப்பு</string>
+
+    <!-- Personal Info Screen -->
+    <string name="personal_info_title">தனிப்பட்ட தகவல்</string>
+    <string name="edit_profile_btn">சுயவிவரத்தைத் தொகு</string>
+
+    <!-- Privacy Policy Screen -->
+    <string name="privacy_policy_title">தனியுரிமைக் கொள்கை</string>
+    <string name="i_agree">ஒப்புக்கொள்கிறேன்</string>
+
+    <!-- Terms of Service Screen -->
+    <string name="terms_of_service_title">சேவை விதிமுறைகள்</string>
+
+    <!-- Request Service Screen -->
+    <string name="request_a_service">சேவை\nகோரிக்கை</string>
+    <string name="enter_your_name_label">உங்கள் பெயரை உள்ளிடுக</string>
+    <string name="title_label">தலைப்பு</string>
+    <string name="category_label">வகை</string>
+    <string name="contact_label">தொடர்பு</string>
+    <string name="location_label">இடம்</string>
+    <string name="description_label">விளக்கம்</string>
+    <string name="submit_request">கோரிக்கையை சமர்பிக்க</string>
+
+    <!-- Splash Screen -->
+    <string name="services_at_doorstep">உங்கள் வாசலில் சேவைகள்</string>
 </resources>
