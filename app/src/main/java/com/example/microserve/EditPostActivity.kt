@@ -57,12 +57,10 @@ class EditPostActivity : AppCompatActivity() {
         val defaultName = intent.getStringExtra("provider_name") ?: "Sunil Perera"
         val defaultLocation = intent.getStringExtra("location") ?: "Galle"
         val defaultContact = intent.getStringExtra("contact") ?: "072587456"
-        val defaultEmail = intent.getStringExtra("email") ?: "Sunil@gmail.com"
 
         binding.providerNameET.setText(defaultName)
         binding.locationET.setText(defaultLocation)
         binding.contactET.setText(defaultContact)
-        binding.emailET.setText(defaultEmail)
 
         val categoryPosition = (0 until binding.categorySpinner.count)
             .firstOrNull { binding.categorySpinner.getItemAtPosition(it) == defaultCategory }
@@ -97,14 +95,13 @@ class EditPostActivity : AppCompatActivity() {
         val name = binding.providerNameET.text.toString().trim()
         val location = binding.locationET.text.toString().trim()
         val contact = binding.contactET.text.toString().trim()
-        val email = binding.emailET.text.toString().trim()
 
         return when {
             category == "-Select-" -> {
                 showToast("Please select a category")
                 false
             }
-            name.isEmpty() || location.isEmpty() || contact.isEmpty() || email.isEmpty() -> {
+            name.isEmpty() || location.isEmpty() || contact.isEmpty() -> {
                 showToast("Please fill all fields")
                 false
             }

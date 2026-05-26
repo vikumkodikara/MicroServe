@@ -1,13 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">MicroServe</string>
+
+    <!-- Service Request App Strings -->
+    <string name="title_my_service">My Service</string>
+    <string name="title_requests">Requests</string>
+    <string name="services_at_door">Services At Your Door</string>
+
+    <!-- Categories -->
+    <string name="category_plumbing">Plumbing</string>
+    <string name="category_painting">Painting</string>
+    <string name="category_carpentry">Carpentry</string>
+    <string name="category_gardening">Gardening</string>
+    <string name="category_electric">Electric Work</string>
+    <string name="category_mechanic">Mechanic</string>
+    <string name="category_cleaning">Cleaning</string>
+    <string name="category_handyman">Handyman</string>
+    <string name="category_hvac">HVAC</string>
+
+    <!-- Request Items -->
+    <string name="request_1_title">1. Plumber</string>
+    <string name="request_1_desc">Pipe leak repair</string>
+    <string name="request_2_title">2. Painter</string>
+    <string name="request_2_desc">House repainting</string>
+    <string name="request_3_title">3. Gardening</string>
+    <string name="request_3_desc">Weed removal</string>
+    <string name="request_4_title">4. Plumber</string>
+    <string name="request_4_desc">Bathroom fitting</string>
+    <string name="request_5_title">5. Painter</string>
+    <string name="request_5_desc">Wood polishing</string>
+    <string name="request_6_title">6. Gardening</string>
+    <string name="request_6_desc">Seasonal garden care</string>
+
+    <!-- Request Main -->
+    <string name="my_service_requests">My Service\nRequests</string>
+    <string name="section_category">Category</string>
+    <string name="section_my_requests">My Requests</string>
+    <string name="category_electric_short">Electric</string>
+    <string name="no_requests_yet">No requests yet. Tap a category to create one.</string>
+
+    <!-- Buttons -->
+    <string name="edit">Edit</string>
+    <string name="btn_edit">Edit</string>
+    <string name="btn_requests">Requests</string>
+    <string name="delete_request">Delete request</string>
+    <string name="request_row_title_format">%1$d. %2$s</string>
+
+    <!-- Homepage -->
     <string name="cd_services_at_your_door_banner">Services at your door — browse local service providers</string>
     <string name="cd_job_done_preview">Previously completed job preview image</string>
     <string name="cd_sidebar_menu">Open navigation menu</string>
+
+    <!-- Navigation -->
     <string name="nav_request">Request</string>
     <string name="nav_service">Service</string>
     <string name="nav_home">Home</string>
     <string name="nav_post">Post</string>
     <string name="nav_profile">Profile</string>
+
+    <!-- Content Descriptions -->
+    <string name="cd_settings">Settings</string>
+    <string name="cd_back">Go back</string>
+    <string name="cd_delete">Delete</string>
+    <string name="cd_category">Category</string>
+
+    <!-- Category Detail -->
+    <string name="description_label_format">Description :- %1$s</string>
+    <string name="no_category_requests">No requests in this category yet.</string>
+
+    <!-- Service Request Detail -->
+    <string name="service_request_details">Service Request Details</string>
+    <string name="service_label">Service</string>
+    <string name="location_label">Location</string>
+    <string name="job_label">Job</string>
+    <string name="previous_bids">Previous bids</string>
+    <string name="bid_button">Bid</string>
+    <string name="purchase_button">Purchase</string>
+    <string name="age_label_format">Age: %1$d</string>
+    <string name="bid_price_format">Bid Price: Rs. %1$,d</string>
+    <string name="bid_submitted_toast">Bid submitted</string>
+    <string name="purchase_confirmed_toast">Purchase confirmed for %1$s</string>
+    <string name="request_not_found">Request not found</string>
+    <string name="detail_row_format">%1$s: %2$s</string>
+
+    <!-- Place a Bid -->
+    <string name="place_bid_title">Place a\nbid</string>
+    <string name="bid_amount_label">Bid Amount</string>
+    <string name="bid_amount_hint">Rs.</string>
+    <string name="completion_time_label">Completion Time</string>
+    <string name="completion_time_hint">xxxxh</string>
+    <string name="agree_to_terms">I agree to terms</string>
+    <string name="place_bid_submit">PLACE BID</string>
+    <string name="bid_amount_invalid">Enter a valid bid amount</string>
+    <string name="completion_time_invalid">Enter completion time in hours</string>
+    <string name="terms_not_agreed">Please agree to terms</string>
+
+    <!-- Settings / Profile -->
     <string name="settings">Settings</string>
     <string name="dummy_user_name">Nethmina Malshan</string>
     <string name="edit_profile">Edit Profile</string>

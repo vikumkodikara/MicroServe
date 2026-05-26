@@ -13,6 +13,10 @@ import com.example.microserve.databinding.ActivityRequestServiceBinding
  */
 class RequestServiceActivity : AppCompatActivity() {
 
+    companion object {
+        const val EXTRA_CATEGORY = "extra_category"
+    }
+
     private lateinit var binding: ActivityRequestServiceBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -26,10 +30,28 @@ class RequestServiceActivity : AppCompatActivity() {
     }
 
     private fun setupSpinner() {
-        val categories = arrayOf("-Select-", "Plumbing", "Electrical", "House Painting", "Carpentry", "Cleaning", "Graphic Design", "Welding")
+        val categories = arrayOf(
+            "-Select-",
+            "Plumbing",
+            "Electrical",
+            "House Painting",
+            "Carpentry",
+            "Cleaning",
+            "Gardening",
+            "Graphic Design",
+            "Welding"
+        )
         val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, categories)
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         binding.categorySpinner.adapter = adapter
+
+        val preselected = intent.getStringExtra(EXTRA_CATEGORY)
+        if (!preselected.isNullOrBlank()) {
+            val index = categories.indexOfFirst { it.equals(preselected, ignoreCase = true) }
+            if (index >= 0) {
+                binding.categorySpinner.setSelection(index)
+            }
+        }
     }
 
     private fun setupClickListeners() {

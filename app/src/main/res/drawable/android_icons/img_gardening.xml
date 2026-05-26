@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="83dp"
+    android:height="63dp"
+    android:viewportWidth="83"
+    android:viewportHeight="63">
+    <!-- Background -->
+    <path
+        android:fillColor="#4CAF50"
+        android:pathData="M0,0h83v63h-83z"/>
+    <!-- Plant/leaf icon -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M40,22c-4.4,0 -8,3.6 -8,8c0,2.2 0.9,4.2 2.4,5.7L34,44h12l-0.4,-8.3c1.5,-1.5 2.4,-3.5 2.4,-5.7c0,-4.4 -3.6,-8 -8,-8zM40,34c-2.2,0 -4,-1.8 -4,-4s1.8,-4 4,-4 4,1.8 4,4 -1.8,4 -4,4z"
+        android:translateX="1"
+        android:translateY="0"/>
+</vector>
