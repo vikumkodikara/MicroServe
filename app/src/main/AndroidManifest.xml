@@ -2,6 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <uses-permission android:name="android.permission.INTERNET" />
+
     <application
         android:name=".MicroServeApp"
         android:allowBackup="true"
@@ -31,6 +33,9 @@
             android:theme="@style/Theme.MicroServe.Login" />
         <activity
             android:name=".Homepage"
+            android:exported="false" />
+        <activity
+            android:name=".AdminDashboardActivity"
             android:exported="false" />
         <activity
             android:name=".PostServiceActivity"
