@@ -22,21 +22,23 @@
     <string name="terms_of_services">Terms of Services</string>
     <string name="log_out">Log Out</string>
 
+    <!-- Google Sign-In -->
+    <string name="default_web_client_id">905624307478-ke4mf9eaubh4n9or8sk9o770i7r2l4al.apps.googleusercontent.com</string>
+
     <!-- Login -->
     <string name="login_title">Login</string>
     <string name="login_username_hint">Email</string>
     <string name="login_password_hint">Password</string>
     <string name="login_button">Log in</string>
     <string name="sign_up_button">Sign Up</string>
-    <string name="login_google_button">Sign in with Google</string>
-    <string name="login_google_not_configured">Google sign-in is not configured. Add the web client ID in Firebase.</string>
-    <string name="login_admin_success">Welcome, Admin</string>
+    <string name="login_google_button">Continue with Google</string>
     <string name="login_forgot_password">Forgot your password?</string>
     <string name="login_forgot_password_soon">Password reset coming soon</string>
     <string name="login_error_username">Please enter your email</string>
     <string name="login_error_invalid_email">Please enter a valid email</string>
     <string name="login_error_password">Please enter your password</string>
     <string name="cd_login_logo">MicroServe logo</string>
+    <string name="login_google_not_configured">Google Sign-In is not configured correctly</string>
 
     <!-- Sign up -->
     <string name="sign_up_title">Create Account</string>
