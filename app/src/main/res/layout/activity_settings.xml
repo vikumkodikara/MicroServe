@@ -319,7 +319,7 @@
                         <ImageView
                             android:layout_width="36dp"
                             android:layout_height="36dp"
-                            android:src="@android:drawable/ic_menu_agenda"
+                            android:src="@drawable/contract"
                             app:tint="@color/admin_purple_dark" />
 
                         <TextView
