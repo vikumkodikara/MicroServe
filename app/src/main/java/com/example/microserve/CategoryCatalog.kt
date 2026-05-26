@@ -18,9 +18,9 @@ object CategoryCatalog {
         Category("painting", "Painting", listOf("House Painting", "Painting"), R.drawable.nethmina_painting),
         Category("electric", "Electric Work", listOf("Electrical", "Electric Work"), R.drawable.nethmina_electric),
         Category("handyman", "Handyman", listOf("Handyman"), R.drawable.nethmina_handyman),
-        Category("hvac", "HVAC", listOf("HVAC"), R.drawable.img_hvac),
-        Category("mechanic", "Mechanic", listOf("Mechanic"), R.drawable.img_mechanic),
-        Category("carpentry", "Carpentry", listOf("Carpentry"), R.drawable.img_carpentry)
+        Category("hvac", "HVAC", listOf("HVAC"), R.drawable.nethmina_hvac),
+        Category("mechanic", "Mechanic", listOf("Mechanic"), R.drawable.nethmina_mechanic),
+        Category("carpentry", "Carpentry", listOf("Carpentry"), R.drawable.nethmina_carpentry)
     )
 
     fun findById(id: String): Category? = all.firstOrNull { it.id == id }

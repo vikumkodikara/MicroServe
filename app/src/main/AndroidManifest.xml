@@ -13,13 +13,25 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.MicroServe">
         <activity
-            android:name=".Homepage"
-            android:exported="true">
+            android:name=".SplashActivity"
+            android:exported="true"
+            android:theme="@style/Theme.MicroServe.Splash">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".LoginActivity"
+            android:exported="false"
+            android:theme="@style/Theme.MicroServe.Login" />
+        <activity
+            android:name=".SignUpActivity"
+            android:exported="false"
+            android:theme="@style/Theme.MicroServe.Login" />
+        <activity
+            android:name=".Homepage"
+            android:exported="false" />
         <activity
             android:name=".PostAdsActivity"
             android:exported="false" />
@@ -48,6 +60,12 @@
             android:name=".RequestServiceActivity"
             android:exported="false" />
         <activity
+            android:name=".RequestMainActivity"
+            android:exported="false" />
+        <activity
+            android:name=".CategoryDetailActivity"
+            android:exported="false" />
+        <activity
             android:name=".UsersActivity"
             android:exported="false" />
         <activity
@@ -69,10 +87,19 @@
             android:name=".AdminProfileActivity"
             android:exported="false" />
         <activity
-            android:name=".RequestMainActivity"
+            android:name=".PersonalInfoActivity"
             android:exported="false" />
         <activity
-            android:name=".CategoryDetailActivity"
+            android:name=".SavedAddressActivity"
+            android:exported="false" />
+        <activity
+            android:name=".WalletActivity"
+            android:exported="false" />
+        <activity
+            android:name=".SettingsFragmentActivity"
+            android:exported="false" />
+        <activity
+            android:name=".AddNewCardActivity"
             android:exported="false" />
     </application>
 

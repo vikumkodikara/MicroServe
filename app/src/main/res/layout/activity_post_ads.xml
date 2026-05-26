@@ -5,6 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white"
+    android:clipChildren="false"
+    android:clipToPadding="false"
     tools:context=".PostAdsActivity">
 
     <!-- Fixed Header -->
@@ -34,7 +36,7 @@
             android:layout_marginTop="20dp"
             android:text="Post Adds"
             android:textColor="@color/white"
-            android:textSize="40sp"
+            android:textSize="35sp"
             android:textStyle="bold" />
 
         <ImageView
@@ -56,10 +58,10 @@
         android:layout_height="0dp"
         android:layout_marginHorizontal="16dp"
         android:layout_marginTop="10dp"
-        android:layout_marginBottom="16dp"
+        android:layout_marginBottom="8dp"
         android:background="@drawable/post_form_card"
         android:padding="2dp"
-        app:layout_constraintBottom_toTopOf="@+id/navContainer"
+        app:layout_constraintBottom_toTopOf="@id/customBottomNav"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/headerContainer">
@@ -68,7 +70,10 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:clipToPadding="false"
-            android:padding="16dp">
+            android:paddingStart="16dp"
+            android:paddingTop="16dp"
+            android:paddingEnd="16dp"
+            android:paddingBottom="120dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -221,6 +226,9 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="12dp"
+                    android:layout_marginBottom="8dp"
+                    android:foreground="@drawable/previous_post_card_border"
+                    app:cardBackgroundColor="@color/white"
                     app:cardCornerRadius="16dp"
                     app:cardElevation="2dp"
                     app:contentPadding="12dp">
@@ -230,6 +238,7 @@
                         android:layout_height="wrap_content"
                         android:orientation="vertical">
 
+                        <!-- Top row: info on left, image on right -->
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -247,58 +256,74 @@
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:text="Service - Plumbing"
-                                    android:textSize="12sp" />
+                                    android:textColor="@color/black"
+                                    android:textSize="13sp"
+                                    android:textStyle="bold" />
 
                                 <TextView
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:text="Name - Sunil"
-                                    android:textSize="12sp" />
+                                    android:layout_marginTop="4dp"
+                                    android:text="Name - Sunli"
+                                    android:textColor="@color/black"
+                                    android:textSize="13sp" />
 
                                 <TextView
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
+                                    android:layout_marginTop="2dp"
                                     android:text="Contact - 072587456"
-                                    android:textSize="12sp" />
+                                    android:textColor="@color/black"
+                                    android:textSize="13sp" />
 
                                 <TextView
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
+                                    android:layout_marginTop="2dp"
                                     android:text="Location - Galle"
-                                    android:textSize="12sp" />
+                                    android:textColor="@color/black"
+                                    android:textSize="13sp" />
                             </LinearLayout>
 
                             <ImageView
                                 android:layout_width="100dp"
-                                android:layout_height="80dp"
+                                android:layout_height="90dp"
                                 android:layout_marginStart="8dp"
                                 android:contentDescription="Post Image"
                                 android:scaleType="centerCrop"
                                 android:src="@android:drawable/ic_menu_gallery" />
                         </LinearLayout>
 
-                        <RelativeLayout
+                        <!-- Bottom row: purple bar left, Edit button right -->
+                        <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="8dp">
+                            android:layout_marginTop="8dp"
+                            android:gravity="center_vertical"
+                            android:orientation="horizontal">
 
                             <View
-                                android:layout_width="100dp"
-                                android:layout_height="30dp"
-                                android:background="#5D518B" />
+                                android:layout_width="0dp"
+                                android:layout_height="32dp"
+                                android:layout_marginEnd="8dp"
+                                android:layout_weight="1"
+                                android:background="@drawable/primary_button_bg" />
 
                             <com.google.android.material.button.MaterialButton
                                 android:id="@+id/editBtn"
                                 android:layout_width="wrap_content"
                                 android:layout_height="36dp"
-                                android:layout_alignParentEnd="true"
-                                android:backgroundTint="#CC0000"
                                 android:insetTop="0dp"
                                 android:insetBottom="0dp"
+                                android:paddingHorizontal="24dp"
                                 android:text="Edit"
-                                android:textSize="12sp"
+                                android:textAllCaps="false"
+                                android:textColor="@color/white"
+                                android:textSize="13sp"
+                                app:backgroundTint="#28A745"
                                 app:cornerRadius="12dp" />
-                        </RelativeLayout>
+                        </LinearLayout>
+
                     </LinearLayout>
                 </androidx.cardview.widget.CardView>
             </LinearLayout>
@@ -307,9 +332,13 @@
     </FrameLayout>
 
     <include
-        layout="@layout/view_user_bottom_nav"
+        android:id="@+id/customBottomNav"
+        layout="@layout/view_home_bottom_nav"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:clipChildren="false"
+        android:clipToPadding="false"
+        android:elevation="12dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />

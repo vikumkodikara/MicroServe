@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/splashRoot"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#FFFFFF"
+    tools:context=".SplashActivity">
+
+    <!-- Purple circle that expands to cover the screen -->
+    <View
+        android:id="@+id/purpleCircle"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_gravity="center"
+        android:alpha="0"
+        android:background="@drawable/splash_circle_purple" />
+
+    <!-- Content layer on top of the circle -->
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <!-- Logo with white rounded square background -->
+        <androidx.cardview.widget.CardView
+            android:id="@+id/splashLogoCard"
+            android:layout_width="68dp"
+            android:layout_height="68dp"
+            android:alpha="0"
+            app:cardBackgroundColor="#FFFFFF"
+            app:cardCornerRadius="16dp"
+            app:cardElevation="6dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <ImageView
+                android:id="@+id/splashLogo"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:contentDescription="@string/cd_login_logo"
+                android:padding="6dp"
+                android:scaleType="fitCenter"
+                android:src="@drawable/logo" />
+        </androidx.cardview.widget.CardView>
+
+        <!-- App name — to the right of the logo card -->
+        <TextView
+            android:id="@+id/splashAppName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:alpha="0"
+            android:fontFamily="sans-serif-bold"
+            android:includeFontPadding="false"
+            android:letterSpacing="0.05"
+            android:text="@string/app_name"
+            android:textColor="@color/white"
+            android:textSize="24sp"
+            app:layout_constraintBottom_toBottomOf="@id/splashLogoCard"
+            app:layout_constraintStart_toEndOf="@id/splashLogoCard"
+            app:layout_constraintTop_toTopOf="@id/splashLogoCard" />
+
+        <!-- Tagline — below the app name -->
+        <TextView
+            android:id="@+id/splashTagline"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:alpha="0"
+            android:fontFamily="sans-serif-light"
+            android:letterSpacing="0.08"
+            android:text="Services at your doorstep"
+            android:textColor="#CCFFFFFF"
+            android:textSize="12sp"
+            app:layout_constraintStart_toStartOf="@id/splashAppName"
+            app:layout_constraintTop_toBottomOf="@id/splashAppName" />
+
+        <!-- Small loading bar at the bottom -->
+        <com.google.android.material.progressindicator.LinearProgressIndicator
+            android:id="@+id/splashProgress"
+            android:layout_width="120dp"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="80dp"
+            android:alpha="0"
+            android:indeterminate="true"
+            app:indicatorColor="@color/white"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:trackColor="#33FFFFFF"
+            app:trackCornerRadius="2dp"
+            app:trackThickness="2dp" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</FrameLayout>

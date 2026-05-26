@@ -2,6 +2,7 @@ package com.example.microserve
 
 import android.content.Intent
 import android.os.Bundle
+import android.view.View
 import android.widget.ArrayAdapter
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
@@ -12,7 +13,7 @@ import com.example.microserve.databinding.ActivityPostAdsBinding
 class PostAdsActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityPostAdsBinding
-    private var activeTab: String = UserBottomNavHelper.TAB_POST
+    private var activeTab: String = HomeBottomNavHelper.TAB_HOME
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -20,33 +21,34 @@ class PostAdsActivity : AppCompatActivity() {
         binding = ActivityPostAdsBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        activeTab = intent.getStringExtra(UserBottomNavHelper.EXTRA_ACTIVE_TAB)
-            ?: UserBottomNavHelper.TAB_POST
+        activeTab = intent.getStringExtra(HomeBottomNavHelper.EXTRA_ACTIVE_TAB)
+            ?: HomeBottomNavHelper.TAB_HOME
 
         setupWindowInsets()
         setupSpinner()
         setupClickListeners()
-        UserBottomNavHelper.setup(this, activeTab)
+        HomeBottomNavHelper.setup(this, activeTab)
     }
 
     override fun onNewIntent(intent: Intent) {
         super.onNewIntent(intent)
         setIntent(intent)
-        activeTab = intent.getStringExtra(UserBottomNavHelper.EXTRA_ACTIVE_TAB)
-            ?: UserBottomNavHelper.TAB_POST
-        UserBottomNavHelper.setup(this, activeTab)
+        activeTab = intent.getStringExtra(HomeBottomNavHelper.EXTRA_ACTIVE_TAB)
+            ?: HomeBottomNavHelper.TAB_HOME
+        HomeBottomNavHelper.setup(this, activeTab)
     }
 
     private fun setupWindowInsets() {
-        ViewCompat.setOnApplyWindowInsetsListener(binding.root) { _, insets ->
+        ViewCompat.setOnApplyWindowInsetsListener(binding.root) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            binding.headerContainer.setPadding(
-                binding.headerContainer.paddingLeft,
-                systemBars.top + 16,
-                binding.headerContainer.paddingRight,
-                binding.headerContainer.paddingBottom
-            )
-            findViewById<android.view.View>(R.id.navContainer)?.setPadding(0, 0, 0, systemBars.bottom)
+            v.setPadding(systemBars.left, systemBars.top, systemBars.right, 0)
+            findViewById<View>(R.id.navSystemBarSpacer)?.let { spacer ->
+                val lp = spacer.layoutParams
+                if (lp.height != systemBars.bottom) {
+                    lp.height = systemBars.bottom
+                    spacer.layoutParams = lp
+                }
+            }
             insets
         }
     }

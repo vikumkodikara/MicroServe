@@ -1,0 +1,692 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/drawerRoot"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/header_gradient"
+    tools:context=".Homepage">
+
+    <!-- Back shadow card (visible strip on right edge of main card) -->
+    <androidx.cardview.widget.CardView
+        android:id="@+id/backShadowCard"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:alpha="0"
+        app:cardBackgroundColor="#B8A9D4"
+        app:cardCornerRadius="40dp"
+        app:cardElevation="4dp" />
+
+    <!-- ══════ MAIN CONTENT (scales down when menu opens) ══════ -->
+    <androidx.cardview.widget.CardView
+        android:id="@+id/mainContentCard"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:cardCornerRadius="0dp"
+        app:cardElevation="12dp">
+
+        <LinearLayout
+            android:id="@+id/main"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/admin_bg_light"
+            android:orientation="vertical"
+            android:clipChildren="false">
+
+            <!-- ═══════════ HEADER WITH GRADIENT ═══════════ -->
+            <FrameLayout
+                android:id="@+id/headerFrame"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/home_header_gradient">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:paddingHorizontal="20dp"
+                    android:paddingTop="48dp"
+                    android:paddingBottom="20dp">
+
+                    <!-- ─── Top Row: Avatar + Name + Icons ─── -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
+
+                        <ImageView
+                            android:id="@+id/profileAvatar"
+                            android:layout_width="46dp"
+                            android:layout_height="46dp"
+                            android:background="@drawable/home_avatar_rounded_square_bg"
+                            android:contentDescription="Profile"
+                            android:padding="2dp"
+                            android:scaleType="centerCrop"
+                            android:src="@drawable/navprofile" />
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:layout_marginStart="12dp"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:id="@+id/userName"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Nethmina"
+                                android:textColor="@android:color/white"
+                                android:textSize="18sp"
+                                android:textStyle="bold" />
+
+                            <TextView
+                                android:id="@+id/dateText"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="2dp"
+                                android:text="Monday, 20 Jan"
+                                android:textColor="@android:color/white"
+                                android:textSize="12sp"
+                                android:alpha="0.85" />
+                        </LinearLayout>
+
+                        <ImageView
+                            android:id="@+id/settingsBtn"
+                            android:layout_width="28dp"
+                            android:layout_height="28dp"
+                            android:layout_marginEnd="14dp"
+                            android:clickable="true"
+                            android:focusable="true"
+                            android:contentDescription="Settings"
+                            android:src="@drawable/settings"
+                            app:tint="@android:color/white" />
+
+                        <ImageView
+                            android:id="@+id/menuBtn"
+                            android:layout_width="28dp"
+                            android:layout_height="28dp"
+                            android:background="?android:selectableItemBackgroundBorderless"
+                            android:clickable="true"
+                            android:focusable="true"
+                            android:contentDescription="@string/cd_sidebar_menu"
+                            android:scaleType="fitCenter"
+                            android:src="@drawable/side_bar" />
+                    </LinearLayout>
+
+                    <!-- ─── Search Bar ─── -->
+                    <FrameLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="48dp"
+                        android:layout_marginTop="16dp"
+                        android:background="@drawable/home_search_bg">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:gravity="center_vertical"
+                            android:orientation="horizontal"
+                            android:paddingHorizontal="18dp">
+
+                            <ImageView
+                                android:layout_width="20dp"
+                                android:layout_height="20dp"
+                                android:layout_marginEnd="10dp"
+                                android:contentDescription=""
+                                android:src="@android:drawable/ic_menu_search"
+                                app:tint="#9E9E9E" />
+
+                            <EditText
+                                android:id="@+id/searchInput"
+                                android:layout_width="0dp"
+                                android:layout_height="match_parent"
+                                android:layout_weight="1"
+                                android:background="@android:color/transparent"
+                                android:hint="Search"
+                                android:textColor="@color/admin_text_primary"
+                                android:textColorHint="#B3B3B3"
+                                android:textSize="14sp"
+                                android:singleLine="true" />
+                        </LinearLayout>
+                    </FrameLayout>
+
+                </LinearLayout>
+            </FrameLayout>
+
+            <!-- ─── FIXED: banner + chips ─── -->
+            <LinearLayout
+                android:id="@+id/homeFixedMiddleSection"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/admin_bg_light"
+                android:orientation="vertical"
+                android:paddingHorizontal="16dp"
+                android:paddingTop="16dp">
+
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/bannerCard"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layoutDirection="ltr"
+                    app:cardBackgroundColor="@android:color/black"
+                    app:cardCornerRadius="26dp"
+                    app:cardElevation="5dp"
+                    app:cardMaxElevation="5dp"
+                    app:cardUseCompatPadding="false">
+
+                    <FrameLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="132dp"
+                        android:layoutDirection="ltr">
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:background="@drawable/home_banner_bg" />
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layoutDirection="ltr"
+                            android:orientation="horizontal">
+
+                            <FrameLayout
+                                android:layout_width="0dp"
+                                android:layout_height="match_parent"
+                                android:layout_weight="1.2"
+                                android:clipChildren="true">
+
+                                <ImageView
+                                    android:id="@+id/bannerToolsBackdrop"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:alpha="0.92"
+                                    android:contentDescription="@null"
+                                    android:focusable="false"
+                                    android:importantForAccessibility="no"
+                                    android:scaleType="centerCrop"
+                                    android:src="@drawable/home_tool" />
+                            </FrameLayout>
+
+                            <View
+                                android:layout_width="0dp"
+                                android:layout_height="match_parent"
+                                android:layout_weight="0.92" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:baselineAligned="false"
+                            android:gravity="center_vertical"
+                            android:layoutDirection="ltr"
+                            android:orientation="horizontal">
+
+                            <LinearLayout
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:orientation="vertical"
+                                android:paddingStart="22dp"
+                                android:paddingEnd="8dp"
+                                tools:ignore="RtlSymmetry">
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:fontFamily="sans-serif-medium"
+                                    android:includeFontPadding="false"
+                                    android:letterSpacing="-0.02"
+                                    android:lineSpacingExtra="-5dp"
+                                    android:text="Services"
+                                    android:textColor="@android:color/white"
+                                    android:textSize="22sp"
+                                    android:textStyle="bold" />
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:fontFamily="sans-serif-medium"
+                                    android:includeFontPadding="false"
+                                    android:letterSpacing="-0.02"
+                                    android:lineSpacingExtra="-5dp"
+                                    android:text="At Your"
+                                    android:textColor="@android:color/white"
+                                    android:textSize="22sp"
+                                    android:textStyle="bold" />
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:fontFamily="sans-serif-medium"
+                                    android:includeFontPadding="false"
+                                    android:letterSpacing="-0.02"
+                                    android:lineSpacingExtra="-5dp"
+                                    android:text="Door"
+                                    android:textColor="@android:color/white"
+                                    android:textSize="22sp"
+                                    android:textStyle="bold" />
+                            </LinearLayout>
+
+                            <FrameLayout
+                                android:layout_width="0dp"
+                                android:layout_height="match_parent"
+                                android:layout_weight="1.52"
+                                android:paddingStart="2dp"
+                                android:paddingTop="8dp"
+                                android:paddingEnd="14dp"
+                                android:paddingBottom="8dp">
+
+                                <ImageView
+                                    android:id="@+id/bannerPeopleImage"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:contentDescription="@string/cd_services_at_your_door_banner"
+                                    android:scaleType="fitCenter"
+                                    android:src="@drawable/home_person" />
+                            </FrameLayout>
+                        </LinearLayout>
+                    </FrameLayout>
+                </androidx.cardview.widget.CardView>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/chipPostService"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:layout_marginEnd="6dp"
+                        android:minHeight="40dp"
+                        android:background="@drawable/home_action_chip_bg"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:gravity="center"
+                        android:paddingHorizontal="6dp"
+                        android:paddingVertical="8dp"
+                        android:text="Post a Service"
+                        android:textColor="@android:color/white"
+                        android:textSize="11sp"
+                        android:textStyle="bold"
+                        android:maxLines="2" />
+
+                    <TextView
+                        android:id="@+id/chipRequestService"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:layout_marginEnd="6dp"
+                        android:minHeight="40dp"
+                        android:background="@drawable/home_action_chip_bg"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:gravity="center"
+                        android:paddingHorizontal="6dp"
+                        android:paddingVertical="8dp"
+                        android:text="Request a Service"
+                        android:textColor="@android:color/white"
+                        android:textSize="11sp"
+                        android:textStyle="bold"
+                        android:maxLines="2" />
+
+                    <TextView
+                        android:id="@+id/chipPostAds"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:minHeight="40dp"
+                        android:background="@drawable/home_action_chip_bg"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:gravity="center"
+                        android:paddingHorizontal="6dp"
+                        android:paddingVertical="8dp"
+                        android:text="Post Ads"
+                        android:textColor="@android:color/white"
+                        android:textSize="11sp"
+                        android:textStyle="bold"
+                        android:maxLines="2" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <!-- ─── Jobs scroll ─── -->
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:background="@color/admin_bg_light"
+                android:clipChildren="true">
+
+                <androidx.core.widget.NestedScrollView
+                    android:id="@+id/scrollView"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@color/admin_bg_light"
+                    android:clipToPadding="false"
+                    android:fillViewport="false"
+                    android:overScrollMode="never"
+                    android:scrollbars="none">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@color/admin_bg_light"
+                        android:orientation="vertical"
+                        android:paddingHorizontal="16dp"
+                        android:paddingTop="54dp"
+                        android:paddingBottom="@dimen/home_nav_scroll_bottom_padding">
+
+                        <androidx.cardview.widget.CardView
+                            android:id="@+id/jobCard1"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="18dp"
+                            app:cardBackgroundColor="@android:color/white"
+                            app:cardCornerRadius="24dp"
+                            app:cardElevation="4dp"
+                            app:cardMaxElevation="4dp"
+                            app:cardUseCompatPadding="false">
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="vertical"
+                                android:padding="18dp">
+
+                                <androidx.cardview.widget.CardView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="182dp"
+                                    app:cardBackgroundColor="#EBE9E6"
+                                    app:cardCornerRadius="18dp"
+                                    app:cardElevation="0dp">
+
+                                    <ImageView
+                                        android:id="@+id/jobImage1"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="match_parent"
+                                        android:contentDescription="@string/cd_job_done_preview"
+                                        android:scaleType="centerCrop"
+                                        android:src="@drawable/home_job_done_placeholder" />
+                                </androidx.cardview.widget.CardView>
+
+                                <TextView
+                                    android:id="@+id/jobTitle1"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="16dp"
+                                    android:letterSpacing="-0.01"
+                                    android:lineSpacingExtra="2dp"
+                                    android:text="Service: House Painting"
+                                    android:textColor="@color/admin_text_primary"
+                                    android:textSize="19sp"
+                                    android:textStyle="bold" />
+
+                                <TextView
+                                    android:id="@+id/jobName1"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="8dp"
+                                    android:lineSpacingExtra="4dp"
+                                    android:text="Name: Nimal Perera"
+                                    android:textColor="@color/admin_text_secondary"
+                                    android:textSize="14sp" />
+
+                                <TextView
+                                    android:id="@+id/jobExperience1"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="4dp"
+                                    android:text="Experience: 6+ Years"
+                                    android:textColor="@color/admin_text_secondary"
+                                    android:textSize="14sp" />
+
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="10dp"
+                                    android:orientation="horizontal">
+
+                                    <TextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:text="Service Done Area"
+                                        android:textColor="@color/admin_text_primary"
+                                        android:textSize="14sp"
+                                        android:textStyle="bold" />
+
+                                    <TextView
+                                        android:id="@+id/jobArea1"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:text=" - Karaptiya, Galle"
+                                        android:textColor="@color/admin_text_secondary"
+                                        android:textSize="14sp" />
+                                </LinearLayout>
+                            </LinearLayout>
+                        </androidx.cardview.widget.CardView>
+                    </LinearLayout>
+                </androidx.core.widget.NestedScrollView>
+
+                <LinearLayout
+                    android:id="@+id/previouslyJobsSectionHeader"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="top"
+                    android:background="@color/admin_bg_light"
+                    android:clickable="false"
+                    android:focusable="false"
+                    android:orientation="vertical"
+                    android:paddingHorizontal="16dp"
+                    android:paddingTop="10dp"
+                    android:paddingBottom="16dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:includeFontPadding="false"
+                        android:text="Previously Done Jobs"
+                        android:textColor="@color/admin_text_primary"
+                        android:textSize="20sp"
+                        android:textStyle="bold" />
+                </LinearLayout>
+            </FrameLayout>
+
+            <!-- ═══════════ BOTTOM NAVIGATION ═══════════ -->
+            <include
+                android:id="@+id/customBottomNav"
+                layout="@layout/view_home_bottom_nav"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:clipChildren="false"
+                android:clipToPadding="false"
+                android:elevation="12dp" />
+
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
+
+    <!-- ══════ SIDE MENU OVERLAY (hidden by default, slides from right) ══════ -->
+    <LinearLayout
+        android:id="@+id/sideMenuPanel"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="end"
+        android:orientation="vertical"
+        android:paddingStart="200dp"
+        android:paddingEnd="16dp"
+        android:translationX="400dp"
+        android:visibility="invisible">
+
+        <!-- Close button at top right -->
+        <ImageView
+            android:id="@+id/menuCloseBtn"
+            android:layout_width="44dp"
+            android:layout_height="44dp"
+            android:layout_gravity="end"
+            android:layout_marginTop="52dp"
+            android:layout_marginEnd="4dp"
+            android:background="@drawable/home_avatar_rounded_square_bg"
+            android:contentDescription="Close menu"
+            android:padding="10dp"
+            android:scaleType="fitCenter"
+            android:src="@drawable/close" />
+
+        <!-- Spacer to push menu items up -->
+        <View
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_weight="0.6" />
+
+        <!-- Menu Items -->
+        <LinearLayout
+            android:id="@+id/menuAccount"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="36dp"
+            android:clickable="true"
+            android:focusable="true"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="34dp"
+                android:layout_height="34dp"
+                android:layout_marginEnd="14dp"
+                android:contentDescription="Account"
+                android:scaleType="fitCenter"
+                android:src="@drawable/user" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Account"
+                android:textColor="#1A1A1A"
+                android:textSize="26sp"
+                android:fontFamily="sans-serif-medium" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/menuAbout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="36dp"
+            android:clickable="true"
+            android:focusable="true"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="34dp"
+                android:layout_height="34dp"
+                android:layout_marginEnd="14dp"
+                android:contentDescription="About us"
+                android:scaleType="fitCenter"
+                android:src="@drawable/location" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="About us"
+                android:textColor="#1A1A1A"
+                android:textSize="26sp"
+                android:fontFamily="sans-serif-medium" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/menuContact"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="36dp"
+            android:clickable="true"
+            android:focusable="true"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="34dp"
+                android:layout_height="34dp"
+                android:layout_marginEnd="14dp"
+                android:contentDescription="Contact us"
+                android:scaleType="fitCenter"
+                android:src="@drawable/call" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Contact us"
+                android:textColor="#1A1A1A"
+                android:textSize="26sp"
+                android:fontFamily="sans-serif-medium" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/menuWallet"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="36dp"
+            android:clickable="true"
+            android:focusable="true"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="34dp"
+                android:layout_height="34dp"
+                android:layout_marginEnd="14dp"
+                android:contentDescription="Wallet"
+                android:scaleType="fitCenter"
+                android:src="@drawable/wallet" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Wallet"
+                android:textColor="#1A1A1A"
+                android:textSize="26sp"
+                android:fontFamily="sans-serif-medium" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/menuFeedback"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="36dp"
+            android:clickable="true"
+            android:focusable="true"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="34dp"
+                android:layout_height="34dp"
+                android:layout_marginEnd="14dp"
+                android:contentDescription="Feedback"
+                android:scaleType="fitCenter"
+                android:src="@drawable/feedback" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Feedback"
+                android:textColor="#1A1A1A"
+                android:textSize="26sp"
+                android:fontFamily="sans-serif-medium" />
+        </LinearLayout>
+
+        <!-- Bottom spacer to balance vertical position -->
+        <View
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_weight="2" />
+
+    </LinearLayout>
+
+</FrameLayout>

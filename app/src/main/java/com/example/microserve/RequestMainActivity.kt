@@ -27,7 +27,7 @@ class RequestMainActivity : AppCompatActivity() {
         seedSampleRequestsIfEmpty()
         setupCategoryGrid()
         setupClickListeners()
-        UserBottomNavHelper.setup(this, UserBottomNavHelper.TAB_REQUEST)
+        HomeBottomNavHelper.setup(this, HomeBottomNavHelper.TAB_REQUEST)
         refreshRequestsList()
     }
 
@@ -40,7 +40,17 @@ class RequestMainActivity : AppCompatActivity() {
         ViewCompat.setOnApplyWindowInsetsListener(binding.mainScrollView) { view, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             view.setPadding(0, systemBars.top, 0, 0)
-            findViewById<View>(R.id.navContainer)?.setPadding(0, 0, 0, systemBars.bottom)
+            insets
+        }
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.customBottomNav)) { _, insets ->
+            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
+            findViewById<View>(R.id.navSystemBarSpacer)?.let { spacer ->
+                val lp = spacer.layoutParams
+                if (lp.height != systemBars.bottom) {
+                    lp.height = systemBars.bottom
+                    spacer.layoutParams = lp
+                }
+            }
             insets
         }
     }
