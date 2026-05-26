@@ -68,6 +68,18 @@ object FeedbackStore {
         return feedback
     }
 
+    fun updateFeedback(context: Context, feedbackId: String, message: String, rating: Int): Boolean {
+        val current = getAllFeedbacks(context).toMutableList()
+        val index = current.indexOfFirst { it.id == feedbackId }
+        if (index == -1) return false
+        current[index] = current[index].copy(
+            message = message.trim().ifBlank { "No feedback message provided." },
+            rating = rating.coerceIn(1, 5)
+        )
+        saveAll(context, current)
+        return true
+    }
+
     fun deleteFeedback(context: Context, feedbackId: String): Boolean {
         val current = getAllFeedbacks(context)
         val updated = current.filterNot { it.id == feedbackId }

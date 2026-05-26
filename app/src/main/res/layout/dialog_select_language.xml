@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/login_field_bg"
+    android:gravity="center_horizontal"
+    android:orientation="vertical"
+    android:paddingHorizontal="28dp"
+    android:paddingTop="16dp"
+    android:paddingBottom="28dp">
+
+    <!-- Handle Bar -->
+    <View
+        android:layout_width="40dp"
+        android:layout_height="4dp"
+        android:layout_marginBottom="20dp"
+        android:background="#CCCCCC" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="start"
+        android:layout_marginBottom="20dp"
+        android:fontFamily="sans-serif-medium"
+        android:text="Select Language"
+        android:textColor="#1A1A1A"
+        android:textSize="18sp" />
+
+    <!-- English -->
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/btn_english"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_marginBottom="12dp"
+        android:clickable="true"
+        android:focusable="true"
+        app:cardBackgroundColor="#F5F5F5"
+        app:cardCornerRadius="25dp"
+        app:cardElevation="0dp"
+        app:strokeColor="#E0E0E0"
+        app:strokeWidth="1dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:fontFamily="sans-serif-medium"
+            android:text="English"
+            android:textColor="#1A1A1A"
+            android:textSize="15sp" />
+    </com.google.android.material.card.MaterialCardView>
+
+    <!-- Sinhala -->
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/btn_sinhala"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_marginBottom="12dp"
+        android:clickable="true"
+        android:focusable="true"
+        app:cardBackgroundColor="#F5F5F5"
+        app:cardCornerRadius="25dp"
+        app:cardElevation="0dp"
+        app:strokeColor="#E0E0E0"
+        app:strokeWidth="1dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:fontFamily="sans-serif-medium"
+            android:text="Sinhala"
+            android:textColor="#1A1A1A"
+            android:textSize="15sp" />
+    </com.google.android.material.card.MaterialCardView>
+
+    <!-- Tamil -->
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/btn_tamil"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:clickable="true"
+        android:focusable="true"
+        app:cardBackgroundColor="#F5F5F5"
+        app:cardCornerRadius="25dp"
+        app:cardElevation="0dp"
+        app:strokeColor="#E0E0E0"
+        app:strokeWidth="1dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:fontFamily="sans-serif-medium"
+            android:text="Tamil"
+            android:textColor="#1A1A1A"
+            android:textSize="15sp" />
+    </com.google.android.material.card.MaterialCardView>
+
+</LinearLayout>

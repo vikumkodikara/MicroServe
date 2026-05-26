@@ -112,8 +112,6 @@ class SplashActivity : AppCompatActivity() {
         val fullSequence = AnimatorSet()
         fullSequence.playSequentially(phase1, phase2, phase3, phase4, phase5, phase6)
         fullSequence.start()
-
-        binding.splashRoot.postDelayed({ goToLogin() }, 4200)
     }
 
     /**

@@ -184,19 +184,19 @@ class Homepage : AppCompatActivity() {
         }
         binding.menuFeedback.setOnClickListener {
             closeMenu()
-            startActivity(Intent(this, FeedbacksActivity::class.java))
+            startActivity(Intent(this, UserFeedbacksActivity::class.java))
         }
         binding.menuAbout.setOnClickListener {
             closeMenu()
-            showToast("About us")
+            startActivity(Intent(this, AboutUsActivity::class.java))
         }
         binding.menuContact.setOnClickListener {
             closeMenu()
-            showToast("Contact us")
+            startActivity(Intent(this, ContactUsActivity::class.java))
         }
         binding.menuWallet.setOnClickListener {
             closeMenu()
-            showToast("Wallet")
+            startActivity(Intent(this, WalletActivity::class.java))
         }
     }
 

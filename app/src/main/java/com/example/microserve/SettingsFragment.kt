@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 
 class SettingsFragment : Fragment() {
@@ -53,5 +54,48 @@ class SettingsFragment : Fragment() {
         view.findViewById<View>(R.id.btn_payment_methods).setOnClickListener {
             startActivity(android.content.Intent(requireContext(), WalletActivity::class.java))
         }
+
+        view.findViewById<View>(R.id.btn_get_help).setOnClickListener {
+            startActivity(android.content.Intent(requireContext(), GetHelpActivity::class.java))
+        }
+
+        view.findViewById<View>(R.id.btn_privacy_policy).setOnClickListener {
+            startActivity(android.content.Intent(requireContext(), PrivacyPolicyActivity::class.java))
+        }
+
+        view.findViewById<View>(R.id.btn_terms_of_service).setOnClickListener {
+            startActivity(android.content.Intent(requireContext(), TermsOfServiceActivity::class.java))
+        }
+
+        view.findViewById<View>(R.id.btn_language).setOnClickListener {
+            showLanguageDialog()
+        }
+    }
+
+    private fun showLanguageDialog() {
+        val dialog = android.app.AlertDialog.Builder(requireContext(), com.google.android.material.R.style.Theme_MaterialComponents_Light_Dialog_MinWidth)
+            .create()
+
+        val dialogView = LayoutInflater.from(requireContext()).inflate(R.layout.dialog_select_language, null)
+        dialog.setView(dialogView)
+        dialog.window?.setBackgroundDrawableResource(android.R.color.transparent)
+
+        dialogView.findViewById<View>(R.id.btn_english).setOnClickListener {
+            AppPreferences.setLanguage(requireContext(), "en")
+            Toast.makeText(requireContext(), "Language set to English", Toast.LENGTH_SHORT).show()
+            dialog.dismiss()
+        }
+        dialogView.findViewById<View>(R.id.btn_sinhala).setOnClickListener {
+            AppPreferences.setLanguage(requireContext(), "si")
+            Toast.makeText(requireContext(), "Language set to Sinhala", Toast.LENGTH_SHORT).show()
+            dialog.dismiss()
+        }
+        dialogView.findViewById<View>(R.id.btn_tamil).setOnClickListener {
+            AppPreferences.setLanguage(requireContext(), "ta")
+            Toast.makeText(requireContext(), "Language set to Tamil", Toast.LENGTH_SHORT).show()
+            dialog.dismiss()
+        }
+
+        dialog.show()
     }
 }

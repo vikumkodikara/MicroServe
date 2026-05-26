@@ -204,4 +204,11 @@
             android:textStyle="bold" />
     </com.google.android.material.card.MaterialCardView>
 
+    <!-- Footer Bar -->
+    <View
+        android:id="@+id/footerBar"
+        android:layout_width="match_parent"
+        android:layout_height="38dp"
+        android:background="@drawable/footer_gradient_bar" />
+
 </LinearLayout>
