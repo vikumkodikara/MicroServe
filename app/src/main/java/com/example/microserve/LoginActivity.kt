@@ -25,11 +25,13 @@ class LoginActivity : AppCompatActivity() {
         ActivityResultContracts.StartActivityForResult()
     ) { result ->
         if (result.resultCode != RESULT_OK) {
+            showLoading(false)
             toast("Google sign-in canceled")
             return@registerForActivityResult
         }
 
         val data = result.data ?: run {
+            showLoading(false)
             toast("Google sign-in canceled")
             return@registerForActivityResult
         }
@@ -43,10 +45,12 @@ class LoginActivity : AppCompatActivity() {
                     loadProfileAndRoute(user, fallbackName = account.displayName)
                 },
                 onError = { message ->
+                    showLoading(false)
                     toast(message)
                 }
             )
         } catch (error: ApiException) {
+            showLoading(false)
             toast(error.localizedMessage ?: "Google sign-in failed")
         }
     }
@@ -88,7 +92,10 @@ class LoginActivity : AppCompatActivity() {
                 email.isEmpty() -> toast(getString(R.string.login_error_username))
                 password.isEmpty() -> toast(getString(R.string.login_error_password))
                 !Patterns.EMAIL_ADDRESS.matcher(email).matches() -> toast(getString(R.string.login_error_invalid_email))
-                else -> signInWithEmail(email, password)
+                else -> {
+                    showLoading(true)
+                    signInWithEmail(email, password)
+                }
             }
         }
 
@@ -107,6 +114,7 @@ class LoginActivity : AppCompatActivity() {
                 return@setOnClickListener
             }
             googleSignInLauncher.launch(GoogleAuthHelper.buildSignInClient(this).signInIntent)
+            showLoading(true)
         }
 
         binding.googleSignInButton.setSize(SignInButton.SIZE_WIDE)
@@ -118,12 +126,14 @@ class LoginActivity : AppCompatActivity() {
             .addOnSuccessListener { result ->
                 val user = result.user
                 if (user == null) {
+                    showLoading(false)
                     toast("Login failed")
                     return@addOnSuccessListener
                 }
                 loadProfileAndRoute(user)
             }
             .addOnFailureListener { error ->
+                showLoading(false)
                 toast(error.localizedMessage ?: "Login failed")
             }
     }
@@ -135,11 +145,15 @@ class LoginActivity : AppCompatActivity() {
             fallbackName = fallbackName,
             onAdminRoute = { routeByRole(UserProfile.ROLE_ADMIN) },
             onUserRoute = { routeByRole(UserProfile.ROLE_USER) },
-            onError = { message -> toast(message) }
+            onError = { message ->
+                showLoading(false)
+                toast(message)
+            }
         )
     }
 
     private fun routeByRole(role: String) {
+        showLoading(false)
         val target = if (role.equals(UserProfile.ROLE_ADMIN, ignoreCase = true)) {
             AdminDashboardActivity::class.java
         } else {
@@ -151,6 +165,10 @@ class LoginActivity : AppCompatActivity() {
                 .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
         )
         finish()
+    }
+
+    private fun showLoading(isLoading: Boolean) {
+        binding.loadingOverlay.visibility = if (isLoading) android.view.View.VISIBLE else android.view.View.GONE
     }
 
     private fun toast(message: String) {
