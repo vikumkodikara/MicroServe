@@ -85,5 +85,48 @@ class SettingsFragmentActivity : AppCompatActivity() {
                 startActivity(Intent(this, WalletActivity::class.java))
             }
         } catch (_: Exception) { }
+
+        try {
+            findViewById<View>(R.id.btn_language).setOnClickListener {
+                val dialog = com.google.android.material.bottomsheet.BottomSheetDialog(this)
+                val sheetView = layoutInflater.inflate(R.layout.dialog_select_language, null)
+                dialog.setContentView(sheetView)
+
+                // Safe-guard to make Bottom Sheet background transparent so rounded corners render perfectly
+                dialog.setOnShowListener {
+                    val bottomSheet = dialog.findViewById<View>(com.google.android.material.R.id.design_bottom_sheet)
+                    bottomSheet?.setBackgroundColor(Color.TRANSPARENT)
+                }
+
+                sheetView.findViewById<View>(R.id.btn_lang_english).setOnClickListener {
+                    AppPreferences.setLanguage(this, "English")
+                    androidx.appcompat.app.AppCompatDelegate.setApplicationLocales(
+                        androidx.core.os.LocaleListCompat.forLanguageTags("en")
+                    )
+                    Toast.makeText(this, "Language changed to English", Toast.LENGTH_SHORT).show()
+                    dialog.dismiss()
+                }
+
+                sheetView.findViewById<View>(R.id.btn_lang_sinhala).setOnClickListener {
+                    AppPreferences.setLanguage(this, "Sinhala")
+                    androidx.appcompat.app.AppCompatDelegate.setApplicationLocales(
+                        androidx.core.os.LocaleListCompat.forLanguageTags("si")
+                    )
+                    Toast.makeText(this, "Language changed to Sinhala", Toast.LENGTH_SHORT).show()
+                    dialog.dismiss()
+                }
+
+                sheetView.findViewById<View>(R.id.btn_lang_tamil).setOnClickListener {
+                    AppPreferences.setLanguage(this, "Tamil")
+                    androidx.appcompat.app.AppCompatDelegate.setApplicationLocales(
+                        androidx.core.os.LocaleListCompat.forLanguageTags("ta")
+                    )
+                    Toast.makeText(this, "Language changed to Tamil", Toast.LENGTH_SHORT).show()
+                    dialog.dismiss()
+                }
+
+                dialog.show()
+            }
+        } catch (_: Exception) { }
     }
 }

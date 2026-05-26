@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">மைக்ரோசெர்வ்</string>
+
+    <!-- Service Request App Strings -->
+    <string name="title_my_service">எனது சேவை</string>
+    <string name="title_requests">கோரிக்கைகள்</string>
+    <string name="services_at_door">உங்கள் வீட்டு வாசலில் சேவைகள்</string>
+
+    <!-- Categories -->
+    <string name="category_plumbing">குழாய் வேலை</string>
+    <string name="category_painting">பெயிண்டிங்</string>
+    <string name="category_carpentry">தச்சு வேலை</string>
+    <string name="category_gardening">தோட்டக்கலை</string>
+    <string name="category_electric">மின்சார வேலை</string>
+    <string name="category_mechanic">மெக்கானிக்</string>
+    <string name="category_cleaning">சுத்தம் செய்தல்</string>
+    <string name="category_handyman">கைவினைஞர்</string>
+    <string name="category_hvac">ஏசி வேலை</string>
+
+    <!-- Request Main -->
+    <string name="my_service_requests">எனது சேவை\nகோரிக்கைகள்</string>
+    <string name="section_category">வகை</string>
+    <string name="section_my_requests">எனது கோரிக்கைகள்</string>
+    <string name="no_requests_yet">இன்னும் கோரிக்கைகள் இல்லை.</string>
+
+    <!-- Buttons -->
+    <string name="edit">தொகு</string>
+    <string name="btn_edit">தொகு</string>
+    <string name="btn_requests">கோரிக்கைகள்</string>
+    <string name="delete_request">கோரிக்கையை நீக்கு</string>
+
+    <!-- Navigation -->
+    <string name="nav_request">கோரிக்கை</string>
+    <string name="nav_service">சேவை</string>
+    <string name="nav_home">முகப்பு</string>
+    <string name="nav_post">பதிவிட</string>
+    <string name="nav_profile">விவரக்குறிப்பு</string>
+
+    <!-- Settings / Profile -->
+    <string name="settings">அமைப்புகள்</string>
+    <string name="edit_profile">சுயவிவரத்தைத் தொகு</string>
+    <string name="personal_information">தனிப்பட்ட தகவல்</string>
+    <string name="saved_addresses">சேமித்த முகவரிகள்</string>
+    <string name="payment_methods">பணம் செலுத்தும் முறைகள்</string>
+    <string name="notifications">அறிவிப்புகள்</string>
+    <string name="dark_mode">டார்க் மோட்</string>
+    <string name="language">மொழி</string>
+    <string name="get_help">உதவி பெற</string>
+    <string name="privacy_policy">தனியுரிமைக் கொள்கை</string>
+    <string name="terms_of_services">சேவை விதிமுறைகள்</string>
+    <string name="log_out">வெளியேறு</string>
+</resources>

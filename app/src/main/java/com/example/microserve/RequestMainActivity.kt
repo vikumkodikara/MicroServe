@@ -96,7 +96,7 @@ class RequestMainActivity : AppCompatActivity() {
         CategoryCatalog.all.forEach { category ->
             val itemBinding = ItemCategoryBinding.inflate(inflater, binding.categoryGrid, false)
             itemBinding.categoryImage.setImageResource(category.imageRes)
-            itemBinding.categoryLabel.text = category.displayName
+            itemBinding.categoryLabel.text = itemBinding.root.context.getString(category.nameResId)
             itemBinding.root.setOnClickListener {
                 openCategoryDetail(category.id)
             }
@@ -118,7 +118,7 @@ class RequestMainActivity : AppCompatActivity() {
 
         requests.forEachIndexed { index, request ->
             val rowBinding = ItemRequestRowBinding.inflate(inflater, binding.requestsContainer, false)
-            val categoryLabel = displayCategoryName(request.category)
+            val categoryLabel = displayCategoryName(this, request.category)
             rowBinding.requestTitle.text = getString(R.string.request_row_title_format, index + 1, categoryLabel)
             rowBinding.requestDesc.text = request.title
 
@@ -136,15 +136,20 @@ class RequestMainActivity : AppCompatActivity() {
         }
     }
 
-    private fun displayCategoryName(category: String): String {
-        return CategoryCatalog.findByStoreKey(category)?.displayName ?: when {
-            category.contains("Plumb", ignoreCase = true) -> "Plumber"
-            category.contains("Paint", ignoreCase = true) -> "Painter"
-            category.contains("Garden", ignoreCase = true) -> "Gardening"
-            category.contains("Clean", ignoreCase = true) -> "Cleaning"
-            category.contains("Electric", ignoreCase = true) -> "Electric"
-            category.contains("Carpent", ignoreCase = true) -> "Handyman"
-            else -> category
+    private fun displayCategoryName(context: android.content.Context, category: String): String {
+        val cat = CategoryCatalog.findByStoreKey(category)
+        return if (cat != null) {
+            context.getString(cat.nameResId)
+        } else {
+            when {
+                category.contains("Plumb", ignoreCase = true) -> context.getString(R.string.category_plumbing)
+                category.contains("Paint", ignoreCase = true) -> context.getString(R.string.category_painting)
+                category.contains("Garden", ignoreCase = true) -> context.getString(R.string.category_gardening)
+                category.contains("Clean", ignoreCase = true) -> context.getString(R.string.category_cleaning)
+                category.contains("Electric", ignoreCase = true) -> context.getString(R.string.category_electric)
+                category.contains("Carpent", ignoreCase = true) -> context.getString(R.string.category_carpentry)
+                else -> category
+            }
         }
     }
 

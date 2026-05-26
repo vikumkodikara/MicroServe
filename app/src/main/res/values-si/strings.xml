@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">මයික්‍රෝසර්ව්</string>
+
+    <!-- Service Request App Strings -->
+    <string name="title_my_service">මගේ සේවාවන්</string>
+    <string name="title_requests">ඉල්ලීම්</string>
+    <string name="services_at_door">ඔබේ නිවසටම සේවාවන්</string>
+
+    <!-- Categories -->
+    <string name="category_plumbing">නල අලුත්වැඩියාව</string>
+    <string name="category_painting">තීන්ත ආලේප කිරීම</string>
+    <string name="category_carpentry">වඩු වැඩ</string>
+    <string name="category_gardening">වතු වගාව</string>
+    <string name="category_electric">විදුලි වැඩ</string>
+    <string name="category_mechanic">මෝටර් රථ කාර්මික</string>
+    <string name="category_cleaning">පිරිසිදු කිරීම්</string>
+    <string name="category_handyman">විවිධ අලුත්වැඩියා</string>
+    <string name="category_hvac">වායු සමීකරණ</string>
+
+    <!-- Request Main -->
+    <string name="my_service_requests">මගේ සේවා\nඉල්ලීම්</string>
+    <string name="section_category">සේවා වර්ගය</string>
+    <string name="section_my_requests">මගේ ඉල්ලීම්</string>
+    <string name="no_requests_yet">තවම ඉල්ලීම් කිසිවක් නැත.</string>
+
+    <!-- Buttons -->
+    <string name="edit">සංස්කරණය</string>
+    <string name="btn_edit">සංස්කරණය</string>
+    <string name="btn_requests">ඉල්ලීම්</string>
+    <string name="delete_request">ඉල්ලීම මකන්න</string>
+
+    <!-- Navigation -->
+    <string name="nav_request">ඉල්ලීම්</string>
+    <string name="nav_service">සේවාවන්</string>
+    <string name="nav_home">මුල් පිටුව</string>
+    <string name="nav_post">පළ කිරීම්</string>
+    <string name="nav_profile">ගිණුම</string>
+
+    <!-- Settings / Profile -->
+    <string name="settings">සැකසුම්</string>
+    <string name="edit_profile">ගිණුම සංස්කරණය</string>
+    <string name="personal_information">පුද්ගලික තොරතුරු</string>
+    <string name="saved_addresses">සුරැකි ලිපින</string>
+    <string name="payment_methods">ගෙවීම් ක්‍රම</string>
+    <string name="notifications">දැනුම්දීම්</string>
+    <string name="dark_mode">අඳුරු ප්‍රකාරය</string>
+    <string name="language">භාෂාව</string>
+    <string name="get_help">උදව් ලබාගන්න</string>
+    <string name="privacy_policy">පෞද්ගලිකත්ව ප්‍රතිපත්තිය</string>
+    <string name="terms_of_services">සේවා කොන්දේසි</string>
+    <string name="log_out">පිටවීම</string>
+</resources>

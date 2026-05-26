@@ -65,7 +65,7 @@ class CategoryDetailActivity : AppCompatActivity() {
         CategoryCatalog.all.forEach { category ->
             val chipView = inflater.inflate(R.layout.item_category_chip, binding.chipContainer, false)
             val chipText = chipView.findViewById<TextView>(R.id.chipText)
-            chipText.text = category.displayName
+            chipText.text = getString(category.nameResId)
             chipText.tag = category.id
 
             chipText.setOnClickListener {
@@ -87,7 +87,7 @@ class CategoryDetailActivity : AppCompatActivity() {
     }
 
     private fun updateHeader(category: CategoryCatalog.Category) {
-        binding.categoryTitleText.text = category.displayName
+        binding.categoryTitleText.text = getString(category.nameResId)
         binding.categoryHeaderImage.setImageResource(category.imageRes)
     }
 
