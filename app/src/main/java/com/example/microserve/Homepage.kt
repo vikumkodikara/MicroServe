@@ -3,6 +3,12 @@ package com.example.microserve
 import android.animation.AnimatorSet
 import android.animation.ObjectAnimator
 import android.content.Intent
+import android.graphics.Canvas
+import android.graphics.Color
+import android.graphics.ColorFilter
+import android.graphics.Paint
+import android.graphics.PixelFormat
+import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.view.View
 import android.view.animation.DecelerateInterpolator
@@ -12,6 +18,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.doOnLayout
+import com.bumptech.glide.Glide
 import com.example.microserve.databinding.ActivityHomeBinding
 import java.text.SimpleDateFormat
 import java.util.Date
@@ -33,6 +40,7 @@ class Homepage : AppCompatActivity() {
         screenWidth = resources.displayMetrics.widthPixels.toFloat()
 
         setupWindowInsets()
+        setupUserProfile()
         setupJobsScroll()
         setupDate()
         setupBannerToolsWatermarkScale()
@@ -41,6 +49,74 @@ class Homepage : AppCompatActivity() {
         HomeBottomNavHelper.setup(this, HomeBottomNavHelper.TAB_HOME)
     }
 
+    /**
+     * Loads the logged-in user's name and profile photo from session.
+     */
+    private fun setupUserProfile() {
+        val name = AppPreferences.getSessionName(this)
+        val photoUrl = AppPreferences.getSessionPhotoUrl(this)
+
+        // Set user name (fallback to "User" if empty)
+        binding.userName.text = if (name.isNotBlank()) name else "User"
+
+        // Load profile photo
+        if (photoUrl.isNotBlank()) {
+            Glide.with(this)
+                .load(photoUrl)
+                .circleCrop()
+                .placeholder(R.drawable.navprofile)
+                .error(buildInitialsDrawable(name))
+                .into(binding.profileAvatar)
+        } else {
+            binding.profileAvatar.setImageDrawable(buildInitialsDrawable(name))
+        }
+    }
+
+    /**
+     * Creates a circular drawable with the user's initial letter.
+     */
+    private fun buildInitialsDrawable(name: String): Drawable {
+        val initial = name.firstOrNull()?.uppercaseChar()?.toString() ?: "U"
+        val colors = intArrayOf(
+            Color.parseColor("#6C63FF"),
+            Color.parseColor("#FF6584"),
+            Color.parseColor("#43B581"),
+            Color.parseColor("#FAA61A"),
+            Color.parseColor("#F47B67")
+        )
+        val bgColor = colors[initial.hashCode().and(0x7FFFFFFF) % colors.size]
+
+        return object : Drawable() {
+            private val bgPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply { color = bgColor }
+            private val textPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
+                color = Color.WHITE
+                textAlign = Paint.Align.CENTER
+                textSize = 22f
+                isFakeBoldText = true
+            }
+
+            override fun draw(canvas: Canvas) {
+                val cx = bounds.exactCenterX()
+                val cy = bounds.exactCenterY()
+                val radius = minOf(bounds.width(), bounds.height()) / 2f
+                canvas.drawCircle(cx, cy, radius, bgPaint)
+                textPaint.textSize = radius * 0.9f
+                val textY = cy - (textPaint.descent() + textPaint.ascent()) / 2f
+                canvas.drawText(initial, cx, textY, textPaint)
+            }
+
+            override fun setAlpha(alpha: Int) { bgPaint.alpha = alpha }
+            override fun setColorFilter(colorFilter: ColorFilter?) { bgPaint.colorFilter = colorFilter }
+            @Suppress("OVERRIDE_DEPRECATION")
+            override fun getOpacity(): Int = PixelFormat.OPAQUE
+            override fun getIntrinsicWidth() = 128
+            override fun getIntrinsicHeight() = 128
+        }
+    }
+
+    /**
+     * Blows up the soft tool watermark so it reads clearly in the shallow banner strip.
+     */
     private fun setupBannerToolsWatermarkScale() {
         binding.bannerToolsBackdrop.doOnLayout {
             val iv = binding.bannerToolsBackdrop
@@ -90,7 +166,7 @@ class Homepage : AppCompatActivity() {
         }
 
         binding.chipRequestService.setOnClickListener {
-            startActivity(Intent(this, RequestServiceActivity::class.java))
+            startActivity(Intent(this, RequestMainActivity::class.java))
         }
 
         binding.chipPostAds.setOnClickListener {

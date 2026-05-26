@@ -1,5 +1,6 @@
 package com.example.microserve
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -125,6 +126,12 @@ class CategoryDetailActivity : AppCompatActivity() {
                 R.string.description_label_format,
                 request.description.ifBlank { request.title }
             )
+            rowBinding.root.setOnClickListener {
+                startActivity(
+                    Intent(this, RequestDetailActivity::class.java)
+                        .putExtra(RequestDetailActivity.EXTRA_REQUEST_ID, request.id)
+                )
+            }
             binding.requestsContainer.addView(rowBinding.root)
         }
     }

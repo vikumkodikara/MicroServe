@@ -41,4 +41,6 @@
     <color name="login_link_gray">#B0B0B0</color>
     <color name="login_auth_purple_top">#8778BF</color>
     <color name="login_auth_purple_bottom">#483C72</color>
+    <color name="google_button_text">#3C4043</color>
+    <color name="google_button_stroke">#DADCE0</color>
 </resources>

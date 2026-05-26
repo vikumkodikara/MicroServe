@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    tools:context=".PlaceBidActivity">
+
+    <ScrollView
+        android:id="@+id/contentScrollView"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:clipToPadding="false"
+        android:fillViewport="true"
+        android:scrollbars="none"
+        app:layout_constraintBottom_toTopOf="@id/footerBar"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingBottom="20dp">
+
+            <!-- Header -->
+            <RelativeLayout
+                android:id="@+id/headerSection"
+                android:layout_width="match_parent"
+                android:layout_height="220dp"
+                android:background="@drawable/request_header_bg"
+                android:paddingStart="24dp"
+                android:paddingTop="48dp"
+                android:paddingEnd="24dp"
+                android:paddingBottom="24dp">
+
+                <ImageView
+                    android:id="@+id/backBtn"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignParentTop="true"
+                    android:contentDescription="@string/cd_back"
+                    android:padding="8dp"
+                    android:src="@android:drawable/ic_menu_revert"
+                    app:tint="@color/white" />
+
+                <TextView
+                    android:id="@+id/placeBidTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentStart="true"
+                    android:layout_centerVertical="true"
+                    android:fontFamily="sans-serif-medium"
+                    android:text="@string/place_bid_title"
+                    android:textColor="@color/white"
+                    android:textSize="28sp"
+                    android:textStyle="bold" />
+
+                <ImageView
+                    android:id="@+id/placeBidIllustration"
+                    android:layout_width="120dp"
+                    android:layout_height="120dp"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:contentDescription="@null"
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/place_bid" />
+            </RelativeLayout>
+
+            <!-- Place Bid form card -->
+            <LinearLayout
+                android:id="@+id/bidFormCard"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginEnd="20dp"
+                android:background="@drawable/form_card_bordered_bg"
+                android:elevation="2dp"
+                android:orientation="vertical"
+                android:padding="16dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="sans-serif-medium"
+                    android:text="@string/bid_amount_label"
+                    android:textColor="@color/black"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
+
+                <EditText
+                    android:id="@+id/bidAmountInput"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:layout_marginTop="8dp"
+                    android:background="@drawable/edittext_bg"
+                    android:hint="@string/bid_amount_hint"
+                    android:inputType="number"
+                    android:paddingHorizontal="14dp"
+                    android:textColor="@color/black"
+                    android:textColorHint="@color/text_gray"
+                    android:textSize="15sp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:fontFamily="sans-serif-medium"
+                    android:text="@string/completion_time_label"
+                    android:textColor="@color/black"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
+
+                <EditText
+                    android:id="@+id/completionTimeInput"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:layout_marginTop="8dp"
+                    android:background="@drawable/edittext_bg"
+                    android:hint="@string/completion_time_hint"
+                    android:inputType="number"
+                    android:paddingHorizontal="14dp"
+                    android:textColor="@color/black"
+                    android:textColorHint="@color/text_gray"
+                    android:textSize="15sp" />
+
+                <CheckBox
+                    android:id="@+id/termsCheckbox"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:checked="true"
+                    android:text="@string/agree_to_terms"
+                    android:textColor="@color/black"
+                    android:textSize="14sp" />
+
+                <TextView
+                    android:id="@+id/placeBidSubmitButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="40dp"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="16dp"
+                    android:background="@drawable/rounded_purple_24dp"
+                    android:gravity="center"
+                    android:minWidth="160dp"
+                    android:paddingHorizontal="24dp"
+                    android:text="@string/place_bid_submit"
+                    android:textColor="@color/black"
+                    android:textSize="14sp"
+                    android:textStyle="bold" />
+            </LinearLayout>
+
+            <!-- Previous bids -->
+            <TextView
+                android:id="@+id/previousBidsLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="24dp"
+                android:layout_marginTop="24dp"
+                android:fontFamily="sans-serif-medium"
+                android:text="@string/previous_bids"
+                android:textColor="@color/black"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+            <LinearLayout
+                android:id="@+id/bidsContainer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="12dp"
+                android:layout_marginEnd="20dp"
+                android:orientation="vertical" />
+        </LinearLayout>
+    </ScrollView>
+
+    <View
+        android:id="@+id/footerBar"
+        android:layout_width="0dp"
+        android:layout_height="24dp"
+        android:background="@drawable/nav_gradient"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

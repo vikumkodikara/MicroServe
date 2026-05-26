@@ -5,11 +5,11 @@ import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 
 /**
- * Wires the home-style bottom nav and directional tab transitions for the user app flow.
+ * Wires the home-style bottom nav and directional tab transitions.
+ *
+ * Usage: HomeBottomNavHelper.setup(this, HomeBottomNavHelper.TAB_HOME)
  */
 object HomeBottomNavHelper {
-
-    const val EXTRA_ACTIVE_TAB = "extra_active_tab"
 
     const val TAB_REQUEST = "request"
     const val TAB_SERVICE = "service"
@@ -37,33 +37,28 @@ object HomeBottomNavHelper {
 
         activity.findViewById<View>(R.id.navTabService)?.setOnClickListener {
             navigate(activity, currentTab, TAB_SERVICE) {
-                Intent(activity, PostServiceActivity::class.java)
+                Intent(activity, ServicesActivity::class.java)
             }
         }
 
         activity.findViewById<View>(R.id.navTabHome)?.setOnClickListener {
             navigate(activity, currentTab, TAB_HOME) {
-                postAdsIntent(activity, TAB_HOME)
+                Intent(activity, Homepage::class.java)
+                    .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP)
             }
         }
 
         activity.findViewById<View>(R.id.navTabPost)?.setOnClickListener {
             navigate(activity, currentTab, TAB_POST) {
-                postAdsIntent(activity, TAB_POST)
+                Intent(activity, PostAdsActivity::class.java)
             }
         }
 
         activity.findViewById<View>(R.id.navTabProfile)?.setOnClickListener {
             navigate(activity, currentTab, TAB_PROFILE) {
-                Intent(activity, EditProfileActivity::class.java)
+                Intent(activity, AdminProfileActivity::class.java)
             }
         }
-    }
-
-    private fun postAdsIntent(activity: AppCompatActivity, tab: String): Intent {
-        return Intent(activity, PostAdsActivity::class.java)
-            .putExtra(EXTRA_ACTIVE_TAB, tab)
-            .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP)
     }
 
     private fun navigate(

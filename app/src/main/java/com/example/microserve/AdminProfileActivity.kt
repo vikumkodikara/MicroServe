@@ -42,7 +42,7 @@ class AdminProfileActivity : AppCompatActivity() {
         binding.bottomNavigation.setOnItemSelectedListener { menuItem ->
             when (menuItem.itemId) {
                 R.id.nav_home -> {
-                    startActivity(Intent(this, Homepage::class.java))
+                    startActivity(Intent(this, AdminDashboardActivity::class.java))
                     finish()
                     true
                 }

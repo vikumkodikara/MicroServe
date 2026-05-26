@@ -13,7 +13,6 @@ import com.example.microserve.databinding.ActivityPostAdsBinding
 class PostAdsActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityPostAdsBinding
-    private var activeTab: String = HomeBottomNavHelper.TAB_HOME
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -21,21 +20,10 @@ class PostAdsActivity : AppCompatActivity() {
         binding = ActivityPostAdsBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        activeTab = intent.getStringExtra(HomeBottomNavHelper.EXTRA_ACTIVE_TAB)
-            ?: HomeBottomNavHelper.TAB_HOME
-
         setupWindowInsets()
         setupSpinner()
         setupClickListeners()
-        HomeBottomNavHelper.setup(this, activeTab)
-    }
-
-    override fun onNewIntent(intent: Intent) {
-        super.onNewIntent(intent)
-        setIntent(intent)
-        activeTab = intent.getStringExtra(HomeBottomNavHelper.EXTRA_ACTIVE_TAB)
-            ?: HomeBottomNavHelper.TAB_HOME
-        HomeBottomNavHelper.setup(this, activeTab)
+        HomeBottomNavHelper.setup(this, HomeBottomNavHelper.TAB_POST)
     }
 
     private fun setupWindowInsets() {

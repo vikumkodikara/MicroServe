@@ -43,6 +43,10 @@ object RequestStore {
         return getPendingRequestsByCategory(context, categoryKeys).isNotEmpty()
     }
 
+    fun getRequestById(context: Context, requestId: String): UserRequest? {
+        return getAllRequests(context).firstOrNull { it.id == requestId }
+    }
+
     fun getAllRequests(context: Context): List<UserRequest> {
         val prefs = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE)
         val raw = prefs.getString(KEY_REQUESTS, null) ?: return emptyList()

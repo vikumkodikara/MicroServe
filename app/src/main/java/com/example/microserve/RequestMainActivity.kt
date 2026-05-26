@@ -58,10 +58,12 @@ class RequestMainActivity : AppCompatActivity() {
     private fun seedSampleRequestsIfEmpty() {
         if (RequestStore.getPendingRequests(this).isNotEmpty()) return
 
+        val requesterName = AppPreferences.getSessionName(this).ifBlank { "Demo User" }
+
         RequestStore.addRequest(
             context = this,
             category = "Plumbing",
-            requesterName = "Demo User",
+            requesterName = requesterName,
             contact = "555-0100",
             location = "Home",
             title = "Pipe leak repair",
@@ -70,7 +72,7 @@ class RequestMainActivity : AppCompatActivity() {
         RequestStore.addRequest(
             context = this,
             category = "House Painting",
-            requesterName = "Demo User",
+            requesterName = requesterName,
             contact = "555-0100",
             location = "Home",
             title = "House repainting",
@@ -79,7 +81,7 @@ class RequestMainActivity : AppCompatActivity() {
         RequestStore.addRequest(
             context = this,
             category = "Gardening",
-            requesterName = "Demo User",
+            requesterName = requesterName,
             contact = "555-0100",
             location = "Garden",
             title = "Weed removal",
@@ -152,7 +154,7 @@ class RequestMainActivity : AppCompatActivity() {
         }
 
         binding.requestsButton.setOnClickListener {
-            binding.mainScrollView.smoothScrollTo(0, binding.myRequestsLabel.top)
+            openRequestForm()
         }
     }
 
@@ -161,6 +163,10 @@ class RequestMainActivity : AppCompatActivity() {
             Intent(this, CategoryDetailActivity::class.java)
                 .putExtra(CategoryDetailActivity.EXTRA_CATEGORY_ID, categoryId)
         )
+    }
+
+    private fun openRequestForm() {
+        startActivity(Intent(this, RequestServiceActivity::class.java))
     }
 
     private fun openRequestForm(category: String) {
