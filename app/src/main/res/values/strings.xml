@@ -146,6 +146,7 @@
     <!-- Sign up -->
     <string name="sign_up_title">Create Account</string>
     <string name="sign_up_email_hint">E-mail</string>
+    <string name="sign_up_username_hint">Username</string>
     <string name="sign_up_mobile_hint">Mobile</string>
     <string name="sign_up_create_button">Create</string>
     <string name="sign_up_already_have_account">Already have an account? Log in</string>
@@ -154,6 +155,10 @@
     <string name="sign_up_error_mobile">Please enter your mobile number</string>
     <string name="sign_up_error_password_length">Password must be at least 6 characters</string>
     <string name="sign_up_success">Account created successfully</string>
+    <string name="sign_up_error_email_in_use">Email already in use</string>
+    <string name="sign_up_error_check_email">Error checking email</string>
+    <string name="sign_up_error_network">Network error</string>
+    <string name="sign_up_error_generic">Sign up failed</string>
 
     <!-- Edit Profile Strings -->
     <string name="personal_info">Personal Info</string>
@@ -162,6 +167,11 @@
     <string name="phone_number">Phone Number</string>
     <string name="location_address">Location / Address</string>
     <string name="save_changes">Save Changes</string>
+    <string name="edit_profile_btn">Edit Profile</string>
+    <string name="profile_photo_saved">Profile photo saved</string>
+    <string name="profile_photo_save_failed">Failed to save profile photo</string>
+    <string name="profile_save_failed">Failed to save profile</string>
+    <string name="profile_saved">Profile saved successfully</string>
 
     <!-- Discover Screen Strings -->
     <string name="discover_title">Discover</string>
@@ -185,9 +195,29 @@
     <string name="work_address">Level 4, Tech Park, Colombo 03</string>
     <string name="card_number">**** **** **** 4589</string>
     <string name="card_expiry">Expires 12/26</string>
-    <string name="help_subtitle">Hello %1$s, how can we help ?</string>
+
+    <!-- UI Buttons and Labels (from main) -->
+    <string name="btn_edit">Edit</string>
+    <string name="btn_requests">Requests</string>
+    <string name="edit">Edit</string>
+    <string name="delete_request">Delete Request</string>
+    <string name="submit_request">Submit Request</string>
+
+    <!-- Categories (from main) -->
+    <string name="category_label">Category</string>
+    <string name="section_category">Category</string>
+    <string name="category_carpentry">Carpentry</string>
+    <string name="category_cleaning">Cleaning</string>
+    <string name="category_electric">Electric</string>
+    <string name="category_gardening">Gardening</string>
+    <string name="category_handyman">Handyman</string>
+    <string name="category_hvac">HVAC</string>
+    <string name="category_mechanic">Mechanic</string>
+    <string name="category_painting">Painting</string>
+    <string name="category_plumbing">Plumbing</string>
 
     <!-- Get Help Screen -->
+    <string name="help_subtitle">Hello %1$s, how can we help ?</string>
     <string name="get_help_title">Get Help</string>
     <string name="search_help_hint">Search for issues, topics.....</string>
     <string name="help_bookings">Bookings</string>
@@ -198,9 +228,18 @@
     <string name="help_live_chat">Live Chat</string>
     <string name="help_call_hotline">Call Hotline</string>
 
-    <!-- Personal Info Screen -->
+    <!-- Labels and Titles (from main) -->
     <string name="personal_info_title">Personal Info</string>
-    <string name="edit_profile_btn">Edit Profile</string>
+    <string name="enter_your_name_label">Enter Your name</string>
+    <string name="title_label">Title</string>
+    <string name="contact_label">Contact</string>
+    <string name="description_label">Description</string>
+    <string name="title_my_service">My Service</string>
+    <string name="title_requests">Requests</string>
+    <string name="my_service_requests">My Service Requests</string>
+    <string name="section_my_requests">My Requests</string>
+    <string name="no_requests_yet">No requests yet</string>
+    <string name="services_at_door">Services at Door</string>
 
     <!-- Privacy Policy Screen -->
     <string name="privacy_policy_title">Privacy Policy</string>
@@ -221,13 +260,4 @@
     <string name="request_service_select_category">Please select a service category</string>
     <string name="request_service_fill_required">Please fill all required fields</string>
     <string name="request_service_success">Service request submitted successfully!</string>
-    <string name="enter_your_name_label">Enter Your name</string>
-    <string name="title_label">Title</string>
-    <string name="category_label">Category</string>
-    <string name="contact_label">Contact</string>
-    <string name="description_label">Description</string>
-    <string name="submit_request">Submit Request</string>
-
-    <!-- Splash Screen -->
-    <string name="services_at_doorstep">Services at your doorstep</string>
 </resources>

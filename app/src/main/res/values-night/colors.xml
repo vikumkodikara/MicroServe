@@ -29,6 +29,7 @@
     <color name="primary_purple">#BB86FC</color>
     <color name="purple_button">#BB86FC</color>
     <color name="admin_primary_purple">#BB86FC</color>
+    <color name="admin_purple_light">#D0C4FF</color>
     
     <!-- Majestic Plum Night Sky Gradient Colors -->
     <color name="purple_dark">#1A1430</color>
@@ -39,4 +40,10 @@
     
     <!-- Balanced Bottom Spacers -->
     <color name="home_nav_inset_fill">#1A1430</color>
+    
+    <!-- Shadow tint for dark mode -->
+    <color name="shadow_dark">#33000000</color>
+    
+    <!-- Divider for dark mode settings -->
+    <color name="white">#FFFFFFFF</color>
 </resources>
