@@ -67,7 +67,18 @@ class PlaceBidActivity : AppCompatActivity() {
             item.findViewById<TextView>(R.id.tv_bid_price).text = "Bid Price: ${bid.price}"
 
             item.findViewById<View>(R.id.btn_purchase).setOnClickListener {
-                Toast.makeText(this, "Purchased from ${bid.name}", Toast.LENGTH_SHORT).show()
+                val price = bid.price.replace("Rs.", "").replace(",", "").trim().toIntOrNull() ?: 0
+                if (price > 0) {
+                    MPointsPaymentHelper.showPaymentDialog(
+                        activity = this,
+                        amount = price,
+                        providerName = bid.name
+                    ) {
+                        // Payment successful
+                    }
+                } else {
+                    Toast.makeText(this, "Invalid bid price", Toast.LENGTH_SHORT).show()
+                }
             }
 
             bidsContainer.addView(item)
