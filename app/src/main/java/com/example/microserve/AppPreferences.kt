@@ -53,7 +53,7 @@ object AppPreferences {
             .putString(KEY_SESSION_LOCATION, profile.location)
             .putString(KEY_SESSION_PHOTO_URL, profile.photoUrl)
             .putString(KEY_SESSION_ROLE, profile.role)
-            .apply()
+            .commit()
     }
 
     fun isLoggedIn(context: Context): Boolean {
