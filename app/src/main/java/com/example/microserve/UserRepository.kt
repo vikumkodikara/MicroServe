@@ -12,8 +12,8 @@ object UserRepository {
     private const val TAG = "UserRepository"
 
     /** Default admin credentials — used to seed Firebase Auth + Firestore. */
-    const val ADMIN_EMAIL = "admin@microserve.local"
-    const val ADMIN_PASSWORD = "admin123"
+    const val ADMIN_EMAIL = "admin@gmail.com"
+    const val ADMIN_PASSWORD = "Admin123"
     private const val ADMIN_NAME = "Admin"
     private const val ADMIN_PHONE = "+94 70 000 0000"
 
