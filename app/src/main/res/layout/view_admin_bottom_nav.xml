@@ -119,7 +119,8 @@
             android:layout_gravity="top"
             android:layout_marginTop="2dp"
             android:background="@drawable/nav_bubble_bg"
-            android:elevation="10dp">
+            android:elevation="10dp"
+            android:visibility="invisible">
 
             <ImageView
                 android:id="@+id/navBubbleIcon"
