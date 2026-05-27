@@ -17,25 +17,23 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
-        <FrameLayout
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="200dp">
+            android:layout_height="wrap_content">
 
             <ImageView
                 android:id="@+id/jobImage"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
                 android:background="@color/admin_quick_action_bg"
                 android:contentDescription="@string/cd_job_done_preview"
                 android:scaleType="centerCrop"
-                android:src="@drawable/home_job_done_placeholder" />
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="48dp"
-                android:layout_gravity="bottom"
-                android:background="@drawable/ad_card_image_scrim" />
-        </FrameLayout>
+                android:src="@drawable/home_job_done_placeholder"
+                app:layout_constraintDimensionRatio="1:1"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
         <LinearLayout
             android:layout_width="match_parent"

@@ -11,6 +11,7 @@ import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
+import com.canhub.cropper.CropImageContract
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -27,18 +28,15 @@ class PostAdsActivity : AppCompatActivity() {
     private var selectedDistrict: String = ""
     private var selectedCity: String = ""
 
-    private val imagePicker = registerForActivityResult(ActivityResultContracts.GetContent()) { uri ->
+    private val pickImage = registerForActivityResult(ActivityResultContracts.GetContent()) { uri ->
         if (uri != null) {
-            val savedPath = PostImageHelper.copyPickedImage(this, uri)
-            if (savedPath == null) {
-                toast(getString(R.string.post_ads_image_save_failed))
-                return@registerForActivityResult
-            }
-            selectedImagePath = savedPath
-            PostImageHelper.loadPostImage(binding.selectedImagePreview, savedPath)
-            binding.selectedImagePreview.visibility = View.VISIBLE
-            binding.addImagePlaceholder.visibility = View.GONE
-            binding.tvImageChangeHint.visibility = View.VISIBLE
+            cropImage.launch(PostImagePicker.optionsForGalleryUri(this, uri))
+        }
+    }
+
+    private val cropImage = registerForActivityResult(CropImageContract()) { result ->
+        if (result.isSuccessful) {
+            applyCroppedImage(result.uriContent)
         }
     }
 
@@ -226,7 +224,7 @@ class PostAdsActivity : AppCompatActivity() {
         binding.backBtn.setOnClickListener { finish() }
 
         binding.addImageBtn.setOnClickListener {
-            imagePicker.launch("image/*")
+            pickImage.launch("image/*")
         }
 
         binding.btnPickOnMap.setOnClickListener {
@@ -298,6 +296,24 @@ class PostAdsActivity : AppCompatActivity() {
                 binding.previousPostsRecyclerView.smoothScrollToPosition(0)
             }
         }
+    }
+
+    private fun applyCroppedImage(uri: Uri?) {
+        if (uri == null) return
+        val previous = selectedImagePath
+        val savedPath = PostImageHelper.copyPickedImage(this, uri)
+        if (savedPath == null) {
+            toast(getString(R.string.post_ads_image_save_failed))
+            return
+        }
+        if (!previous.isNullOrBlank() && previous != savedPath) {
+            PostImageHelper.deletePostImage(this, previous)
+        }
+        selectedImagePath = savedPath
+        PostImageHelper.loadPostImage(binding.selectedImagePreview, savedPath)
+        binding.selectedImagePreview.visibility = View.VISIBLE
+        binding.addImagePlaceholder.visibility = View.GONE
+        binding.tvImageChangeHint.visibility = View.VISIBLE
     }
 
     private fun resetFormAfterPost() {

@@ -5,8 +5,10 @@ import android.os.Bundle
 import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
+import android.net.Uri
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
+import com.canhub.cropper.CropImageContract
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.example.microserve.databinding.ActivityEditPostBinding
@@ -18,19 +20,15 @@ class EditPostActivity : AppCompatActivity() {
     private var selectedImagePath: String? = null
     private var imageChanged = false
 
-    private val imagePicker = registerForActivityResult(ActivityResultContracts.GetContent()) { uri ->
+    private val pickImage = registerForActivityResult(ActivityResultContracts.GetContent()) { uri ->
         if (uri != null) {
-            val savedPath = PostImageHelper.copyPickedImage(this, uri)
-            if (savedPath == null) {
-                showToast(getString(R.string.post_ads_image_save_failed))
-                return@registerForActivityResult
-            }
-            selectedImagePath = savedPath
-            imageChanged = true
-            PostImageHelper.loadPostImage(binding.selectedImagePreview, savedPath)
-            binding.addImagePlaceholder.visibility = View.GONE
-            binding.tvImageChangeHint.visibility = View.VISIBLE
-            binding.imageActionText.text = getString(R.string.post_ads_image_selected)
+            cropImage.launch(PostImagePicker.optionsForGalleryUri(this, uri))
+        }
+    }
+
+    private val cropImage = registerForActivityResult(CropImageContract()) { result ->
+        if (result.isSuccessful) {
+            applyCroppedImage(result.uriContent)
         }
     }
 
@@ -99,7 +97,7 @@ class EditPostActivity : AppCompatActivity() {
         }
 
         binding.addImageBtn.setOnClickListener {
-            imagePicker.launch("image/*")
+            pickImage.launch("image/*")
         }
 
         binding.deleteBtn.setOnClickListener {
@@ -153,6 +151,25 @@ class EditPostActivity : AppCompatActivity() {
             }
             else -> true
         }
+    }
+
+    private fun applyCroppedImage(uri: Uri?) {
+        if (uri == null) return
+        val previous = selectedImagePath
+        val savedPath = PostImageHelper.copyPickedImage(this, uri)
+        if (savedPath == null) {
+            showToast(getString(R.string.post_ads_image_save_failed))
+            return
+        }
+        if (!previous.isNullOrBlank() && previous != savedPath) {
+            PostImageHelper.deletePostImage(this, previous)
+        }
+        selectedImagePath = savedPath
+        imageChanged = true
+        PostImageHelper.loadPostImage(binding.selectedImagePreview, savedPath)
+        binding.addImagePlaceholder.visibility = View.GONE
+        binding.tvImageChangeHint.visibility = View.VISIBLE
+        binding.imageActionText.text = getString(R.string.post_ads_image_selected)
     }
 
     private fun showToast(message: String) {
