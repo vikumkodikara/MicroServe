@@ -2,12 +2,63 @@ rules_version = '2';
 
 service cloud.firestore {
   match /databases/{database}/documents {
+
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isAdmin() {
+      return isSignedIn()
+        && get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin';
+    }
+
     match /users/{userId} {
-      // Any authenticated user can read any profile (needed for admin checks)
-      allow read: if request.auth != null;
-      // Users can only create/update/delete their own profile
-      allow create: if request.auth != null && request.auth.uid == userId;
-      allow update, delete: if request.auth != null && request.auth.uid == userId;
+      allow read: if isSignedIn();
+      allow create: if isSignedIn() && request.auth.uid == userId;
+      allow update: if isSignedIn() && (request.auth.uid == userId || isAdmin());
+      allow delete: if isSignedIn() && request.auth.uid == userId;
+    }
+
+    match /platform/{docId} {
+      allow read: if isSignedIn();
+      allow write: if isSignedIn();
+    }
+
+    match /service_requests/{requestId} {
+      allow read: if isSignedIn();
+      allow create: if isSignedIn()
+        && request.resource.data.requesterUid == request.auth.uid;
+      allow update: if isSignedIn() && (
+        resource.data.requesterUid == request.auth.uid
+        || resource.data.acceptedProviderUid == request.auth.uid
+        || isAdmin()
+      );
+      allow delete: if isSignedIn() && resource.data.requesterUid == request.auth.uid;
+
+      match /bids/{bidId} {
+        allow read: if isSignedIn();
+        allow create: if isSignedIn()
+          && request.resource.data.providerUid == request.auth.uid
+          && get(/databases/$(database)/documents/service_requests/$(requestId)).data.requesterUid != request.auth.uid;
+        allow update: if isSignedIn() && (
+          get(/databases/$(database)/documents/service_requests/$(requestId)).data.requesterUid == request.auth.uid
+          || isAdmin()
+        );
+      }
+    }
+
+    match /transactions/{transactionId} {
+      allow read: if isSignedIn() && (
+        resource.data.requesterUid == request.auth.uid
+        || resource.data.providerUid == request.auth.uid
+        || isAdmin()
+      );
+      allow create: if isSignedIn();
+      allow update: if isSignedIn() && (
+        resource.data.requesterUid == request.auth.uid
+        || resource.data.providerUid == request.auth.uid
+        || isAdmin()
+      );
     }
   }
 }
