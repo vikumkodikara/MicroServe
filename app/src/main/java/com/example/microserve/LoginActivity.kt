@@ -141,9 +141,17 @@ class LoginActivity : AppCompatActivity() {
         )
     }
 
-    private fun routeByRole(@Suppress("UNUSED_PARAMETER") role: String) {
+    private fun routeByRole(role: String) {
         showLoading(false)
-        startActivity(SessionNavigator.mainIntent(this))
+        val target = if (role.equals(UserProfile.ROLE_ADMIN, ignoreCase = true)) {
+            AdminDashboardActivity::class.java
+        } else {
+            Homepage::class.java
+        }
+        val intent = Intent(this, target).apply {
+            addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
+        }
+        startActivity(intent)
         finish()
     }
 

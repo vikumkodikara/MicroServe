@@ -138,24 +138,31 @@ object UserRepository {
                         onUserRoute()
                     }
                 } else {
-                    val profile = buildProfile(user, fallbackName)
+                    // Doc doesn't exist yet — build one
+                    val isAdmin = user.email.equals(ADMIN_EMAIL, ignoreCase = true)
+                    val profile = buildProfile(user, fallbackName).let {
+                        if (isAdmin) it.copy(role = UserProfile.ROLE_ADMIN) else it
+                    }
                     saveProfile(
                         context = context,
                         profile = profile,
-                        onSuccess = onUserRoute,
+                        onSuccess = { if (isAdmin) onAdminRoute() else onUserRoute() },
                         onFailure = { message ->
                             onError(message)
-                            onUserRoute()
+                            if (isAdmin) onAdminRoute() else onUserRoute()
                         }
                     )
                 }
             }
             .addOnFailureListener { error ->
-                val profile = buildProfile(user, fallbackName)
+                val isAdmin = user.email.equals(ADMIN_EMAIL, ignoreCase = true)
+                val profile = buildProfile(user, fallbackName).let {
+                    if (isAdmin) it.copy(role = UserProfile.ROLE_ADMIN) else it
+                }
                 syncProfileToUserStore(context, profile)
                 AppPreferences.saveSession(context, profile)
                 onError(error.localizedMessage ?: "Unable to load profile")
-                onUserRoute()
+                if (isAdmin) onAdminRoute() else onUserRoute()
             }
     }
 
