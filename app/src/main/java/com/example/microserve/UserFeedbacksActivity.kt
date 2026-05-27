@@ -8,6 +8,7 @@ import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.PopupMenu
 import android.widget.TextView
+import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import java.text.SimpleDateFormat
@@ -28,6 +29,8 @@ class UserFeedbacksActivity : AppCompatActivity() {
         findViewById<View>(R.id.fab_add_feedback).setOnClickListener {
             startActivity(Intent(this, CreateFeedbackActivity::class.java))
         }
+
+        FeedbackStore.startListening(this)
     }
 
     override fun onResume() {
@@ -35,9 +38,19 @@ class UserFeedbacksActivity : AppCompatActivity() {
         loadFeedbacks()
     }
 
+    override fun onDestroy() {
+        FeedbackStore.stopListening()
+        super.onDestroy()
+    }
+
     private fun loadFeedbacks() {
+        FeedbackStore.loadFromFirestore(this) { feedbacks ->
+            renderFeedbacks(feedbacks)
+        }
+    }
+
+    private fun renderFeedbacks(feedbacks: List<FeedbackStore.Feedback>) {
         container.removeAllViews()
-        val feedbacks = FeedbackStore.getAllFeedbacks(this)
         val dateFormat = SimpleDateFormat("MMM dd, yyyy", Locale.getDefault())
 
         for (fb in feedbacks) {
@@ -60,37 +73,59 @@ class UserFeedbacksActivity : AppCompatActivity() {
                 )
             }
 
-            card.findViewById<View>(R.id.btn_menu).setOnClickListener { anchor ->
-                val popup = PopupMenu(this, anchor)
-                popup.menu.add(0, 1, 0, "Edit")
-                popup.menu.add(0, 2, 1, "Delete")
-                popup.setOnMenuItemClickListener { item ->
-                    when (item.itemId) {
-                        1 -> {
-                            startActivity(
-                                Intent(this, EditFeedbackActivity::class.java)
-                                    .putExtra("feedback_id", fb.id)
-                            )
-                            true
-                        }
-                        2 -> {
-                            showDeleteDialog(fb.id)
-                            true
-                        }
-                        else -> false
-                    }
-                }
-                popup.show()
-            }
+            val btnMenu = card.findViewById<View>(R.id.btn_menu)
+            val isOwner = FeedbackStore.isOwner(this, fb)
 
-            card.setOnClickListener {
-                startActivity(
-                    Intent(this, EditFeedbackActivity::class.java)
-                        .putExtra("feedback_id", fb.id)
-                )
+            if (isOwner) {
+                // Show edit/delete menu only for own feedbacks
+                btnMenu.visibility = View.VISIBLE
+                btnMenu.setOnClickListener { anchor ->
+                    val popup = PopupMenu(this, anchor)
+                    popup.menu.add(0, 1, 0, "Edit")
+                    popup.menu.add(0, 2, 1, "Delete")
+                    popup.setOnMenuItemClickListener { item ->
+                        when (item.itemId) {
+                            1 -> {
+                                startActivity(
+                                    Intent(this, EditFeedbackActivity::class.java)
+                                        .putExtra("feedback_id", fb.id)
+                                )
+                                true
+                            }
+                            2 -> {
+                                showDeleteDialog(fb.id)
+                                true
+                            }
+                            else -> false
+                        }
+                    }
+                    popup.show()
+                }
+
+                card.setOnClickListener {
+                    startActivity(
+                        Intent(this, EditFeedbackActivity::class.java)
+                            .putExtra("feedback_id", fb.id)
+                    )
+                }
+            } else {
+                // Hide menu for other users' feedbacks
+                btnMenu.visibility = View.GONE
+                card.isClickable = false
             }
 
             container.addView(card)
+        }
+
+        if (feedbacks.isEmpty()) {
+            val empty = TextView(this).apply {
+                text = "No feedbacks yet. Tap + to add yours!"
+                textSize = 15f
+                setTextColor(0xFF999999.toInt())
+                setPadding(0, 64, 0, 0)
+                textAlignment = View.TEXT_ALIGNMENT_CENTER
+            }
+            container.addView(empty)
         }
     }
 
@@ -105,6 +140,7 @@ class UserFeedbacksActivity : AppCompatActivity() {
         view.findViewById<View>(R.id.btn_yes_delete).setOnClickListener {
             FeedbackStore.deleteFeedback(this, feedbackId)
             dialog.dismiss()
+            Toast.makeText(this, "Feedback deleted", Toast.LENGTH_SHORT).show()
             loadFeedbacks()
         }
         view.findViewById<View>(R.id.btn_cancel).setOnClickListener {

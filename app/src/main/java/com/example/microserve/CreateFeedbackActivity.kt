@@ -1,7 +1,6 @@
 package com.example.microserve
 
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
 import android.widget.EditText
 import android.widget.ImageView
@@ -32,7 +31,6 @@ class CreateFeedbackActivity : AppCompatActivity() {
         }
 
         findViewById<View>(R.id.btn_create).setOnClickListener {
-            val email = findViewById<EditText>(R.id.et_email).text.toString().trim()
             val feedback = findViewById<EditText>(R.id.et_feedback).text.toString().trim()
 
             if (selectedRating == 0) {
@@ -44,18 +42,17 @@ class CreateFeedbackActivity : AppCompatActivity() {
                 return@setOnClickListener
             }
 
+            val ownerUid = AppPreferences.getSessionUid(this)
+            val userName = AppPreferences.getSessionName(this).ifBlank { "User" }
+
             FeedbackStore.addFeedback(
                 context = this,
-                userId = email.ifBlank { "user" },
-                userName = email.ifBlank { "User" },
+                ownerUid = ownerUid,
+                userName = userName,
                 message = feedback,
                 rating = selectedRating
             )
             Toast.makeText(this, "Feedback created", Toast.LENGTH_SHORT).show()
-            finish()
-        }
-
-        findViewById<View>(R.id.btn_delete).setOnClickListener {
             finish()
         }
     }

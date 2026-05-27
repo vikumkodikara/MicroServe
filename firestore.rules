@@ -9,5 +9,19 @@ service cloud.firestore {
       allow create: if request.auth != null && request.auth.uid == userId;
       allow update, delete: if request.auth != null && request.auth.uid == userId;
     }
+
+    match /feedbacks/{feedbackId} {
+      // Any authenticated user can read all feedbacks
+      allow read: if request.auth != null;
+      // Any authenticated user can create a feedback
+      allow create: if request.auth != null;
+      // Only the owner can update their own feedback
+      allow update: if request.auth != null
+        && resource.data.ownerUid == request.auth.uid;
+      // Owner can delete their own, or admin can delete any
+      allow delete: if request.auth != null
+        && (resource.data.ownerUid == request.auth.uid
+            || get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin');
+    }
   }
 }

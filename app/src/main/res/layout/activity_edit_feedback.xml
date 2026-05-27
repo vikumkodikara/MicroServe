@@ -121,48 +121,6 @@
                     app:tint="#CCCCCC" />
             </LinearLayout>
 
-            <!-- Email -->
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Email address"
-                android:textColor="#1A1A1A"
-                android:textSize="15sp" />
-
-            <EditText
-                android:id="@+id/et_email"
-                android:layout_width="match_parent"
-                android:layout_height="48dp"
-                android:layout_marginTop="6dp"
-                android:layout_marginBottom="18dp"
-                android:background="@drawable/login_field_bg"
-                android:inputType="textEmailAddress"
-                android:paddingHorizontal="16dp"
-                android:textColor="#1A1A1A"
-                android:textSize="14sp" />
-
-            <!-- Category -->
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Category"
-                android:textColor="#1A1A1A"
-                android:textSize="15sp" />
-
-            <EditText
-                android:id="@+id/et_category"
-                android:layout_width="match_parent"
-                android:layout_height="48dp"
-                android:layout_marginTop="6dp"
-                android:layout_marginBottom="18dp"
-                android:background="@drawable/login_field_bg"
-                android:hint="Booking Issue"
-                android:inputType="text"
-                android:paddingHorizontal="16dp"
-                android:textColor="#1A1A1A"
-                android:textColorHint="#C0A8D4"
-                android:textSize="14sp" />
-
             <!-- Feedback -->
             <TextView
                 android:layout_width="wrap_content"
