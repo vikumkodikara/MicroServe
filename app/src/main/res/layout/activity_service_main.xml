@@ -29,7 +29,7 @@
             android:layout_below="@id/btn_back"
             android:layout_marginTop="12dp"
             android:fontFamily="sans-serif-bold"
-            android:text="My\nServices"
+            android:text="@string/service_main_title"
             android:textColor="#FFFFFF"
             android:textSize="30sp" />
 

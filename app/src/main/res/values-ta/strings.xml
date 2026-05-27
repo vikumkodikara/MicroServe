@@ -3,7 +3,8 @@
     <string name="app_name">மைக்ரோசெர்வ்</string>
 
     <!-- Service Request App Strings -->
-    <string name="title_my_service">எனது சேவை</string>
+    <string name="title_my_service">சேவை வழங்குநர்</string>
+    <string name="service_main_title">சேவை\nவழங்குநர்</string>
     <string name="title_requests">கோரிக்கைகள்</string>
     <string name="services_at_door">உங்கள் வீட்டு வாசலில் சேவைகள்</string>
 
@@ -19,7 +20,8 @@
     <string name="category_hvac">ஏசி வேலை</string>
 
     <!-- Request Main -->
-    <string name="my_service_requests">எனது சேவை\nகோரிக்கைகள்</string>
+    <string name="my_service_requests">சேவை கோரிக்கை</string>
+    <string name="request_main_title">சேவை\nகோரிக்கை</string>
     <string name="section_category">வகை</string>
     <string name="section_my_requests">எனது கோரிக்கைகள்</string>
     <string name="no_requests_yet">இன்னும் கோரிக்கைகள் இல்லை.</string>
