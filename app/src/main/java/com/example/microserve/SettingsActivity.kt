@@ -47,23 +47,7 @@ class SettingsActivity : AppCompatActivity() {
     }
 
     private fun setupBottomNavigation() {
-        binding.bottomNavigation.setOnItemSelectedListener { menuItem ->
-            when (menuItem.itemId) {
-                R.id.nav_home -> {
-                    startActivity(Intent(this, AdminDashboardActivity::class.java))
-                    finish()
-                    true
-                }
-                R.id.nav_profile -> {
-                    startActivity(Intent(this, AdminProfileActivity::class.java))
-                    finish()
-                    true
-                }
-                R.id.nav_settings -> true
-                else -> false
-            }
-        }
-        binding.bottomNavigation.selectedItemId = R.id.nav_settings
+        AdminBottomNavHelper.setup(this, AdminBottomNavHelper.TAB_SETTINGS)
     }
 
     private fun setupInitialState() {
