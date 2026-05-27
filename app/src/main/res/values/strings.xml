@@ -77,6 +77,7 @@
     <string name="sign_up_error_check_email">Error checking email</string>
     <string name="sign_up_error_network">Network error</string>
     <string name="sign_up_error_generic">Sign up failed</string>
+    <string name="sign_up_success_title">Success</string>
 
     <!-- Edit Profile Strings -->
     <string name="personal_info">Personal Info</string>
@@ -123,6 +124,43 @@
     <string name="bid_button">Place Bid</string>
     <string name="purchase_button">Purchase</string>
     <string name="purchase_confirmed_toast">Purchase confirmed from %1$s</string>
+    <string name="action_ok">OK</string>
+
+    <!-- Post Ads / Edit Post -->
+    <string name="post_ads_add_image_label">Service Image</string>
+    <string name="post_ads_add_image">Add Image</string>
+    <string name="post_ads_change_image">Change Image</string>
+    <string name="post_ads_province_label">Province</string>
+    <string name="post_ads_district_label">District</string>
+    <string name="post_ads_city_label">City</string>
+    <string name="pick_on_map">Pick on Map</string>
+    <string name="post_ads_location_not_selected">No location selected</string>
+    <string name="post_ads_previous_posts">Your Previous Advertisements</string>
+    <string name="post_ads_no_previous_posts">No previous advertisements found</string>
+    <string name="post_ads_post_image">Advertisement Image</string>
+    <string name="post_ads_edit">Edit Ad</string>
+    <string name="post_ads_image_save_failed">Failed to save image</string>
+    <string name="post_ads_image_selected">Image selected</string>
+    <string name="post_ads_deleted">Post deleted successfully</string>
+    <string name="post_ads_updated">Post updated successfully</string>
+    <string name="post_ads_select_option">Please select %1$s</string>
+    <string name="post_ads_location_pending_map">Location selection pending on map</string>
+    <string name="post_ads_select_location_first">Please select location first</string>
+    <string name="post_ads_select_category">Please select a category</string>
+    <string name="post_ads_enter_provider">Please enter provider name</string>
+    <string name="post_ads_pick_map_location">Please pick location on map</string>
+    <string name="post_ads_enter_contact">Please enter contact number</string>
+    <string name="post_ads_enter_email">Please enter email address</string>
+    <string name="post_ads_posted_title">Post Successful</string>
+    <string name="post_ads_posted_success_stay">Your advertisement has been posted successfully.</string>
+
+    <!-- Pick Location -->
+    <string name="pick_location_title">Select Location</string>
+    <string name="pick_location_hint">Search for location</string>
+    <string name="confirm_location">Confirm Location</string>
+    <string name="pick_location_area_format">Area: %1$s</string>
+    <string name="pick_location_coords_format">Coords: %1$.5f, %2$.5f</string>
+    <string name="pick_location_pin_format">Location: %1$s</string>
 
     <!-- Categories -->
     <string name="category_label">Category</string>
