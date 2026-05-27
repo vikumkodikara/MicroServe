@@ -10,22 +10,26 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.ListenerRegistration
 
 class PlaceBidActivity : AppCompatActivity() {
 
     private lateinit var bidsContainer: LinearLayout
-
-    private data class Bid(val name: String, val price: String)
-
-    private val bids = mutableListOf(
-        Bid("Anuja Silva", "Rs. 4,000"),
-        Bid("Kulathunga Herath", "Rs. 3,500")
-    )
+    private var requestId: String = ""
+    private var bidListener: ListenerRegistration? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContentView(R.layout.activity_place_bid)
+
+        requestId = intent.getStringExtra(RequestDetailActivity.EXTRA_REQUEST_ID).orEmpty()
+        if (requestId.isBlank()) {
+            Toast.makeText(this, R.string.request_not_found, Toast.LENGTH_SHORT).show()
+            finish()
+            return
+        }
 
         bidsContainer = findViewById(R.id.bidsListContainer)
         val etAmount = findViewById<EditText>(R.id.et_bid_amount)
@@ -35,31 +39,90 @@ class PlaceBidActivity : AppCompatActivity() {
         findViewById<View>(R.id.btn_back).setOnClickListener { finish() }
 
         findViewById<View>(R.id.btn_place_bid).setOnClickListener {
-            val amount = etAmount.text.toString().trim()
-            val time = etTime.text.toString().trim()
-
-            if (amount.isBlank()) {
-                Toast.makeText(this, "Please enter bid amount", Toast.LENGTH_SHORT).show()
-                return@setOnClickListener
-            }
-            if (!cbAgree.isChecked) {
-                Toast.makeText(this, "Please agree to terms", Toast.LENGTH_SHORT).show()
+            val user = FirebaseAuth.getInstance().currentUser
+            if (user == null) {
+                Toast.makeText(this, R.string.login_required, Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
 
-            bids.add(0, Bid("You", "Rs. $amount"))
-            etAmount.text.clear()
-            etTime.text.clear()
-            cbAgree.isChecked = false
-            Toast.makeText(this, "Bid placed successfully", Toast.LENGTH_SHORT).show()
-            loadBids()
+            val amountText = etAmount.text.toString().trim()
+            val timeText = etTime.text.toString().trim()
+            val points = amountText.toIntOrNull()
+
+            when {
+                points == null || points <= 0 -> {
+                    Toast.makeText(this, R.string.invalid_bid_amount, Toast.LENGTH_SHORT).show()
+                }
+                !cbAgree.isChecked -> {
+                    Toast.makeText(this, R.string.agree_terms_required, Toast.LENGTH_SHORT).show()
+                }
+                else -> {
+                    ServiceRequestRepository.getById(
+                        requestId = requestId,
+                        onSuccess = { request ->
+                            if (request.requesterUid == user.uid) {
+                                Toast.makeText(this, R.string.cannot_bid_own_request, Toast.LENGTH_SHORT).show()
+                                return@getById
+                            }
+                            if (request.status != ServiceRequestStatus.OPEN) {
+                                Toast.makeText(this, R.string.request_not_open, Toast.LENGTH_SHORT).show()
+                                return@getById
+                            }
+
+                            val session = AppPreferences.getSessionProfile(this)
+                            val providerName = session.name.takeIf { it.isNotBlank() }
+                                ?: user.displayName
+                                ?: user.email?.substringBefore("@")
+                                ?: "Provider"
+                            val completionHours = timeText.filter { it.isDigit() }.toIntOrNull() ?: 0
+
+                            BidRepository.placeBid(
+                                requestId = requestId,
+                                bid = Bid(
+                                    providerUid = user.uid,
+                                    providerName = providerName,
+                                    points = points,
+                                    completionHours = completionHours
+                                ),
+                                onSuccess = {
+                                    etAmount.text.clear()
+                                    etTime.text.clear()
+                                    cbAgree.isChecked = false
+                                    Toast.makeText(this, R.string.bid_placed_success, Toast.LENGTH_SHORT).show()
+                                },
+                                onFailure = { message ->
+                                    Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
+                                }
+                            )
+                        },
+                        onFailure = { message ->
+                            Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
+                        }
+                    )
+                }
+            }
         }
-
-        loadBids()
     }
 
-    private fun loadBids() {
+    override fun onStart() {
+        super.onStart()
+        bidListener?.remove()
+        bidListener = BidRepository.listenBids(
+            requestId = requestId,
+            onUpdate = { bids -> renderBids(bids) },
+            onError = { message -> Toast.makeText(this, message, Toast.LENGTH_SHORT).show() }
+        )
+    }
+
+    override fun onStop() {
+        bidListener?.remove()
+        bidListener = null
+        super.onStop()
+    }
+
+    private fun renderBids(bids: List<Bid>) {
         bidsContainer.removeAllViews()
+        if (bids.isEmpty()) return
 
         for (bid in bids) {
             val item = LayoutInflater.from(this).inflate(R.layout.item_previous_bid, bidsContainer, false)

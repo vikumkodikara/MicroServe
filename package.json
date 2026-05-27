@@ -1,0 +1,8 @@
+{
+  "scripts": {
+    "deploy:firestore": "firebase deploy --only firestore:rules --project microserve-b2e9e"
+  },
+  "devDependencies": {
+    "firebase-tools": "^15.19.0"
+  }
+}

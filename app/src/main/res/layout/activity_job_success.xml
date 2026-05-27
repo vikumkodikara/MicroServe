@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#483C72"
+    android:fitsSystemWindows="true"
+    android:gravity="center"
+    android:orientation="vertical"
+    android:padding="32dp">
+
+    <ImageView
+        android:layout_width="120dp"
+        android:layout_height="120dp"
+        android:importantForAccessibility="no"
+        android:src="@drawable/logo" />
+
+    <TextView
+        android:id="@+id/tv_success_message"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:fontFamily="sans-serif-medium"
+        android:gravity="center"
+        android:text="@string/job_success_default"
+        android:textColor="@android:color/white"
+        android:textSize="22sp" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btn_back_home"
+        android:layout_width="match_parent"
+        android:layout_height="52dp"
+        android:layout_marginTop="32dp"
+        android:backgroundTint="#D199FF"
+        android:text="@string/back_to_home"
+        android:textAllCaps="false"
+        android:textColor="@android:color/black"
+        app:cornerRadius="26dp" />
+
+</LinearLayout>

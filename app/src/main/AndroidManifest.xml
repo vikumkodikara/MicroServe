@@ -146,6 +146,15 @@
             android:name=".PlaceBidActivity"
             android:exported="false" />
         <activity
+            android:name=".RequestDetailActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ProviderJobsActivity"
+            android:exported="false" />
+        <activity
+            android:name=".JobSuccessActivity"
+            android:exported="false" />
+        <activity
             android:name=".ServiceMainActivity"
             android:exported="false" />
         <provider

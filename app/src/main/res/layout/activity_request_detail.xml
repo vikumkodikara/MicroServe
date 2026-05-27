@@ -132,6 +132,15 @@
                     tools:text="Job: Paint house (20 sq.ft)" />
 
                 <TextView
+                    android:id="@+id/statusValueText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:textColor="@color/admin_text_primary"
+                    android:textSize="15sp"
+                    tools:text="Status: open" />
+
+                <TextView
                     android:id="@+id/bidButton"
                     android:layout_width="wrap_content"
                     android:layout_height="36dp"
@@ -144,6 +153,30 @@
                     android:text="@string/bid_button"
                     android:textColor="@color/white"
                     android:textSize="14sp" />
+
+                <TextView
+                    android:id="@+id/proceedPaymentButton"
+                    android:layout_width="match_parent"
+                    android:layout_height="44dp"
+                    android:layout_marginTop="12dp"
+                    android:background="@drawable/rounded_purple_24dp"
+                    android:gravity="center"
+                    android:text="@string/proceed_payment"
+                    android:textColor="@color/white"
+                    android:textSize="14sp"
+                    android:visibility="gone" />
+
+                <TextView
+                    android:id="@+id/finishedButton"
+                    android:layout_width="match_parent"
+                    android:layout_height="44dp"
+                    android:layout_marginTop="12dp"
+                    android:background="@drawable/rounded_purple_24dp"
+                    android:gravity="center"
+                    android:text="@string/finished_button"
+                    android:textColor="@color/white"
+                    android:textSize="14sp"
+                    android:visibility="gone" />
             </LinearLayout>
 
             <!-- Previous bids -->

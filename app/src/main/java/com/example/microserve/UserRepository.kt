@@ -149,6 +149,7 @@ object UserRepository {
                         photoUrl = doc.getString(UserProfile.FIELD_PHOTO_URL)
                             ?: user.photoUrl?.toString().orEmpty(),
                         role = doc.getString(UserProfile.FIELD_ROLE) ?: UserProfile.ROLE_USER,
+                        cashPoints = doc.getLong(UserProfile.FIELD_CASH_POINTS)?.toInt() ?: 0,
                         createdAt = doc.getLong(UserProfile.FIELD_CREATED_AT) ?: System.currentTimeMillis()
                     )
                     syncProfileToUserStore(context, profile)
