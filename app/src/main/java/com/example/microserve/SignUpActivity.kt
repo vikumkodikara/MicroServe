@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.util.Patterns
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
@@ -32,17 +33,12 @@ class SignUpActivity : AppCompatActivity() {
     }
 
     private fun setupWindowInsets() {
-        ViewCompat.setOnApplyWindowInsetsListener(binding.signUpScroll) { view, insets ->
-            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            view.setPadding(0, systemBars.top, 0, systemBars.bottom)
-            insets
-        }
+        SystemUiHelper.setupFullBleedPurpleScreen(this, binding.signUpScroll)
     }
 
     private fun setupActions() {
         binding.alreadyHaveAccountLink.setOnClickListener {
-            finish()
-            overridePendingTransition(R.anim.nav_slide_in_left, R.anim.nav_slide_out_right)
+            goToLogin(prefillEmail = null)
         }
 
         binding.createAccountButton.setOnClickListener {
@@ -58,7 +54,7 @@ class SignUpActivity : AppCompatActivity() {
                 email.isEmpty() -> toast(getString(R.string.sign_up_error_email))
                 !Patterns.EMAIL_ADDRESS.matcher(email).matches() -> toast(getString(R.string.login_error_invalid_email))
                 mobile.isEmpty() -> toast(getString(R.string.sign_up_error_mobile))
-                else -> checkEmailThenCreateAccount(
+                else -> createAccount(
                     name = username,
                     email = email.lowercase(),
                     phone = mobile,
@@ -68,27 +64,15 @@ class SignUpActivity : AppCompatActivity() {
         }
     }
 
-    private fun checkEmailThenCreateAccount(name: String, email: String, phone: String, password: String) {
-        auth.fetchSignInMethodsForEmail(email)
-            .addOnSuccessListener { result ->
-                val methods = result.signInMethods.orEmpty()
-                if (methods.isNotEmpty()) {
-                    toast(getString(R.string.sign_up_error_email_in_use))
-                    return@addOnSuccessListener
-                }
-                createAccount(name, email, phone, password)
-            }
-            .addOnFailureListener { error ->
-                toast(error.localizedMessage ?: getString(R.string.sign_up_error_check_email))
-            }
-    }
-
     private fun createAccount(name: String, email: String, phone: String, password: String) {
+        setLoading(true)
+
         auth.createUserWithEmailAndPassword(email, password)
             .addOnSuccessListener { result ->
                 val user = result.user
                 if (user == null) {
-                    toast("Sign up failed")
+                    setLoading(false)
+                    toast(getString(R.string.sign_up_error_generic))
                     return@addOnSuccessListener
                 }
 
@@ -103,27 +87,63 @@ class SignUpActivity : AppCompatActivity() {
                 UserRepository.saveProfile(
                     context = this,
                     profile = profile,
-                    onSuccess = {
-                        toast(getString(R.string.sign_up_success))
-                        startActivity(SessionNavigator.mainIntent(this))
-                        finish()
-                    },
-                    onFailure = { message ->
-                        toast(message)
-                        AppPreferences.saveSession(this, profile)
-                        startActivity(SessionNavigator.mainIntent(this))
-                        finish()
+                    persistSession = false,
+                    onSuccess = { completeSignUpAndReturnToLogin(email) },
+                    onFailure = {
+                        // Auth account exists; still send user to log in manually.
+                        completeSignUpAndReturnToLogin(email)
                     }
                 )
             }
             .addOnFailureListener { error ->
+                setLoading(false)
                 val message = when (error) {
                     is FirebaseAuthUserCollisionException -> getString(R.string.sign_up_error_email_in_use)
                     is FirebaseNetworkException -> getString(R.string.sign_up_error_network)
-                    else -> error.localizedMessage ?: getString(R.string.sign_up_error_generic)
+                    else -> AuthErrorHelper.loginMessage(this, error)
+                        .takeUnless { it == getString(R.string.login_error_wrong_credentials) }
+                        ?: getString(R.string.sign_up_error_generic)
                 }
                 toast(message)
             }
+    }
+
+    private fun completeSignUpAndReturnToLogin(email: String) {
+        auth.signOut()
+        SessionNavigator.clearAuth(this)
+        setLoading(false)
+        showAccountCreatedDialog(email)
+    }
+
+    private fun showAccountCreatedDialog(email: String) {
+        if (isFinishing || isDestroyed) return
+
+        AlertDialog.Builder(this)
+            .setTitle(R.string.sign_up_success_title)
+            .setMessage(R.string.sign_up_success)
+            .setCancelable(false)
+            .setPositiveButton(R.string.action_ok) { dialog, _ ->
+                dialog.dismiss()
+                goToLogin(prefillEmail = email)
+            }
+            .show()
+    }
+
+    private fun goToLogin(prefillEmail: String?) {
+        val intent = Intent(this, LoginActivity::class.java).apply {
+            addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP)
+            if (!prefillEmail.isNullOrBlank()) {
+                putExtra(LoginActivity.EXTRA_PREFILL_EMAIL, prefillEmail)
+            }
+        }
+        startActivity(intent)
+        finish()
+        overridePendingTransition(R.anim.nav_slide_in_left, R.anim.nav_slide_out_right)
+    }
+
+    private fun setLoading(loading: Boolean) {
+        binding.createAccountButton.isEnabled = !loading
+        binding.alreadyHaveAccountLink.isEnabled = !loading
     }
 
     private fun toast(message: String) {

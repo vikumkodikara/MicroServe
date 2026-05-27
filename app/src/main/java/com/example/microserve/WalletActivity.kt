@@ -1,116 +1,153 @@
 package com.example.microserve
 
+import android.app.Dialog
 import android.content.Intent
 import android.os.Bundle
+import android.view.Gravity
 import android.view.View
-import android.widget.ArrayAdapter
+import android.view.WindowManager
 import android.widget.EditText
+import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.firestore.ListenerRegistration
+import java.text.NumberFormat
+import java.util.Locale
 
 class WalletActivity : AppCompatActivity() {
 
-    private var balanceListener: ListenerRegistration? = null
+    private lateinit var tvPoints: TextView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContentView(R.layout.activity_wallet)
 
+        tvPoints = findViewById(R.id.tv_points)
+
         findViewById<View>(R.id.btn_back).setOnClickListener { finish() }
 
-        findViewById<View>(R.id.btn_add_card).setOnClickListener {
-            startActivity(Intent(this, AddNewCardActivity::class.java))
+        findViewById<View>(R.id.btn_add_points).setOnClickListener {
+            showAddPointsDialog()
         }
 
         findViewById<View>(R.id.btn_cards).setOnClickListener {
             startActivity(Intent(this, MyCardsActivity::class.java))
         }
 
-        findViewById<View>(R.id.btn_add_points).setOnClickListener {
-            showAddPointsDialog()
+        findViewById<View>(R.id.btn_add_card).setOnClickListener {
+            startActivity(Intent(this, AddNewCardActivity::class.java))
         }
     }
 
-    override fun onStart() {
-        super.onStart()
-        val uid = FirebaseAuth.getInstance().currentUser?.uid
-        if (uid.isNullOrBlank()) {
-            findViewById<android.widget.TextView>(R.id.tv_points).text = "0"
-            return
-        }
-        balanceListener?.remove()
-        balanceListener = PointsRepository.listenBalance(
-            uid = uid,
-            onUpdate = { balance ->
-                findViewById<android.widget.TextView>(R.id.tv_points).text = balance.toString()
-            },
-            onError = { message ->
-                Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
-            }
-        )
+    override fun onResume() {
+        super.onResume()
+        refreshBalance()
     }
 
-    override fun onStop() {
-        balanceListener?.remove()
-        balanceListener = null
-        super.onStop()
+    private fun refreshBalance() {
+        val balance = AppPreferences.getMPoints(this)
+        tvPoints.text = "M ${formatNumber(balance)}"
     }
 
     private fun showAddPointsDialog() {
-        val uid = FirebaseAuth.getInstance().currentUser?.uid
-        if (uid.isNullOrBlank()) {
-            Toast.makeText(this, R.string.login_required, Toast.LENGTH_SHORT).show()
-            return
-        }
+        val dialog = Dialog(this, com.google.android.material.R.style.Theme_MaterialComponents_Light_Dialog)
+        dialog.setContentView(R.layout.dialog_add_points)
 
-        val cards = CardStore.getAllCards(this)
-        if (cards.isEmpty()) {
-            Toast.makeText(this, R.string.add_card_first, Toast.LENGTH_SHORT).show()
-            startActivity(Intent(this, AddNewCardActivity::class.java))
-            return
-        }
-
-        val cardLabels = cards.map { "${it.cardName} •••• ${it.cardNumber.takeLast(4)}" }.toTypedArray()
-        var selectedIndex = 0
-
-        val amountInput = EditText(this).apply {
-            hint = getString(R.string.top_up_amount_hint)
-            inputType = android.text.InputType.TYPE_CLASS_NUMBER
-            setPadding(48, 32, 48, 16)
-        }
-
-        AlertDialog.Builder(this)
-            .setTitle(R.string.add_points_title)
-            .setSingleChoiceItems(cardLabels, 0) { _, which -> selectedIndex = which }
-            .setView(amountInput)
-            .setPositiveButton(R.string.add_points_confirm) { dialog, _ ->
-                val amount = amountInput.text.toString().trim().toIntOrNull()
-                if (amount == null || amount <= 0) {
-                    Toast.makeText(this, R.string.invalid_top_up_amount, Toast.LENGTH_SHORT).show()
-                    return@setPositiveButton
-                }
-                PointsRepository.topUp(
-                    uid = uid,
-                    amount = amount,
-                    onSuccess = { newBalance ->
-                        Toast.makeText(
-                            this,
-                            getString(R.string.top_up_success, newBalance),
-                            Toast.LENGTH_SHORT
-                        ).show()
-                    },
-                    onFailure = { message ->
-                        Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
-                    }
-                )
-                dialog.dismiss()
+        dialog.window?.apply {
+            setLayout(
+                WindowManager.LayoutParams.MATCH_PARENT,
+                WindowManager.LayoutParams.WRAP_CONTENT
+            )
+            setGravity(Gravity.BOTTOM)
+            setBackgroundDrawableResource(android.R.color.transparent)
+            attributes = attributes.also {
+                it.windowAnimations = com.google.android.material.R.style.Animation_Design_BottomSheetDialog
             }
-            .setNegativeButton(android.R.string.cancel, null)
-            .show()
+        }
+
+        val etAmount = dialog.findViewById<EditText>(R.id.et_amount)
+        val tvCurrentBalance = dialog.findViewById<TextView>(R.id.tv_current_balance)
+        val cardInfoRow = dialog.findViewById<View>(R.id.card_info_row)
+        val tvCardInfo = dialog.findViewById<TextView>(R.id.tv_card_info)
+        val tvNoCard = dialog.findViewById<TextView>(R.id.tv_no_card)
+        val btnAddToWallet = dialog.findViewById<View>(R.id.btn_add_to_wallet)
+
+        // Show current balance
+        val currentBalance = AppPreferences.getMPoints(this)
+        tvCurrentBalance.text = "Current balance: M ${formatNumber(currentBalance)}"
+
+        // Show card info or warning
+        val cards = CardStore.getAllCards(this)
+        if (cards.isNotEmpty()) {
+            val card = cards.first()
+            val lastFour = card.cardNumber.takeLast(4)
+            tvCardInfo.text = "•••• •••• •••• $lastFour  (${card.cardName})"
+            cardInfoRow.visibility = View.VISIBLE
+            tvNoCard.visibility = View.GONE
+        } else {
+            cardInfoRow.visibility = View.GONE
+            tvNoCard.visibility = View.VISIBLE
+        }
+
+        // Quick amount chips
+        dialog.findViewById<View>(R.id.chip_500).setOnClickListener {
+            etAmount.setText("500")
+            etAmount.setSelection(etAmount.text.length)
+        }
+        dialog.findViewById<View>(R.id.chip_1000).setOnClickListener {
+            etAmount.setText("1000")
+            etAmount.setSelection(etAmount.text.length)
+        }
+        dialog.findViewById<View>(R.id.chip_2000).setOnClickListener {
+            etAmount.setText("2000")
+            etAmount.setSelection(etAmount.text.length)
+        }
+        dialog.findViewById<View>(R.id.chip_5000).setOnClickListener {
+            etAmount.setText("5000")
+            etAmount.setSelection(etAmount.text.length)
+        }
+
+        // Add to wallet button
+        btnAddToWallet.setOnClickListener {
+            val amountStr = etAmount.text.toString().trim()
+            if (amountStr.isEmpty()) {
+                Toast.makeText(this, "Please enter an amount", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+
+            val amount = amountStr.toIntOrNull()
+            if (amount == null || amount <= 0) {
+                Toast.makeText(this, "Please enter a valid amount", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+
+            if (cards.isEmpty()) {
+                Toast.makeText(this, "Please add a card first", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+
+            // Add points
+            val newBalance = AppPreferences.addMPoints(this, amount)
+            dialog.dismiss()
+
+            // Refresh balance on wallet
+            refreshBalance()
+
+            // Show success notification
+            val cardName = cards.first().cardName
+            Toast.makeText(
+                this,
+                "Rs. ${formatNumber(amount)} debited from $cardName.\nM Points added successfully!",
+                Toast.LENGTH_LONG
+            ).show()
+        }
+
+        dialog.show()
+    }
+
+    private fun formatNumber(number: Int): String {
+        return NumberFormat.getNumberInstance(Locale.US).format(number)
     }
 }

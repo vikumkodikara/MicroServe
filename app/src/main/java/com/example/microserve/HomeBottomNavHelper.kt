@@ -51,6 +51,7 @@ object HomeBottomNavHelper {
         activity.findViewById<View>(R.id.navTabPost)?.setOnClickListener {
             navigate(activity, currentTab, TAB_POST) {
                 Intent(activity, PostAdsActivity::class.java)
+                    .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP)
             }
         }
 

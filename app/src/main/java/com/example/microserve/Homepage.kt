@@ -18,6 +18,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.doOnLayout
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.example.microserve.databinding.ActivityHomeBinding
 import java.text.SimpleDateFormat
@@ -27,6 +28,7 @@ import java.util.Locale
 class Homepage : AppCompatActivity() {
 
     private lateinit var binding: ActivityHomeBinding
+    private lateinit var homeJobAdapter: HomeJobDoneAdapter
     private var isMenuOpen = false
     private var screenWidth = 0f
 
@@ -42,10 +44,12 @@ class Homepage : AppCompatActivity() {
         setupWindowInsets()
         setupUserProfile()
         setupJobsScroll()
+        setupPreviouslyDoneJobsList()
         setupDate()
         setupBannerToolsWatermarkScale()
         setupClickListeners()
         setupSideMenu()
+        loadPreviouslyDoneJobs()
         HomeBottomNavHelper.setup(this, HomeBottomNavHelper.TAB_HOME)
     }
 
@@ -53,7 +57,25 @@ class Homepage : AppCompatActivity() {
         super.onResume()
         if (::binding.isInitialized) {
             setupUserProfile()
+            loadPreviouslyDoneJobs()
         }
+    }
+
+    private fun setupPreviouslyDoneJobsList() {
+        homeJobAdapter = HomeJobDoneAdapter()
+        binding.homeJobsRecyclerView.apply {
+            layoutManager = LinearLayoutManager(this@Homepage)
+            adapter = homeJobAdapter
+            setHasFixedSize(false)
+        }
+    }
+
+    private fun loadPreviouslyDoneJobs() {
+        val jobs = ServiceStore.getHomeAdvertisements(this)
+        homeJobAdapter.submitList(jobs)
+        val hasJobs = jobs.isNotEmpty()
+        binding.tvNoHomeJobs.visibility = if (hasJobs) View.GONE else View.VISIBLE
+        binding.homeJobsRecyclerView.visibility = if (hasJobs) View.VISIBLE else View.GONE
     }
 
     /**
@@ -154,18 +176,9 @@ class Homepage : AppCompatActivity() {
     }
 
     private fun setupWindowInsets() {
-        ViewCompat.setOnApplyWindowInsetsListener(binding.main) { v, insets ->
-            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            v.setPadding(systemBars.left, 0, systemBars.right, 0)
-            findViewById<View>(R.id.navSystemBarSpacer)?.let { spacer ->
-                val lp = spacer.layoutParams
-                if (lp.height != systemBars.bottom) {
-                    lp.height = systemBars.bottom
-                    spacer.layoutParams = lp
-                }
-            }
-            insets
-        }
+        binding.main.applyHorizontalSystemBarInsets()
+        binding.headerFrame.applyStatusBarTopInset()
+        applyNavBarSpacer(R.id.navSystemBarSpacer)
     }
 
     private fun setupDate() {

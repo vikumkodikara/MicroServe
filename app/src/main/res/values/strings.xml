@@ -1,57 +1,24 @@
-<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">MicroServe</string>
-
-    <!-- Service Request App Strings -->
-    <string name="title_my_service">My Service</string>
-    <string name="title_requests">Requests</string>
-    <string name="services_at_door">Services At Your Door</string>
-
-    <!-- Categories -->
-    <string name="category_plumbing">Plumbing</string>
-    <string name="category_painting">Painting</string>
-    <string name="category_carpentry">Carpentry</string>
-    <string name="category_gardening">Gardening</string>
-    <string name="category_electric">Electric Work</string>
-    <string name="category_mechanic">Mechanic</string>
-    <string name="category_cleaning">Cleaning</string>
-    <string name="category_handyman">Handyman</string>
-    <string name="category_hvac">HVAC</string>
-
-    <!-- Request Items -->
-    <string name="request_1_title">1. Plumber</string>
-    <string name="request_1_desc">Pipe leak repair</string>
-    <string name="request_2_title">2. Painter</string>
-    <string name="request_2_desc">House repainting</string>
-    <string name="request_3_title">3. Gardening</string>
-    <string name="request_3_desc">Weed removal</string>
-    <string name="request_4_title">4. Plumber</string>
-    <string name="request_4_desc">Bathroom fitting</string>
-    <string name="request_5_title">5. Painter</string>
-    <string name="request_5_desc">Wood polishing</string>
-    <string name="request_6_title">6. Gardening</string>
-    <string name="request_6_desc">Seasonal garden care</string>
-
-    <!-- Request Main -->
-    <string name="my_service_requests">My Service\nRequests</string>
-    <string name="section_category">Category</string>
-    <string name="section_my_requests">My Requests</string>
-    <string name="category_electric_short">Electric</string>
-    <string name="no_requests_yet">No requests yet. Tap a category to create one.</string>
-
-    <!-- Buttons -->
-    <string name="edit">Edit</string>
-    <string name="btn_edit">Edit</string>
-    <string name="btn_requests">Requests</string>
-    <string name="delete_request">Delete request</string>
-    <string name="request_row_title_format">%1$d. %2$s</string>
-
-    <!-- Homepage -->
     <string name="cd_services_at_your_door_banner">Services at your door — browse local service providers</string>
-    <string name="cd_job_done_preview">Previously completed job preview image</string>
+    <string name="cd_job_done_preview">Advertisement preview image</string>
+    <string name="home_previously_done_jobs">Advertisements</string>
+    <string name="home_service_done_area">Service area</string>
+    <string name="home_ad_label_name">Name</string>
+    <string name="home_ad_label_contact">Contact</string>
+    <string name="home_ad_label_name_value">Name: %1$s</string>
+    <string name="home_ad_label_contact_value">Contact: %1$s</string>
+    <string name="home_ad_title_format">%1$s Service</string>
+    <string name="post_ads_image_crop_hint">Choose a photo, then pinch and drag inside the square</string>
+    <string name="post_ads_adjust_image_hint">Pinch to zoom · drag to move</string>
+    <string name="post_ads_use_photo">Use photo</string>
+    <string name="post_ads_cancel_image">Cancel</string>
+    <string name="home_job_service_format">Service: %1$s</string>
+    <string name="home_job_name_format">Name: %1$s</string>
+    <string name="home_job_contact_format">Contact: %1$s</string>
+    <string name="home_job_area_format"> - %1$s</string>
+    <string name="home_no_jobs_yet">No advertisements yet. Post your work from Post Ads.</string>
     <string name="cd_sidebar_menu">Open navigation menu</string>
-
-    <!-- Navigation -->
     <string name="nav_request">Request</string>
     <string name="nav_service">Service</string>
     <string name="nav_home">Home</string>
@@ -72,6 +39,48 @@
     <string name="service_request_details">Service Request Details</string>
     <string name="service_label">Service</string>
     <string name="location_label">Location</string>
+    <string name="post_ads_province_label">Province</string>
+    <string name="post_ads_district_label">District</string>
+    <string name="post_ads_city_label">City</string>
+    <string name="post_ads_select_option">-Select-</string>
+    <string name="pick_on_map">Select exact place on map</string>
+    <string name="post_ads_location_not_selected">Select province, district, and city first</string>
+    <string name="post_ads_location_pending_map">%1$s, %2$s, %3$s — tap map to pin exact place</string>
+    <string name="post_ads_select_location_first">Please select province, district, and city first</string>
+    <string name="post_ads_pick_map_location">Please pin your exact location on the map</string>
+    <string name="post_ads_select_category">Please select a service category</string>
+    <string name="post_ads_enter_provider">Please enter provider name</string>
+    <string name="post_ads_enter_contact">Please enter contact number</string>
+    <string name="post_ads_enter_email">Please enter email</string>
+    <string name="post_ads_posted_success">Service posted successfully</string>
+    <string name="post_ads_posted_title">Posted</string>
+    <string name="post_ads_posted_success_stay">Your advertisement was added. You can view it below or on the Home screen when you go there.</string>
+    <string name="post_ads_image_selected">Image selected</string>
+    <string name="post_ads_change_image">Tap to change image</string>
+    <string name="post_ads_image_save_failed">Could not save the selected image. Please try another photo.</string>
+    <string name="post_ads_previous_posts">Previous advertisement</string>
+    <string name="post_ads_no_previous_posts">No advertisements yet. Tap Post above to add your first listing.</string>
+    <string name="post_ads_previous_post_category">Service - %1$s</string>
+    <string name="post_ads_previous_post_name">Name - %1$s</string>
+    <string name="post_ads_previous_post_contact">Contact - %1$s</string>
+    <string name="post_ads_previous_post_location">Location - %1$s</string>
+    <string name="post_ads_edit">Edit</string>
+    <string name="post_ads_post_image">Post image</string>
+    <string name="post_ads_swipe_hint">Swipe sideways to see more posts</string>
+    <string name="post_ads_add_image">Tap to add image (optional)</string>
+    <string name="post_ads_add_image_label">Add Image (optional)</string>
+    <string name="post_ads_deleted">Post deleted</string>
+    <string name="post_ads_updated">Post updated successfully</string>
+    <string name="pick_location_title">Pin exact location</string>
+    <string name="pick_location_subtitle">Mark where you will provide the service</string>
+    <string name="pick_location_hint">Tap the map or drag the purple pin to set your exact place</string>
+    <string name="pick_location_drag_hint">Drag pin to adjust</string>
+    <string name="pick_location_selected_label">Selected area</string>
+    <string name="pick_location_coords_label">GPS coordinates</string>
+    <string name="confirm_location">Confirm location</string>
+    <string name="pick_location_area_format">Area: %1$s</string>
+    <string name="pick_location_coords_format">Coordinates: %1$s, %2$s</string>
+    <string name="pick_location_pin_format">Pinned at %1$s, %2$s</string>
     <string name="job_label">Job</string>
     <string name="previous_bids">Previous bids</string>
     <string name="bid_button">Bid</string>
@@ -143,10 +152,6 @@
     <string name="settings">Settings</string>
     <string name="dummy_user_name">Nethmina Malshan</string>
     <string name="edit_profile">Edit Profile</string>
-    <string name="profile_saved">Profile saved</string>
-    <string name="profile_photo_saved">Profile photo updated</string>
-    <string name="profile_photo_save_failed">Could not save photo. Try again.</string>
-    <string name="profile_save_failed">Could not save profile. Please log in again.</string>
     <string name="personal_information">Personal Information</string>
     <string name="saved_addresses">Saved Addresses</string>
     <string name="payment_methods">Payment Methods</string>
@@ -157,6 +162,7 @@
     <string name="privacy_policy">Privacy Policy</string>
     <string name="terms_of_services">Terms of Services</string>
     <string name="log_out">Log Out</string>
+    <string name="services_at_doorstep">Services at your doorstep</string>
 
     <!-- Google Sign-In -->
     <string name="default_web_client_id">905624307478-ke4mf9eaubh4n9or8sk9o770i7r2l4al.apps.googleusercontent.com</string>
@@ -173,13 +179,20 @@
     <string name="login_error_username">Please enter your email</string>
     <string name="login_error_invalid_email">Please enter a valid email</string>
     <string name="login_error_password">Please enter your password</string>
+    <string name="login_error_wrong_credentials">Wrong email or password. Use the same email you registered with and check for typos.</string>
+    <string name="login_error_no_account">No account found for this email. Please sign up first.</string>
+    <string name="login_error_generic">Could not sign in. Please try again.</string>
+    <string name="login_error_user_disabled">This account has been disabled. Contact support.</string>
+    <string name="login_error_too_many_requests">Too many attempts. Please wait a moment and try again.</string>
+    <string name="login_reset_email_sent">Password reset link sent to your email</string>
+    <string name="login_reset_email_failed">Could not send reset email. Check the address and try again.</string>
     <string name="cd_login_logo">MicroServe logo</string>
     <string name="login_google_not_configured">Google Sign-In is not configured correctly</string>
 
     <!-- Sign up -->
     <string name="sign_up_title">Create Account</string>
-    <string name="sign_up_username_hint">Full name</string>
     <string name="sign_up_email_hint">E-mail</string>
+    <string name="sign_up_username_hint">Username</string>
     <string name="sign_up_mobile_hint">Mobile</string>
     <string name="sign_up_create_button">Create</string>
     <string name="sign_up_already_have_account">Already have an account? Log in</string>
@@ -187,11 +200,14 @@
     <string name="sign_up_error_email">Please enter your e-mail</string>
     <string name="sign_up_error_mobile">Please enter your mobile number</string>
     <string name="sign_up_error_password_length">Password must be at least 6 characters</string>
-    <string name="sign_up_error_email_in_use">This email address is already used in another account</string>
-    <string name="sign_up_error_check_email">Could not verify email right now. Please try again.</string>
-    <string name="sign_up_error_network">Network error. Please check your internet and try again.</string>
-    <string name="sign_up_error_generic">Sign up failed. Please try again.</string>
-    <string name="sign_up_success">Account created successfully</string>
+    <string name="sign_up_success_title">Account created</string>
+    <string name="sign_up_success">Your account was created. Please log in with your email and password.</string>
+    <string name="action_ok">OK</string>
+    <string name="sign_up_error_email_in_use">Email already in use</string>
+    <string name="sign_up_error_check_email">Error checking email</string>
+    <string name="sign_up_error_network">Network error</string>
+    <string name="sign_up_error_generic">Sign up failed</string>
+    <string name="sign_up_success_title">Success</string>
 
     <!-- Edit Profile Strings -->
     <string name="personal_info">Personal Info</string>
@@ -200,6 +216,11 @@
     <string name="phone_number">Phone Number</string>
     <string name="location_address">Location / Address</string>
     <string name="save_changes">Save Changes</string>
+    <string name="edit_profile_btn">Edit Profile</string>
+    <string name="profile_photo_saved">Profile photo saved</string>
+    <string name="profile_photo_save_failed">Failed to save profile photo</string>
+    <string name="profile_save_failed">Failed to save profile</string>
+    <string name="profile_saved">Profile saved successfully</string>
 
     <!-- Discover Screen Strings -->
     <string name="discover_title">Discover</string>
@@ -223,9 +244,29 @@
     <string name="work_address">Level 4, Tech Park, Colombo 03</string>
     <string name="card_number">**** **** **** 4589</string>
     <string name="card_expiry">Expires 12/26</string>
-    <string name="help_subtitle">Hello %1$s, how can we help ?</string>
+
+    <!-- UI Buttons and Labels (from main) -->
+    <string name="btn_edit">Edit</string>
+    <string name="btn_requests">Requests</string>
+    <string name="edit">Edit</string>
+    <string name="delete_request">Delete Request</string>
+    <string name="submit_request">Submit Request</string>
+
+    <!-- Categories (from main) -->
+    <string name="category_label">Category</string>
+    <string name="section_category">Category</string>
+    <string name="category_carpentry">Carpentry</string>
+    <string name="category_cleaning">Cleaning</string>
+    <string name="category_electric">Electric</string>
+    <string name="category_gardening">Gardening</string>
+    <string name="category_handyman">Handyman</string>
+    <string name="category_hvac">HVAC</string>
+    <string name="category_mechanic">Mechanic</string>
+    <string name="category_painting">Painting</string>
+    <string name="category_plumbing">Plumbing</string>
 
     <!-- Get Help Screen -->
+    <string name="help_subtitle">Hello %1$s, how can we help ?</string>
     <string name="get_help_title">Get Help</string>
     <string name="search_help_hint">Search for issues, topics.....</string>
     <string name="help_bookings">Bookings</string>
@@ -236,9 +277,18 @@
     <string name="help_live_chat">Live Chat</string>
     <string name="help_call_hotline">Call Hotline</string>
 
-    <!-- Personal Info Screen -->
+    <!-- Labels and Titles (from main) -->
     <string name="personal_info_title">Personal Info</string>
-    <string name="edit_profile_btn">Edit Profile</string>
+    <string name="enter_your_name_label">Enter Your name</string>
+    <string name="title_label">Title</string>
+    <string name="contact_label">Contact</string>
+    <string name="description_label">Description</string>
+    <string name="title_my_service">My Service</string>
+    <string name="title_requests">Requests</string>
+    <string name="my_service_requests">My Service Requests</string>
+    <string name="section_my_requests">My Requests</string>
+    <string name="no_requests_yet">No requests yet</string>
+    <string name="services_at_door">Services at Door</string>
 
     <!-- Privacy Policy Screen -->
     <string name="privacy_policy_title">Privacy Policy</string>
@@ -249,13 +299,14 @@
 
     <!-- Request Service Screen -->
     <string name="request_a_service">Request a\nService</string>
-    <string name="enter_your_name_label">Enter Your name</string>
-    <string name="title_label">Title</string>
-    <string name="category_label">Category</string>
-    <string name="contact_label">Contact</string>
-    <string name="description_label">Description</string>
-    <string name="submit_request">Submit Request</string>
-
-    <!-- Splash Screen -->
-    <string name="services_at_doorstep">Services at your doorstep</string>
+    <string name="request_service_title">Request Service</string>
+    <string name="request_service_subtitle">Describe what you need — providers can respond</string>
+    <string name="request_service_hint_name">Enter your name</string>
+    <string name="request_service_hint_title">Enter service title</string>
+    <string name="request_service_hint_contact">Enter contact number</string>
+    <string name="request_service_hint_location">Enter your area or address</string>
+    <string name="request_service_hint_description">Describe your service request…</string>
+    <string name="request_service_select_category">Please select a service category</string>
+    <string name="request_service_fill_required">Please fill all required fields</string>
+    <string name="request_service_success">Service request submitted successfully!</string>
 </resources>

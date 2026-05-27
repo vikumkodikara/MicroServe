@@ -162,9 +162,9 @@ object UserStore {
         return addUser(
             context = context,
             name = "Admin",
-            email = "admin@microserve.local",
+            email = "admin@gmail.com",
             phone = "+94 70 000 0000",
-            password = DEFAULT_PASSWORD,
+            password = "Admin123",
             type = TYPE_ADMIN
         )
     }

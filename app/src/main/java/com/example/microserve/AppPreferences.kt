@@ -53,7 +53,7 @@ object AppPreferences {
             .putString(KEY_SESSION_LOCATION, profile.location)
             .putString(KEY_SESSION_PHOTO_URL, profile.photoUrl)
             .putString(KEY_SESSION_ROLE, profile.role)
-            .apply()
+            .commit()
     }
 
     fun isLoggedIn(context: Context): Boolean {
@@ -119,6 +119,23 @@ object AppPreferences {
             .remove(KEY_SESSION_PHOTO_URL)
             .remove(KEY_SESSION_ROLE)
             .apply()
+    }
+    // ── M Points Wallet ──────────────────────────────────────────
+
+    private const val KEY_M_POINTS = "m_points"
+
+    fun getMPoints(context: Context): Int {
+        return prefs(context).getInt(KEY_M_POINTS, 10500)
+    }
+
+    fun setMPoints(context: Context, points: Int) {
+        prefs(context).edit().putInt(KEY_M_POINTS, points.coerceAtLeast(0)).commit()
+    }
+
+    fun addMPoints(context: Context, amount: Int): Int {
+        val newBalance = getMPoints(context) + amount
+        setMPoints(context, newBalance)
+        return newBalance
     }
 
     private fun prefs(context: Context) =

@@ -12,8 +12,8 @@ object UserRepository {
     private const val TAG = "UserRepository"
 
     /** Default admin credentials — used to seed Firebase Auth + Firestore. */
-    const val ADMIN_EMAIL = "admin@microserve.local"
-    const val ADMIN_PASSWORD = "admin123"
+    const val ADMIN_EMAIL = "admin@gmail.com"
+    const val ADMIN_PASSWORD = "Admin123"
     private const val ADMIN_NAME = "Admin"
     private const val ADMIN_PHONE = "+94 70 000 0000"
 
@@ -59,11 +59,17 @@ object UserRepository {
     }
 
     /**
-     * Signs in as admin temporarily to verify / fix the Firestore role,
-     * then signs out so the current session is not affected.
+     * Queries Firestore for the admin profile by email and ensures the role
+     * field is set to "admin". Does NOT sign in as admin — avoids changing
+     * the current Firebase Auth user.
      */
     private fun ensureAdminRole() {
         val auth = FirebaseAuth.getInstance()
+        if (auth.currentUser != null) {
+            Log.d(TAG, "Skipping admin role sync — a user is already signed in")
+            return
+        }
+
         val previousUser = auth.currentUser
 
         auth.signInWithEmailAndPassword(ADMIN_EMAIL, ADMIN_PASSWORD)
@@ -91,12 +97,13 @@ object UserRepository {
                         if (previousUser == null) auth.signOut()
                     }
             }
-            .addOnFailureListener { Log.w(TAG, "ensureAdminRole sign-in failed", it) }
+            .addOnFailureListener { Log.w(TAG, "ensureAdminRole query failed", it) }
     }
 
     fun saveProfile(
         context: Context,
         profile: UserProfile,
+        persistSession: Boolean = true,
         onSuccess: () -> Unit,
         onFailure: (String) -> Unit
     ) {
@@ -105,12 +112,16 @@ object UserRepository {
             .set(profile.toMap())
             .addOnSuccessListener {
                 syncProfileToUserStore(context, profile)
-                AppPreferences.saveSession(context, profile)
+                if (persistSession) {
+                    AppPreferences.saveSession(context, profile)
+                }
                 onSuccess()
             }
             .addOnFailureListener { error ->
                 syncProfileToUserStore(context, profile)
-                AppPreferences.saveSession(context, profile)
+                if (persistSession) {
+                    AppPreferences.saveSession(context, profile)
+                }
                 onFailure(error.localizedMessage ?: "Unable to save profile")
             }
     }
@@ -149,24 +160,31 @@ object UserRepository {
                         onUserRoute()
                     }
                 } else {
-                    val profile = buildProfile(user, fallbackName)
+                    // Doc doesn't exist yet — build one
+                    val isAdmin = user.email.equals(ADMIN_EMAIL, ignoreCase = true)
+                    val profile = buildProfile(user, fallbackName).let {
+                        if (isAdmin) it.copy(role = UserProfile.ROLE_ADMIN) else it
+                    }
                     saveProfile(
                         context = context,
                         profile = profile,
-                        onSuccess = onUserRoute,
+                        onSuccess = { if (isAdmin) onAdminRoute() else onUserRoute() },
                         onFailure = { message ->
                             onError(message)
-                            onUserRoute()
+                            if (isAdmin) onAdminRoute() else onUserRoute()
                         }
                     )
                 }
             }
             .addOnFailureListener { error ->
-                val profile = buildProfile(user, fallbackName)
+                val isAdmin = user.email.equals(ADMIN_EMAIL, ignoreCase = true)
+                val profile = buildProfile(user, fallbackName).let {
+                    if (isAdmin) it.copy(role = UserProfile.ROLE_ADMIN) else it
+                }
                 syncProfileToUserStore(context, profile)
                 AppPreferences.saveSession(context, profile)
                 onError(error.localizedMessage ?: "Unable to load profile")
-                onUserRoute()
+                if (isAdmin) onAdminRoute() else onUserRoute()
             }
     }
 

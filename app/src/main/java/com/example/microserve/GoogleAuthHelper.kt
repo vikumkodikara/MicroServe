@@ -48,7 +48,7 @@ object GoogleAuthHelper {
     ) {
         val idToken = account.idToken
         if (!idToken.isNullOrBlank()) {
-            signInWithGoogleIdToken(idToken, onSuccess, onError)
+            signInWithGoogleIdToken(account, idToken, onSuccess, onError)
             return
         }
 
@@ -56,6 +56,7 @@ object GoogleAuthHelper {
     }
 
     private fun signInWithGoogleIdToken(
+        account: GoogleSignInAccount,
         idToken: String,
         onSuccess: (FirebaseUser) -> Unit,
         onError: (String) -> Unit
@@ -71,8 +72,9 @@ object GoogleAuthHelper {
                     onSuccess(user)
                 }
             }
-            .addOnFailureListener { error ->
-                onError(error.localizedMessage ?: "Google sign-in failed")
+            .addOnFailureListener {
+                // Invalid/expired token (common on debug builds) — try email-based fallback.
+                signInWithGoogleEmailFallback(account, onSuccess, onError)
             }
     }
 

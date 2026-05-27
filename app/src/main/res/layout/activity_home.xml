@@ -384,94 +384,26 @@
                         android:paddingTop="54dp"
                         android:paddingBottom="@dimen/home_nav_scroll_bottom_padding">
 
-                        <androidx.cardview.widget.CardView
-                            android:id="@+id/jobCard1"
+                        <TextView
+                            android:id="@+id/tvNoHomeJobs"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginBottom="18dp"
-                            app:cardBackgroundColor="@color/white_card_bg"
-                            app:cardCornerRadius="24dp"
-                            app:cardElevation="4dp"
-                            app:cardMaxElevation="4dp"
-                            app:cardUseCompatPadding="false">
+                            android:gravity="center"
+                            android:paddingVertical="24dp"
+                            android:text="@string/home_no_jobs_yet"
+                            android:textColor="@color/admin_text_secondary"
+                            android:textSize="14sp"
+                            android:visibility="gone" />
 
-                            <LinearLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:orientation="vertical"
-                                android:padding="18dp">
-
-                                <androidx.cardview.widget.CardView
-                                    android:layout_width="match_parent"
-                                    android:layout_height="182dp"
-                                    app:cardBackgroundColor="@color/admin_quick_action_bg"
-                                    app:cardCornerRadius="18dp"
-                                    app:cardElevation="0dp">
-
-                                    <ImageView
-                                        android:id="@+id/jobImage1"
-                                        android:layout_width="match_parent"
-                                        android:layout_height="match_parent"
-                                        android:contentDescription="@string/cd_job_done_preview"
-                                        android:scaleType="centerCrop"
-                                        android:src="@drawable/home_job_done_placeholder" />
-                                </androidx.cardview.widget.CardView>
-
-                                <TextView
-                                    android:id="@+id/jobTitle1"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginTop="16dp"
-                                    android:letterSpacing="-0.01"
-                                    android:lineSpacingExtra="2dp"
-                                    android:text="Service: House Painting"
-                                    android:textColor="@color/admin_text_primary"
-                                    android:textSize="19sp"
-                                    android:textStyle="bold" />
-
-                                <TextView
-                                    android:id="@+id/jobName1"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginTop="8dp"
-                                    android:lineSpacingExtra="4dp"
-                                    android:text="Name: Nimal Perera"
-                                    android:textColor="@color/admin_text_secondary"
-                                    android:textSize="14sp" />
-
-                                <TextView
-                                    android:id="@+id/jobExperience1"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginTop="4dp"
-                                    android:text="Experience: 6+ Years"
-                                    android:textColor="@color/admin_text_secondary"
-                                    android:textSize="14sp" />
-
-                                <LinearLayout
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginTop="10dp"
-                                    android:orientation="horizontal">
-
-                                    <TextView
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:text="Service Done Area"
-                                        android:textColor="@color/admin_text_primary"
-                                        android:textSize="14sp"
-                                        android:textStyle="bold" />
-
-                                    <TextView
-                                        android:id="@+id/jobArea1"
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:text=" - Karaptiya, Galle"
-                                        android:textColor="@color/admin_text_secondary"
-                                        android:textSize="14sp" />
-                                </LinearLayout>
-                            </LinearLayout>
-                        </androidx.cardview.widget.CardView>
+                        <androidx.recyclerview.widget.RecyclerView
+                            android:id="@+id/homeJobsRecyclerView"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:nestedScrollingEnabled="false"
+                            android:overScrollMode="never"
+                            tools:itemCount="1"
+                            tools:listitem="@layout/item_home_job_done" />
                     </LinearLayout>
                 </androidx.core.widget.NestedScrollView>
 
@@ -492,7 +424,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:includeFontPadding="false"
-                        android:text="Previously Done Jobs"
+                        android:text="@string/home_previously_done_jobs"
                         android:textColor="@color/admin_text_primary"
                         android:textSize="20sp"
                         android:textStyle="bold" />

@@ -234,7 +234,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="1dp"
                         android:layout_marginTop="16dp"
-                        android:background="#13000000" />
+                        android:background="@color/admin_text_secondary"
+                        android:alpha="0.2" />
 
                     <LinearLayout
                         android:id="@+id/rowGetHelp"
@@ -264,10 +265,9 @@
                             android:textSize="18sp" />
 
                         <ImageView
-                            android:layout_width="20dp"
-                            android:layout_height="20dp"
-                            android:src="@android:drawable/ic_media_next"
-                            app:tint="#A5A5A5" />
+                            android:layout_width="22dp"
+                            android:layout_height="22dp"
+                            android:src="@drawable/ic_chevron_right" />
                     </LinearLayout>
 
                     <LinearLayout
@@ -298,10 +298,9 @@
                             android:textSize="18sp" />
 
                         <ImageView
-                            android:layout_width="20dp"
-                            android:layout_height="20dp"
-                            android:src="@android:drawable/ic_media_next"
-                            app:tint="#A5A5A5" />
+                            android:layout_width="22dp"
+                            android:layout_height="22dp"
+                            android:src="@drawable/ic_chevron_right" />
                     </LinearLayout>
 
                     <LinearLayout
@@ -319,8 +318,7 @@
                         <ImageView
                             android:layout_width="36dp"
                             android:layout_height="36dp"
-                            android:src="@drawable/contract"
-                            app:tint="@color/admin_purple_dark" />
+                            android:src="@drawable/ic_setting_terms" />
 
                         <TextView
                             android:layout_width="0dp"
@@ -332,10 +330,9 @@
                             android:textSize="18sp" />
 
                         <ImageView
-                            android:layout_width="20dp"
-                            android:layout_height="20dp"
-                            android:src="@android:drawable/ic_media_next"
-                            app:tint="#A5A5A5" />
+                            android:layout_width="22dp"
+                            android:layout_height="22dp"
+                            android:src="@drawable/ic_chevron_right" />
                     </LinearLayout>
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
@@ -345,24 +342,17 @@
                 android:layout_width="match_parent"
                 android:layout_height="56dp"
                 android:layout_marginTop="18dp"
-                android:background="@drawable/delete_user_button_bg"
+                android:background="@drawable/logout_button_bg"
                 android:text="@string/log_out"
                 android:textAllCaps="false"
                 android:textColor="@color/white"
-                android:textSize="20sp"
-                android:textStyle="bold|italic" />
+                android:textSize="18sp"
+                android:textStyle="bold" />
 
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
 
-    <com.google.android.material.bottomnavigation.BottomNavigationView
-        android:id="@+id/bottomNavigation"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@drawable/admin_bottom_nav_bg"
-        android:elevation="10dp"
-        app:itemIconTint="@color/white"
-        app:itemTextColor="@color/white"
-        app:menu="@menu/admin_bottom_nav_menu" />
+    <!-- ═══════════ BOTTOM NAVIGATION ═══════════ -->
+    <include layout="@layout/view_admin_bottom_nav" />
 
 </LinearLayout>
