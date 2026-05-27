@@ -61,6 +61,7 @@ object AdminBottomNavHelper {
                     )
 
                     // Entrance animation: scale in with overshoot
+                    bubble.visibility = View.VISIBLE
                     bubble.scaleX = 0f
                     bubble.scaleY = 0f
                     bubble.animate()

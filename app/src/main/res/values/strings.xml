@@ -159,6 +159,7 @@
     <string name="sign_up_error_check_email">Error checking email</string>
     <string name="sign_up_error_network">Network error</string>
     <string name="sign_up_error_generic">Sign up failed</string>
+    <string name="sign_up_success_title">Success</string>
 
     <!-- Edit Profile Strings -->
     <string name="personal_info">Personal Info</string>
