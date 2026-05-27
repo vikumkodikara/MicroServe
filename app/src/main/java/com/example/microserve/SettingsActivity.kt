@@ -140,6 +140,16 @@ class SettingsActivity : AppCompatActivity() {
                 val language = languages[which]
                 AppPreferences.setLanguage(this, language)
                 binding.tvLanguageValue.text = language
+
+                val langCode = when (language) {
+                    "Sinhala" -> "si"
+                    "Tamil" -> "ta"
+                    else -> "en"
+                }
+                androidx.appcompat.app.AppCompatDelegate.setApplicationLocales(
+                    androidx.core.os.LocaleListCompat.forLanguageTags(langCode)
+                )
+
                 Toast.makeText(this, "Language set to $language", Toast.LENGTH_SHORT).show()
                 dialog.dismiss()
             }

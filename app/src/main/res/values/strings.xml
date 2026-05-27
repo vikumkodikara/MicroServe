@@ -179,4 +179,39 @@
     <string name="work_address">Level 4, Tech Park, Colombo 03</string>
     <string name="card_number">**** **** **** 4589</string>
     <string name="card_expiry">Expires 12/26</string>
+    <string name="help_subtitle">Hello %1$s, how can we help ?</string>
+
+    <!-- Get Help Screen -->
+    <string name="get_help_title">Get Help</string>
+    <string name="search_help_hint">Search for issues, topics.....</string>
+    <string name="help_bookings">Bookings</string>
+    <string name="help_payments">Payments</string>
+    <string name="help_account">Account</string>
+    <string name="help_safety_legal">Safety &amp; Legal</string>
+    <string name="help_still_need">Still need help ?</string>
+    <string name="help_live_chat">Live Chat</string>
+    <string name="help_call_hotline">Call Hotline</string>
+
+    <!-- Personal Info Screen -->
+    <string name="personal_info_title">Personal Info</string>
+    <string name="edit_profile_btn">Edit Profile</string>
+
+    <!-- Privacy Policy Screen -->
+    <string name="privacy_policy_title">Privacy Policy</string>
+    <string name="i_agree">I Agree</string>
+
+    <!-- Terms of Service Screen -->
+    <string name="terms_of_service_title">Terms of Service</string>
+
+    <!-- Request Service Screen -->
+    <string name="request_a_service">Request a\nService</string>
+    <string name="enter_your_name_label">Enter Your name</string>
+    <string name="title_label">Title</string>
+    <string name="category_label">Category</string>
+    <string name="contact_label">Contact</string>
+    <string name="description_label">Description</string>
+    <string name="submit_request">Submit Request</string>
+
+    <!-- Splash Screen -->
+    <string name="services_at_doorstep">Services at your doorstep</string>
 </resources>

@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white"
+    android:background="@color/light_background"
     tools:context=".RequestDetailActivity">
 
     <ScrollView
@@ -100,7 +100,7 @@
                     android:layout_height="wrap_content"
                     android:fontFamily="sans-serif-medium"
                     android:text="@string/service_request_details"
-                    android:textColor="@color/black"
+                    android:textColor="@color/admin_text_primary"
                     android:textSize="18sp"
                     android:textStyle="bold" />
 
@@ -109,7 +109,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="12dp"
-                    android:textColor="@color/black"
+                    android:textColor="@color/admin_text_primary"
                     android:textSize="15sp"
                     tools:text="Service: Painting" />
 
@@ -118,7 +118,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
-                    android:textColor="@color/black"
+                    android:textColor="@color/admin_text_primary"
                     android:textSize="15sp"
                     tools:text="Location: Kalutara, Western Province" />
 
@@ -127,7 +127,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
-                    android:textColor="@color/black"
+                    android:textColor="@color/admin_text_primary"
                     android:textSize="15sp"
                     tools:text="Job: Paint house (20 sq.ft)" />
 
@@ -155,7 +155,7 @@
                 android:layout_marginTop="24dp"
                 android:fontFamily="sans-serif-medium"
                 android:text="@string/previous_bids"
-                android:textColor="@color/black"
+                android:textColor="@color/admin_text_primary"
                 android:textSize="18sp"
                 android:textStyle="bold" />
 

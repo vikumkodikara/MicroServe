@@ -32,7 +32,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/backBtn"
             android:layout_marginTop="20dp"
-            android:text="Request a\nService"
+            android:text="@string/request_a_service"
             android:textColor="@color/white"
             android:textSize="35sp"
             android:textStyle="bold" />
@@ -78,7 +78,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Enter Your name"
+                    android:text="@string/enter_your_name_label"
                     android:textColor="@color/admin_text_primary"
                     android:textSize="16sp"
                     android:textStyle="bold" />
@@ -99,7 +99,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="16dp"
-                    android:text="Title"
+                    android:text="@string/title_label"
                     android:textColor="@color/admin_text_primary"
                     android:textSize="16sp"
                     android:textStyle="bold" />
@@ -120,7 +120,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="16dp"
-                    android:text="Category"
+                    android:text="@string/category_label"
                     android:textColor="@color/admin_text_primary"
                     android:textSize="16sp"
                     android:textStyle="bold" />
@@ -138,7 +138,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="16dp"
-                    android:text="Contact"
+                    android:text="@string/contact_label"
                     android:textColor="@color/admin_text_primary"
                     android:textSize="16sp"
                     android:textStyle="bold" />
@@ -159,7 +159,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="16dp"
-                    android:text="Location"
+                    android:text="@string/location_label"
                     android:textColor="@color/admin_text_primary"
                     android:textSize="16sp"
                     android:textStyle="bold" />
@@ -180,7 +180,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="16dp"
-                    android:text="Description"
+                    android:text="@string/description_label"
                     android:textColor="@color/admin_text_primary"
                     android:textSize="16sp"
                     android:textStyle="bold" />
@@ -206,7 +206,7 @@
                     android:layout_marginTop="24dp"
                     android:insetTop="0dp"
                     android:insetBottom="0dp"
-                    android:text="Submit Request"
+                    android:text="@string/submit_request"
                     android:textAllCaps="false"
                     android:textColor="@color/white"
                     android:textSize="16sp"

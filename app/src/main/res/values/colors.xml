@@ -43,4 +43,6 @@
     <color name="login_auth_purple_bottom">#483C72</color>
     <color name="google_button_text">#3C4043</color>
     <color name="google_button_stroke">#DADCE0</color>
+    <color name="white_card_bg">#FFFFFF</color>
+    <color name="home_header_center">#5F5193</color>
 </resources>

@@ -13,6 +13,7 @@ class MicroServeApp : Application() {
         FirebaseApp.initializeApp(this)
         enableFirestoreOfflineCache()
         applySavedTheme()
+        applySavedLanguage()
         UserRepository.ensureAdminExists()
     }
 
@@ -30,5 +31,17 @@ class MicroServeApp : Application() {
             AppCompatDelegate.MODE_NIGHT_NO
         }
         AppCompatDelegate.setDefaultNightMode(mode)
+    }
+
+    private fun applySavedLanguage() {
+        val language = AppPreferences.getLanguage(this)
+        val langCode = when (language) {
+            "Sinhala" -> "si"
+            "Tamil" -> "ta"
+            else -> "en"
+        }
+        AppCompatDelegate.setApplicationLocales(
+            androidx.core.os.LocaleListCompat.forLanguageTags(langCode)
+        )
     }
 }

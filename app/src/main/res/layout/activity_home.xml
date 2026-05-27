@@ -389,7 +389,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginBottom="18dp"
-                            app:cardBackgroundColor="@android:color/white"
+                            app:cardBackgroundColor="@color/white_card_bg"
                             app:cardCornerRadius="24dp"
                             app:cardElevation="4dp"
                             app:cardMaxElevation="4dp"
@@ -404,7 +404,7 @@
                                 <androidx.cardview.widget.CardView
                                     android:layout_width="match_parent"
                                     android:layout_height="182dp"
-                                    app:cardBackgroundColor="#EBE9E6"
+                                    app:cardBackgroundColor="@color/admin_quick_action_bg"
                                     app:cardCornerRadius="18dp"
                                     app:cardElevation="0dp">
 
@@ -561,13 +561,14 @@
                 android:layout_marginEnd="14dp"
                 android:contentDescription="Account"
                 android:scaleType="fitCenter"
-                android:src="@drawable/user" />
+                android:src="@drawable/user"
+                app:tint="@color/white" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Account"
-                android:textColor="#1A1A1A"
+                android:textColor="@color/white"
                 android:textSize="26sp"
                 android:fontFamily="sans-serif-medium" />
         </LinearLayout>
@@ -588,13 +589,14 @@
                 android:layout_marginEnd="14dp"
                 android:contentDescription="About us"
                 android:scaleType="fitCenter"
-                android:src="@drawable/location" />
+                android:src="@drawable/location"
+                app:tint="@color/white" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="About us"
-                android:textColor="#1A1A1A"
+                android:textColor="@color/white"
                 android:textSize="26sp"
                 android:fontFamily="sans-serif-medium" />
         </LinearLayout>
@@ -615,13 +617,14 @@
                 android:layout_marginEnd="14dp"
                 android:contentDescription="Contact us"
                 android:scaleType="fitCenter"
-                android:src="@drawable/call" />
+                android:src="@drawable/call"
+                app:tint="@color/white" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Contact us"
-                android:textColor="#1A1A1A"
+                android:textColor="@color/white"
                 android:textSize="26sp"
                 android:fontFamily="sans-serif-medium" />
         </LinearLayout>
@@ -642,13 +645,14 @@
                 android:layout_marginEnd="14dp"
                 android:contentDescription="Wallet"
                 android:scaleType="fitCenter"
-                android:src="@drawable/wallet" />
+                android:src="@drawable/wallet"
+                app:tint="@color/white" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Wallet"
-                android:textColor="#1A1A1A"
+                android:textColor="@color/white"
                 android:textSize="26sp"
                 android:fontFamily="sans-serif-medium" />
         </LinearLayout>
@@ -669,13 +673,14 @@
                 android:layout_marginEnd="14dp"
                 android:contentDescription="Feedback"
                 android:scaleType="fitCenter"
-                android:src="@drawable/feedback" />
+                android:src="@drawable/feedback"
+                app:tint="@color/white" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Feedback"
-                android:textColor="#1A1A1A"
+                android:textColor="@color/white"
                 android:textSize="26sp"
                 android:fontFamily="sans-serif-medium" />
         </LinearLayout>

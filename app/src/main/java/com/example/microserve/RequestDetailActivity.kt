@@ -64,7 +64,7 @@ class RequestDetailActivity : AppCompatActivity() {
 
     private fun bindRequest(request: RequestStore.UserRequest) {
         val profile = BidSampleData.getProfile(request)
-        val serviceName = CategoryCatalog.findByStoreKey(request.category)?.displayName
+        val serviceName = CategoryCatalog.findByStoreKey(request.category)?.let { getString(it.nameResId) }
             ?: request.category
 
         binding.requesterNameText.text = request.requesterName
