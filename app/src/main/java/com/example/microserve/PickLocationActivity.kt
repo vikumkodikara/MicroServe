@@ -1,11 +1,15 @@
 package com.example.microserve
 
 import android.content.Intent
+import android.graphics.PorterDuff
 import android.os.Bundle
 import android.view.View
 import android.widget.TextView
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
 import com.google.android.material.button.MaterialButton
 import org.osmdroid.config.Configuration
 import org.osmdroid.events.MapEventsReceiver
@@ -43,11 +47,32 @@ class PickLocationActivity : AppCompatActivity() {
         tvSelectedAddress = findViewById(R.id.tvSelectedAddress)
         tvCoordinates = findViewById(R.id.tvCoordinates)
 
+        setupWindowInsets()
         findViewById<View>(R.id.btnBack).setOnClickListener { finish() }
         findViewById<MaterialButton>(R.id.btnConfirmLocation).setOnClickListener { confirmSelection() }
 
         setupMap()
         updateSummary()
+    }
+
+    private fun setupWindowInsets() {
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.pickLocationRoot)) { _, insets ->
+            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
+            findViewById<View>(R.id.headerContainer).setPadding(
+                findViewById<View>(R.id.headerContainer).paddingLeft,
+                systemBars.top,
+                findViewById<View>(R.id.headerContainer).paddingRight,
+                findViewById<View>(R.id.headerContainer).paddingBottom
+            )
+            val footer = findViewById<View>(R.id.footerBar)
+            val lp = footer.layoutParams
+            if (lp.height < 38 + systemBars.bottom) {
+                lp.height = 38 + systemBars.bottom
+                footer.layoutParams = lp
+            }
+            footer.setPadding(0, 0, 0, systemBars.bottom)
+            insets
+        }
     }
 
     private fun setupMap() {
@@ -78,6 +103,12 @@ class PickLocationActivity : AppCompatActivity() {
             position = GeoPoint(lat, lng)
             setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM)
             isDraggable = true
+            icon = ContextCompat.getDrawable(this@PickLocationActivity, R.drawable.location)?.apply {
+                setColorFilter(
+                    ContextCompat.getColor(this@PickLocationActivity, R.color.admin_purple_dark),
+                    PorterDuff.Mode.SRC_IN
+                )
+            }
             setOnMarkerDragListener(object : Marker.OnMarkerDragListener {
                 override fun onMarkerDrag(marker: Marker) {
                     selectedLat = marker.position.latitude

@@ -9,7 +9,8 @@
     <string name="home_ad_label_name_value">Name: %1$s</string>
     <string name="home_ad_label_contact_value">Contact: %1$s</string>
     <string name="home_ad_title_format">%1$s Service</string>
-    <string name="post_ads_image_crop_hint">Photo fills the card — tap again to change image</string>
+    <string name="post_ads_image_crop_hint">After choosing a photo, drag and zoom to fit the square — same view on Home</string>
+    <string name="post_ads_crop_title">Adjust photo</string>
     <string name="home_job_service_format">Service: %1$s</string>
     <string name="home_job_name_format">Name: %1$s</string>
     <string name="home_job_contact_format">Contact: %1$s</string>
@@ -21,6 +22,87 @@
     <string name="nav_home">Home</string>
     <string name="nav_post">Post</string>
     <string name="nav_profile">Profile</string>
+
+    <!-- Content Descriptions -->
+    <string name="cd_settings">Settings</string>
+    <string name="cd_back">Go back</string>
+    <string name="cd_delete">Delete</string>
+    <string name="cd_category">Category</string>
+
+    <!-- Category Detail -->
+    <string name="description_label_format">Description :- %1$s</string>
+    <string name="no_category_requests">No requests in this category yet.</string>
+
+    <!-- Service Request Detail -->
+    <string name="service_request_details">Service Request Details</string>
+    <string name="service_label">Service</string>
+    <string name="location_label">Location</string>
+    <string name="post_ads_province_label">Province</string>
+    <string name="post_ads_district_label">District</string>
+    <string name="post_ads_city_label">City</string>
+    <string name="post_ads_select_option">-Select-</string>
+    <string name="pick_on_map">Select exact place on map</string>
+    <string name="post_ads_location_not_selected">Select province, district, and city first</string>
+    <string name="post_ads_location_pending_map">%1$s, %2$s, %3$s — tap map to pin exact place</string>
+    <string name="post_ads_select_location_first">Please select province, district, and city first</string>
+    <string name="post_ads_pick_map_location">Please pin your exact location on the map</string>
+    <string name="post_ads_select_category">Please select a service category</string>
+    <string name="post_ads_enter_provider">Please enter provider name</string>
+    <string name="post_ads_enter_contact">Please enter contact number</string>
+    <string name="post_ads_enter_email">Please enter email</string>
+    <string name="post_ads_posted_success">Service posted successfully</string>
+    <string name="post_ads_posted_title">Posted</string>
+    <string name="post_ads_posted_success_stay">Your advertisement was added. You can view it below or on the Home screen when you go there.</string>
+    <string name="post_ads_image_selected">Image selected</string>
+    <string name="post_ads_change_image">Tap to change image</string>
+    <string name="post_ads_image_save_failed">Could not save the selected image. Please try another photo.</string>
+    <string name="post_ads_previous_posts">Previous advertisement</string>
+    <string name="post_ads_no_previous_posts">No advertisements yet. Tap Post above to add your first listing.</string>
+    <string name="post_ads_previous_post_category">Service - %1$s</string>
+    <string name="post_ads_previous_post_name">Name - %1$s</string>
+    <string name="post_ads_previous_post_contact">Contact - %1$s</string>
+    <string name="post_ads_previous_post_location">Location - %1$s</string>
+    <string name="post_ads_edit">Edit</string>
+    <string name="post_ads_post_image">Post image</string>
+    <string name="post_ads_swipe_hint">Swipe sideways to see more posts</string>
+    <string name="post_ads_add_image">Tap to add image (optional)</string>
+    <string name="post_ads_add_image_label">Add Image (optional)</string>
+    <string name="post_ads_deleted">Post deleted</string>
+    <string name="post_ads_updated">Post updated successfully</string>
+    <string name="pick_location_title">Pin exact location</string>
+    <string name="pick_location_subtitle">Mark where you will provide the service</string>
+    <string name="pick_location_hint">Tap the map or drag the purple pin to set your exact place</string>
+    <string name="pick_location_drag_hint">Drag pin to adjust</string>
+    <string name="pick_location_selected_label">Selected area</string>
+    <string name="pick_location_coords_label">GPS coordinates</string>
+    <string name="confirm_location">Confirm location</string>
+    <string name="pick_location_area_format">Area: %1$s</string>
+    <string name="pick_location_coords_format">Coordinates: %1$s, %2$s</string>
+    <string name="pick_location_pin_format">Pinned at %1$s, %2$s</string>
+    <string name="job_label">Job</string>
+    <string name="previous_bids">Previous bids</string>
+    <string name="bid_button">Bid</string>
+    <string name="purchase_button">Purchase</string>
+    <string name="age_label_format">Age: %1$d</string>
+    <string name="bid_price_format">Bid Price: Rs. %1$,d</string>
+    <string name="bid_submitted_toast">Bid submitted</string>
+    <string name="purchase_confirmed_toast">Purchase confirmed for %1$s</string>
+    <string name="request_not_found">Request not found</string>
+    <string name="detail_row_format">%1$s: %2$s</string>
+
+    <!-- Place a Bid -->
+    <string name="place_bid_title">Place a\nbid</string>
+    <string name="bid_amount_label">Bid Amount</string>
+    <string name="bid_amount_hint">Rs.</string>
+    <string name="completion_time_label">Completion Time</string>
+    <string name="completion_time_hint">xxxxh</string>
+    <string name="agree_to_terms">I agree to terms</string>
+    <string name="place_bid_submit">PLACE BID</string>
+    <string name="bid_amount_invalid">Enter a valid bid amount</string>
+    <string name="completion_time_invalid">Enter completion time in hours</string>
+    <string name="terms_not_agreed">Please agree to terms</string>
+
+    <!-- Settings / Profile -->
     <string name="settings">Settings</string>
     <string name="dummy_user_name">Nethmina Malshan</string>
     <string name="edit_profile">Edit Profile</string>
@@ -114,17 +196,14 @@
     <string name="card_number">**** **** **** 4589</string>
     <string name="card_expiry">Expires 12/26</string>
 
-    <!-- UI Buttons and Labels -->
+    <!-- UI Buttons and Labels (from main) -->
     <string name="btn_edit">Edit</string>
     <string name="btn_requests">Requests</string>
     <string name="edit">Edit</string>
     <string name="delete_request">Delete Request</string>
     <string name="submit_request">Submit Request</string>
-    <string name="bid_button">Place Bid</string>
-    <string name="purchase_button">Purchase</string>
-    <string name="purchase_confirmed_toast">Purchase confirmed from %1$s</string>
 
-    <!-- Categories -->
+    <!-- Categories (from main) -->
     <string name="category_label">Category</string>
     <string name="section_category">Category</string>
     <string name="category_carpentry">Carpentry</string>
@@ -137,24 +216,23 @@
     <string name="category_painting">Painting</string>
     <string name="category_plumbing">Plumbing</string>
 
-    <!-- Help Section -->
+    <!-- Get Help Screen -->
+    <string name="help_subtitle">Hello %1$s, how can we help ?</string>
     <string name="get_help_title">Get Help</string>
-    <string name="help_subtitle">How can we help you?</string>
-    <string name="search_help_hint">Search help</string>
+    <string name="search_help_hint">Search for issues, topics.....</string>
     <string name="help_bookings">Bookings</string>
     <string name="help_payments">Payments</string>
     <string name="help_account">Account</string>
     <string name="help_safety_legal">Safety &amp; Legal</string>
-    <string name="help_still_need">Still need help?</string>
-    <string name="help_call_hotline">Call Hotline</string>
+    <string name="help_still_need">Still need help ?</string>
     <string name="help_live_chat">Live Chat</string>
+    <string name="help_call_hotline">Call Hotline</string>
 
-    <!-- Labels and Titles -->
+    <!-- Labels and Titles (from main) -->
     <string name="personal_info_title">Personal Info</string>
-    <string name="enter_your_name_label">Name</string>
+    <string name="enter_your_name_label">Enter Your name</string>
     <string name="title_label">Title</string>
     <string name="contact_label">Contact</string>
-    <string name="location_label">Location</string>
     <string name="description_label">Description</string>
     <string name="title_my_service">My Service</string>
     <string name="title_requests">Requests</string>
@@ -162,21 +240,24 @@
     <string name="section_my_requests">My Requests</string>
     <string name="no_requests_yet">No requests yet</string>
     <string name="services_at_door">Services at Door</string>
-    <string name="service_request_details">Service Request Details</string>
-    <string name="previous_bids">Previous Bids</string>
-    <string name="request_a_service">Request a Service</string>
-    <string name="request_not_found">Request not found</string>
-    <string name="age_label_format">Age: %1$d</string>
-    <string name="detail_row_format">%1$s: %2$s</string>
-    <string name="job_label">Job</string>
-    <string name="service_label">Service</string>
-    <string name="bid_price_format">Rs. %1$.2f</string>
 
-    <!-- Policies -->
+    <!-- Privacy Policy Screen -->
     <string name="privacy_policy_title">Privacy Policy</string>
-    <string name="terms_of_service_title">Terms of Service</string>
-    <string name="i_agree">I agree</string>
+    <string name="i_agree">I Agree</string>
 
-    <!-- Accessibility -->
-    <string name="cd_back">Back</string>
+    <!-- Terms of Service Screen -->
+    <string name="terms_of_service_title">Terms of Service</string>
+
+    <!-- Request Service Screen -->
+    <string name="request_a_service">Request a\nService</string>
+    <string name="request_service_title">Request Service</string>
+    <string name="request_service_subtitle">Describe what you need — providers can respond</string>
+    <string name="request_service_hint_name">Enter your name</string>
+    <string name="request_service_hint_title">Enter service title</string>
+    <string name="request_service_hint_contact">Enter contact number</string>
+    <string name="request_service_hint_location">Enter your area or address</string>
+    <string name="request_service_hint_description">Describe your service request…</string>
+    <string name="request_service_select_category">Please select a service category</string>
+    <string name="request_service_fill_required">Please fill all required fields</string>
+    <string name="request_service_success">Service request submitted successfully!</string>
 </resources>

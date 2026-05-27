@@ -157,26 +157,44 @@
                     app:strokeColor="#D8D2E8"
                     app:strokeWidth="1dp">
 
-                    <FrameLayout
+                    <androidx.constraintlayout.widget.ConstraintLayout
                         android:layout_width="match_parent"
-                        android:layout_height="200dp">
+                        android:layout_height="wrap_content">
+
+                        <View
+                            android:id="@+id/imageSquareGuide"
+                            android:layout_width="0dp"
+                            android:layout_height="0dp"
+                            android:visibility="invisible"
+                            app:layout_constraintDimensionRatio="1:1"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
 
                         <ImageView
                             android:id="@+id/selectedImagePreview"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
+                            android:layout_width="0dp"
+                            android:layout_height="0dp"
+                            android:background="@color/admin_quick_action_bg"
                             android:contentDescription="Selected image"
                             android:scaleType="centerCrop"
-                            android:src="@drawable/home_job_done_placeholder" />
+                            android:src="@drawable/home_job_done_placeholder"
+                            app:layout_constraintBottom_toBottomOf="@id/imageSquareGuide"
+                            app:layout_constraintEnd_toEndOf="@id/imageSquareGuide"
+                            app:layout_constraintStart_toStartOf="@id/imageSquareGuide"
+                            app:layout_constraintTop_toTopOf="@id/imageSquareGuide" />
 
                         <LinearLayout
                             android:id="@+id/addImagePlaceholder"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_gravity="center"
                             android:gravity="center"
                             android:orientation="vertical"
-                            android:padding="16dp">
+                            android:padding="16dp"
+                            app:layout_constraintBottom_toBottomOf="@id/imageSquareGuide"
+                            app:layout_constraintEnd_toEndOf="@id/imageSquareGuide"
+                            app:layout_constraintStart_toStartOf="@id/imageSquareGuide"
+                            app:layout_constraintTop_toTopOf="@id/imageSquareGuide">
 
                             <ImageView
                                 android:layout_width="44dp"
@@ -198,17 +216,19 @@
 
                         <TextView
                             android:id="@+id/tvImageChangeHint"
-                            android:layout_width="match_parent"
+                            android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:layout_gravity="bottom"
                             android:background="@drawable/ad_card_image_scrim"
                             android:gravity="center"
                             android:paddingVertical="8dp"
                             android:text="@string/post_ads_change_image"
                             android:textColor="@color/white"
                             android:textSize="12sp"
-                            android:visibility="gone" />
-                    </FrameLayout>
+                            android:visibility="gone"
+                            app:layout_constraintBottom_toBottomOf="@id/imageSquareGuide"
+                            app:layout_constraintEnd_toEndOf="@id/imageSquareGuide"
+                            app:layout_constraintStart_toStartOf="@id/imageSquareGuide" />
+                    </androidx.constraintlayout.widget.ConstraintLayout>
                 </com.google.android.material.card.MaterialCardView>
 
                 <TextView

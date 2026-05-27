@@ -2,12 +2,14 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/requestServiceRoot"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/admin_bg_light"
+    android:background="@color/light_background"
+    android:clipChildren="false"
+    android:clipToPadding="false"
     tools:context=".RequestServiceActivity">
 
-    <!-- ═══════════ HEADER ═══════════ -->
     <RelativeLayout
         android:id="@+id/headerContainer"
         android:layout_width="0dp"
@@ -23,52 +25,64 @@
             android:id="@+id/backBtn"
             android:layout_width="34dp"
             android:layout_height="34dp"
-            android:contentDescription="Back"
+            android:contentDescription="@string/cd_back"
             android:padding="6dp"
             android:src="@drawable/back_arrow" />
 
         <TextView
+            android:id="@+id/tvRequestServiceTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/backBtn"
-            android:layout_marginTop="20dp"
-            android:text="@string/request_a_service"
+            android:layout_marginTop="16dp"
+            android:text="@string/request_service_title"
             android:textColor="@color/white"
-            android:textSize="35sp"
+            android:textSize="32sp"
             android:textStyle="bold" />
 
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/tvRequestServiceTitle"
+            android:layout_marginTop="4dp"
+            android:text="@string/request_service_subtitle"
+            android:textColor="#E8E0FF"
+            android:textSize="14sp" />
+
         <ImageView
-            android:layout_width="140dp"
-            android:layout_height="140dp"
+            android:layout_width="120dp"
+            android:layout_height="120dp"
             android:layout_alignParentEnd="true"
             android:layout_alignParentBottom="true"
-            android:layout_marginEnd="26dp"
-            android:contentDescription="Request illustration"
+            android:layout_marginEnd="20dp"
+            android:contentDescription="@string/request_service_title"
             android:src="@drawable/request" />
-
     </RelativeLayout>
 
-    <!-- ═══════════ BLACK BORDERED CARD ═══════════ -->
     <FrameLayout
         android:id="@+id/blackFrame"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginHorizontal="16dp"
         android:layout_marginTop="10dp"
-        android:layout_marginBottom="16dp"
+        android:layout_marginBottom="8dp"
         android:background="@drawable/post_form_card"
         android:padding="2dp"
-        app:layout_constraintBottom_toTopOf="@id/footerBar"
+        app:layout_constraintBottom_toTopOf="@id/customBottomNav"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/headerContainer">
 
         <androidx.core.widget.NestedScrollView
+            android:id="@+id/requestServiceScrollView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:clipToPadding="false"
             android:overScrollMode="never"
-            android:padding="20dp">
+            android:paddingStart="16dp"
+            android:paddingTop="16dp"
+            android:paddingEnd="16dp"
+            android:paddingBottom="24dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -86,12 +100,12 @@
                 <EditText
                     android:id="@+id/nameET"
                     android:layout_width="match_parent"
-                    android:layout_height="50dp"
+                    android:layout_height="48dp"
                     android:layout_marginTop="8dp"
                     android:background="@drawable/edittext_bg"
-                    android:hint="Enter your name"
+                    android:hint="@string/request_service_hint_name"
                     android:inputType="textPersonName"
-                    android:paddingHorizontal="14dp"
+                    android:paddingHorizontal="12dp"
                     android:textColor="@color/admin_text_primary"
                     android:textColorHint="@color/admin_text_secondary" />
 
@@ -107,12 +121,12 @@
                 <EditText
                     android:id="@+id/titleET"
                     android:layout_width="match_parent"
-                    android:layout_height="50dp"
+                    android:layout_height="48dp"
                     android:layout_marginTop="8dp"
                     android:background="@drawable/edittext_bg"
-                    android:hint="Enter service title"
+                    android:hint="@string/request_service_hint_title"
                     android:inputType="text"
-                    android:paddingHorizontal="14dp"
+                    android:paddingHorizontal="12dp"
                     android:textColor="@color/admin_text_primary"
                     android:textColorHint="@color/admin_text_secondary" />
 
@@ -128,11 +142,10 @@
                 <Spinner
                     android:id="@+id/categorySpinner"
                     android:layout_width="match_parent"
-                    android:layout_height="50dp"
+                    android:layout_height="48dp"
                     android:layout_marginTop="8dp"
-                    android:background="@drawable/spinner_dropdown_bg"
-                    android:paddingHorizontal="10dp"
-                    android:spinnerMode="dropdown" />
+                    android:background="@drawable/edittext_bg"
+                    android:paddingHorizontal="8dp" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -146,12 +159,12 @@
                 <EditText
                     android:id="@+id/contactET"
                     android:layout_width="match_parent"
-                    android:layout_height="50dp"
+                    android:layout_height="48dp"
                     android:layout_marginTop="8dp"
                     android:background="@drawable/edittext_bg"
-                    android:hint="Enter contact number"
+                    android:hint="@string/request_service_hint_contact"
                     android:inputType="phone"
-                    android:paddingHorizontal="14dp"
+                    android:paddingHorizontal="12dp"
                     android:textColor="@color/admin_text_primary"
                     android:textColorHint="@color/admin_text_secondary" />
 
@@ -167,12 +180,12 @@
                 <EditText
                     android:id="@+id/locationET"
                     android:layout_width="match_parent"
-                    android:layout_height="50dp"
+                    android:layout_height="48dp"
                     android:layout_marginTop="8dp"
                     android:background="@drawable/edittext_bg"
-                    android:hint="Enter location"
+                    android:hint="@string/request_service_hint_location"
                     android:inputType="textPostalAddress"
-                    android:paddingHorizontal="14dp"
+                    android:paddingHorizontal="12dp"
                     android:textColor="@color/admin_text_primary"
                     android:textColorHint="@color/admin_text_secondary" />
 
@@ -192,9 +205,9 @@
                     android:layout_marginTop="8dp"
                     android:background="@drawable/edittext_bg"
                     android:gravity="top|start"
-                    android:hint="Describe your service request..."
+                    android:hint="@string/request_service_hint_description"
                     android:inputType="textMultiLine"
-                    android:paddingHorizontal="14dp"
+                    android:paddingHorizontal="12dp"
                     android:paddingVertical="12dp"
                     android:textColor="@color/admin_text_primary"
                     android:textColorHint="@color/admin_text_secondary" />
@@ -211,22 +224,21 @@
                     android:textColor="@color/white"
                     android:textSize="16sp"
                     android:textStyle="bold"
-                    app:backgroundTint="#28A745"
-                    app:rippleColor="#33FFFFFF"
-                    app:strokeWidth="0dp" />
-
+                    app:backgroundTint="@color/brand_purple"
+                    app:cornerRadius="24dp"
+                    app:rippleColor="#33FFFFFF" />
             </LinearLayout>
-
         </androidx.core.widget.NestedScrollView>
-
     </FrameLayout>
 
-    <!-- ═══════════ FOOTER BAR ═══════════ -->
-    <View
-        android:id="@+id/footerBar"
+    <include
+        android:id="@+id/customBottomNav"
+        layout="@layout/view_home_bottom_nav"
         android:layout_width="0dp"
-        android:layout_height="38dp"
-        android:background="@drawable/footer_gradient_bar"
+        android:layout_height="wrap_content"
+        android:clipChildren="false"
+        android:clipToPadding="false"
+        android:elevation="12dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
