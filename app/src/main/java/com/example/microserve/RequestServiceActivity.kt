@@ -1,10 +1,13 @@
 package com.example.microserve
 
 import android.os.Bundle
+import android.view.View
 import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
 import com.example.microserve.databinding.ActivityRequestServiceBinding
 
 /**
@@ -25,8 +28,25 @@ class RequestServiceActivity : AppCompatActivity() {
         binding = ActivityRequestServiceBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        setupWindowInsets()
         setupSpinner()
         setupClickListeners()
+        HomeBottomNavHelper.setup(this, HomeBottomNavHelper.TAB_HOME)
+    }
+
+    private fun setupWindowInsets() {
+        ViewCompat.setOnApplyWindowInsetsListener(binding.requestServiceRoot) { v, insets ->
+            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
+            v.setPadding(systemBars.left, systemBars.top, systemBars.right, 0)
+            findViewById<View>(R.id.navSystemBarSpacer)?.let { spacer ->
+                val lp = spacer.layoutParams
+                if (lp.height != systemBars.bottom) {
+                    lp.height = systemBars.bottom
+                    spacer.layoutParams = lp
+                }
+            }
+            insets
+        }
     }
 
     private fun setupSpinner() {
@@ -68,14 +88,13 @@ class RequestServiceActivity : AppCompatActivity() {
             val category = binding.categorySpinner.selectedItem.toString()
 
             if (category == "-Select-") {
-                Toast.makeText(this, "Please select a service category", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, R.string.request_service_select_category, Toast.LENGTH_SHORT).show()
             } else if (title.isEmpty() || name.isEmpty() || contact.isEmpty() || location.isEmpty()) {
-                Toast.makeText(this, "Please fill all required fields", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, R.string.request_service_fill_required, Toast.LENGTH_SHORT).show()
             } else {
-                // Create/register user if not exists
                 val existingUser = UserStore.getAllUsers(this)
                     .firstOrNull { it.name.equals(name, ignoreCase = true) }
-                
+
                 if (existingUser == null) {
                     UserStore.addUser(
                         context = this,
@@ -86,7 +105,6 @@ class RequestServiceActivity : AppCompatActivity() {
                     )
                 }
 
-                // Add the request
                 RequestStore.addRequest(
                     context = this,
                     requesterName = name,
@@ -96,7 +114,7 @@ class RequestServiceActivity : AppCompatActivity() {
                     location = location,
                     description = description
                 )
-                Toast.makeText(this, "Service request submitted successfully!", Toast.LENGTH_LONG).show()
+                Toast.makeText(this, R.string.request_service_success, Toast.LENGTH_LONG).show()
                 finish()
             }
         }

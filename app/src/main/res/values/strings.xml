@@ -56,7 +56,8 @@
     <string name="home_ad_label_name_value">Name: %1$s</string>
     <string name="home_ad_label_contact_value">Contact: %1$s</string>
     <string name="home_ad_title_format">%1$s Service</string>
-    <string name="post_ads_image_crop_hint">Photo fills the card — tap again to change image</string>
+    <string name="post_ads_image_crop_hint">After choosing a photo, drag and zoom to fit the square — same view on Home</string>
+    <string name="post_ads_crop_title">Adjust photo</string>
     <string name="home_job_service_format">Service: %1$s</string>
     <string name="home_job_name_format">Name: %1$s</string>
     <string name="home_job_contact_format">Contact: %1$s</string>
@@ -104,7 +105,7 @@
     <string name="post_ads_image_selected">Image selected</string>
     <string name="post_ads_change_image">Tap to change image</string>
     <string name="post_ads_image_save_failed">Could not save the selected image. Please try another photo.</string>
-    <string name="post_ads_previous_posts">Advertisements</string>
+    <string name="post_ads_previous_posts">Previous advertisement</string>
     <string name="post_ads_no_previous_posts">No advertisements yet. Tap Post above to add your first listing.</string>
     <string name="post_ads_previous_post_category">Service - %1$s</string>
     <string name="post_ads_previous_post_name">Name - %1$s</string>
@@ -118,7 +119,11 @@
     <string name="post_ads_deleted">Post deleted</string>
     <string name="post_ads_updated">Post updated successfully</string>
     <string name="pick_location_title">Pin exact location</string>
-    <string name="pick_location_hint">Tap the map or drag the pin to mark the exact service location</string>
+    <string name="pick_location_subtitle">Mark where you will provide the service</string>
+    <string name="pick_location_hint">Tap the map or drag the purple pin to set your exact place</string>
+    <string name="pick_location_drag_hint">Drag pin to adjust</string>
+    <string name="pick_location_selected_label">Selected area</string>
+    <string name="pick_location_coords_label">GPS coordinates</string>
     <string name="confirm_location">Confirm location</string>
     <string name="pick_location_area_format">Area: %1$s</string>
     <string name="pick_location_coords_format">Coordinates: %1$s, %2$s</string>
@@ -265,6 +270,16 @@
 
     <!-- Request Service Screen -->
     <string name="request_a_service">Request a\nService</string>
+    <string name="request_service_title">Request Service</string>
+    <string name="request_service_subtitle">Describe what you need — providers can respond</string>
+    <string name="request_service_hint_name">Enter your name</string>
+    <string name="request_service_hint_title">Enter service title</string>
+    <string name="request_service_hint_contact">Enter contact number</string>
+    <string name="request_service_hint_location">Enter your area or address</string>
+    <string name="request_service_hint_description">Describe your service request…</string>
+    <string name="request_service_select_category">Please select a service category</string>
+    <string name="request_service_fill_required">Please fill all required fields</string>
+    <string name="request_service_success">Service request submitted successfully!</string>
     <string name="enter_your_name_label">Enter Your name</string>
     <string name="title_label">Title</string>
     <string name="category_label">Category</string>
