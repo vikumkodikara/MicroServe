@@ -13,8 +13,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.example.microserve.databinding.ActivitySplashBinding
-import com.google.firebase.auth.FirebaseAuth
-
 class SplashActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivitySplashBinding
@@ -108,51 +106,34 @@ class SplashActivity : AppCompatActivity() {
         // ── Phase 6: Loading bar appears ──
         val phase6 = ObjectAnimator.ofFloat(progress, "alpha", 0f, 1f).setDuration(300)
 
+        val splashDelay = if (SessionNavigator.isLoggedIn(this)) 900L else 3200L
+        binding.splashRoot.postDelayed({ navigateNext() }, splashDelay)
         val fullSequence = AnimatorSet()
         fullSequence.playSequentially(phase1, phase2, phase3, phase4, phase5, phase6)
         fullSequence.start()
-
-        binding.splashRoot.postDelayed({ navigateNext() }, 4200)
     }
 
-    /**
-     * Routes to the correct screen based on session state:
-     * - If logged in as admin → AdminDashboard
-     * - If logged in as user → Homepage
-     * - Otherwise → Login
-     */
+    /** Logged in → Home (or admin dashboard). Not logged in → Login only. */
     private fun navigateNext() {
         if (navigated || isFinishing) return
         navigated = true
 
-        val hasSession = AppPreferences.isLoggedIn(this)
-        val hasFirebaseUser = FirebaseAuth.getInstance().currentUser != null
-        val role = AppPreferences.getSessionRole(this)
-
-        val target = when {
-            hasSession && hasFirebaseUser && role.equals(UserProfile.ROLE_ADMIN, ignoreCase = true) ->
-                AdminDashboardActivity::class.java
-            hasSession && hasFirebaseUser ->
-                Homepage::class.java
-            // Admin with local-only credentials (no Firebase Auth)
-            hasSession && role.equals(UserProfile.ROLE_ADMIN, ignoreCase = true) ->
-                AdminDashboardActivity::class.java
-            else ->
-                LoginActivity::class.java
+        val nextIntent = if (SessionNavigator.isLoggedIn(this)) {
+            SessionNavigator.mainIntent(this)
+        } else {
+            SessionNavigator.clearAuth(this)
+            SessionNavigator.loginIntent(this)
         }
 
-        val root = binding.splashRoot
-        root.animate()
+        binding.splashRoot.animate()
             .alpha(0f)
             .setDuration(400)
             .withEndAction {
-                startActivity(
-                    Intent(this, target)
-                        .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
-                )
+                startActivity(nextIntent)
                 overridePendingTransition(R.anim.splash_fade_in, R.anim.splash_fade_out)
                 finish()
-            }.start()
+            }
+            .start()
     }
 
     override fun onDestroy() {
@@ -161,3 +142,4 @@ class SplashActivity : AppCompatActivity() {
         super.onDestroy()
     }
 }
+

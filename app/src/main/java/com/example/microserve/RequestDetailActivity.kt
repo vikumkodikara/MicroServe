@@ -126,7 +126,7 @@ class RequestDetailActivity : AppCompatActivity() {
         binding.bidButton.setOnClickListener {
             startActivity(
                 Intent(this, PlaceBidActivity::class.java)
-                    .putExtra(PlaceBidActivity.EXTRA_REQUEST_ID, request.id)
+                    .putExtra(EXTRA_REQUEST_ID, request.id)
             )
         }
     }

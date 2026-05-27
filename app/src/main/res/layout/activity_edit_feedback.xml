@@ -1,0 +1,226 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#F8F9FA"
+    android:fitsSystemWindows="true"
+    android:orientation="vertical">
+
+    <!-- Header -->
+    <FrameLayout
+        android:id="@+id/header_bg"
+        android:layout_width="match_parent"
+        android:layout_height="160dp"
+        android:background="@drawable/header_gradient">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingStart="20dp"
+            android:paddingEnd="20dp"
+            android:paddingTop="40dp">
+
+            <ImageView
+                android:id="@+id/btn_back"
+                android:layout_width="28dp"
+                android:layout_height="28dp"
+                android:importantForAccessibility="no"
+                android:padding="2dp"
+                android:src="@drawable/back_arrow" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:fontFamily="sans-serif-bold"
+                android:text="Edit Feedbacks"
+                android:textColor="#FFFFFF"
+                android:textSize="26sp" />
+        </LinearLayout>
+    </FrameLayout>
+
+    <!-- Content -->
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:fillViewport="true">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingHorizontal="28dp"
+            android:paddingTop="24dp"
+            android:paddingBottom="20dp">
+
+            <!-- Star Rating -->
+            <LinearLayout
+                android:id="@+id/starsRow"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginBottom="28dp"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:id="@+id/star1"
+                    android:layout_width="36dp"
+                    android:layout_height="36dp"
+                    android:layout_marginEnd="6dp"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:importantForAccessibility="no"
+                    android:src="@android:drawable/btn_star_big_on"
+                    app:tint="#4a4458" />
+
+                <ImageView
+                    android:id="@+id/star2"
+                    android:layout_width="36dp"
+                    android:layout_height="36dp"
+                    android:layout_marginEnd="6dp"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:importantForAccessibility="no"
+                    android:src="@android:drawable/btn_star_big_on"
+                    app:tint="#4a4458" />
+
+                <ImageView
+                    android:id="@+id/star3"
+                    android:layout_width="36dp"
+                    android:layout_height="36dp"
+                    android:layout_marginEnd="6dp"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:importantForAccessibility="no"
+                    android:src="@android:drawable/btn_star_big_on"
+                    app:tint="#4a4458" />
+
+                <ImageView
+                    android:id="@+id/star4"
+                    android:layout_width="36dp"
+                    android:layout_height="36dp"
+                    android:layout_marginEnd="6dp"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:importantForAccessibility="no"
+                    android:src="@android:drawable/btn_star_big_on"
+                    app:tint="#CCCCCC" />
+
+                <ImageView
+                    android:id="@+id/star5"
+                    android:layout_width="36dp"
+                    android:layout_height="36dp"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:importantForAccessibility="no"
+                    android:src="@android:drawable/btn_star_big_on"
+                    app:tint="#CCCCCC" />
+            </LinearLayout>
+
+            <!-- Email -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Email address"
+                android:textColor="#1A1A1A"
+                android:textSize="15sp" />
+
+            <EditText
+                android:id="@+id/et_email"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:layout_marginTop="6dp"
+                android:layout_marginBottom="18dp"
+                android:background="@drawable/login_field_bg"
+                android:inputType="textEmailAddress"
+                android:paddingHorizontal="16dp"
+                android:textColor="#1A1A1A"
+                android:textSize="14sp" />
+
+            <!-- Category -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Category"
+                android:textColor="#1A1A1A"
+                android:textSize="15sp" />
+
+            <EditText
+                android:id="@+id/et_category"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:layout_marginTop="6dp"
+                android:layout_marginBottom="18dp"
+                android:background="@drawable/login_field_bg"
+                android:hint="Booking Issue"
+                android:inputType="text"
+                android:paddingHorizontal="16dp"
+                android:textColor="#1A1A1A"
+                android:textColorHint="#C0A8D4"
+                android:textSize="14sp" />
+
+            <!-- Feedback -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Feedback"
+                android:textColor="#1A1A1A"
+                android:textSize="15sp" />
+
+            <EditText
+                android:id="@+id/et_feedback"
+                android:layout_width="match_parent"
+                android:layout_height="80dp"
+                android:layout_marginTop="6dp"
+                android:layout_marginBottom="28dp"
+                android:background="@drawable/login_field_bg"
+                android:gravity="top|start"
+                android:hint="The driver was late ......."
+                android:inputType="textMultiLine"
+                android:paddingHorizontal="16dp"
+                android:paddingTop="12dp"
+                android:textColor="#1A1A1A"
+                android:textColorHint="#C0A8D4"
+                android:textSize="14sp" />
+
+            <!-- Update Button -->
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btn_update"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginBottom="12dp"
+                android:backgroundTint="#E8675A"
+                android:text="Update Feedback"
+                android:textAllCaps="false"
+                android:textColor="@android:color/white"
+                android:textSize="15sp"
+                app:cornerRadius="25dp" />
+
+            <!-- Delete Button -->
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btn_delete"
+                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:text="Delete this Feedback"
+                android:textAllCaps="false"
+                android:textColor="#E8675A"
+                android:textSize="15sp"
+                app:cornerRadius="25dp"
+                app:strokeColor="#E8675A" />
+
+        </LinearLayout>
+    </ScrollView>
+
+    <!-- Footer Bar -->
+    <View
+        android:id="@+id/footerBar"
+        android:layout_width="match_parent"
+        android:layout_height="38dp"
+        android:background="@drawable/footer_gradient_bar" />
+
+</LinearLayout>

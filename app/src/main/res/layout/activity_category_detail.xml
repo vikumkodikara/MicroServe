@@ -1,139 +1,111 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white"
-    tools:context=".CategoryDetailActivity">
+    android:background="#F8F9FA"
+    android:fitsSystemWindows="true"
+    android:orientation="vertical">
 
-    <ScrollView
-        android:id="@+id/contentScrollView"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
+    <!-- Header -->
+    <RelativeLayout
+        android:id="@+id/header_bg"
+        android:layout_width="match_parent"
+        android:layout_height="180dp"
+        android:background="@drawable/header_gradient"
+        android:clipChildren="false"
+        android:paddingHorizontal="20dp"
+        android:paddingTop="16dp">
+
+        <ImageView
+            android:id="@+id/btn_back"
+            android:layout_width="34dp"
+            android:layout_height="34dp"
+            android:importantForAccessibility="no"
+            android:padding="6dp"
+            android:src="@drawable/back_arrow" />
+
+        <TextView
+            android:id="@+id/tv_category_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/btn_back"
+            android:layout_marginTop="8dp"
+            android:fontFamily="sans-serif-bold"
+            android:text="Plumbing"
+            android:textColor="#FFFFFF"
+            android:textSize="28sp" />
+
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentBottom="true"
+            android:layout_marginEnd="10dp"
+            android:layout_marginBottom="10dp"
+            app:cardBackgroundColor="#E8E0F0"
+            app:cardCornerRadius="16dp"
+            app:cardElevation="4dp">
+
+            <ImageView
+                android:id="@+id/iv_category_icon"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:importantForAccessibility="no"
+                android:padding="12dp"
+                android:scaleType="fitCenter"
+                android:src="@drawable/request" />
+        </com.google.android.material.card.MaterialCardView>
+    </RelativeLayout>
+
+    <!-- Category Chips -->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="10dp"
+        android:fontFamily="sans-serif-bold"
+        android:text="Category"
+        android:textColor="#1A1A1A"
+        android:textSize="16sp" />
+
+    <HorizontalScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="12dp"
         android:clipToPadding="false"
-        android:fillViewport="true"
-        android:scrollbars="none"
-        app:layout_constraintBottom_toTopOf="@id/footerBar"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        android:paddingHorizontal="16dp"
+        android:scrollbars="none">
 
         <LinearLayout
+            android:id="@+id/chipsContainer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal" />
+    </HorizontalScrollView>
+
+    <!-- Providers List -->
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:clipToPadding="false"
+        android:paddingHorizontal="20dp"
+        android:paddingBottom="8dp">
+
+        <LinearLayout
+            android:id="@+id/providersContainer"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:paddingBottom="20dp">
-
-            <!-- Header -->
-            <RelativeLayout
-                android:id="@+id/headerSection"
-                android:layout_width="match_parent"
-                android:layout_height="200dp"
-                android:background="@drawable/request_header_bg"
-                android:paddingStart="24dp"
-                android:paddingTop="48dp"
-                android:paddingEnd="24dp"
-                android:paddingBottom="24dp">
-
-                <ImageView
-                    android:id="@+id/backBtn"
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
-                    android:layout_alignParentStart="true"
-                    android:layout_alignParentTop="true"
-                    android:contentDescription="@string/cd_back"
-                    android:padding="8dp"
-                    android:src="@android:drawable/ic_menu_revert"
-                    app:tint="@color/white" />
-
-                <TextView
-                    android:id="@+id/categoryTitleText"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentStart="true"
-                    android:layout_alignParentBottom="true"
-                    android:fontFamily="sans-serif-medium"
-                    android:textColor="@color/white"
-                    android:textSize="34sp"
-                    tools:text="Plumbing" />
-
-                <ImageView
-                    android:id="@+id/categoryHeaderImage"
-                    android:layout_width="90dp"
-                    android:layout_height="72dp"
-                    android:layout_alignParentEnd="true"
-                    android:layout_alignParentBottom="true"
-                    android:background="@drawable/rounded_14dp"
-                    android:contentDescription="@string/cd_category"
-                    android:scaleType="centerCrop"
-                    tools:src="@drawable/nethmina_plumbing" />
-            </RelativeLayout>
-
-            <!-- Category chips label -->
-            <TextView
-                android:id="@+id/categorySectionLabel"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="24dp"
-                android:layout_marginTop="20dp"
-                android:fontFamily="sans-serif-medium"
-                android:text="@string/section_category"
-                android:textColor="@color/black"
-                android:textSize="18sp" />
-
-            <!-- Horizontal chip row -->
-            <HorizontalScrollView
-                android:id="@+id/chipScrollView"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="12dp"
-                android:clipToPadding="false"
-                android:paddingStart="20dp"
-                android:paddingEnd="20dp"
-                android:scrollbars="none">
-
-                <LinearLayout
-                    android:id="@+id/chipContainer"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal" />
-            </HorizontalScrollView>
-
-            <!-- Request list -->
-            <LinearLayout
-                android:id="@+id/requestsContainer"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="20dp"
-                android:layout_marginTop="20dp"
-                android:layout_marginEnd="20dp"
-                android:orientation="vertical" />
-
-            <TextView
-                android:id="@+id/emptyRequestsText"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="20dp"
-                android:layout_marginTop="20dp"
-                android:layout_marginEnd="20dp"
-                android:gravity="center"
-                android:padding="24dp"
-                android:text="@string/no_category_requests"
-                android:textColor="@color/text_gray"
-                android:textSize="14sp"
-                android:visibility="gone" />
-        </LinearLayout>
+            android:orientation="vertical" />
     </ScrollView>
 
-    <!-- Footer bar -->
+    <!-- Footer Bar -->
     <View
         android:id="@+id/footerBar"
-        android:layout_width="0dp"
-        android:layout_height="24dp"
-        android:background="@drawable/nav_gradient"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        android:layout_width="match_parent"
+        android:layout_height="38dp"
+        android:background="@drawable/footer_gradient_bar" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+</LinearLayout>

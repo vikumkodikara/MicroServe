@@ -13,10 +13,7 @@ class PrivacyPolicyActivity : AppCompatActivity() {
         enableEdgeToEdge()
         setContentView(R.layout.fragment_privacy_policy)
 
-        // Bind back button
         findViewById<View>(R.id.btn_back).setOnClickListener { finish() }
-
-        // Bind I Agree button
         findViewById<View>(R.id.btn_agree).setOnClickListener {
             Toast.makeText(this, "Privacy Policy accepted", Toast.LENGTH_SHORT).show()
             finish()

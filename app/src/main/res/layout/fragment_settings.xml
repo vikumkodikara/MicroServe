@@ -4,16 +4,429 @@
     android:id="@+id/settingsFragRoot"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/admin_bg_light"
-    android:clipChildren="false"
+    android:background="#F0EDF5"
     android:orientation="vertical">
 
-    <!-- FIXED: Header + Profile Card -->
+    <!-- Main content area: ScrollView behind fixed header+profile -->
     <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
+        android:layout_weight="1"
         android:clipChildren="false">
 
+        <!-- ScrollView (behind header+profile, scrolls underneath) -->
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:clipToPadding="false"
+            android:fillViewport="true"
+            android:overScrollMode="never"
+            android:scrollbars="none">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:paddingTop="270dp"
+                android:paddingBottom="16dp">
+
+                <androidx.cardview.widget.CardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="24dp"
+                    android:layout_marginEnd="24dp"
+                    app:cardBackgroundColor="#FFFFFF"
+                    app:cardCornerRadius="20dp"
+                    app:cardElevation="3dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:paddingTop="6dp"
+                        android:paddingBottom="6dp">
+
+                        <LinearLayout
+                            android:id="@+id/btn_personal_info"
+                            android:layout_width="match_parent"
+                            android:layout_height="52dp"
+                            android:background="?attr/selectableItemBackground"
+                            android:clickable="true"
+                            android:focusable="true"
+                            android:gravity="center_vertical"
+                            android:orientation="horizontal"
+                            android:paddingStart="20dp"
+                            android:paddingEnd="20dp">
+
+                            <ImageView
+                                android:layout_width="26dp"
+                                android:layout_height="26dp"
+                                android:importantForAccessibility="no"
+                                android:src="@drawable/user"
+                                app:tint="#483C72" />
+
+                            <TextView
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="14dp"
+                                android:layout_weight="1"
+                                android:text="Personal Information"
+                                android:textColor="#1A1A1A"
+                                android:textSize="15sp" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="›"
+                                android:textColor="#BBBBBB"
+                                android:textSize="22sp" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/btn_saved_addresses"
+                            android:layout_width="match_parent"
+                            android:layout_height="52dp"
+                            android:background="?attr/selectableItemBackground"
+                            android:clickable="true"
+                            android:focusable="true"
+                            android:gravity="center_vertical"
+                            android:orientation="horizontal"
+                            android:paddingStart="20dp"
+                            android:paddingEnd="20dp">
+
+                            <ImageView
+                                android:layout_width="26dp"
+                                android:layout_height="26dp"
+                                android:importantForAccessibility="no"
+                                android:src="@drawable/location"
+                                app:tint="#483C72" />
+
+                            <TextView
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="14dp"
+                                android:layout_weight="1"
+                                android:text="Saved Addresses"
+                                android:textColor="#1A1A1A"
+                                android:textSize="15sp" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="›"
+                                android:textColor="#BBBBBB"
+                                android:textSize="22sp" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/btn_payment_methods"
+                            android:layout_width="match_parent"
+                            android:layout_height="52dp"
+                            android:background="?attr/selectableItemBackground"
+                            android:clickable="true"
+                            android:focusable="true"
+                            android:gravity="center_vertical"
+                            android:orientation="horizontal"
+                            android:paddingStart="20dp"
+                            android:paddingEnd="20dp">
+
+                            <ImageView
+                                android:layout_width="26dp"
+                                android:layout_height="26dp"
+                                android:importantForAccessibility="no"
+                                android:src="@drawable/wallet"
+                                app:tint="#483C72" />
+
+                            <TextView
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="14dp"
+                                android:layout_weight="1"
+                                android:text="Wallet"
+                                android:textColor="#1A1A1A"
+                                android:textSize="15sp" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="›"
+                                android:textColor="#BBBBBB"
+                                android:textSize="22sp" />
+                        </LinearLayout>
+                    </LinearLayout>
+                </androidx.cardview.widget.CardView>
+
+                <androidx.cardview.widget.CardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="24dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="24dp"
+                    app:cardBackgroundColor="#FFFFFF"
+                    app:cardCornerRadius="20dp"
+                    app:cardElevation="3dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:paddingTop="6dp"
+                        android:paddingBottom="6dp">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="52dp"
+                            android:background="?attr/selectableItemBackground"
+                            android:clickable="true"
+                            android:focusable="true"
+                            android:gravity="center_vertical"
+                            android:orientation="horizontal"
+                            android:paddingStart="20dp"
+                            android:paddingEnd="20dp">
+
+                            <ImageView
+                                android:layout_width="26dp"
+                                android:layout_height="26dp"
+                                android:importantForAccessibility="no"
+                                android:src="@drawable/ic_setting_darkmode"
+                                app:tint="#483C72" />
+
+                            <TextView
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="14dp"
+                                android:layout_weight="1"
+                                android:text="Dark Mode"
+                                android:textColor="#1A1A1A"
+                                android:textSize="15sp" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="›"
+                                android:textColor="#BBBBBB"
+                                android:textSize="22sp" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/btn_language"
+                            android:layout_width="match_parent"
+                            android:layout_height="52dp"
+                            android:background="?attr/selectableItemBackground"
+                            android:clickable="true"
+                            android:focusable="true"
+                            android:gravity="center_vertical"
+                            android:orientation="horizontal"
+                            android:paddingStart="20dp"
+                            android:paddingEnd="20dp">
+
+                            <ImageView
+                                android:layout_width="26dp"
+                                android:layout_height="26dp"
+                                android:importantForAccessibility="no"
+                                android:src="@drawable/ic_setting_language"
+                                app:tint="#483C72" />
+
+                            <TextView
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="14dp"
+                                android:layout_weight="1"
+                                android:text="Language"
+                                android:textColor="#1A1A1A"
+                                android:textSize="15sp" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="›"
+                                android:textColor="#BBBBBB"
+                                android:textSize="22sp" />
+                        </LinearLayout>
+                    </LinearLayout>
+                </androidx.cardview.widget.CardView>
+
+                <androidx.cardview.widget.CardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="24dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="24dp"
+                    app:cardBackgroundColor="#FFFFFF"
+                    app:cardCornerRadius="20dp"
+                    app:cardElevation="3dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:paddingTop="6dp"
+                        android:paddingBottom="6dp">
+
+                        <LinearLayout
+                            android:id="@+id/btn_get_help"
+                            android:layout_width="match_parent"
+                            android:layout_height="52dp"
+                            android:background="?attr/selectableItemBackground"
+                            android:clickable="true"
+                            android:focusable="true"
+                            android:gravity="center_vertical"
+                            android:orientation="horizontal"
+                            android:paddingStart="20dp"
+                            android:paddingEnd="20dp">
+
+                            <ImageView
+                                android:layout_width="26dp"
+                                android:layout_height="26dp"
+                                android:importantForAccessibility="no"
+                                android:src="@drawable/ic_setting_help"
+                                app:tint="#483C72" />
+
+                            <TextView
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="14dp"
+                                android:layout_weight="1"
+                                android:text="Get Help"
+                                android:textColor="#1A1A1A"
+                                android:textSize="15sp" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="›"
+                                android:textColor="#BBBBBB"
+                                android:textSize="22sp" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="52dp"
+                            android:gravity="center_vertical"
+                            android:orientation="horizontal"
+                            android:paddingStart="20dp"
+                            android:paddingEnd="20dp">
+
+                            <ImageView
+                                android:layout_width="26dp"
+                                android:layout_height="26dp"
+                                android:importantForAccessibility="no"
+                                android:src="@drawable/ic_setting_notification"
+                                app:tint="#483C72" />
+
+                            <TextView
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="14dp"
+                                android:layout_weight="1"
+                                android:text="Notifications"
+                                android:textColor="#1A1A1A"
+                                android:textSize="15sp" />
+
+                            <com.google.android.material.switchmaterial.SwitchMaterial
+                                android:id="@+id/switchNotifications"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:checked="true"
+                                app:thumbTint="#FFFFFF"
+                                app:trackTint="#7A6BB3" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/btn_privacy_policy"
+                            android:layout_width="match_parent"
+                            android:layout_height="52dp"
+                            android:background="?attr/selectableItemBackground"
+                            android:clickable="true"
+                            android:focusable="true"
+                            android:gravity="center_vertical"
+                            android:orientation="horizontal"
+                            android:paddingStart="20dp"
+                            android:paddingEnd="20dp">
+
+                            <ImageView
+                                android:layout_width="26dp"
+                                android:layout_height="26dp"
+                                android:importantForAccessibility="no"
+                                android:src="@drawable/ic_setting_privacy"
+                                app:tint="#483C72" />
+
+                            <TextView
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="14dp"
+                                android:layout_weight="1"
+                                android:text="Privacy Policy"
+                                android:textColor="#1A1A1A"
+                                android:textSize="15sp" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="›"
+                                android:textColor="#BBBBBB"
+                                android:textSize="22sp" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/btn_terms_of_service"
+                            android:layout_width="match_parent"
+                            android:layout_height="52dp"
+                            android:background="?attr/selectableItemBackground"
+                            android:clickable="true"
+                            android:focusable="true"
+                            android:gravity="center_vertical"
+                            android:orientation="horizontal"
+                            android:paddingStart="20dp"
+                            android:paddingEnd="20dp">
+
+                            <ImageView
+                                android:layout_width="26dp"
+                                android:layout_height="26dp"
+                                android:importantForAccessibility="no"
+                                android:src="@android:drawable/ic_menu_agenda"
+                                app:tint="#483C72" />
+
+                            <TextView
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="14dp"
+                                android:layout_weight="1"
+                                android:text="Terms of Services"
+                                android:textColor="#1A1A1A"
+                                android:textSize="15sp" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="›"
+                                android:textColor="#BBBBBB"
+                                android:textSize="22sp" />
+                        </LinearLayout>
+                    </LinearLayout>
+                </androidx.cardview.widget.CardView>
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btn_logout"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:layout_marginStart="36dp"
+                    android:layout_marginTop="14dp"
+                    android:layout_marginEnd="36dp"
+                    android:backgroundTint="#E8675A"
+                    android:fontFamily="sans-serif-medium"
+                    android:insetTop="0dp"
+                    android:insetBottom="0dp"
+                    android:text="Log Out"
+                    android:textAllCaps="false"
+                    android:textColor="#FFFFFF"
+                    android:textSize="16sp"
+                    app:cornerRadius="26dp" />
+
+            </LinearLayout>
+        </ScrollView>
+
+        <!-- Fixed Header (on top of ScrollView) -->
         <FrameLayout
             android:id="@+id/headerContainer"
             android:layout_width="match_parent"
@@ -45,12 +458,13 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="4dp"
                     android:fontFamily="sans-serif-bold"
-                    android:text="@string/settings"
+                    android:text="Settings"
                     android:textColor="#FFFFFF"
                     android:textSize="35sp" />
             </LinearLayout>
         </FrameLayout>
 
+        <!-- Fixed Profile Card (on top of ScrollView) -->
         <androidx.cardview.widget.CardView
             android:id="@+id/profileCard"
             android:layout_width="match_parent"
@@ -60,7 +474,7 @@
             android:layout_marginEnd="24dp"
             android:clickable="true"
             android:focusable="true"
-            app:cardBackgroundColor="@color/white_card_bg"
+            app:cardBackgroundColor="#FFFFFF"
             app:cardCornerRadius="20dp"
             app:cardElevation="6dp">
 
@@ -105,7 +519,7 @@
                         android:layout_height="wrap_content"
                         android:fontFamily="sans-serif-medium"
                         android:text="Nethmina Malshan"
-                        android:textColor="@color/admin_text_primary"
+                        android:textColor="#1A1A1A"
                         android:textSize="20sp" />
 
                     <TextView
@@ -115,421 +529,20 @@
                         android:layout_marginTop="3dp"
                         android:clickable="true"
                         android:focusable="true"
-                        android:text="@string/edit_profile"
-                        android:textColor="@color/admin_text_secondary"
+                        android:text="Edit Profile"
+                        android:textColor="#7A6BB3"
                         android:textSize="15sp" />
                 </LinearLayout>
             </LinearLayout>
         </androidx.cardview.widget.CardView>
+
     </FrameLayout>
 
-    <!-- SCROLLABLE: Only the 3 cards + Log Out -->
-    <ScrollView
+    <!-- FIXED: Footer Bar -->
+    <View
+        android:id="@+id/footerBar"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:fillViewport="true"
-        android:overScrollMode="never"
-        android:scrollbars="none">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:paddingTop="12dp"
-            android:paddingBottom="16dp">
-
-            <androidx.cardview.widget.CardView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="24dp"
-                android:layout_marginEnd="24dp"
-                app:cardBackgroundColor="@color/white_card_bg"
-                app:cardCornerRadius="20dp"
-                app:cardElevation="3dp">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:paddingTop="6dp"
-                    android:paddingBottom="6dp">
-
-                    <LinearLayout
-                        android:id="@+id/btn_personal_info"
-                        android:layout_width="match_parent"
-                        android:layout_height="52dp"
-                        android:background="?attr/selectableItemBackground"
-                        android:clickable="true"
-                        android:focusable="true"
-                        android:gravity="center_vertical"
-                        android:orientation="horizontal"
-                        android:paddingStart="20dp"
-                        android:paddingEnd="20dp">
-
-                        <ImageView
-                            android:layout_width="26dp"
-                            android:layout_height="26dp"
-                            android:importantForAccessibility="no"
-                            android:src="@drawable/user"
-                            app:tint="#483C72" />
-
-                        <TextView
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="14dp"
-                            android:layout_weight="1"
-                            android:text="@string/personal_information"
-                            android:textColor="@color/admin_text_primary"
-                            android:textSize="15sp" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="›"
-                            android:textColor="#BBBBBB"
-                            android:textSize="22sp" />
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:id="@+id/btn_saved_addresses"
-                        android:layout_width="match_parent"
-                        android:layout_height="52dp"
-                        android:background="?attr/selectableItemBackground"
-                        android:clickable="true"
-                        android:focusable="true"
-                        android:gravity="center_vertical"
-                        android:orientation="horizontal"
-                        android:paddingStart="20dp"
-                        android:paddingEnd="20dp">
-
-                        <ImageView
-                            android:layout_width="26dp"
-                            android:layout_height="26dp"
-                            android:importantForAccessibility="no"
-                            android:src="@drawable/location"
-                            app:tint="#483C72" />
-
-                        <TextView
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="14dp"
-                            android:layout_weight="1"
-                            android:text="@string/saved_addresses"
-                            android:textColor="@color/admin_text_primary"
-                            android:textSize="15sp" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="›"
-                            android:textColor="#BBBBBB"
-                            android:textSize="22sp" />
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:id="@+id/btn_payment_methods"
-                        android:layout_width="match_parent"
-                        android:layout_height="52dp"
-                        android:background="?attr/selectableItemBackground"
-                        android:clickable="true"
-                        android:focusable="true"
-                        android:gravity="center_vertical"
-                        android:orientation="horizontal"
-                        android:paddingStart="20dp"
-                        android:paddingEnd="20dp">
-
-                        <ImageView
-                            android:layout_width="26dp"
-                            android:layout_height="26dp"
-                            android:importantForAccessibility="no"
-                            android:src="@drawable/wallet"
-                            app:tint="#483C72" />
-
-                        <TextView
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="14dp"
-                            android:layout_weight="1"
-                            android:text="@string/payment_methods"
-                            android:textColor="@color/admin_text_primary"
-                            android:textSize="15sp" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="›"
-                            android:textColor="#BBBBBB"
-                            android:textSize="22sp" />
-                    </LinearLayout>
-                </LinearLayout>
-            </androidx.cardview.widget.CardView>
-
-            <androidx.cardview.widget.CardView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="24dp"
-                android:layout_marginTop="8dp"
-                android:layout_marginEnd="24dp"
-                app:cardBackgroundColor="@color/white_card_bg"
-                app:cardCornerRadius="20dp"
-                app:cardElevation="3dp">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:paddingTop="6dp"
-                    android:paddingBottom="6dp">
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="52dp"
-                        android:gravity="center_vertical"
-                        android:orientation="horizontal"
-                        android:paddingStart="20dp"
-                        android:paddingEnd="20dp">
-
-                        <ImageView
-                            android:layout_width="26dp"
-                            android:layout_height="26dp"
-                            android:importantForAccessibility="no"
-                            android:src="@drawable/ic_setting_notification"
-                            app:tint="#483C72" />
-
-                        <TextView
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="14dp"
-                            android:layout_weight="1"
-                            android:text="@string/notifications"
-                            android:textColor="@color/admin_text_primary"
-                            android:textSize="15sp" />
-
-                        <com.google.android.material.switchmaterial.SwitchMaterial
-                            android:id="@+id/switchNotifications"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:checked="true"
-                            app:thumbTint="#FFFFFF"
-                            app:trackTint="#7A6BB3" />
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="52dp"
-                        android:gravity="center_vertical"
-                        android:orientation="horizontal"
-                        android:paddingStart="20dp"
-                        android:paddingEnd="20dp">
-
-                        <ImageView
-                            android:layout_width="26dp"
-                            android:layout_height="26dp"
-                            android:importantForAccessibility="no"
-                            android:src="@drawable/ic_setting_darkmode"
-                            app:tint="#483C72" />
-
-                        <TextView
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="14dp"
-                            android:layout_weight="1"
-                            android:text="@string/dark_mode"
-                            android:textColor="@color/admin_text_primary"
-                            android:textSize="15sp" />
-
-                        <com.google.android.material.switchmaterial.SwitchMaterial
-                            android:id="@+id/switchDarkMode"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            app:thumbTint="#FFFFFF"
-                            app:trackTint="#7A6BB3" />
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:id="@+id/btn_language"
-                        android:layout_width="match_parent"
-                        android:layout_height="52dp"
-                        android:background="?attr/selectableItemBackground"
-                        android:clickable="true"
-                        android:focusable="true"
-                        android:gravity="center_vertical"
-                        android:orientation="horizontal"
-                        android:paddingStart="20dp"
-                        android:paddingEnd="20dp">
-
-                        <ImageView
-                            android:layout_width="26dp"
-                            android:layout_height="26dp"
-                            android:importantForAccessibility="no"
-                            android:src="@drawable/ic_setting_language"
-                            app:tint="#483C72" />
-
-                        <TextView
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="14dp"
-                            android:layout_weight="1"
-                            android:text="@string/language"
-                            android:textColor="@color/admin_text_primary"
-                            android:textSize="15sp" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="›"
-                            android:textColor="#BBBBBB"
-                            android:textSize="22sp" />
-                    </LinearLayout>
-                </LinearLayout>
-            </androidx.cardview.widget.CardView>
-
-            <androidx.cardview.widget.CardView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="24dp"
-                android:layout_marginTop="8dp"
-                android:layout_marginEnd="24dp"
-                app:cardBackgroundColor="@color/white_card_bg"
-                app:cardCornerRadius="20dp"
-                app:cardElevation="3dp">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:paddingTop="6dp"
-                    android:paddingBottom="6dp">
-
-                    <LinearLayout
-                        android:id="@+id/btn_get_help"
-                        android:layout_width="match_parent"
-                        android:layout_height="52dp"
-                        android:background="?attr/selectableItemBackground"
-                        android:clickable="true"
-                        android:focusable="true"
-                        android:gravity="center_vertical"
-                        android:orientation="horizontal"
-                        android:paddingStart="20dp"
-                        android:paddingEnd="20dp">
-
-                        <ImageView
-                            android:layout_width="26dp"
-                            android:layout_height="26dp"
-                            android:importantForAccessibility="no"
-                            android:src="@drawable/ic_setting_help"
-                            app:tint="#483C72" />
-
-                        <TextView
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="14dp"
-                            android:layout_weight="1"
-                            android:text="@string/get_help"
-                            android:textColor="@color/admin_text_primary"
-                            android:textSize="15sp" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="›"
-                            android:textColor="#BBBBBB"
-                            android:textSize="22sp" />
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:id="@+id/btn_privacy_policy"
-                        android:layout_width="match_parent"
-                        android:layout_height="52dp"
-                        android:background="?attr/selectableItemBackground"
-                        android:clickable="true"
-                        android:focusable="true"
-                        android:gravity="center_vertical"
-                        android:orientation="horizontal"
-                        android:paddingStart="20dp"
-                        android:paddingEnd="20dp">
-
-                        <ImageView
-                            android:layout_width="26dp"
-                            android:layout_height="26dp"
-                            android:importantForAccessibility="no"
-                            android:src="@drawable/ic_setting_privacy"
-                            app:tint="#483C72" />
-
-                        <TextView
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="14dp"
-                            android:layout_weight="1"
-                            android:text="@string/privacy_policy"
-                            android:textColor="@color/admin_text_primary"
-                            android:textSize="15sp" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="›"
-                            android:textColor="#BBBBBB"
-                            android:textSize="22sp" />
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:id="@+id/btn_terms_of_service"
-                        android:layout_width="match_parent"
-                        android:layout_height="52dp"
-                        android:background="?attr/selectableItemBackground"
-                        android:clickable="true"
-                        android:focusable="true"
-                        android:gravity="center_vertical"
-                        android:orientation="horizontal"
-                        android:paddingStart="20dp"
-                        android:paddingEnd="20dp">
-
-                        <ImageView
-                            android:layout_width="26dp"
-                            android:layout_height="26dp"
-                            android:importantForAccessibility="no"
-                            android:src="@drawable/contract"
-                            app:tint="#483C72" />
-
-                        <TextView
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="14dp"
-                            android:layout_weight="1"
-                            android:text="@string/terms_of_services"
-                            android:textColor="@color/admin_text_primary"
-                            android:textSize="15sp" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="›"
-                            android:textColor="#BBBBBB"
-                            android:textSize="22sp" />
-                    </LinearLayout>
-                </LinearLayout>
-            </androidx.cardview.widget.CardView>
-
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/btn_logout"
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:layout_marginStart="36dp"
-                android:layout_marginTop="14dp"
-                android:layout_marginEnd="36dp"
-                android:backgroundTint="#E8675A"
-                android:fontFamily="sans-serif-medium"
-                android:insetTop="0dp"
-                android:insetBottom="0dp"
-                android:text="@string/log_out"
-                android:textAllCaps="false"
-                android:textColor="#FFFFFF"
-                android:textSize="16sp"
-                app:cornerRadius="26dp" />
-
-        </LinearLayout>
-    </ScrollView>
+        android:layout_height="38dp"
+        android:background="@drawable/footer_gradient_bar" />
 
 </LinearLayout>

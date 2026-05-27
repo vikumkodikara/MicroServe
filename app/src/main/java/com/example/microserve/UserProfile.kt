@@ -8,6 +8,7 @@ data class UserProfile(
     val name: String = "",
     val email: String = "",
     val phone: String = "",
+    val location: String = "",
     val photoUrl: String = "",
     val role: String = ROLE_USER,
     val createdAt: Long = System.currentTimeMillis()
@@ -18,6 +19,7 @@ data class UserProfile(
             FIELD_NAME to name,
             FIELD_EMAIL to email,
             FIELD_PHONE to phone,
+            FIELD_LOCATION to location,
             FIELD_PHOTO_URL to photoUrl,
             FIELD_ROLE to role,
             FIELD_CREATED_AT to createdAt
@@ -34,6 +36,7 @@ data class UserProfile(
         const val FIELD_NAME = "name"
         const val FIELD_EMAIL = "email"
         const val FIELD_PHONE = "phone"
+        const val FIELD_LOCATION = "location"
         const val FIELD_PHOTO_URL = "photoUrl"
         const val FIELD_ROLE = "role"
         const val FIELD_CREATED_AT = "createdAt"

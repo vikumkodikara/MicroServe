@@ -4,7 +4,9 @@ import android.content.Intent
 import android.graphics.Color
 import android.graphics.Typeface
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.View
+import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
@@ -62,13 +64,21 @@ class SettingsFragmentActivity : AppCompatActivity() {
         }
 
         findViewById<View>(R.id.btn_logout).setOnClickListener {
+            SessionNavigator.clearAuth(this)
             Toast.makeText(this, "Logged out", Toast.LENGTH_SHORT).show()
+            startActivity(SessionNavigator.loginIntent(this))
             finish()
         }
 
         findViewById<View>(R.id.tv_edit_profile).setOnClickListener {
             startActivity(Intent(this, EditProfileActivity::class.java))
         }
+
+        findViewById<View>(R.id.profileCard)?.setOnClickListener {
+            startActivity(Intent(this, EditProfileActivity::class.java))
+        }
+
+        bindProfileCard()
 
         findViewById<View>(R.id.btn_personal_info).setOnClickListener {
             startActivity(Intent(this, PersonalInfoActivity::class.java))
@@ -100,51 +110,56 @@ class SettingsFragmentActivity : AppCompatActivity() {
 
         try {
             findViewById<View>(R.id.btn_terms_of_service).setOnClickListener {
-                startActivity(Intent(this, TermsOfServicesActivity::class.java))
+                startActivity(Intent(this, TermsOfServiceActivity::class.java))
             }
         } catch (_: Exception) { }
 
         try {
             findViewById<View>(R.id.btn_language).setOnClickListener {
-                val dialog = com.google.android.material.bottomsheet.BottomSheetDialog(this)
-                val sheetView = layoutInflater.inflate(R.layout.dialog_select_language, null)
-                dialog.setContentView(sheetView)
-
-                // Safe-guard to make Bottom Sheet background transparent so rounded corners render perfectly
-                dialog.setOnShowListener {
-                    val bottomSheet = dialog.findViewById<View>(com.google.android.material.R.id.design_bottom_sheet)
-                    bottomSheet?.setBackgroundColor(Color.TRANSPARENT)
-                }
-
-                sheetView.findViewById<View>(R.id.btn_lang_english).setOnClickListener {
-                    AppPreferences.setLanguage(this, "English")
-                    androidx.appcompat.app.AppCompatDelegate.setApplicationLocales(
-                        androidx.core.os.LocaleListCompat.forLanguageTags("en")
-                    )
-                    Toast.makeText(this, "Language changed to English", Toast.LENGTH_SHORT).show()
-                    dialog.dismiss()
-                }
-
-                sheetView.findViewById<View>(R.id.btn_lang_sinhala).setOnClickListener {
-                    AppPreferences.setLanguage(this, "Sinhala")
-                    androidx.appcompat.app.AppCompatDelegate.setApplicationLocales(
-                        androidx.core.os.LocaleListCompat.forLanguageTags("si")
-                    )
-                    Toast.makeText(this, "Language changed to Sinhala", Toast.LENGTH_SHORT).show()
-                    dialog.dismiss()
-                }
-
-                sheetView.findViewById<View>(R.id.btn_lang_tamil).setOnClickListener {
-                    AppPreferences.setLanguage(this, "Tamil")
-                    androidx.appcompat.app.AppCompatDelegate.setApplicationLocales(
-                        androidx.core.os.LocaleListCompat.forLanguageTags("ta")
-                    )
-                    Toast.makeText(this, "Language changed to Tamil", Toast.LENGTH_SHORT).show()
-                    dialog.dismiss()
-                }
-
-                dialog.show()
+                showLanguageDialog()
             }
         } catch (_: Exception) { }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        bindProfileCard()
+    }
+
+    private fun bindProfileCard() {
+        val name = AppPreferences.getSessionName(this)
+        findViewById<TextView>(R.id.tv_name)?.text =
+            if (name.isNotBlank()) name else getString(R.string.dummy_user_name)
+
+        findViewById<ImageView>(R.id.img_profile)?.let { avatar ->
+            ProfilePhotoHelper.loadAvatar(this, avatar, name)
+        }
+    }
+
+    private fun showLanguageDialog() {
+        val dialog = android.app.AlertDialog.Builder(this, com.google.android.material.R.style.Theme_MaterialComponents_Light_Dialog_MinWidth)
+            .create()
+
+        val view = LayoutInflater.from(this).inflate(R.layout.dialog_select_language, null)
+        dialog.setView(view)
+        dialog.window?.setBackgroundDrawableResource(android.R.color.transparent)
+
+        view.findViewById<View>(R.id.btn_english).setOnClickListener {
+            AppPreferences.setLanguage(this, "en")
+            Toast.makeText(this, "Language set to English", Toast.LENGTH_SHORT).show()
+            dialog.dismiss()
+        }
+        view.findViewById<View>(R.id.btn_sinhala).setOnClickListener {
+            AppPreferences.setLanguage(this, "si")
+            Toast.makeText(this, "Language set to Sinhala", Toast.LENGTH_SHORT).show()
+            dialog.dismiss()
+        }
+        view.findViewById<View>(R.id.btn_tamil).setOnClickListener {
+            AppPreferences.setLanguage(this, "ta")
+            Toast.makeText(this, "Language set to Tamil", Toast.LENGTH_SHORT).show()
+            dialog.dismiss()
+        }
+
+        dialog.show()
     }
 }

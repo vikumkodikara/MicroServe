@@ -89,11 +89,11 @@ class RequestServiceActivity : AppCompatActivity() {
                 // Add the request
                 RequestStore.addRequest(
                     context = this,
-                    category = category,
                     requesterName = name,
+                    title = title,
+                    category = category,
                     contact = contact,
                     location = location,
-                    title = title,
                     description = description
                 )
                 Toast.makeText(this, "Service request submitted successfully!", Toast.LENGTH_LONG).show()

@@ -25,6 +25,7 @@
         android:id="@+id/loginScroll"
         android:layout_width="0dp"
         android:layout_height="0dp"
+        android:clipChildren="false"
         android:clipToPadding="false"
         android:fillViewport="true"
         android:overScrollMode="never"
@@ -37,12 +38,16 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:clipChildren="false"
+            android:clipToPadding="false"
             android:paddingHorizontal="32dp">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/loginContent"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:clipChildren="false"
+                android:clipToPadding="false"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -79,7 +84,9 @@
                     android:id="@+id/usernameField"
                     android:layout_width="0dp"
                     android:layout_height="54dp"
+                    android:layout_marginStart="8dp"
                     android:layout_marginTop="28dp"
+                    android:layout_marginEnd="8dp"
                     android:background="@drawable/login_field_bg"
                     android:gravity="center_vertical"
                     android:orientation="horizontal"
@@ -116,7 +123,9 @@
                     android:id="@+id/passwordField"
                     android:layout_width="0dp"
                     android:layout_height="54dp"
-                    android:layout_marginTop="14dp"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginEnd="8dp"
                     android:background="@drawable/login_field_bg"
                     android:gravity="center_vertical"
                     android:orientation="horizontal"
@@ -167,54 +176,98 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="32dp"
+                    android:clipChildren="false"
+                    android:clipToPadding="false"
                     android:gravity="center"
                     android:orientation="horizontal"
+                    android:paddingBottom="8dp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/forgotPasswordLink">
 
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/signUpButton"
+                        style="@style/Widget.MaterialComponents.Button.UnelevatedButton"
                         android:layout_width="0dp"
                         android:layout_height="40dp"
-                        android:layout_marginEnd="10dp"
+                        android:layout_marginEnd="5dp"
                         android:layout_weight="1"
                         android:background="@drawable/btn_purple_gradient"
+                        android:elevation="0dp"
                         android:fontFamily="sans-serif-medium"
+                        android:insetTop="0dp"
+                        android:insetBottom="0dp"
+                        android:maxWidth="150dp"
+                        android:stateListAnimator="@null"
                         android:text="@string/sign_up_button"
                         android:textAllCaps="false"
                         android:textColor="@color/white"
                         android:textSize="15sp"
-                        android:insetTop="0dp"
-                        android:insetBottom="0dp"
-                        app:backgroundTint="@null" />
+                        app:backgroundTint="@null"
+                        app:cornerRadius="20dp"
+                        app:elevation="0dp"
+                        app:rippleColor="#33FFFFFF" />
 
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/loginButton"
+                        style="@style/Widget.MaterialComponents.Button.UnelevatedButton"
                         android:layout_width="0dp"
                         android:layout_height="40dp"
-                        android:layout_marginStart="10dp"
+                        android:layout_marginStart="5dp"
                         android:layout_weight="1"
                         android:background="@drawable/btn_purple_gradient"
+                        android:elevation="0dp"
                         android:fontFamily="sans-serif-medium"
+                        android:insetTop="0dp"
+                        android:insetBottom="0dp"
+                        android:maxWidth="150dp"
+                        android:stateListAnimator="@null"
                         android:text="@string/login_button"
                         android:textAllCaps="false"
                         android:textColor="@color/white"
                         android:textSize="15sp"
-                        android:insetTop="0dp"
-                        android:insetBottom="0dp"
-                        app:backgroundTint="@null" />
+                        app:backgroundTint="@null"
+                        app:cornerRadius="20dp"
+                        app:elevation="0dp"
+                        app:rippleColor="#33FFFFFF" />
                 </LinearLayout>
 
-                <com.google.android.gms.common.SignInButton
+                <LinearLayout
                     android:id="@+id/googleSignInButton"
-                    android:layout_width="0dp"
-                    android:layout_height="48dp"
-                    android:layout_marginTop="14dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="40dp"
+                    android:layout_marginTop="12dp"
+                    android:layout_marginBottom="16dp"
+                    android:background="@drawable/google_sign_in_button_bg"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:foreground="?attr/selectableItemBackground"
+                    android:gravity="center"
+                    android:orientation="horizontal"
+                    android:paddingHorizontal="16dp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/loginActionsRow" />
+                    app:layout_constraintTop_toBottomOf="@id/loginActionsRow">
+
+                    <ImageView
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:contentDescription="@null"
+                        android:importantForAccessibility="no"
+                        android:scaleType="fitCenter"
+                        android:src="@drawable/ic_google" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="10dp"
+                        android:fontFamily="sans-serif-medium"
+                        android:includeFontPadding="false"
+                        android:text="@string/login_google_button"
+                        android:textColor="#3C4043"
+                        android:textSize="14sp" />
+                </LinearLayout>
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 

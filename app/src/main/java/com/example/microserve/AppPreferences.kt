@@ -13,6 +13,8 @@ object AppPreferences {
     private const val KEY_SESSION_UID = "session_uid"
     private const val KEY_SESSION_NAME = "session_name"
     private const val KEY_SESSION_EMAIL = "session_email"
+    private const val KEY_SESSION_PHONE = "session_phone"
+    private const val KEY_SESSION_LOCATION = "session_location"
     private const val KEY_SESSION_PHOTO_URL = "session_photo_url"
     private const val KEY_SESSION_ROLE = "session_role"
 
@@ -47,6 +49,8 @@ object AppPreferences {
             .putString(KEY_SESSION_UID, profile.uid)
             .putString(KEY_SESSION_NAME, profile.name)
             .putString(KEY_SESSION_EMAIL, profile.email)
+            .putString(KEY_SESSION_PHONE, profile.phone)
+            .putString(KEY_SESSION_LOCATION, profile.location)
             .putString(KEY_SESSION_PHOTO_URL, profile.photoUrl)
             .putString(KEY_SESSION_ROLE, profile.role)
             .apply()
@@ -72,15 +76,46 @@ object AppPreferences {
         return prefs(context).getString(KEY_SESSION_PHOTO_URL, "") ?: ""
     }
 
+    fun setSessionPhotoUrl(context: Context, photoUrl: String) {
+        prefs(context).edit().putString(KEY_SESSION_PHOTO_URL, photoUrl).apply()
+    }
+
+    fun setSessionName(context: Context, name: String) {
+        prefs(context).edit().putString(KEY_SESSION_NAME, name.trim()).apply()
+    }
+
+    fun getSessionPhone(context: Context): String {
+        return prefs(context).getString(KEY_SESSION_PHONE, "") ?: ""
+    }
+
+    fun getSessionLocation(context: Context): String {
+        return prefs(context).getString(KEY_SESSION_LOCATION, "") ?: ""
+    }
+
+    fun getSessionProfile(context: Context): UserProfile {
+        return UserProfile(
+            uid = getSessionUid(context),
+            name = getSessionName(context),
+            email = getSessionEmail(context),
+            phone = getSessionPhone(context),
+            location = getSessionLocation(context),
+            photoUrl = getSessionPhotoUrl(context),
+            role = getSessionRole(context)
+        )
+    }
+
     fun getSessionRole(context: Context): String {
         return prefs(context).getString(KEY_SESSION_ROLE, UserProfile.ROLE_USER) ?: UserProfile.ROLE_USER
     }
 
     fun clearSession(context: Context) {
+        ProfilePhotoHelper.clearPhoto(context)
         prefs(context).edit()
             .remove(KEY_SESSION_UID)
             .remove(KEY_SESSION_NAME)
             .remove(KEY_SESSION_EMAIL)
+            .remove(KEY_SESSION_PHONE)
+            .remove(KEY_SESSION_LOCATION)
             .remove(KEY_SESSION_PHOTO_URL)
             .remove(KEY_SESSION_ROLE)
             .apply()

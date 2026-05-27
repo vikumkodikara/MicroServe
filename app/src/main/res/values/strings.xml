@@ -99,6 +99,10 @@
     <string name="settings">Settings</string>
     <string name="dummy_user_name">Nethmina Malshan</string>
     <string name="edit_profile">Edit Profile</string>
+    <string name="profile_saved">Profile saved</string>
+    <string name="profile_photo_saved">Profile photo updated</string>
+    <string name="profile_photo_save_failed">Could not save photo. Try again.</string>
+    <string name="profile_save_failed">Could not save profile. Please log in again.</string>
     <string name="personal_information">Personal Information</string>
     <string name="saved_addresses">Saved Addresses</string>
     <string name="payment_methods">Payment Methods</string>
@@ -130,6 +134,7 @@
 
     <!-- Sign up -->
     <string name="sign_up_title">Create Account</string>
+    <string name="sign_up_username_hint">Full name</string>
     <string name="sign_up_email_hint">E-mail</string>
     <string name="sign_up_mobile_hint">Mobile</string>
     <string name="sign_up_create_button">Create</string>
@@ -138,6 +143,10 @@
     <string name="sign_up_error_email">Please enter your e-mail</string>
     <string name="sign_up_error_mobile">Please enter your mobile number</string>
     <string name="sign_up_error_password_length">Password must be at least 6 characters</string>
+    <string name="sign_up_error_email_in_use">This email address is already used in another account</string>
+    <string name="sign_up_error_check_email">Could not verify email right now. Please try again.</string>
+    <string name="sign_up_error_network">Network error. Please check your internet and try again.</string>
+    <string name="sign_up_error_generic">Sign up failed. Please try again.</string>
     <string name="sign_up_success">Account created successfully</string>
 
     <!-- Edit Profile Strings -->

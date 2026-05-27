@@ -18,5 +18,9 @@ class WalletActivity : AppCompatActivity() {
         findViewById<View>(R.id.btn_add_card).setOnClickListener {
             startActivity(Intent(this, AddNewCardActivity::class.java))
         }
+
+        findViewById<View>(R.id.btn_cards).setOnClickListener {
+            startActivity(Intent(this, MyCardsActivity::class.java))
+        }
     }
 }

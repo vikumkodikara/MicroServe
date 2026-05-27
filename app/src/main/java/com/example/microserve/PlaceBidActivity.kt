@@ -2,103 +2,75 @@ package com.example.microserve
 
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.View
+import android.widget.CheckBox
+import android.widget.EditText
+import android.widget.LinearLayout
+import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
-import com.example.microserve.databinding.ActivityPlaceBidBinding
-import com.example.microserve.databinding.ItemBidRowBinding
 
 class PlaceBidActivity : AppCompatActivity() {
 
-    companion object {
-        const val EXTRA_REQUEST_ID = "extra_request_id"
-    }
+    private lateinit var bidsContainer: LinearLayout
 
-    private lateinit var binding: ActivityPlaceBidBinding
-    private lateinit var request: RequestStore.UserRequest
+    private data class Bid(val name: String, val price: String)
+
+    private val bids = mutableListOf(
+        Bid("Anuja Silva", "Rs. 4,000"),
+        Bid("Kulathunga Herath", "Rs. 3,500")
+    )
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
-        binding = ActivityPlaceBidBinding.inflate(layoutInflater)
-        setContentView(binding.root)
+        setContentView(R.layout.activity_place_bid)
 
-        val requestId = intent.getStringExtra(EXTRA_REQUEST_ID)
-        if (requestId.isNullOrBlank()) {
-            Toast.makeText(this, R.string.request_not_found, Toast.LENGTH_SHORT).show()
-            finish()
-            return
-        }
+        bidsContainer = findViewById(R.id.bidsListContainer)
+        val etAmount = findViewById<EditText>(R.id.et_bid_amount)
+        val etTime = findViewById<EditText>(R.id.et_completion_time)
+        val cbAgree = findViewById<CheckBox>(R.id.cb_agree)
 
-        val loadedRequest = RequestStore.getRequestById(this, requestId)
-        if (loadedRequest == null) {
-            Toast.makeText(this, R.string.request_not_found, Toast.LENGTH_SHORT).show()
-            finish()
-            return
-        }
-        request = loadedRequest
+        findViewById<View>(R.id.btn_back).setOnClickListener { finish() }
 
-        setupWindowInsets()
-        bindBids()
-        setupClickListeners()
-    }
+        findViewById<View>(R.id.btn_place_bid).setOnClickListener {
+            val amount = etAmount.text.toString().trim()
+            val time = etTime.text.toString().trim()
 
-    private fun setupWindowInsets() {
-        ViewCompat.setOnApplyWindowInsetsListener(binding.contentScrollView) { view, insets ->
-            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            view.setPadding(0, systemBars.top, 0, 0)
-            binding.footerBar.setPadding(0, 0, 0, systemBars.bottom)
-            insets
-        }
-    }
-
-    private fun bindBids() {
-        binding.bidsContainer.removeAllViews()
-        val inflater = LayoutInflater.from(this)
-        val bids = BidSampleData.getBidsForRequest(request)
-
-        bids.forEach { bid ->
-            val rowBinding = ItemBidRowBinding.inflate(inflater, binding.bidsContainer, false)
-            rowBinding.bidProviderName.text = bid.providerName
-            rowBinding.bidPriceText.text = getString(R.string.bid_price_format, bid.priceRs)
-            rowBinding.purchaseButton.setOnClickListener {
-                Toast.makeText(
-                    this,
-                    getString(R.string.purchase_confirmed_toast, bid.providerName),
-                    Toast.LENGTH_SHORT
-                ).show()
+            if (amount.isBlank()) {
+                Toast.makeText(this, "Please enter bid amount", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
             }
-            binding.bidsContainer.addView(rowBinding.root)
+            if (!cbAgree.isChecked) {
+                Toast.makeText(this, "Please agree to terms", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+
+            bids.add(0, Bid("You", "Rs. $amount"))
+            etAmount.text.clear()
+            etTime.text.clear()
+            cbAgree.isChecked = false
+            Toast.makeText(this, "Bid placed successfully", Toast.LENGTH_SHORT).show()
+            loadBids()
         }
+
+        loadBids()
     }
 
-    private fun setupClickListeners() {
-        binding.backBtn.setOnClickListener { finish() }
-        binding.placeBidSubmitButton.setOnClickListener { submitBid() }
-    }
+    private fun loadBids() {
+        bidsContainer.removeAllViews()
 
-    private fun submitBid() {
-        if (!binding.termsCheckbox.isChecked) {
-            Toast.makeText(this, R.string.terms_not_agreed, Toast.LENGTH_SHORT).show()
-            return
+        for (bid in bids) {
+            val item = LayoutInflater.from(this).inflate(R.layout.item_previous_bid, bidsContainer, false)
+            item.findViewById<TextView>(R.id.tv_bidder_name).text = bid.name
+            item.findViewById<TextView>(R.id.tv_bid_price).text = "Bid Price: ${bid.price}"
+
+            item.findViewById<View>(R.id.btn_purchase).setOnClickListener {
+                Toast.makeText(this, "Purchased from ${bid.name}", Toast.LENGTH_SHORT).show()
+            }
+
+            bidsContainer.addView(item)
         }
-
-        val amount = binding.bidAmountInput.text.toString().trim().toIntOrNull()
-        if (amount == null || amount <= 0) {
-            Toast.makeText(this, R.string.bid_amount_invalid, Toast.LENGTH_SHORT).show()
-            return
-        }
-
-        val completionHours = binding.completionTimeInput.text.toString().trim().toIntOrNull()
-        if (completionHours == null || completionHours <= 0) {
-            Toast.makeText(this, R.string.completion_time_invalid, Toast.LENGTH_SHORT).show()
-            return
-        }
-
-        BidSampleData.addBid(request.id, amount, completionHours)
-        Toast.makeText(this, R.string.bid_submitted_toast, Toast.LENGTH_SHORT).show()
-        finish()
     }
 }

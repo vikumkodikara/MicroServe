@@ -69,11 +69,11 @@ object CategorySampleData {
         samples.forEach { sample ->
             RequestStore.addRequest(
                 context = context,
-                category = storeCategory,
                 requesterName = sample.requesterName,
+                title = sample.title,
+                category = storeCategory,
                 contact = "0770000000",
                 location = "Colombo",
-                title = sample.title,
                 description = sample.description
             )
         }

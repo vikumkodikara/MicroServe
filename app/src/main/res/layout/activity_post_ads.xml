@@ -128,17 +128,46 @@
                 <FrameLayout
                     android:id="@+id/addImageBtn"
                     android:layout_width="match_parent"
-                    android:layout_height="80dp"
+                    android:layout_height="100dp"
                     android:layout_marginTop="8dp"
-                    android:background="@drawable/dashed_bg">
+                    android:background="@drawable/dashed_bg"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:foreground="?attr/selectableItemBackground"
+                    android:padding="8dp">
 
                     <ImageView
-                        android:layout_width="40dp"
-                        android:layout_height="40dp"
+                        android:id="@+id/selectedImagePreview"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:contentDescription="Selected image"
+                        android:scaleType="centerCrop"
+                        android:visibility="gone" />
+
+                    <LinearLayout
+                        android:id="@+id/addImagePlaceholder"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
                         android:layout_gravity="center"
-                        android:contentDescription="Gallery Icon"
-                        android:src="@android:drawable/ic_menu_gallery"
-                        app:tint="@color/brand_purple" />
+                        android:gravity="center"
+                        android:orientation="vertical">
+
+                        <ImageView
+                            android:layout_width="40dp"
+                            android:layout_height="40dp"
+                            android:contentDescription="Gallery Icon"
+                            android:src="@android:drawable/ic_menu_gallery"
+                            app:tint="@color/brand_purple" />
+
+                        <TextView
+                            android:id="@+id/imageActionText"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="4dp"
+                            android:text="Tap to add image"
+                            android:textColor="@color/text_gray"
+                            android:textSize="13sp" />
+                    </LinearLayout>
                 </FrameLayout>
 
                 <TextView

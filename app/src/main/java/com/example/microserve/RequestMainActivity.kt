@@ -4,180 +4,107 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
+import android.widget.ImageView
+import android.widget.LinearLayout
+import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
-import com.example.microserve.databinding.ActivityRequestMainBinding
-import com.example.microserve.databinding.ItemCategoryBinding
-import com.example.microserve.databinding.ItemRequestRowBinding
 
 class RequestMainActivity : AppCompatActivity() {
 
-    private lateinit var binding: ActivityRequestMainBinding
+    private lateinit var container: LinearLayout
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
-        binding = ActivityRequestMainBinding.inflate(layoutInflater)
-        setContentView(binding.root)
+        setContentView(R.layout.activity_request_main)
 
-        setupWindowInsets()
-        seedSampleRequestsIfEmpty()
-        setupCategoryGrid()
-        setupClickListeners()
+        container = findViewById(R.id.requestsListContainer)
+
+        findViewById<View>(R.id.btn_back).setOnClickListener { finish() }
+
+        findViewById<View>(R.id.btn_requests).setOnClickListener {
+            startActivity(Intent(this, CreateRequestActivity::class.java))
+        }
+
+        val categoryMap = mapOf(
+            R.id.cat_plumbing to "Plumbing",
+            R.id.cat_gardening to "Gardening",
+            R.id.cat_cleaning to "Cleaning",
+            R.id.cat_painting to "Painting",
+            R.id.cat_electric to "Electric",
+            R.id.cat_handyman to "Handyman",
+            R.id.cat_carpentry to "Carpentry",
+            R.id.cat_mechanic to "Mechanic",
+            R.id.cat_hvac to "HVAC"
+        )
+        for ((viewId, catName) in categoryMap) {
+            findViewById<View>(viewId).setOnClickListener {
+                startActivity(
+                    Intent(this, CategoryDetailActivity::class.java)
+                        .putExtra("category", catName)
+                )
+            }
+        }
+
         HomeBottomNavHelper.setup(this, HomeBottomNavHelper.TAB_REQUEST)
-        refreshRequestsList()
+        loadSampleRequests()
     }
 
     override fun onResume() {
         super.onResume()
-        refreshRequestsList()
+        loadSampleRequests()
     }
 
-    private fun setupWindowInsets() {
-        ViewCompat.setOnApplyWindowInsetsListener(binding.mainScrollView) { view, insets ->
-            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            view.setPadding(0, systemBars.top, 0, 0)
-            insets
-        }
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.customBottomNav)) { _, insets ->
-            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            findViewById<View>(R.id.navSystemBarSpacer)?.let { spacer ->
-                val lp = spacer.layoutParams
-                if (lp.height != systemBars.bottom) {
-                    lp.height = systemBars.bottom
-                    spacer.layoutParams = lp
-                }
-            }
-            insets
-        }
+    private fun seedSampleData() {
+        val prefs = getSharedPreferences("request_store", MODE_PRIVATE)
+        if (prefs.getBoolean("seeded", false)) return
+        RequestStore.addRequest(this, "Sisira Kumara", "Plumber", "Plumbing", "0771234567", "Colombo", "Pipe leak repair")
+        RequestStore.addRequest(this, "Nimal Herath", "Painter", "Painting", "0789876543", "Kandy", "House repainting")
+        RequestStore.addRequest(this, "Sunil Rathnayake", "Gardening", "Gardening", "0761112233", "Galle", "Weed removal")
+        prefs.edit().putBoolean("seeded", true).apply()
     }
 
-    private fun seedSampleRequestsIfEmpty() {
-        if (RequestStore.getPendingRequests(this).isNotEmpty()) return
+    private fun loadSampleRequests() {
+        container.removeAllViews()
 
-        val requesterName = AppPreferences.getSessionName(this).ifBlank { "Demo User" }
-
-        RequestStore.addRequest(
-            context = this,
-            category = "Plumbing",
-            requesterName = requesterName,
-            contact = "555-0100",
-            location = "Home",
-            title = "Pipe leak repair",
-            description = "Kitchen pipe leak repair"
-        )
-        RequestStore.addRequest(
-            context = this,
-            category = "House Painting",
-            requesterName = requesterName,
-            contact = "555-0100",
-            location = "Home",
-            title = "House repainting",
-            description = "Full house repainting"
-        )
-        RequestStore.addRequest(
-            context = this,
-            category = "Gardening",
-            requesterName = requesterName,
-            contact = "555-0100",
-            location = "Garden",
-            title = "Weed removal",
-            description = "Backyard weed removal"
-        )
-    }
-
-    private fun setupCategoryGrid() {
-        binding.categoryGrid.removeAllViews()
-        val inflater = LayoutInflater.from(this)
-
-        CategoryCatalog.all.forEach { category ->
-            val itemBinding = ItemCategoryBinding.inflate(inflater, binding.categoryGrid, false)
-            itemBinding.categoryImage.setImageResource(category.imageRes)
-            itemBinding.categoryLabel.text = itemBinding.root.context.getString(category.nameResId)
-            itemBinding.root.setOnClickListener {
-                openCategoryDetail(category.id)
-            }
-            binding.categoryGrid.addView(itemBinding.root)
-        }
-    }
-
-    private fun refreshRequestsList() {
-        val requests = RequestStore.getPendingRequests(this)
-        binding.requestsContainer.removeAllViews()
+        seedSampleData()
+        val requests = RequestStore.getAllRequests(this)
 
         if (requests.isEmpty()) {
-            binding.emptyRequestsText.visibility = View.VISIBLE
+            val empty = TextView(this).apply {
+                text = "No requests yet. Tap 'Requests' to create one."
+                textSize = 14f
+                setTextColor(0xFF777777.toInt())
+                setPadding(0, 40, 0, 0)
+                gravity = android.view.Gravity.CENTER
+            }
+            container.addView(empty)
             return
         }
 
-        binding.emptyRequestsText.visibility = View.GONE
-        val inflater = LayoutInflater.from(this)
+        requests.forEachIndexed { index, req ->
+            val item = LayoutInflater.from(this).inflate(R.layout.item_my_request, container, false)
 
-        requests.forEachIndexed { index, request ->
-            val rowBinding = ItemRequestRowBinding.inflate(inflater, binding.requestsContainer, false)
-            val categoryLabel = displayCategoryName(this, request.category)
-            rowBinding.requestTitle.text = getString(R.string.request_row_title_format, index + 1, categoryLabel)
-            rowBinding.requestDesc.text = request.title
+            item.findViewById<TextView>(R.id.tv_number).text = "${index + 1}."
+            item.findViewById<TextView>(R.id.tv_title).text = req.title.ifBlank { "Request" }
+            item.findViewById<TextView>(R.id.tv_description).text = req.description.ifBlank { req.category }
 
-            rowBinding.requestDelete.setOnClickListener {
-                RequestStore.deleteRequest(this, request.id)
+            item.findViewById<View>(R.id.btn_edit).setOnClickListener {
+                startActivity(
+                    Intent(this, CreateRequestActivity::class.java)
+                        .putExtra("request_id", req.id)
+                )
+            }
+
+            item.findViewById<ImageView>(R.id.btn_delete).setOnClickListener {
+                RequestStore.deleteRequest(this, req.id)
                 Toast.makeText(this, "Request deleted", Toast.LENGTH_SHORT).show()
-                refreshRequestsList()
+                loadSampleRequests()
             }
 
-            rowBinding.requestEditBtn.setOnClickListener {
-                openRequestForm(request.category)
-            }
-
-            binding.requestsContainer.addView(rowBinding.root)
+            container.addView(item)
         }
-    }
-
-    private fun displayCategoryName(context: android.content.Context, category: String): String {
-        val cat = CategoryCatalog.findByStoreKey(category)
-        return if (cat != null) {
-            context.getString(cat.nameResId)
-        } else {
-            when {
-                category.contains("Plumb", ignoreCase = true) -> context.getString(R.string.category_plumbing)
-                category.contains("Paint", ignoreCase = true) -> context.getString(R.string.category_painting)
-                category.contains("Garden", ignoreCase = true) -> context.getString(R.string.category_gardening)
-                category.contains("Clean", ignoreCase = true) -> context.getString(R.string.category_cleaning)
-                category.contains("Electric", ignoreCase = true) -> context.getString(R.string.category_electric)
-                category.contains("Carpent", ignoreCase = true) -> context.getString(R.string.category_carpentry)
-                else -> category
-            }
-        }
-    }
-
-    private fun setupClickListeners() {
-        binding.headerIconContainer.setOnClickListener {
-            startActivity(Intent(this, SettingsActivity::class.java))
-        }
-
-        binding.requestsButton.setOnClickListener {
-            openRequestForm()
-        }
-    }
-
-    private fun openCategoryDetail(categoryId: String) {
-        startActivity(
-            Intent(this, CategoryDetailActivity::class.java)
-                .putExtra(CategoryDetailActivity.EXTRA_CATEGORY_ID, categoryId)
-        )
-    }
-
-    private fun openRequestForm() {
-        startActivity(Intent(this, RequestServiceActivity::class.java))
-    }
-
-    private fun openRequestForm(category: String) {
-        startActivity(
-            Intent(this, RequestServiceActivity::class.java)
-                .putExtra(RequestServiceActivity.EXTRA_CATEGORY, category)
-        )
     }
 }

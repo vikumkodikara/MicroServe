@@ -11,9 +11,6 @@ import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.example.microserve.databinding.ActivitySettingsBinding
-import com.google.android.gms.auth.api.signin.GoogleSignIn
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions
-import com.google.firebase.auth.FirebaseAuth
 
 class SettingsActivity : AppCompatActivity() {
 
@@ -125,18 +122,9 @@ class SettingsActivity : AppCompatActivity() {
         }
 
         binding.btnLogout.setOnClickListener {
-            FirebaseAuth.getInstance().signOut()
-            GoogleSignIn.getClient(
-                this,
-                GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).build()
-            ).signOut()
-
-            AppPreferences.clearSession(this)
-
+            SessionNavigator.clearAuth(this)
             Toast.makeText(this, "Logged out", Toast.LENGTH_SHORT).show()
-            startActivity(Intent(this, LoginActivity::class.java).apply {
-                flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-            })
+            startActivity(SessionNavigator.loginIntent(this))
             finish()
         }
     }

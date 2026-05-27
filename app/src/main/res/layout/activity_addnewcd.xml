@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/light_background"
+    android:background="#F0F0F3"
     android:fitsSystemWindows="true"
     android:orientation="vertical">
 
@@ -63,7 +63,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Card number"
-                android:textColor="@color/admin_text_primary"
+                android:textColor="#1A1A1A"
                 android:textSize="15sp"
                 android:textStyle="bold" />
 
@@ -74,11 +74,11 @@
                 android:layout_height="48dp"
                 android:layout_marginTop="8dp"
                 android:layout_marginBottom="20dp"
-                android:background="@drawable/login_field_bg"
+                android:background="@drawable/neumorphism_field_bg"
                 android:hint="Card number"
                 android:inputType="number"
                 android:paddingHorizontal="20dp"
-                android:textColor="@color/admin_text_primary"
+                android:textColor="#1A1A1A"
                 android:textColorHint="#C0A8D4"
                 android:textSize="14sp" />
 
@@ -87,7 +87,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Card name"
-                android:textColor="@color/admin_text_primary"
+                android:textColor="#1A1A1A"
                 android:textSize="15sp"
                 android:textStyle="bold" />
 
@@ -98,11 +98,11 @@
                 android:layout_height="48dp"
                 android:layout_marginTop="8dp"
                 android:layout_marginBottom="20dp"
-                android:background="@drawable/login_field_bg"
+                android:background="@drawable/neumorphism_field_bg"
                 android:hint="Card name"
                 android:inputType="textPersonName"
                 android:paddingHorizontal="20dp"
-                android:textColor="@color/admin_text_primary"
+                android:textColor="#1A1A1A"
                 android:textColorHint="#C0A8D4"
                 android:textSize="14sp" />
 
@@ -124,7 +124,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Date"
-                        android:textColor="@color/admin_text_primary"
+                        android:textColor="#1A1A1A"
                         android:textSize="15sp"
                         android:textStyle="bold" />
 
@@ -133,13 +133,13 @@
                         android:layout_width="match_parent"
                         android:layout_height="48dp"
                         android:layout_marginTop="8dp"
-                        android:background="@drawable/login_field_bg"
+                        android:background="@drawable/neumorphism_field_bg"
                         android:drawableStart="@android:drawable/ic_menu_my_calendar"
                         android:drawablePadding="8dp"
                         android:hint="MM/YY"
                         android:inputType="date"
                         android:paddingHorizontal="16dp"
-                        android:textColor="@color/admin_text_primary"
+                        android:textColor="#1A1A1A"
                         android:textColorHint="#C0A8D4"
                         android:textSize="14sp" />
                 </LinearLayout>
@@ -155,7 +155,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="CVV"
-                        android:textColor="@color/admin_text_primary"
+                        android:textColor="#1A1A1A"
                         android:textSize="15sp"
                         android:textStyle="bold" />
 
@@ -164,12 +164,12 @@
                         android:layout_width="match_parent"
                         android:layout_height="48dp"
                         android:layout_marginTop="8dp"
-                        android:background="@drawable/login_field_bg"
+                        android:background="@drawable/neumorphism_field_bg"
                         android:hint="***"
                         android:inputType="numberPassword"
                         android:maxLength="4"
                         android:paddingHorizontal="20dp"
-                        android:textColor="@color/admin_text_primary"
+                        android:textColor="#1A1A1A"
                         android:textColorHint="#C0A8D4"
                         android:textSize="14sp" />
                 </LinearLayout>
@@ -203,5 +203,12 @@
             android:textSize="16sp"
             android:textStyle="bold" />
     </com.google.android.material.card.MaterialCardView>
+
+    <!-- Footer Bar -->
+    <View
+        android:id="@+id/footerBar"
+        android:layout_width="match_parent"
+        android:layout_height="38dp"
+        android:background="@drawable/footer_gradient_bar" />
 
 </LinearLayout>

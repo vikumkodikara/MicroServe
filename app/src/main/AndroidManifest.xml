@@ -1,9 +1,9 @@
-<?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools">
-
-    <uses-permission android:name="android.permission.INTERNET" />
-
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <uses-permission android:name="android.permission.INTERNET" />
+
     <application
         android:name=".MicroServeApp"
         android:allowBackup="true"
@@ -13,124 +13,138 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.MicroServe"
-        android:localeConfig="@xml/locales_config">
-
-        <service
-            android:name="androidx.appcompat.app.AppLocalesMetadataHolderService"
-            android:enabled="false"
-            android:exported="false">
-            <meta-data
-                android:name="autoStoreLocales"
-                android:value="true" />
-        </service>
-        <activity
-            android:name=".SplashActivity"
-            android:exported="true"
-            android:theme="@style/Theme.MicroServe.Splash">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
-        <activity
-            android:name=".LoginActivity"
-            android:exported="false"
-            android:theme="@style/Theme.MicroServe.Login" />
-        <activity
-            android:name=".SignUpActivity"
-            android:exported="false"
-            android:theme="@style/Theme.MicroServe.Login" />
-        <activity
-            android:name=".Homepage"
-            android:exported="false" />
-        <activity
-            android:name=".PostAdsActivity"
-            android:exported="false" />
-        <activity
-            android:name=".AdminDashboardActivity"
-            android:exported="false" />
-        <activity
-            android:name=".PostServiceActivity"
-            android:exported="false" />
-        <activity
-            android:name=".EditPostActivity"
-            android:exported="false" />
-        <activity
-            android:name=".EditProfileActivity"
-            android:exported="false" />
-        <activity
-            android:name=".DiscoverActivity"
-            android:exported="false" />
-        <activity
-            android:name=".RequesterDetailsActivity"
-            android:exported="false" />
-        <activity
-            android:name=".RequestersActivity"
-            android:exported="false" />
-        <activity
-            android:name=".ServicesActivity"
-            android:exported="false" />
-        <activity
-            android:name=".RequestServiceActivity"
-            android:exported="false" />
-        <activity
-            android:name=".RequestMainActivity"
-            android:exported="false" />
-        <activity
-            android:name=".CategoryDetailActivity"
-            android:exported="false" />
-        <activity
-            android:name=".RequestDetailActivity"
-            android:exported="false" />
-        <activity
-            android:name=".PlaceBidActivity"
-            android:exported="false" />
-        <activity
-            android:name=".UsersActivity"
-            android:exported="false" />
-        <activity
-            android:name=".UserDetailsActivity"
-            android:exported="false" />
-        <activity
-            android:name=".TransactionsActivity"
-            android:exported="false" />
-        <activity
-            android:name=".TransactionDetailsActivity"
-            android:exported="false" />
-        <activity
-            android:name=".FeedbacksActivity"
-            android:exported="false" />
-        <activity
-            android:name=".SettingsActivity"
-            android:exported="false" />
-        <activity
-            android:name=".AdminProfileActivity"
-            android:exported="false" />
-        <activity
-            android:name=".PersonalInfoActivity"
-            android:exported="false" />
-        <activity
-            android:name=".SavedAddressActivity"
-            android:exported="false" />
-        <activity
-            android:name=".WalletActivity"
-            android:exported="false" />
-        <activity
-            android:name=".SettingsFragmentActivity"
-            android:exported="false" />
-        <activity
-            android:name=".AddNewCardActivity"
-            android:exported="false" />
-            <activity
+        android:theme="@style/Theme.MicroServe">
+        <activity
+            android:name=".SplashActivity"
+            android:exported="true"
+            android:theme="@style/Theme.MicroServe.Splash">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".LoginActivity"
+            android:exported="false"
+            android:theme="@style/Theme.MicroServe.Login" />
+        <activity
+            android:name=".SignUpActivity"
+            android:exported="false"
+            android:theme="@style/Theme.MicroServe.Login" />
+        <activity
+            android:name=".Homepage"
+            android:exported="false" />
+        <activity
+            android:name=".AdminDashboardActivity"
+            android:exported="false" />
+        <activity
+            android:name=".PostServiceActivity"
+            android:exported="false" />
+        <activity
+            android:name=".EditPostActivity"
+            android:exported="false" />
+        <activity
+            android:name=".PostAdsActivity"
+            android:exported="false" />
+        <activity
+            android:name=".RequesterDetailsActivity"
+            android:exported="false" />
+        <activity
+            android:name=".RequestersActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ServicesActivity"
+            android:exported="false" />
+        <activity
+            android:name=".RequestServiceActivity"
+            android:exported="false" />
+        <activity
+            android:name=".EditProfileActivity"
+            android:exported="false" />
+        <activity
+            android:name=".DiscoverActivity"
+            android:exported="false" />
+        <activity
+            android:name=".UsersActivity"
+            android:exported="false" />
+        <activity
+            android:name=".UserDetailsActivity"
+            android:exported="false" />
+        <activity
+            android:name=".TransactionsActivity"
+            android:exported="false" />
+        <activity
+            android:name=".TransactionDetailsActivity"
+            android:exported="false" />
+        <activity
+            android:name=".FeedbacksActivity"
+            android:exported="false" />
+        <activity
+            android:name=".SettingsActivity"
+            android:exported="false" />
+        <activity
+            android:name=".AdminProfileActivity"
+            android:exported="false" />
+        <activity
+            android:name=".PersonalInfoActivity"
+            android:exported="false" />
+        <activity
+            android:name=".SavedAddressActivity"
+            android:exported="false" />
+        <activity
+            android:name=".WalletActivity"
+            android:exported="false" />
+        <activity
+            android:name=".SettingsFragmentActivity"
+            android:exported="false" />
+        <activity
+            android:name=".AddNewCardActivity"
+            android:exported="false" />
+        <activity
             android:name=".GetHelpActivity"
             android:exported="false" />
         <activity
             android:name=".PrivacyPolicyActivity"
             android:exported="false" />
         <activity
-            android:name=".TermsOfServicesActivity"
+            android:name=".TermsOfServiceActivity"
             android:exported="false" />
-    </application>
-
-</manifest>
+        <activity
+            android:name=".UserFeedbacksActivity"
+            android:exported="false" />
+        <activity
+            android:name=".CreateFeedbackActivity"
+            android:exported="false" />
+        <activity
+            android:name=".EditFeedbackActivity"
+            android:exported="false" />
+        <activity
+            android:name=".AboutUsActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ContactUsActivity"
+            android:exported="false" />
+        <activity
+            android:name=".MyCardsActivity"
+            android:exported="false" />
+        <activity
+            android:name=".EditCardActivity"
+            android:exported="false" />
+        <activity
+            android:name=".RequestMainActivity"
+            android:exported="false" />
+        <activity
+            android:name=".CreateRequestActivity"
+            android:exported="false" />
+        <activity
+            android:name=".CategoryDetailActivity"
+            android:exported="false" />
+        <activity
+            android:name=".PlaceBidActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ServiceMainActivity"
+            android:exported="false" />
+    </application>
+
+</manifest>
