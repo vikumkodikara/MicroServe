@@ -111,11 +111,13 @@ class RequestDetailActivity : AppCompatActivity() {
             rowBinding.bidProviderName.text = bid.providerName
             rowBinding.bidPriceText.text = getString(R.string.bid_price_format, bid.priceRs)
             rowBinding.purchaseButton.setOnClickListener {
-                Toast.makeText(
-                    this,
-                    getString(R.string.purchase_confirmed_toast, bid.providerName),
-                    Toast.LENGTH_SHORT
-                ).show()
+                MPointsPaymentHelper.showPaymentDialog(
+                    activity = this,
+                    amount = bid.priceRs,
+                    providerName = bid.providerName
+                ) {
+                    // Payment successful
+                }
             }
             binding.bidsContainer.addView(rowBinding.root)
         }
