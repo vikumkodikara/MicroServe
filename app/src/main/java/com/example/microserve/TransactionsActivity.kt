@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
 import androidx.core.view.ViewCompat
@@ -13,6 +14,7 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.microserve.databinding.ActivityTransactionsBinding
+import com.google.firebase.firestore.ListenerRegistration
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -22,6 +24,10 @@ class TransactionsActivity : AppCompatActivity() {
     private lateinit var binding: ActivityTransactionsBinding
     private lateinit var transactionAdapter: TransactionAdapter
     private var currentTab = TAB_PENDING
+    private var pendingListener: ListenerRegistration? = null
+    private var successListener: ListenerRegistration? = null
+    private var pendingItems: List<ServiceTransaction> = emptyList()
+    private var successItems: List<ServiceTransaction> = emptyList()
 
     companion object {
         private const val TAB_PENDING = 0
@@ -38,13 +44,36 @@ class TransactionsActivity : AppCompatActivity() {
         setupTabs()
         setupRecycler()
         setupBottomNavigation()
-        initializeDummyTransactionsIfNeeded()
-        loadPending()
     }
 
-    override fun onResume() {
-        super.onResume()
-        if (currentTab == TAB_PENDING) loadPending() else loadSuccess()
+    override fun onStart() {
+        super.onStart()
+        pendingListener?.remove()
+        successListener?.remove()
+
+        pendingListener = TransactionRepository.listenPending(
+            onUpdate = { items ->
+                pendingItems = items
+                if (currentTab == TAB_PENDING) updateList(items)
+            },
+            onError = { message -> Toast.makeText(this, message, Toast.LENGTH_SHORT).show() }
+        )
+
+        successListener = TransactionRepository.listenSuccess(
+            onUpdate = { items ->
+                successItems = items
+                if (currentTab == TAB_SUCCESS) updateList(items)
+            },
+            onError = { message -> Toast.makeText(this, message, Toast.LENGTH_SHORT).show() }
+        )
+    }
+
+    override fun onStop() {
+        pendingListener?.remove()
+        successListener?.remove()
+        pendingListener = null
+        successListener = null
+        super.onStop()
     }
 
     private fun setupWindowInsets() {
@@ -63,13 +92,13 @@ class TransactionsActivity : AppCompatActivity() {
         binding.tabPending.setOnClickListener {
             currentTab = TAB_PENDING
             updateTabStyles()
-            loadPending()
+            updateList(pendingItems)
         }
 
         binding.tabSuccess.setOnClickListener {
             currentTab = TAB_SUCCESS
             updateTabStyles()
-            loadSuccess()
+            updateList(successItems)
         }
 
         updateTabStyles()
@@ -77,25 +106,16 @@ class TransactionsActivity : AppCompatActivity() {
 
     private fun setupRecycler() {
         transactionAdapter = TransactionAdapter(emptyList()) { item ->
-            val intent = Intent(this, TransactionDetailsActivity::class.java)
-            intent.putExtra("TRANSACTION_ID", item.id)
-            startActivity(intent)
+            startActivity(
+                Intent(this, TransactionDetailsActivity::class.java)
+                    .putExtra(TransactionDetailsActivity.EXTRA_TRANSACTION_ID, item.id)
+            )
         }
         binding.rvTransactions.layoutManager = LinearLayoutManager(this)
         binding.rvTransactions.adapter = transactionAdapter
     }
 
-    private fun loadPending() {
-        val items = TransactionStore.getPendingTransactions(this)
-        updateList(items)
-    }
-
-    private fun loadSuccess() {
-        val items = TransactionStore.getSuccessTransactions(this)
-        updateList(items)
-    }
-
-    private fun updateList(items: List<TransactionStore.Transaction>) {
+    private fun updateList(items: List<ServiceTransaction>) {
         if (items.isEmpty()) {
             binding.rvTransactions.visibility = View.GONE
             binding.emptyState.visibility = View.VISIBLE
@@ -120,31 +140,6 @@ class TransactionsActivity : AppCompatActivity() {
         }
     }
 
-    private fun initializeDummyTransactionsIfNeeded() {
-        val all = TransactionStore.getAllTransactions(this)
-        if (all.isNotEmpty()) return
-
-        val providerA = UserStore.getUserByName(this, "Kamal Gunarathne")
-            ?: UserStore.addUser(this, "Kamal Gunarathne", "kamal@example.com", "+94 70 111 2222", UserStore.TYPE_PROVIDER)
-        val providerB = UserStore.getUserByName(this, "Sampath Dahanayake")
-            ?: UserStore.addUser(this, "Sampath Dahanayake", "sampath@example.com", "+94 73 777 8888", UserStore.TYPE_PROVIDER)
-
-        val first = TransactionStore.addPendingTransaction(
-            context = this,
-            providerUserId = providerA.id,
-            providerName = providerA.name,
-            amount = 2800.0
-        )
-        TransactionStore.markTransactionSuccessAndCreditUser(this, first.id)
-
-        TransactionStore.addPendingTransaction(
-            context = this,
-            providerUserId = providerB.id,
-            providerName = providerB.name,
-            amount = 3500.0
-        )
-    }
-
     private fun setupBottomNavigation() {
         val homeTab = findViewById<android.widget.LinearLayout>(R.id.navTabHome)
         val profileTab = findViewById<android.widget.LinearLayout>(R.id.navTabProfile)
@@ -167,8 +162,8 @@ class TransactionsActivity : AppCompatActivity() {
     }
 
     inner class TransactionAdapter(
-        private var items: List<TransactionStore.Transaction>,
-        private val onClick: (TransactionStore.Transaction) -> Unit
+        private var items: List<ServiceTransaction>,
+        private val onClick: (ServiceTransaction) -> Unit
     ) : RecyclerView.Adapter<TransactionAdapter.ViewHolder>() {
 
         inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
@@ -188,13 +183,13 @@ class TransactionsActivity : AppCompatActivity() {
 
         override fun onBindViewHolder(holder: ViewHolder, position: Int) {
             val item = items[position]
-            holder.tvTitle.text = item.title
-            holder.tvAmount.text = TransactionStore.formatAmount(item.amount)
+            holder.tvTitle.text = item.requestTitle.ifBlank { item.providerName }
+            holder.tvAmount.text = ServiceTransaction.formatAmount(item.amount)
             holder.tvTxnId.text = "Txn ID : ${item.transactionCode}"
-            holder.tvDate.text = formatDate(item.completedAt ?: item.createdAt)
-            holder.tvStatus.text = item.status
+            holder.tvDate.text = formatDate(item.adminApprovedAt ?: item.requesterConfirmedAt ?: item.paidAt ?: item.createdAt)
+            holder.tvStatus.text = item.status.replace('_', ' ')
 
-            if (item.status.equals(TransactionStore.STATUS_SUCCESS, ignoreCase = true)) {
+            if (item.status == ServiceTransactionStatus.SUCCESS) {
                 holder.tvStatus.setBackgroundResource(R.drawable.txn_success_tag_bg)
                 holder.tvStatus.setTextColor(resources.getColor(R.color.white, null))
             } else {
@@ -207,12 +202,13 @@ class TransactionsActivity : AppCompatActivity() {
 
         override fun getItemCount() = items.size
 
-        fun updateItems(newItems: List<TransactionStore.Transaction>) {
+        fun updateItems(newItems: List<ServiceTransaction>) {
             items = newItems
             notifyDataSetChanged()
         }
 
-        private fun formatDate(timestamp: Long): String {
+        private fun formatDate(timestamp: Long?): String {
+            if (timestamp == null) return "-"
             val sdf = SimpleDateFormat("dd MMM yyyy - hh.mm a", Locale.getDefault())
             return sdf.format(Date(timestamp))
         }
