@@ -64,22 +64,38 @@ object UserRepository {
      * the current Firebase Auth user.
      */
     private fun ensureAdminRole() {
-        firestore.collection(UserProfile.COLLECTION)
-            .whereEqualTo(UserProfile.FIELD_EMAIL, ADMIN_EMAIL)
-            .limit(1)
-            .get()
-            .addOnSuccessListener { snapshot ->
-                if (snapshot.isEmpty) {
-                    Log.d(TAG, "No Firestore doc for admin email — will be created on first login")
-                    return@addOnSuccessListener
-                }
-                val doc = snapshot.documents.first()
-                val currentRole = doc.getString(UserProfile.FIELD_ROLE)
-                if (currentRole == null || !currentRole.equals(UserProfile.ROLE_ADMIN, ignoreCase = true)) {
-                    doc.reference.update(UserProfile.FIELD_ROLE, UserProfile.ROLE_ADMIN)
-                        .addOnSuccessListener { Log.d(TAG, "Admin role fixed in Firestore") }
-                        .addOnFailureListener { Log.w(TAG, "Failed to fix admin role", it) }
-                }
+        val auth = FirebaseAuth.getInstance()
+        if (auth.currentUser != null) {
+            Log.d(TAG, "Skipping admin role sync — a user is already signed in")
+            return
+        }
+
+        val previousUser = auth.currentUser
+
+        auth.signInWithEmailAndPassword(ADMIN_EMAIL, ADMIN_PASSWORD)
+            .addOnSuccessListener { result ->
+                val user = result.user ?: return@addOnSuccessListener
+                firestore.collection(UserProfile.COLLECTION)
+                    .document(user.uid)
+                    .get()
+                    .addOnSuccessListener { doc ->
+                        val currentRole = doc.getString(UserProfile.FIELD_ROLE)
+                        if (currentRole == null || !currentRole.equals(UserProfile.ROLE_ADMIN, ignoreCase = true)) {
+                            // Fix the role
+                            val profile = UserProfile(
+                                uid = user.uid,
+                                name = doc.getString(UserProfile.FIELD_NAME) ?: ADMIN_NAME,
+                                email = ADMIN_EMAIL,
+                                phone = doc.getString(UserProfile.FIELD_PHONE) ?: ADMIN_PHONE,
+                                role = UserProfile.ROLE_ADMIN
+                            )
+                            firestore.collection(UserProfile.COLLECTION)
+                                .document(user.uid)
+                                .set(profile.toMap())
+                        }
+                        // Restore previous auth state
+                        if (previousUser == null) auth.signOut()
+                    }
             }
             .addOnFailureListener { Log.w(TAG, "ensureAdminRole query failed", it) }
     }
@@ -87,6 +103,7 @@ object UserRepository {
     fun saveProfile(
         context: Context,
         profile: UserProfile,
+        persistSession: Boolean = true,
         onSuccess: () -> Unit,
         onFailure: (String) -> Unit
     ) {
@@ -95,12 +112,16 @@ object UserRepository {
             .set(profile.toMap())
             .addOnSuccessListener {
                 syncProfileToUserStore(context, profile)
-                AppPreferences.saveSession(context, profile)
+                if (persistSession) {
+                    AppPreferences.saveSession(context, profile)
+                }
                 onSuccess()
             }
             .addOnFailureListener { error ->
                 syncProfileToUserStore(context, profile)
-                AppPreferences.saveSession(context, profile)
+                if (persistSession) {
+                    AppPreferences.saveSession(context, profile)
+                }
                 onFailure(error.localizedMessage ?: "Unable to save profile")
             }
     }

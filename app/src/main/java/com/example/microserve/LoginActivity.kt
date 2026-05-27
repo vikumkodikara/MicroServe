@@ -13,6 +13,7 @@ import com.example.microserve.databinding.ActivityLoginBinding
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.common.api.ApiException
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseAuthInvalidUserException
 import com.google.firebase.auth.FirebaseUser
 
 class LoginActivity : AppCompatActivity() {
@@ -65,6 +66,13 @@ class LoginActivity : AppCompatActivity() {
 
         setupWindowInsets()
         setupActions()
+        prefillEmailFromSignUp()
+    }
+
+    private fun prefillEmailFromSignUp() {
+        intent.getStringExtra(EXTRA_PREFILL_EMAIL)?.takeIf { it.isNotBlank() }?.let { email ->
+            binding.usernameInput.setText(AuthErrorHelper.normalizeEmail(email))
+        }
     }
 
     private fun setupWindowInsets() {
@@ -77,7 +85,9 @@ class LoginActivity : AppCompatActivity() {
 
     private fun setupActions() {
         binding.loginButton.setOnClickListener {
-            val email = binding.usernameInput.text?.toString()?.trim().orEmpty()
+            val email = AuthErrorHelper.normalizeEmail(
+                binding.usernameInput.text?.toString().orEmpty()
+            )
             val password = binding.passwordInput.text?.toString()?.trim().orEmpty()
 
             when {
@@ -97,7 +107,7 @@ class LoginActivity : AppCompatActivity() {
         }
 
         binding.forgotPasswordLink.setOnClickListener {
-            toast(getString(R.string.login_forgot_password_soon))
+            sendPasswordReset()
         }
 
         binding.googleSignInButton.setOnClickListener {
@@ -116,14 +126,39 @@ class LoginActivity : AppCompatActivity() {
                 val user = result.user
                 if (user == null) {
                     showLoading(false)
-                    toast("Login failed")
+                    toast(getString(R.string.login_error_generic))
                     return@addOnSuccessListener
                 }
                 loadProfileAndRoute(user)
             }
             .addOnFailureListener { error ->
                 showLoading(false)
-                toast(error.localizedMessage ?: "Login failed")
+                toast(AuthErrorHelper.loginMessage(this, error))
+            }
+    }
+
+    private fun sendPasswordReset() {
+        val email = AuthErrorHelper.normalizeEmail(
+            binding.usernameInput.text?.toString().orEmpty()
+        )
+        if (email.isEmpty() || !Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+            toast(getString(R.string.login_error_username))
+            return
+        }
+        showLoading(true)
+        auth.sendPasswordResetEmail(email)
+            .addOnSuccessListener {
+                showLoading(false)
+                toast(getString(R.string.login_reset_email_sent))
+            }
+            .addOnFailureListener { error ->
+                showLoading(false)
+                val message = if (error is FirebaseAuthInvalidUserException) {
+                    getString(R.string.login_error_no_account)
+                } else {
+                    AuthErrorHelper.loginMessage(this, error)
+                }
+                toast(message)
             }
     }
 
@@ -161,5 +196,9 @@ class LoginActivity : AppCompatActivity() {
 
     private fun toast(message: String) {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
+    }
+
+    companion object {
+        const val EXTRA_PREFILL_EMAIL = "prefill_email"
     }
 }

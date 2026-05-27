@@ -1,8 +1,11 @@
 package com.example.microserve
 
 import android.app.Application
+import android.os.Handler
+import android.os.Looper
 import androidx.appcompat.app.AppCompatDelegate
 import com.google.firebase.FirebaseApp
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.FirebaseFirestoreSettings
 
@@ -14,7 +17,12 @@ class MicroServeApp : Application() {
         enableFirestoreOfflineCache()
         applySavedTheme()
         applySavedLanguage()
-        UserRepository.ensureAdminExists()
+        // Defer admin seeding so it does not race with user sign-in at startup.
+        Handler(Looper.getMainLooper()).postDelayed({
+            if (FirebaseAuth.getInstance().currentUser == null) {
+                UserRepository.ensureAdminExists()
+            }
+        }, 4000L)
     }
 
     private fun enableFirestoreOfflineCache() {

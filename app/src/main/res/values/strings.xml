@@ -1,7 +1,20 @@
 <resources>
     <string name="app_name">MicroServe</string>
     <string name="cd_services_at_your_door_banner">Services at your door — browse local service providers</string>
-    <string name="cd_job_done_preview">Previously completed job preview image</string>
+    <string name="cd_job_done_preview">Advertisement preview image</string>
+    <string name="home_previously_done_jobs">Advertisements</string>
+    <string name="home_service_done_area">Service area</string>
+    <string name="home_ad_label_name">Name</string>
+    <string name="home_ad_label_contact">Contact</string>
+    <string name="home_ad_label_name_value">Name: %1$s</string>
+    <string name="home_ad_label_contact_value">Contact: %1$s</string>
+    <string name="home_ad_title_format">%1$s Service</string>
+    <string name="post_ads_image_crop_hint">Photo fills the card — tap again to change image</string>
+    <string name="home_job_service_format">Service: %1$s</string>
+    <string name="home_job_name_format">Name: %1$s</string>
+    <string name="home_job_contact_format">Contact: %1$s</string>
+    <string name="home_job_area_format"> - %1$s</string>
+    <string name="home_no_jobs_yet">No advertisements yet. Post your work from Post Ads.</string>
     <string name="cd_sidebar_menu">Open navigation menu</string>
     <string name="nav_request">Request</string>
     <string name="nav_service">Service</string>
@@ -38,6 +51,13 @@
     <string name="login_error_username">Please enter your email</string>
     <string name="login_error_invalid_email">Please enter a valid email</string>
     <string name="login_error_password">Please enter your password</string>
+    <string name="login_error_wrong_credentials">Wrong email or password. Use the same email you registered with and check for typos.</string>
+    <string name="login_error_no_account">No account found for this email. Please sign up first.</string>
+    <string name="login_error_generic">Could not sign in. Please try again.</string>
+    <string name="login_error_user_disabled">This account has been disabled. Contact support.</string>
+    <string name="login_error_too_many_requests">Too many attempts. Please wait a moment and try again.</string>
+    <string name="login_reset_email_sent">Password reset link sent to your email</string>
+    <string name="login_reset_email_failed">Could not send reset email. Check the address and try again.</string>
     <string name="cd_login_logo">MicroServe logo</string>
     <string name="login_google_not_configured">Google Sign-In is not configured correctly</string>
 

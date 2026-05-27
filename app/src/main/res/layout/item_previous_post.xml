@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="280dp"
+    android:layout_height="wrap_content"
+    android:layout_marginEnd="14dp"
+    app:cardBackgroundColor="@color/white_card_bg"
+    app:cardCornerRadius="20dp"
+    app:cardElevation="6dp"
+    app:strokeColor="#E8E4F3"
+    app:strokeWidth="1dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="160dp">
+
+            <ImageView
+                android:id="@+id/ivPostImage"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/admin_quick_action_bg"
+                android:contentDescription="@string/post_ads_post_image"
+                android:scaleType="centerCrop"
+                android:src="@drawable/home_job_done_placeholder" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_gravity="bottom"
+                android:background="@drawable/ad_card_image_scrim" />
+        </FrameLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingHorizontal="14dp"
+            android:paddingTop="12dp"
+            android:paddingBottom="14dp">
+
+            <TextView
+                android:id="@+id/tvPostCategory"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/ad_category_chip_bg"
+                android:paddingHorizontal="10dp"
+                android:paddingVertical="4dp"
+                android:textColor="@color/white"
+                android:textSize="11sp"
+                android:textStyle="bold"
+                tools:text="Electrical" />
+
+            <TextView
+                android:id="@+id/tvPostTitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:textColor="@color/admin_text_primary"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                tools:text="Electrical Service" />
+
+            <TextView
+                android:id="@+id/tvPostName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:lineSpacingExtra="2dp"
+                android:textColor="@color/admin_text_secondary"
+                android:textSize="13sp"
+                tools:text="Name: chanux bro" />
+
+            <TextView
+                android:id="@+id/tvPostContact"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:textColor="@color/admin_text_secondary"
+                android:textSize="13sp"
+                tools:text="Contact: 075664551" />
+
+            <TextView
+                android:id="@+id/tvPostLocation"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:lineSpacingExtra="2dp"
+                android:maxLines="3"
+                android:textColor="@color/admin_text_secondary"
+                android:textSize="13sp"
+                tools:text="Polgahawela, Kurunegala" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnEditPost"
+                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_marginTop="12dp"
+                android:insetTop="0dp"
+                android:insetBottom="0dp"
+                android:text="@string/post_ads_edit"
+                android:textAllCaps="false"
+                android:textColor="@color/admin_purple_dark"
+                android:textSize="13sp"
+                app:cornerRadius="12dp"
+                app:strokeColor="@color/admin_purple_dark" />
+        </LinearLayout>
+    </LinearLayout>
+</com.google.android.material.card.MaterialCardView>
