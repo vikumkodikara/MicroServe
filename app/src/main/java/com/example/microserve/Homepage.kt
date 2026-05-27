@@ -176,18 +176,9 @@ class Homepage : AppCompatActivity() {
     }
 
     private fun setupWindowInsets() {
-        ViewCompat.setOnApplyWindowInsetsListener(binding.main) { v, insets ->
-            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            v.setPadding(systemBars.left, 0, systemBars.right, 0)
-            findViewById<View>(R.id.navSystemBarSpacer)?.let { spacer ->
-                val lp = spacer.layoutParams
-                if (lp.height != systemBars.bottom) {
-                    lp.height = systemBars.bottom
-                    spacer.layoutParams = lp
-                }
-            }
-            insets
-        }
+        binding.main.applyHorizontalSystemBarInsets()
+        binding.headerFrame.applyStatusBarTopInset()
+        applyNavBarSpacer(R.id.navSystemBarSpacer)
     }
 
     private fun setupDate() {

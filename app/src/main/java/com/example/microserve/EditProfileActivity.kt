@@ -38,12 +38,14 @@ class EditProfileActivity : AppCompatActivity() {
         enableEdgeToEdge()
         setContentView(R.layout.activity_edit_profile)
 
-        val root = findViewById<View>(R.id.header_bg).parent as View
-        ViewCompat.setOnApplyWindowInsetsListener(root) { v, insets ->
-            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
-            insets
-        }
+        val root = findViewById<View>(R.id.edit_profile_root)
+        val header = findViewById<View>(R.id.header_bg)
+        SystemUiHelper.setupPurpleHeaderScreen(
+            activity = this,
+            root = root,
+            headerView = header,
+            footerBar = findViewById(R.id.footerBar)
+        )
 
         imgProfile = findViewById(R.id.img_profile)
         etFullName = findViewById(R.id.et_full_name)

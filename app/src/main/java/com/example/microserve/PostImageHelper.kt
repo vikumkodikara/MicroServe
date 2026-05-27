@@ -1,6 +1,7 @@
 package com.example.microserve
 
 import android.content.Context
+import android.graphics.Bitmap
 import android.net.Uri
 import android.widget.ImageView
 import com.bumptech.glide.Glide
@@ -51,6 +52,20 @@ object PostImageHelper {
                 source.delete()
             }
             target.absolutePath
+        }
+    }
+
+    fun saveBitmap(context: Context, bitmap: Bitmap): String? {
+        return try {
+            val dir = File(context.filesDir, POST_IMAGES_DIR).apply { mkdirs() }
+            val target = File(dir, "${UUID.randomUUID()}.jpg")
+            target.outputStream().use { output ->
+                bitmap.compress(Bitmap.CompressFormat.JPEG, 92, output)
+            }
+            if (!target.exists() || target.length() <= 0L) return null
+            target.absolutePath
+        } catch (_: Exception) {
+            null
         }
     }
 

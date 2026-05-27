@@ -9,8 +9,10 @@
     <string name="home_ad_label_name_value">Name: %1$s</string>
     <string name="home_ad_label_contact_value">Contact: %1$s</string>
     <string name="home_ad_title_format">%1$s Service</string>
-    <string name="post_ads_image_crop_hint">After choosing a photo, drag and zoom to fit the square — same view on Home</string>
-    <string name="post_ads_crop_title">Adjust photo</string>
+    <string name="post_ads_image_crop_hint">Choose a photo, then pinch and drag inside the square</string>
+    <string name="post_ads_adjust_image_hint">Pinch to zoom · drag to move</string>
+    <string name="post_ads_use_photo">Use photo</string>
+    <string name="post_ads_cancel_image">Cancel</string>
     <string name="home_job_service_format">Service: %1$s</string>
     <string name="home_job_name_format">Name: %1$s</string>
     <string name="home_job_contact_format">Contact: %1$s</string>
@@ -154,7 +156,9 @@
     <string name="sign_up_error_email">Please enter your e-mail</string>
     <string name="sign_up_error_mobile">Please enter your mobile number</string>
     <string name="sign_up_error_password_length">Password must be at least 6 characters</string>
-    <string name="sign_up_success">Account created successfully</string>
+    <string name="sign_up_success_title">Account created</string>
+    <string name="sign_up_success">Your account was created. Please log in with your email and password.</string>
+    <string name="action_ok">OK</string>
     <string name="sign_up_error_email_in_use">Email already in use</string>
     <string name="sign_up_error_check_email">Error checking email</string>
     <string name="sign_up_error_network">Network error</string>

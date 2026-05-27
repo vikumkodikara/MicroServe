@@ -56,23 +56,12 @@ class PickLocationActivity : AppCompatActivity() {
     }
 
     private fun setupWindowInsets() {
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.pickLocationRoot)) { _, insets ->
-            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            findViewById<View>(R.id.headerContainer).setPadding(
-                findViewById<View>(R.id.headerContainer).paddingLeft,
-                systemBars.top,
-                findViewById<View>(R.id.headerContainer).paddingRight,
-                findViewById<View>(R.id.headerContainer).paddingBottom
-            )
-            val footer = findViewById<View>(R.id.footerBar)
-            val lp = footer.layoutParams
-            if (lp.height < 38 + systemBars.bottom) {
-                lp.height = 38 + systemBars.bottom
-                footer.layoutParams = lp
-            }
-            footer.setPadding(0, 0, 0, systemBars.bottom)
-            insets
-        }
+        val root = findViewById<View>(R.id.pickLocationRoot)
+        val header = findViewById<View>(R.id.headerContainer)
+        val footer = findViewById<View>(R.id.footerBar)
+        root.applyHorizontalSystemBarInsets()
+        header.applyStatusBarTopInset()
+        footer.applyPurpleFooterNavInset()
     }
 
     private fun setupMap() {

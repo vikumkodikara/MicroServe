@@ -11,7 +11,6 @@ import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
-import com.canhub.cropper.CropImageContract
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -21,6 +20,7 @@ class PostAdsActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityPostAdsBinding
     private lateinit var previousPostAdapter: PreviousPostAdapter
+    private lateinit var imageAdjuster: PostImageAdjuster
     private var selectedImagePath: String? = null
     private var selectedLocation: SelectedLocation? = null
 
@@ -30,13 +30,7 @@ class PostAdsActivity : AppCompatActivity() {
 
     private val pickImage = registerForActivityResult(ActivityResultContracts.GetContent()) { uri ->
         if (uri != null) {
-            cropImage.launch(PostImagePicker.optionsForGalleryUri(this, uri))
-        }
-    }
-
-    private val cropImage = registerForActivityResult(CropImageContract()) { result ->
-        if (result.isSuccessful) {
-            applyCroppedImage(result.uriContent)
+            imageAdjuster.startAdjust(uri)
         }
     }
 
@@ -58,6 +52,7 @@ class PostAdsActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         setupWindowInsets()
+        setupImageAdjuster()
         setupSpinner()
         setupLocationPickers()
         setupPreviousPostsList()
@@ -72,18 +67,11 @@ class PostAdsActivity : AppCompatActivity() {
     }
 
     private fun setupWindowInsets() {
-        ViewCompat.setOnApplyWindowInsetsListener(binding.root) { v, insets ->
-            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, 0)
-            findViewById<View>(R.id.navSystemBarSpacer)?.let { spacer ->
-                val lp = spacer.layoutParams
-                if (lp.height != systemBars.bottom) {
-                    lp.height = systemBars.bottom
-                    spacer.layoutParams = lp
-                }
-            }
-            insets
-        }
+        SystemUiHelper.setupPurpleHeaderScreen(
+            activity = this,
+            root = binding.root,
+            headerView = binding.headerContainer
+        )
     }
 
     private fun prefillProviderFields() {
@@ -220,10 +208,25 @@ class PostAdsActivity : AppCompatActivity() {
         }
     }
 
+    private fun setupImageAdjuster() {
+        imageAdjuster = PostImageAdjuster(
+            activity = this,
+            imageView = binding.selectedImagePreview,
+            placeholder = binding.addImagePlaceholder,
+            adjustControls = binding.imageAdjustControls,
+            confirmButton = binding.btnConfirmImageAdjust,
+            cancelButton = binding.btnCancelImageAdjust,
+            changeHint = binding.tvImageChangeHint,
+            adjustHint = binding.tvAdjustImageHint,
+            onImageSaved = { savedPath -> applySavedImage(savedPath) }
+        )
+    }
+
     private fun setupClickListeners() {
         binding.backBtn.setOnClickListener { finish() }
 
         binding.addImageBtn.setOnClickListener {
+            if (binding.imageAdjustControls.visibility == View.VISIBLE) return@setOnClickListener
             pickImage.launch("image/*")
         }
 
@@ -298,22 +301,12 @@ class PostAdsActivity : AppCompatActivity() {
         }
     }
 
-    private fun applyCroppedImage(uri: Uri?) {
-        if (uri == null) return
+    private fun applySavedImage(savedPath: String) {
         val previous = selectedImagePath
-        val savedPath = PostImageHelper.copyPickedImage(this, uri)
-        if (savedPath == null) {
-            toast(getString(R.string.post_ads_image_save_failed))
-            return
-        }
         if (!previous.isNullOrBlank() && previous != savedPath) {
             PostImageHelper.deletePostImage(this, previous)
         }
         selectedImagePath = savedPath
-        PostImageHelper.loadPostImage(binding.selectedImagePreview, savedPath)
-        binding.selectedImagePreview.visibility = View.VISIBLE
-        binding.addImagePlaceholder.visibility = View.GONE
-        binding.tvImageChangeHint.visibility = View.VISIBLE
     }
 
     private fun resetFormAfterPost() {
@@ -323,9 +316,7 @@ class PostAdsActivity : AppCompatActivity() {
         selectedProvince = ""
         selectedDistrict = ""
         selectedCity = ""
-        binding.selectedImagePreview.visibility = View.GONE
-        binding.tvImageChangeHint.visibility = View.GONE
-        binding.addImagePlaceholder.visibility = View.VISIBLE
+        imageAdjuster.reset()
         binding.imageActionText.text = getString(R.string.post_ads_add_image)
         binding.provinceSpinner.setSelection(0)
         updateDistrictSpinner()

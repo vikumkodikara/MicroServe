@@ -9,25 +9,28 @@
         <item name="colorSecondary">@color/admin_purple_light</item>
         <item name="colorSecondaryVariant">@color/admin_purple_dark</item>
         <item name="colorOnSecondary">@color/white</item>
-        <!-- Status bar blends with the purple header gradient -->
-        <item name="android:statusBarColor">@color/white</item>
-        <!-- Navigation bar matches the purple gradient -->
-        <item name="android:navigationBarColor">#483C72</item>
-        <!-- Light status bar icons (white icons on dark purple bg) -->
-        <item name="android:windowLightStatusBar" tools:targetApi="23">true</item>
+        <!-- Edge-to-edge: transparent bars; purple draws behind (see SystemUiHelper) -->
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:navigationBarColor">@android:color/transparent</item>
+        <item name="android:windowLightStatusBar" tools:targetApi="23">false</item>
+        <item name="android:windowLightNavigationBar" tools:targetApi="27">false</item>
+        <item name="android:enforceStatusBarContrast" tools:targetApi="29">false</item>
+        <item name="android:enforceNavigationBarContrast" tools:targetApi="29">false</item>
+        <item name="android:windowDrawsSystemBarBackgrounds" tools:targetApi="21">true</item>
     </style>
 
     <style name="Theme.MicroServe.Splash" parent="Theme.MicroServe">
+        <!-- White from first frame (before layout); avoids purple from colorPrimary on Android 12+ -->
+        <item name="android:windowBackground">@android:color/white</item>
+        <item name="colorPrimary">@android:color/white</item>
         <item name="android:statusBarColor">@android:color/transparent</item>
         <item name="android:navigationBarColor">@color/white</item>
         <item name="android:windowLightStatusBar" tools:targetApi="23">true</item>
+        <item name="android:windowLightNavigationBar" tools:targetApi="27">true</item>
+        <item name="android:windowSplashScreenBackground" tools:targetApi="31">@android:color/white</item>
     </style>
 
-    <style name="Theme.MicroServe.Login" parent="Theme.MicroServe">
-        <item name="android:statusBarColor">@android:color/transparent</item>
-        <item name="android:navigationBarColor">@color/white</item>
-        <item name="android:windowLightStatusBar" tools:targetApi="23">true</item>
-    </style>
+    <style name="Theme.MicroServe.Login" parent="Theme.MicroServe" />
 
     <style name="Widget.MicroServe.LoginButton" parent="Widget.MaterialComponents.Button">
         <item name="android:insetTop">0dp</item>

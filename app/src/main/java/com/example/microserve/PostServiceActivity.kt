@@ -36,11 +36,12 @@ class PostServiceActivity : AppCompatActivity() {
     }
 
     private fun applyWindowInsets() {
-        ViewCompat.setOnApplyWindowInsetsListener(binding.main) { view, insets ->
-            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            view.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
-            insets
-        }
+        SystemUiHelper.setupPurpleHeaderScreen(
+            activity = this,
+            root = binding.main,
+            headerView = binding.headerContainer,
+            footerBar = binding.footerBar
+        )
     }
 
     private fun setupSpinner() {
