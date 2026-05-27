@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white"
+    android:background="@color/light_background"
     tools:context=".PaymentMethodsFragment">
 
     <!-- Header Gradient -->
@@ -64,7 +64,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="24dp"
-                app:cardBackgroundColor="@color/white"
+                app:cardBackgroundColor="@color/white_card_bg"
                 app:cardCornerRadius="16dp"
                 app:cardElevation="4dp">
 
@@ -105,7 +105,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="@string/card_number"
-                            android:textColor="#333333"
+                            android:textColor="@color/admin_text_primary"
                             android:textSize="14sp"
                             android:textStyle="bold" />
 
@@ -114,7 +114,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginTop="4dp"
                             android:text="@string/card_expiry"
-                            android:textColor="#777777"
+                            android:textColor="@color/admin_text_secondary"
                             android:textSize="12sp" />
                     </LinearLayout>
 
@@ -143,7 +143,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="24dp"
-                app:cardBackgroundColor="@color/white"
+                app:cardBackgroundColor="@color/white_card_bg"
                 app:cardCornerRadius="16dp"
                 app:cardElevation="4dp">
 
@@ -195,7 +195,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="@string/card_number"
-                            android:textColor="#333333"
+                            android:textColor="@color/admin_text_primary"
                             android:textSize="14sp"
                             android:textStyle="bold" />
 
@@ -204,7 +204,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginTop="4dp"
                             android:text="@string/card_expiry"
-                            android:textColor="#777777"
+                            android:textColor="@color/admin_text_secondary"
                             android:textSize="12sp" />
                     </LinearLayout>
 

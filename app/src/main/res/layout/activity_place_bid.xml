@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white"
+    android:background="@color/light_background"
     tools:context=".PlaceBidActivity">
 
     <ScrollView
@@ -88,7 +88,7 @@
                     android:layout_height="wrap_content"
                     android:fontFamily="sans-serif-medium"
                     android:text="@string/bid_amount_label"
-                    android:textColor="@color/black"
+                    android:textColor="@color/admin_text_primary"
                     android:textSize="16sp"
                     android:textStyle="bold" />
 
@@ -101,7 +101,7 @@
                     android:hint="@string/bid_amount_hint"
                     android:inputType="number"
                     android:paddingHorizontal="14dp"
-                    android:textColor="@color/black"
+                    android:textColor="@color/admin_text_primary"
                     android:textColorHint="@color/text_gray"
                     android:textSize="15sp" />
 
@@ -111,7 +111,7 @@
                     android:layout_marginTop="16dp"
                     android:fontFamily="sans-serif-medium"
                     android:text="@string/completion_time_label"
-                    android:textColor="@color/black"
+                    android:textColor="@color/admin_text_primary"
                     android:textSize="16sp"
                     android:textStyle="bold" />
 
@@ -124,7 +124,7 @@
                     android:hint="@string/completion_time_hint"
                     android:inputType="number"
                     android:paddingHorizontal="14dp"
-                    android:textColor="@color/black"
+                    android:textColor="@color/admin_text_primary"
                     android:textColorHint="@color/text_gray"
                     android:textSize="15sp" />
 
@@ -135,7 +135,7 @@
                     android:layout_marginTop="16dp"
                     android:checked="true"
                     android:text="@string/agree_to_terms"
-                    android:textColor="@color/black"
+                    android:textColor="@color/admin_text_primary"
                     android:textSize="14sp" />
 
                 <TextView
@@ -149,7 +149,7 @@
                     android:minWidth="160dp"
                     android:paddingHorizontal="24dp"
                     android:text="@string/place_bid_submit"
-                    android:textColor="@color/black"
+                    android:textColor="@color/white"
                     android:textSize="14sp"
                     android:textStyle="bold" />
             </LinearLayout>
@@ -163,7 +163,7 @@
                 android:layout_marginTop="24dp"
                 android:fontFamily="sans-serif-medium"
                 android:text="@string/previous_bids"
-                android:textColor="@color/black"
+                android:textColor="@color/admin_text_primary"
                 android:textSize="18sp"
                 android:textStyle="bold" />
 

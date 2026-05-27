@@ -45,7 +45,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Setting"
+                    android:text="@string/settings"
                     android:textColor="@color/white"
                     android:textSize="28sp"
                     android:textStyle="bold" />
@@ -72,7 +72,7 @@
                 android:layout_height="wrap_content"
                 android:clickable="true"
                 android:focusable="true"
-                app:cardBackgroundColor="@color/white"
+                app:cardBackgroundColor="@color/white_card_bg"
                 app:cardCornerRadius="20dp"
                 app:cardElevation="4dp">
 
@@ -113,7 +113,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="2dp"
-                            android:text="Edit Profile"
+                            android:text="@string/edit_profile"
                             android:textColor="@color/admin_primary_purple"
                             android:textSize="16sp" />
                     </LinearLayout>
@@ -124,7 +124,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="14dp"
-                app:cardBackgroundColor="@color/white"
+                app:cardBackgroundColor="@color/white_card_bg"
                 app:cardCornerRadius="20dp"
                 app:cardElevation="4dp">
 
@@ -151,7 +151,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginStart="14dp"
                             android:layout_weight="1"
-                            android:text="Notifications"
+                            android:text="@string/notifications"
                             android:textColor="@color/admin_text_primary"
                             android:textSize="18sp" />
 
@@ -182,7 +182,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginStart="14dp"
                             android:layout_weight="1"
-                            android:text="Dark Mode"
+                            android:text="@string/dark_mode"
                             android:textColor="@color/admin_text_primary"
                             android:textSize="18sp" />
 
@@ -217,7 +217,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginStart="14dp"
                             android:layout_weight="1"
-                            android:text="Language"
+                            android:text="@string/language"
                             android:textColor="@color/admin_text_primary"
                             android:textSize="18sp" />
 
@@ -259,7 +259,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginStart="14dp"
                             android:layout_weight="1"
-                            android:text="Get Help"
+                            android:text="@string/get_help"
                             android:textColor="@color/admin_text_primary"
                             android:textSize="18sp" />
 
@@ -293,7 +293,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginStart="14dp"
                             android:layout_weight="1"
-                            android:text="Privacy Policy"
+                            android:text="@string/privacy_policy"
                             android:textColor="@color/admin_text_primary"
                             android:textSize="18sp" />
 
@@ -327,7 +327,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginStart="14dp"
                             android:layout_weight="1"
-                            android:text="Terms of Services"
+                            android:text="@string/terms_of_services"
                             android:textColor="@color/admin_text_primary"
                             android:textSize="18sp" />
 
@@ -346,7 +346,7 @@
                 android:layout_height="56dp"
                 android:layout_marginTop="18dp"
                 android:background="@drawable/delete_user_button_bg"
-                android:text="Logout"
+                android:text="@string/log_out"
                 android:textAllCaps="false"
                 android:textColor="@color/white"
                 android:textSize="20sp"

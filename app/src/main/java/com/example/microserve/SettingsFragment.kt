@@ -34,6 +34,22 @@ class SettingsFragment : Fragment() {
             requireActivity().onBackPressedDispatcher.onBackPressed()
         }
 
+        val switchNotifications = view.findViewById<com.google.android.material.switchmaterial.SwitchMaterial>(R.id.switchNotifications)
+        switchNotifications?.isChecked = AppPreferences.isNotificationsEnabled(requireContext())
+        switchNotifications?.setOnCheckedChangeListener { _, isChecked ->
+            AppPreferences.setNotificationsEnabled(requireContext(), isChecked)
+            Toast.makeText(requireContext(), if (isChecked) "Notifications enabled" else "Notifications disabled", Toast.LENGTH_SHORT).show()
+        }
+
+        val switchDarkMode = view.findViewById<com.google.android.material.switchmaterial.SwitchMaterial>(R.id.switchDarkMode)
+        switchDarkMode?.isChecked = AppPreferences.isDarkModeEnabled(requireContext())
+        switchDarkMode?.setOnCheckedChangeListener { _, isChecked ->
+            AppPreferences.setDarkModeEnabled(requireContext(), isChecked)
+            androidx.appcompat.app.AppCompatDelegate.setDefaultNightMode(
+                if (isChecked) androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_YES else androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_NO
+            )
+        }
+
         view.findViewById<View>(R.id.btn_logout).setOnClickListener {
             Toast.makeText(requireContext(), "Log Out Clicked", Toast.LENGTH_SHORT).show()
         }
