@@ -33,16 +33,24 @@ class EditFeedbackActivity : AppCompatActivity() {
             stars[i].setOnClickListener { setRating(i + 1) }
         }
 
-        val etEmail = findViewById<EditText>(R.id.et_email)
-        val etCategory = findViewById<EditText>(R.id.et_category)
         val etFeedback = findViewById<EditText>(R.id.et_feedback)
 
         val feedback = FeedbackStore.getAllFeedbacks(this).firstOrNull { it.id == feedbackId }
-        if (feedback != null) {
-            etEmail.setText(feedback.userId)
-            etFeedback.setText(feedback.message)
-            setRating(feedback.rating)
+        if (feedback == null) {
+            Toast.makeText(this, "Feedback not found", Toast.LENGTH_SHORT).show()
+            finish()
+            return
         }
+
+        // Verify ownership — only the owner can edit
+        if (!FeedbackStore.isOwner(this, feedback)) {
+            Toast.makeText(this, "You can only edit your own feedback", Toast.LENGTH_SHORT).show()
+            finish()
+            return
+        }
+
+        etFeedback.setText(feedback.message)
+        setRating(feedback.rating)
 
         findViewById<View>(R.id.btn_update).setOnClickListener {
             val message = etFeedback.text.toString().trim()
