@@ -238,9 +238,11 @@
     <string name="title_label">Title</string>
     <string name="contact_label">Contact</string>
     <string name="description_label">Description</string>
-    <string name="title_my_service">My Service</string>
+    <string name="title_my_service">Service Provider</string>
+    <string name="service_main_title">Service\nProvider</string>
     <string name="title_requests">Requests</string>
-    <string name="my_service_requests">My Service Requests</string>
+    <string name="my_service_requests">Service Request</string>
+    <string name="request_main_title">Service\nRequest</string>
     <string name="section_my_requests">My Requests</string>
     <string name="no_requests_yet">No requests yet</string>
     <string name="services_at_door">Services at Door</string>

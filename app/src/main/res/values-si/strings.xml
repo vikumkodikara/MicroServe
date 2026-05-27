@@ -3,7 +3,8 @@
     <string name="app_name">මයික්‍රෝසර්ව්</string>
 
     <!-- Service Request App Strings -->
-    <string name="title_my_service">මගේ සේවාවන්</string>
+    <string name="title_my_service">සේවා සපයන්නා</string>
+    <string name="service_main_title">සේවා\nසපයන්නා</string>
     <string name="title_requests">ඉල්ලීම්</string>
     <string name="services_at_door">ඔබේ නිවසටම සේවාවන්</string>
 
@@ -19,7 +20,8 @@
     <string name="category_hvac">වායු සමීකරණ</string>
 
     <!-- Request Main -->
-    <string name="my_service_requests">මගේ සේවා\nඉල්ලීම්</string>
+    <string name="my_service_requests">සේවා ඉල්ලීම</string>
+    <string name="request_main_title">සේවා\nඉල්ලීම</string>
     <string name="section_category">සේවා වර්ගය</string>
     <string name="section_my_requests">මගේ ඉල්ලීම්</string>
     <string name="no_requests_yet">තවම ඉල්ලීම් කිසිවක් නැත.</string>
