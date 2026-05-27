@@ -1,14 +1,12 @@
 package com.example.microserve
 
-import android.view.View
 import android.os.Bundle
+import android.view.View
 import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
-import android.net.Uri
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
-import com.canhub.cropper.CropImageContract
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.example.microserve.databinding.ActivityEditPostBinding
@@ -16,19 +14,14 @@ import com.example.microserve.databinding.ActivityEditPostBinding
 class EditPostActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityEditPostBinding
+    private lateinit var imageAdjuster: PostImageAdjuster
     private var serviceId: String = ""
     private var selectedImagePath: String? = null
     private var imageChanged = false
 
     private val pickImage = registerForActivityResult(ActivityResultContracts.GetContent()) { uri ->
         if (uri != null) {
-            cropImage.launch(PostImagePicker.optionsForGalleryUri(this, uri))
-        }
-    }
-
-    private val cropImage = registerForActivityResult(CropImageContract()) { result ->
-        if (result.isSuccessful) {
-            applyCroppedImage(result.uriContent)
+            imageAdjuster.startAdjust(uri)
         }
     }
 
@@ -40,17 +33,33 @@ class EditPostActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         applyWindowInsets()
+        setupImageAdjuster()
         setupSpinner()
         prefillExistingData()
         setupClickListeners()
     }
 
+    private fun setupImageAdjuster() {
+        imageAdjuster = PostImageAdjuster(
+            activity = this,
+            imageView = binding.selectedImagePreview,
+            placeholder = binding.addImagePlaceholder,
+            adjustControls = binding.imageAdjustControls,
+            confirmButton = binding.btnConfirmImageAdjust,
+            cancelButton = binding.btnCancelImageAdjust,
+            changeHint = binding.tvImageChangeHint,
+            adjustHint = binding.tvAdjustImageHint,
+            onImageSaved = { savedPath -> applySavedImage(savedPath) }
+        )
+    }
+
     private fun applyWindowInsets() {
-        ViewCompat.setOnApplyWindowInsetsListener(binding.root) { view, insets ->
-            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            view.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
-            insets
-        }
+        SystemUiHelper.setupPurpleHeaderScreen(
+            activity = this,
+            root = binding.root,
+            headerView = binding.headerContainer,
+            footerBar = binding.footerBar
+        )
     }
 
     private fun setupSpinner() {
@@ -79,9 +88,7 @@ class EditPostActivity : AppCompatActivity() {
 
         service?.imageUri?.takeIf { it.isNotBlank() }?.let { imagePath ->
             selectedImagePath = imagePath
-            PostImageHelper.loadPostImage(binding.selectedImagePreview, imagePath)
-            binding.addImagePlaceholder.visibility = View.GONE
-            binding.tvImageChangeHint.visibility = View.VISIBLE
+            imageAdjuster.showSavedPreview(imagePath)
             binding.imageActionText.text = getString(R.string.post_ads_image_selected)
         }
 
@@ -97,6 +104,7 @@ class EditPostActivity : AppCompatActivity() {
         }
 
         binding.addImageBtn.setOnClickListener {
+            if (binding.imageAdjustControls.visibility == View.VISIBLE) return@setOnClickListener
             pickImage.launch("image/*")
         }
 
@@ -153,22 +161,13 @@ class EditPostActivity : AppCompatActivity() {
         }
     }
 
-    private fun applyCroppedImage(uri: Uri?) {
-        if (uri == null) return
+    private fun applySavedImage(savedPath: String) {
         val previous = selectedImagePath
-        val savedPath = PostImageHelper.copyPickedImage(this, uri)
-        if (savedPath == null) {
-            showToast(getString(R.string.post_ads_image_save_failed))
-            return
-        }
         if (!previous.isNullOrBlank() && previous != savedPath) {
             PostImageHelper.deletePostImage(this, previous)
         }
         selectedImagePath = savedPath
         imageChanged = true
-        PostImageHelper.loadPostImage(binding.selectedImagePreview, savedPath)
-        binding.addImagePlaceholder.visibility = View.GONE
-        binding.tvImageChangeHint.visibility = View.VISIBLE
         binding.imageActionText.text = getString(R.string.post_ads_image_selected)
     }
 

@@ -31,18 +31,9 @@ class AdminDashboardActivity : AppCompatActivity() {
     }
 
     private fun setupWindowInsets() {
-        ViewCompat.setOnApplyWindowInsetsListener(binding.main) { view, insets ->
-            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            view.setPadding(systemBars.left, 0, systemBars.right, 0)
-            findViewById<android.view.View>(R.id.adminNavSystemBarSpacer)?.let { spacer ->
-                val lp = spacer.layoutParams
-                if (lp.height != systemBars.bottom) {
-                    lp.height = systemBars.bottom
-                    spacer.layoutParams = lp
-                }
-            }
-            insets
-        }
+        binding.main.applyHorizontalSystemBarInsets()
+        binding.headerFrame.applyStatusBarTopInset()
+        applyNavBarSpacer(R.id.adminNavSystemBarSpacer)
     }
 
     private fun setupQuickActions() {

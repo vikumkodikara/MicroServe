@@ -8,7 +8,6 @@ import android.view.View
 import android.view.animation.AccelerateInterpolator
 import android.view.animation.DecelerateInterpolator
 import android.view.animation.OvershootInterpolator
-import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
@@ -20,10 +19,10 @@ class SplashActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
-
         binding = ActivitySplashBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        SystemUiHelper.applySplashScreen(this)
 
         ViewCompat.setOnApplyWindowInsetsListener(binding.splashRoot) { view, insets ->
             val bars = insets.getInsets(WindowInsetsCompat.Type.systemBars())

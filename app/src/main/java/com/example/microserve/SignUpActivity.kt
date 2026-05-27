@@ -33,11 +33,7 @@ class SignUpActivity : AppCompatActivity() {
     }
 
     private fun setupWindowInsets() {
-        ViewCompat.setOnApplyWindowInsetsListener(binding.signUpScroll) { view, insets ->
-            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            view.setPadding(0, systemBars.top, 0, systemBars.bottom)
-            insets
-        }
+        SystemUiHelper.setupFullBleedPurpleScreen(this, binding.signUpScroll)
     }
 
     private fun setupActions() {

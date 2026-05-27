@@ -1,13 +1,9 @@
 package com.example.microserve
 
 import android.os.Bundle
-import android.view.View
 import android.widget.ArrayAdapter
 import android.widget.Toast
-import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
 import com.example.microserve.databinding.ActivityRequestServiceBinding
 
 /**
@@ -24,29 +20,21 @@ class RequestServiceActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
         binding = ActivityRequestServiceBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         setupWindowInsets()
         setupSpinner()
         setupClickListeners()
-        HomeBottomNavHelper.setup(this, HomeBottomNavHelper.TAB_HOME)
     }
 
     private fun setupWindowInsets() {
-        ViewCompat.setOnApplyWindowInsetsListener(binding.requestServiceRoot) { v, insets ->
-            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, 0)
-            findViewById<View>(R.id.navSystemBarSpacer)?.let { spacer ->
-                val lp = spacer.layoutParams
-                if (lp.height != systemBars.bottom) {
-                    lp.height = systemBars.bottom
-                    spacer.layoutParams = lp
-                }
-            }
-            insets
-        }
+        SystemUiHelper.setupPurpleHeaderScreen(
+            activity = this,
+            root = binding.requestServiceRoot,
+            headerView = binding.headerContainer,
+            footerBar = binding.footerBar
+        )
     }
 
     private fun setupSpinner() {
