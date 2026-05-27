@@ -3,11 +3,11 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#F0F0F3"
+    android:background="@drawable/wallet_dark_bg"
     android:fitsSystemWindows="true"
     android:orientation="vertical">
 
-    <!-- Header -->
+    <!-- ═══════════ HEADER ═══════════ -->
     <FrameLayout
         android:id="@+id/header_bg"
         android:layout_width="match_parent"
@@ -35,15 +35,135 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="10dp"
+                android:layout_marginStart="12dp"
                 android:fontFamily="sans-serif-bold"
-                android:text="Add new card"
+                android:text="Add New Card"
                 android:textColor="#FFFFFF"
-                android:textSize="26sp" />
+                android:textSize="22sp" />
         </LinearLayout>
     </FrameLayout>
 
-    <!-- Form Content -->
+    <!-- ═══════════ CARD PREVIEW ═══════════ -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="-30dp"
+        android:layout_marginEnd="20dp"
+        android:background="@drawable/wallet_card_preview_bg"
+        android:elevation="8dp"
+        android:orientation="vertical"
+        android:padding="24dp">
+
+        <!-- Card chip + logo row -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <!-- Chip icon -->
+            <View
+                android:layout_width="36dp"
+                android:layout_height="28dp"
+                android:background="@drawable/wallet_chip_bg" />
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_weight="1" />
+
+            <!-- M coin logo -->
+            <FrameLayout
+                android:layout_width="32dp"
+                android:layout_height="32dp">
+
+                <View
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:background="@drawable/ic_m_coin" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:fontFamily="sans-serif-black"
+                    android:gravity="center"
+                    android:text="M"
+                    android:textColor="#FFD700"
+                    android:textSize="14sp"
+                    android:includeFontPadding="false" />
+            </FrameLayout>
+        </LinearLayout>
+
+        <!-- Card number preview -->
+        <TextView
+            android:id="@+id/tv_card_number_preview"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:fontFamily="monospace"
+            android:letterSpacing="0.15"
+            android:text="•••• •••• •••• ••••"
+            android:textColor="#E0D4FF"
+            android:textSize="18sp" />
+
+        <!-- Name + Date row -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="CARD HOLDER"
+                    android:textColor="#8877AA"
+                    android:textSize="9sp" />
+
+                <TextView
+                    android:id="@+id/tv_card_name_preview"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="2dp"
+                    android:text="YOUR NAME"
+                    android:textColor="#C4B5E0"
+                    android:textSize="12sp"
+                    android:textStyle="bold" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="EXPIRES"
+                    android:textColor="#8877AA"
+                    android:textSize="9sp" />
+
+                <TextView
+                    android:id="@+id/tv_card_date_preview"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="2dp"
+                    android:text="MM/YY"
+                    android:textColor="#C4B5E0"
+                    android:textSize="12sp"
+                    android:textStyle="bold" />
+            </LinearLayout>
+        </LinearLayout>
+    </LinearLayout>
+
+    <!-- ═══════════ FORM ═══════════ -->
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="0dp"
@@ -54,100 +174,95 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:paddingHorizontal="28dp"
-            android:paddingTop="36dp"
+            android:paddingHorizontal="24dp"
+            android:paddingTop="28dp"
             android:paddingBottom="20dp">
 
-            <!-- Card Number Label -->
+            <!-- Card Number -->
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Card number"
-                android:textColor="#1A1A1A"
-                android:textSize="15sp"
+                android:text="Card Number"
+                android:textColor="#C4B5E0"
+                android:textSize="14sp"
                 android:textStyle="bold" />
 
-            <!-- Card Number Field -->
             <EditText
                 android:id="@+id/et_card_number"
                 android:layout_width="match_parent"
-                android:layout_height="48dp"
+                android:layout_height="52dp"
                 android:layout_marginTop="8dp"
                 android:layout_marginBottom="20dp"
-                android:background="@drawable/neumorphism_field_bg"
-                android:hint="Card number"
+                android:background="@drawable/wallet_input_bg"
+                android:hint="1234 5678 9012 3456"
                 android:inputType="number"
                 android:paddingHorizontal="20dp"
-                android:textColor="#1A1A1A"
-                android:textColorHint="#C0A8D4"
-                android:textSize="14sp" />
+                android:textColor="#FFFFFF"
+                android:textColorHint="#665A80"
+                android:textSize="16sp" />
 
-            <!-- Card Name Label -->
+            <!-- Card Name -->
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Card name"
-                android:textColor="#1A1A1A"
-                android:textSize="15sp"
+                android:text="Card Holder Name"
+                android:textColor="#C4B5E0"
+                android:textSize="14sp"
                 android:textStyle="bold" />
 
-            <!-- Card Name Field -->
             <EditText
                 android:id="@+id/et_card_name"
                 android:layout_width="match_parent"
-                android:layout_height="48dp"
+                android:layout_height="52dp"
                 android:layout_marginTop="8dp"
                 android:layout_marginBottom="20dp"
-                android:background="@drawable/neumorphism_field_bg"
-                android:hint="Card name"
+                android:background="@drawable/wallet_input_bg"
+                android:hint="John Doe"
                 android:inputType="textPersonName"
                 android:paddingHorizontal="20dp"
-                android:textColor="#1A1A1A"
-                android:textColorHint="#C0A8D4"
-                android:textSize="14sp" />
+                android:textColor="#FFFFFF"
+                android:textColorHint="#665A80"
+                android:textSize="16sp" />
 
-            <!-- Date and CVV Row -->
+            <!-- Date + CVV row -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
 
-                <!-- Date Section -->
                 <LinearLayout
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginEnd="16dp"
+                    android:layout_marginEnd="12dp"
                     android:layout_weight="1"
                     android:orientation="vertical">
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Date"
-                        android:textColor="#1A1A1A"
-                        android:textSize="15sp"
+                        android:text="Expiry Date"
+                        android:textColor="#C4B5E0"
+                        android:textSize="14sp"
                         android:textStyle="bold" />
 
                     <EditText
                         android:id="@+id/et_date"
                         android:layout_width="match_parent"
-                        android:layout_height="48dp"
+                        android:layout_height="52dp"
                         android:layout_marginTop="8dp"
-                        android:background="@drawable/neumorphism_field_bg"
-                        android:drawableStart="@android:drawable/ic_menu_my_calendar"
-                        android:drawablePadding="8dp"
+                        android:background="@drawable/wallet_input_bg"
                         android:hint="MM/YY"
                         android:inputType="date"
-                        android:paddingHorizontal="16dp"
-                        android:textColor="#1A1A1A"
-                        android:textColorHint="#C0A8D4"
-                        android:textSize="14sp" />
+                        android:paddingHorizontal="20dp"
+                        android:textColor="#FFFFFF"
+                        android:textColorHint="#665A80"
+                        android:textSize="16sp" />
                 </LinearLayout>
 
-                <!-- CVV Section -->
                 <LinearLayout
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:layout_marginStart="12dp"
                     android:layout_weight="1"
                     android:orientation="vertical">
 
@@ -155,60 +270,50 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="CVV"
-                        android:textColor="#1A1A1A"
-                        android:textSize="15sp"
+                        android:textColor="#C4B5E0"
+                        android:textSize="14sp"
                         android:textStyle="bold" />
 
                     <EditText
                         android:id="@+id/et_cvv"
                         android:layout_width="match_parent"
-                        android:layout_height="48dp"
+                        android:layout_height="52dp"
                         android:layout_marginTop="8dp"
-                        android:background="@drawable/neumorphism_field_bg"
-                        android:hint="***"
+                        android:background="@drawable/wallet_input_bg"
+                        android:hint="•••"
                         android:inputType="numberPassword"
                         android:maxLength="4"
                         android:paddingHorizontal="20dp"
-                        android:textColor="#1A1A1A"
-                        android:textColorHint="#C0A8D4"
-                        android:textSize="14sp" />
+                        android:textColor="#FFFFFF"
+                        android:textColorHint="#665A80"
+                        android:textSize="16sp" />
                 </LinearLayout>
             </LinearLayout>
-
         </LinearLayout>
     </ScrollView>
 
-    <!-- Save Button -->
-    <com.google.android.material.card.MaterialCardView
+    <!-- ═══════════ SAVE BUTTON ═══════════ -->
+    <FrameLayout
         android:id="@+id/btn_save"
         android:layout_width="match_parent"
         android:layout_height="56dp"
         android:layout_marginStart="24dp"
         android:layout_marginEnd="24dp"
         android:layout_marginBottom="24dp"
+        android:background="@drawable/wallet_button_gradient"
         android:clickable="true"
         android:focusable="true"
-        app:cardBackgroundColor="#4a4458"
-        app:cardCornerRadius="28dp"
-        app:cardElevation="6dp"
-        app:strokeColor="#7A6BB3"
-        app:strokeWidth="2dp">
+        android:foreground="?attr/selectableItemBackground"
+        android:elevation="6dp">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:text="Save"
+            android:fontFamily="sans-serif-bold"
+            android:text="Save Card"
             android:textColor="@color/white"
-            android:textSize="16sp"
-            android:textStyle="bold" />
-    </com.google.android.material.card.MaterialCardView>
-
-    <!-- Footer Bar -->
-    <View
-        android:id="@+id/footerBar"
-        android:layout_width="match_parent"
-        android:layout_height="38dp"
-        android:background="@drawable/footer_gradient_bar" />
+            android:textSize="16sp" />
+    </FrameLayout>
 
 </LinearLayout>
