@@ -67,6 +67,7 @@
         app:layout_constraintTop_toBottomOf="@id/headerContainer">
 
         <androidx.core.widget.NestedScrollView
+            android:id="@+id/postAdsScrollView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:clipToPadding="false"
@@ -120,75 +121,173 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="16dp"
-                    android:text="Add Image"
+                    android:text="@string/post_ads_add_image_label"
                     android:textColor="@color/admin_text_primary"
                     android:textSize="16sp"
                     android:textStyle="bold" />
 
-                <FrameLayout
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:text="@string/post_ads_image_crop_hint"
+                    android:textColor="@color/admin_text_secondary"
+                    android:textSize="12sp" />
+
+                <com.google.android.material.card.MaterialCardView
                     android:id="@+id/addImageBtn"
                     android:layout_width="match_parent"
-                    android:layout_height="100dp"
+                    android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
-                    android:background="@drawable/dashed_bg"
                     android:clickable="true"
                     android:focusable="true"
                     android:foreground="?attr/selectableItemBackground"
-                    android:padding="8dp">
+                    app:cardBackgroundColor="@color/admin_quick_action_bg"
+                    app:cardCornerRadius="16dp"
+                    app:cardElevation="0dp"
+                    app:strokeColor="#D8D2E8"
+                    app:strokeWidth="1dp">
 
-                    <ImageView
-                        android:id="@+id/selectedImagePreview"
+                    <FrameLayout
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:contentDescription="Selected image"
-                        android:scaleType="centerCrop"
-                        android:visibility="gone" />
-
-                    <LinearLayout
-                        android:id="@+id/addImagePlaceholder"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:gravity="center"
-                        android:orientation="vertical">
+                        android:layout_height="200dp">
 
                         <ImageView
-                            android:layout_width="40dp"
-                            android:layout_height="40dp"
-                            android:contentDescription="Gallery Icon"
-                            android:src="@android:drawable/ic_menu_gallery"
-                            app:tint="@color/brand_purple" />
+                            android:id="@+id/selectedImagePreview"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:contentDescription="Selected image"
+                            android:scaleType="centerCrop"
+                            android:visibility="gone" />
 
                         <TextView
-                            android:id="@+id/imageActionText"
+                            android:id="@+id/tvImageChangeHint"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="bottom"
+                            android:background="@drawable/ad_card_image_scrim"
+                            android:gravity="center"
+                            android:paddingVertical="8dp"
+                            android:text="@string/post_ads_change_image"
+                            android:textColor="@color/white"
+                            android:textSize="12sp"
+                            android:visibility="gone" />
+
+                        <LinearLayout
+                            android:id="@+id/addImagePlaceholder"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="4dp"
-                            android:text="Tap to add image"
-                            android:textColor="@color/text_gray"
-                            android:textSize="13sp" />
-                    </LinearLayout>
-                </FrameLayout>
+                            android:layout_gravity="center"
+                            android:gravity="center"
+                            android:orientation="vertical"
+                            android:padding="16dp">
+
+                            <ImageView
+                                android:layout_width="44dp"
+                                android:layout_height="44dp"
+                                android:contentDescription="Gallery Icon"
+                                android:src="@android:drawable/ic_menu_gallery"
+                                app:tint="@color/brand_purple" />
+
+                            <TextView
+                                android:id="@+id/imageActionText"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="8dp"
+                                android:gravity="center"
+                                android:text="@string/post_ads_add_image"
+                                android:textColor="@color/text_gray"
+                                android:textSize="13sp" />
+                        </LinearLayout>
+                    </FrameLayout>
+                </com.google.android.material.card.MaterialCardView>
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="16dp"
-                    android:text="Location"
+                    android:text="@string/location_label"
                     android:textColor="@color/admin_text_primary"
                     android:textSize="16sp"
                     android:textStyle="bold" />
 
-                <EditText
-                    android:id="@+id/locationET"
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:text="@string/post_ads_province_label"
+                    android:textColor="@color/admin_text_primary"
+                    android:textSize="14sp" />
+
+                <Spinner
+                    android:id="@+id/provinceSpinner"
                     android:layout_width="match_parent"
                     android:layout_height="48dp"
+                    android:layout_marginTop="6dp"
+                    android:background="@drawable/edittext_bg"
+                    android:paddingHorizontal="8dp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:text="@string/post_ads_district_label"
+                    android:textColor="@color/admin_text_primary"
+                    android:textSize="14sp" />
+
+                <Spinner
+                    android:id="@+id/districtSpinner"
+                    android:layout_width="match_parent"
+                    android:layout_height="48dp"
+                    android:layout_marginTop="6dp"
+                    android:background="@drawable/edittext_bg"
+                    android:enabled="false"
+                    android:paddingHorizontal="8dp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:text="@string/post_ads_city_label"
+                    android:textColor="@color/admin_text_primary"
+                    android:textSize="14sp" />
+
+                <Spinner
+                    android:id="@+id/citySpinner"
+                    android:layout_width="match_parent"
+                    android:layout_height="48dp"
+                    android:layout_marginTop="6dp"
+                    android:background="@drawable/edittext_bg"
+                    android:enabled="false"
+                    android:paddingHorizontal="8dp" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnPickOnMap"
+                    style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                    android:layout_width="match_parent"
+                    android:layout_height="48dp"
+                    android:layout_marginTop="12dp"
+                    android:enabled="false"
+                    android:text="@string/pick_on_map"
+                    android:textAllCaps="false"
+                    app:cornerRadius="24dp"
+                    app:icon="@android:drawable/ic_menu_mylocation"
+                    app:iconGravity="textStart"
+                    app:iconTint="@color/brand_purple"
+                    app:strokeColor="@color/brand_purple" />
+
+                <TextView
+                    android:id="@+id/tvSelectedLocationSummary"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
                     android:background="@drawable/edittext_bg"
-                    android:hint="Enter location"
-                    android:inputType="textPostalAddress"
+                    android:minHeight="48dp"
                     android:paddingHorizontal="12dp"
-                    android:textColor="@color/admin_text_primary" />
+                    android:paddingVertical="10dp"
+                    android:text="@string/post_ads_location_not_selected"
+                    android:textColor="@color/text_gray"
+                    android:textSize="13sp" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -245,116 +344,37 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="24dp"
-                    android:text="Previous Posts"
+                    android:text="@string/post_ads_previous_posts"
                     android:textColor="@color/admin_text_primary"
                     android:textSize="18sp"
                     android:textStyle="bold" />
 
-                <!-- Sample Previous Post Item -->
-                <androidx.cardview.widget.CardView
+                <TextView
+                    android:id="@+id/tvNoPreviousPosts"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="12dp"
                     android:layout_marginBottom="8dp"
-                    android:foreground="@drawable/previous_post_card_border"
-                    app:cardBackgroundColor="@color/white_card_bg"
-                    app:cardCornerRadius="16dp"
-                    app:cardElevation="2dp"
-                    app:contentPadding="12dp">
+                    android:gravity="center"
+                    android:paddingVertical="16dp"
+                    android:text="@string/post_ads_no_previous_posts"
+                    android:textColor="@color/admin_text_secondary"
+                    android:textSize="14sp"
+                    android:visibility="gone" />
 
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical">
-
-                        <!-- Top row: info on left, image on right -->
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:orientation="horizontal">
-
-                            <LinearLayout
-                                android:layout_width="0dp"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="1"
-                                android:background="@color/admin_quick_action_bg"
-                                android:orientation="vertical"
-                                android:padding="8dp">
-
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="Service - Plumbing"
-                                    android:textColor="@color/admin_text_primary"
-                                    android:textSize="13sp"
-                                    android:textStyle="bold" />
-
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginTop="4dp"
-                                    android:text="Name - Sunli"
-                                    android:textColor="@color/admin_text_primary"
-                                    android:textSize="13sp" />
-
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginTop="2dp"
-                                    android:text="Contact - 072587456"
-                                    android:textColor="@color/admin_text_primary"
-                                    android:textSize="13sp" />
-
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginTop="2dp"
-                                    android:text="Location - Galle"
-                                    android:textColor="@color/admin_text_primary"
-                                    android:textSize="13sp" />
-                            </LinearLayout>
-
-                            <ImageView
-                                android:layout_width="100dp"
-                                android:layout_height="90dp"
-                                android:layout_marginStart="8dp"
-                                android:contentDescription="Post Image"
-                                android:scaleType="centerCrop"
-                                android:src="@android:drawable/ic_menu_gallery" />
-                        </LinearLayout>
-
-                        <!-- Bottom row: purple bar left, Edit button right -->
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="8dp"
-                            android:gravity="center_vertical"
-                            android:orientation="horizontal">
-
-                            <View
-                                android:layout_width="0dp"
-                                android:layout_height="32dp"
-                                android:layout_marginEnd="8dp"
-                                android:layout_weight="1"
-                                android:background="@drawable/primary_button_bg" />
-
-                            <com.google.android.material.button.MaterialButton
-                                android:id="@+id/editBtn"
-                                android:layout_width="wrap_content"
-                                android:layout_height="36dp"
-                                android:insetTop="0dp"
-                                android:insetBottom="0dp"
-                                android:paddingHorizontal="24dp"
-                                android:text="Edit"
-                                android:textAllCaps="false"
-                                android:textColor="@color/white"
-                                android:textSize="13sp"
-                                app:backgroundTint="#28A745"
-                                app:cornerRadius="12dp" />
-                        </LinearLayout>
-
-                    </LinearLayout>
-                </androidx.cardview.widget.CardView>
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/previousPostsRecyclerView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:layout_marginBottom="8dp"
+                    android:clipToPadding="false"
+                    android:nestedScrollingEnabled="false"
+                    android:overScrollMode="never"
+                    android:paddingEnd="4dp"
+                    tools:itemCount="2"
+                    tools:listitem="@layout/item_previous_post"
+                    tools:orientation="horizontal" />
             </LinearLayout>
         </androidx.core.widget.NestedScrollView>
 

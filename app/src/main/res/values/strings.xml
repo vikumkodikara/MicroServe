@@ -48,7 +48,20 @@
 
     <!-- Homepage -->
     <string name="cd_services_at_your_door_banner">Services at your door — browse local service providers</string>
-    <string name="cd_job_done_preview">Previously completed job preview image</string>
+    <string name="cd_job_done_preview">Advertisement preview image</string>
+    <string name="home_previously_done_jobs">Advertisements</string>
+    <string name="home_service_done_area">Service area</string>
+    <string name="home_ad_label_name">Name</string>
+    <string name="home_ad_label_contact">Contact</string>
+    <string name="home_ad_label_name_value">Name: %1$s</string>
+    <string name="home_ad_label_contact_value">Contact: %1$s</string>
+    <string name="home_ad_title_format">%1$s Service</string>
+    <string name="post_ads_image_crop_hint">Photo fills the card — tap again to change image</string>
+    <string name="home_job_service_format">Service: %1$s</string>
+    <string name="home_job_name_format">Name: %1$s</string>
+    <string name="home_job_contact_format">Contact: %1$s</string>
+    <string name="home_job_area_format"> - %1$s</string>
+    <string name="home_no_jobs_yet">No advertisements yet. Post your work from Post Ads.</string>
     <string name="cd_sidebar_menu">Open navigation menu</string>
 
     <!-- Navigation -->
@@ -72,6 +85,44 @@
     <string name="service_request_details">Service Request Details</string>
     <string name="service_label">Service</string>
     <string name="location_label">Location</string>
+    <string name="post_ads_province_label">Province</string>
+    <string name="post_ads_district_label">District</string>
+    <string name="post_ads_city_label">City</string>
+    <string name="post_ads_select_option">-Select-</string>
+    <string name="pick_on_map">Select exact place on map</string>
+    <string name="post_ads_location_not_selected">Select province, district, and city first</string>
+    <string name="post_ads_location_pending_map">%1$s, %2$s, %3$s — tap map to pin exact place</string>
+    <string name="post_ads_select_location_first">Please select province, district, and city first</string>
+    <string name="post_ads_pick_map_location">Please pin your exact location on the map</string>
+    <string name="post_ads_select_category">Please select a service category</string>
+    <string name="post_ads_enter_provider">Please enter provider name</string>
+    <string name="post_ads_enter_contact">Please enter contact number</string>
+    <string name="post_ads_enter_email">Please enter email</string>
+    <string name="post_ads_posted_success">Service posted successfully</string>
+    <string name="post_ads_posted_title">Posted</string>
+    <string name="post_ads_posted_success_stay">Your advertisement was added. You can view it below or on the Home screen when you go there.</string>
+    <string name="post_ads_image_selected">Image selected</string>
+    <string name="post_ads_change_image">Tap to change image</string>
+    <string name="post_ads_image_save_failed">Could not save the selected image. Please try another photo.</string>
+    <string name="post_ads_previous_posts">Advertisements</string>
+    <string name="post_ads_no_previous_posts">No advertisements yet. Tap Post above to add your first listing.</string>
+    <string name="post_ads_previous_post_category">Service - %1$s</string>
+    <string name="post_ads_previous_post_name">Name - %1$s</string>
+    <string name="post_ads_previous_post_contact">Contact - %1$s</string>
+    <string name="post_ads_previous_post_location">Location - %1$s</string>
+    <string name="post_ads_edit">Edit</string>
+    <string name="post_ads_post_image">Post image</string>
+    <string name="post_ads_swipe_hint">Swipe sideways to see more posts</string>
+    <string name="post_ads_add_image">Tap to add image (optional)</string>
+    <string name="post_ads_add_image_label">Add Image (optional)</string>
+    <string name="post_ads_deleted">Post deleted</string>
+    <string name="post_ads_updated">Post updated successfully</string>
+    <string name="pick_location_title">Pin exact location</string>
+    <string name="pick_location_hint">Tap the map or drag the pin to mark the exact service location</string>
+    <string name="confirm_location">Confirm location</string>
+    <string name="pick_location_area_format">Area: %1$s</string>
+    <string name="pick_location_coords_format">Coordinates: %1$s, %2$s</string>
+    <string name="pick_location_pin_format">Pinned at %1$s, %2$s</string>
     <string name="job_label">Job</string>
     <string name="previous_bids">Previous bids</string>
     <string name="bid_button">Bid</string>
@@ -129,6 +180,13 @@
     <string name="login_error_username">Please enter your email</string>
     <string name="login_error_invalid_email">Please enter a valid email</string>
     <string name="login_error_password">Please enter your password</string>
+    <string name="login_error_wrong_credentials">Wrong email or password. Use the same email you registered with and check for typos.</string>
+    <string name="login_error_no_account">No account found for this email. Please sign up first.</string>
+    <string name="login_error_generic">Could not sign in. Please try again.</string>
+    <string name="login_error_user_disabled">This account has been disabled. Contact support.</string>
+    <string name="login_error_too_many_requests">Too many attempts. Please wait a moment and try again.</string>
+    <string name="login_reset_email_sent">Password reset link sent to your email</string>
+    <string name="login_reset_email_failed">Could not send reset email. Check the address and try again.</string>
     <string name="cd_login_logo">MicroServe logo</string>
     <string name="login_google_not_configured">Google Sign-In is not configured correctly</string>
 
@@ -147,7 +205,9 @@
     <string name="sign_up_error_check_email">Could not verify email right now. Please try again.</string>
     <string name="sign_up_error_network">Network error. Please check your internet and try again.</string>
     <string name="sign_up_error_generic">Sign up failed. Please try again.</string>
-    <string name="sign_up_success">Account created successfully</string>
+    <string name="sign_up_success">Your account was created successfully. You can now log in with your email and password.</string>
+    <string name="sign_up_success_title">Account Created</string>
+    <string name="action_ok">OK</string>
 
     <!-- Edit Profile Strings -->
     <string name="personal_info">Personal Info</string>

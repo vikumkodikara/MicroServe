@@ -47,20 +47,30 @@ class SettingsFragmentActivity : AppCompatActivity() {
 
         findViewById<View>(R.id.btn_back).setOnClickListener { finish() }
 
-        val switchNotifications = findViewById<com.google.android.material.switchmaterial.SwitchMaterial>(R.id.switchNotifications)
-        switchNotifications.isChecked = AppPreferences.isNotificationsEnabled(this)
-        switchNotifications.setOnCheckedChangeListener { _, isChecked ->
-            AppPreferences.setNotificationsEnabled(this, isChecked)
-            Toast.makeText(this, if (isChecked) "Notifications enabled" else "Notifications disabled", Toast.LENGTH_SHORT).show()
+        findViewById<com.google.android.material.switchmaterial.SwitchMaterial>(R.id.switchNotifications)?.apply {
+            isChecked = AppPreferences.isNotificationsEnabled(this@SettingsFragmentActivity)
+            setOnCheckedChangeListener { _, isChecked ->
+                AppPreferences.setNotificationsEnabled(this@SettingsFragmentActivity, isChecked)
+                Toast.makeText(
+                    this@SettingsFragmentActivity,
+                    if (isChecked) "Notifications enabled" else "Notifications disabled",
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
         }
 
-        val switchDarkMode = findViewById<com.google.android.material.switchmaterial.SwitchMaterial>(R.id.switchDarkMode)
-        switchDarkMode.isChecked = AppPreferences.isDarkModeEnabled(this)
-        switchDarkMode.setOnCheckedChangeListener { _, isChecked ->
-            AppPreferences.setDarkModeEnabled(this, isChecked)
-            androidx.appcompat.app.AppCompatDelegate.setDefaultNightMode(
-                if (isChecked) androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_YES else androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_NO
-            )
+        findViewById<com.google.android.material.switchmaterial.SwitchMaterial>(R.id.switchDarkMode)?.apply {
+            isChecked = AppPreferences.isDarkModeEnabled(this@SettingsFragmentActivity)
+            setOnCheckedChangeListener { _, isChecked ->
+                AppPreferences.setDarkModeEnabled(this@SettingsFragmentActivity, isChecked)
+                androidx.appcompat.app.AppCompatDelegate.setDefaultNightMode(
+                    if (isChecked) {
+                        androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_YES
+                    } else {
+                        androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_NO
+                    }
+                )
+            }
         }
 
         findViewById<View>(R.id.btn_logout).setOnClickListener {
