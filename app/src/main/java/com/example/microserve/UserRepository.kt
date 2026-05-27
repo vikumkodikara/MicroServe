@@ -59,39 +59,29 @@ object UserRepository {
     }
 
     /**
-     * Signs in as admin temporarily to verify / fix the Firestore role,
-     * then signs out so the current session is not affected.
+     * Queries Firestore for the admin profile by email and ensures the role
+     * field is set to "admin". Does NOT sign in as admin — avoids changing
+     * the current Firebase Auth user.
      */
     private fun ensureAdminRole() {
-        val auth = FirebaseAuth.getInstance()
-        val previousUser = auth.currentUser
-
-        auth.signInWithEmailAndPassword(ADMIN_EMAIL, ADMIN_PASSWORD)
-            .addOnSuccessListener { result ->
-                val user = result.user ?: return@addOnSuccessListener
-                firestore.collection(UserProfile.COLLECTION)
-                    .document(user.uid)
-                    .get()
-                    .addOnSuccessListener { doc ->
-                        val currentRole = doc.getString(UserProfile.FIELD_ROLE)
-                        if (currentRole == null || !currentRole.equals(UserProfile.ROLE_ADMIN, ignoreCase = true)) {
-                            // Fix the role
-                            val profile = UserProfile(
-                                uid = user.uid,
-                                name = doc.getString(UserProfile.FIELD_NAME) ?: ADMIN_NAME,
-                                email = ADMIN_EMAIL,
-                                phone = doc.getString(UserProfile.FIELD_PHONE) ?: ADMIN_PHONE,
-                                role = UserProfile.ROLE_ADMIN
-                            )
-                            firestore.collection(UserProfile.COLLECTION)
-                                .document(user.uid)
-                                .set(profile.toMap())
-                        }
-                        // Restore previous auth state
-                        if (previousUser == null) auth.signOut()
-                    }
+        firestore.collection(UserProfile.COLLECTION)
+            .whereEqualTo(UserProfile.FIELD_EMAIL, ADMIN_EMAIL)
+            .limit(1)
+            .get()
+            .addOnSuccessListener { snapshot ->
+                if (snapshot.isEmpty) {
+                    Log.d(TAG, "No Firestore doc for admin email — will be created on first login")
+                    return@addOnSuccessListener
+                }
+                val doc = snapshot.documents.first()
+                val currentRole = doc.getString(UserProfile.FIELD_ROLE)
+                if (currentRole == null || !currentRole.equals(UserProfile.ROLE_ADMIN, ignoreCase = true)) {
+                    doc.reference.update(UserProfile.FIELD_ROLE, UserProfile.ROLE_ADMIN)
+                        .addOnSuccessListener { Log.d(TAG, "Admin role fixed in Firestore") }
+                        .addOnFailureListener { Log.w(TAG, "Failed to fix admin role", it) }
+                }
             }
-            .addOnFailureListener { Log.w(TAG, "ensureAdminRole sign-in failed", it) }
+            .addOnFailureListener { Log.w(TAG, "ensureAdminRole query failed", it) }
     }
 
     fun saveProfile(
