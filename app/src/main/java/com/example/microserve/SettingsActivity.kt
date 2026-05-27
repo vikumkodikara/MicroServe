@@ -38,6 +38,13 @@ class SettingsActivity : AppCompatActivity() {
         ViewCompat.setOnApplyWindowInsetsListener(binding.settingsRoot) { _, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             binding.settingsHeaderFrame.setPadding(0, systemBars.top, 0, 0)
+            findViewById<android.view.View>(R.id.adminNavSystemBarSpacer)?.let { spacer ->
+                val lp = spacer.layoutParams
+                if (lp.height != systemBars.bottom) {
+                    lp.height = systemBars.bottom
+                    spacer.layoutParams = lp
+                }
+            }
             insets
         }
     }

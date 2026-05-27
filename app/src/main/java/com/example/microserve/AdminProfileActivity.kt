@@ -34,6 +34,13 @@ class AdminProfileActivity : AppCompatActivity() {
         ViewCompat.setOnApplyWindowInsetsListener(binding.adminProfileRoot) { _, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             binding.profileHeaderFrame.setPadding(0, systemBars.top, 0, 0)
+            findViewById<android.view.View>(R.id.adminNavSystemBarSpacer)?.let { spacer ->
+                val lp = spacer.layoutParams
+                if (lp.height != systemBars.bottom) {
+                    lp.height = systemBars.bottom
+                    spacer.layoutParams = lp
+                }
+            }
             insets
         }
     }
