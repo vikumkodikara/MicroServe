@@ -74,7 +74,7 @@
                     android:layout_height="match_parent"
                     android:importantForAccessibility="no"
                     android:scaleType="centerCrop"
-                    android:src="@drawable/Aboutus" />
+                    android:src="@drawable/aboutus" />
             </com.google.android.material.card.MaterialCardView>
 
             <!-- About Card (Neumorphism) -->

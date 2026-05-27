@@ -95,7 +95,7 @@ class UserFeedbacksActivity : AppCompatActivity() {
     }
 
     private fun showDeleteDialog(feedbackId: String) {
-        val dialog = android.app.AlertDialog.Builder(this, R.style.Theme_MaterialComponents_Light_Dialog_MinWidth)
+        val dialog = android.app.AlertDialog.Builder(this, com.google.android.material.R.style.Theme_MaterialComponents_Light_Dialog_MinWidth)
             .create()
 
         val view = LayoutInflater.from(this).inflate(R.layout.dialog_delete_feedback, null)

@@ -134,6 +134,7 @@ object UserRepository {
                         name = doc.getString(UserProfile.FIELD_NAME).orEmpty(),
                         email = doc.getString(UserProfile.FIELD_EMAIL).orEmpty(),
                         phone = doc.getString(UserProfile.FIELD_PHONE).orEmpty(),
+                        location = doc.getString(UserProfile.FIELD_LOCATION).orEmpty(),
                         photoUrl = doc.getString(UserProfile.FIELD_PHOTO_URL)
                             ?: user.photoUrl?.toString().orEmpty(),
                         role = doc.getString(UserProfile.FIELD_ROLE) ?: UserProfile.ROLE_USER,

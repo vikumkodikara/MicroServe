@@ -45,9 +45,33 @@ class RequestersActivity : AppCompatActivity() {
         val allRequests = RequestStore.getAllRequests(this)
         if (allRequests.isEmpty()) {
             // Add sample requests for demo
-            RequestStore.addRequest(this, "Plumbing & Pipe Fixing", "Kasun Fernando", "+94 70 456 7890", "Malabe")
-            RequestStore.addRequest(this, "Logo & Branding Design", "Savindi Rathnayaka", "+94 76 345 6789", "Kurunegala")
-            RequestStore.addRequest(this, "House Cleaning Service", "Amila Darshana", "+94 77 123 4567", "Kandy")
+            RequestStore.addRequest(
+                this,
+                requesterName = "Kasun Fernando",
+                title = "Plumbing & Pipe Fixing",
+                category = "Plumbing",
+                contact = "+94 70 456 7890",
+                location = "Malabe",
+                description = "Plumbing & Pipe Fixing"
+            )
+            RequestStore.addRequest(
+                this,
+                requesterName = "Savindi Rathnayaka",
+                title = "Logo & Branding Design",
+                category = "General",
+                contact = "+94 76 345 6789",
+                location = "Kurunegala",
+                description = "Logo & Branding Design"
+            )
+            RequestStore.addRequest(
+                this,
+                requesterName = "Amila Darshana",
+                title = "House Cleaning Service",
+                category = "Cleaning",
+                contact = "+94 77 123 4567",
+                location = "Kandy",
+                description = "House Cleaning Service"
+            )
         }
     }
 

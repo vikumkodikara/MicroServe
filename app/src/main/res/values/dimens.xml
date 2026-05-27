@@ -1,7 +1,51 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- Screen Dimensions -->
+    <dimen name="screen_width">412dp</dimen>
+    <dimen name="screen_height">953dp</dimen>
+
+    <!-- Border Radius -->
+    <dimen name="radius_small">9dp</dimen>
+    <dimen name="radius_medium">14dp</dimen>
+    <dimen name="radius_large">15dp</dimen>
+    <dimen name="radius_xlarge">24dp</dimen>
+    <dimen name="radius_xxlarge">43dp</dimen>
+    <dimen name="radius_xxxlarge">52dp</dimen>
+
+    <!-- Spacing -->
+    <dimen name="spacing_tiny">6dp</dimen>
+    <dimen name="spacing_small">7dp</dimen>
+    <dimen name="spacing_medium">12dp</dimen>
+    <dimen name="spacing_large">26dp</dimen>
+
+    <!-- Icon Sizes -->
+    <dimen name="icon_tiny">27dp</dimen>
+    <dimen name="icon_small">29dp</dimen>
+    <dimen name="icon_medium">33dp</dimen>
+    <dimen name="icon_large">38dp</dimen>
+    <dimen name="icon_xlarge">46dp</dimen>
+
+    <!-- Category Card -->
+    <dimen name="category_image_width">83dp</dimen>
+    <dimen name="category_image_height">63dp</dimen>
+    <dimen name="category_text_width">95dp</dimen>
+    <dimen name="category_text_height">18dp</dimen>
+
+    <!-- Request Item -->
+    <dimen name="request_height">47dp</dimen>
+    <dimen name="request_width">353dp</dimen>
+    <dimen name="request_button_width">70dp</dimen>
+    <dimen name="request_button_height">36dp</dimen>
+
+    <!-- Text Sizes -->
+    <dimen name="text_small">12sp</dimen>
+    <dimen name="text_medium">15sp</dimen>
+    <dimen name="text_large">16sp</dimen>
+    <dimen name="text_xlarge">24sp</dimen>
+    <dimen name="text_xxlarge">40sp</dimen>
+
+    <!-- Home bottom nav -->
     <dimen name="home_nav_bar_height">68dp</dimen>
-    <!-- 68dp bar + room for centre Home puck above the strip -->
     <dimen name="home_nav_container_height">100dp</dimen>
     <dimen name="home_nav_puck_overflow">32dp</dimen>
     <dimen name="home_nav_icon_size">26dp</dimen>

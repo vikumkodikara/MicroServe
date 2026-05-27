@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="8dp"
+    android:background="@drawable/rounded_white_9dp"
+    android:gravity="center_vertical"
+    android:minHeight="47dp"
+    android:orientation="horizontal"
+    android:paddingStart="16dp"
+    android:paddingTop="8dp"
+    android:paddingEnd="8dp"
+    android:paddingBottom="8dp">
+
+    <TextView
+        android:id="@+id/requestTitle"
+        style="@style/RequestTitleText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <TextView
+        android:id="@+id/requestDesc"
+        style="@style/RequestDescText"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_weight="1"
+        android:ellipsize="end"
+        android:maxLines="1" />
+
+    <Button
+        android:id="@+id/requestEditBtn"
+        style="@style/EditButton"
+        android:layout_width="70dp"
+        android:layout_height="36dp"
+        android:layout_marginEnd="6dp"
+        android:text="@string/edit" />
+
+    <ImageView
+        android:id="@+id/requestDelete"
+        android:layout_width="28dp"
+        android:layout_height="28dp"
+        android:contentDescription="@string/delete_request"
+        android:padding="2dp"
+        android:src="@drawable/nethmina_delete" />
+
+</LinearLayout>

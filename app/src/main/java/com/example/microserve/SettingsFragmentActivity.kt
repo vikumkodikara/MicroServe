@@ -6,6 +6,7 @@ import android.graphics.Typeface
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
+import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
@@ -45,13 +46,21 @@ class SettingsFragmentActivity : AppCompatActivity() {
         findViewById<View>(R.id.btn_back).setOnClickListener { finish() }
 
         findViewById<View>(R.id.btn_logout).setOnClickListener {
+            SessionNavigator.clearAuth(this)
             Toast.makeText(this, "Logged out", Toast.LENGTH_SHORT).show()
+            startActivity(SessionNavigator.loginIntent(this))
             finish()
         }
 
         findViewById<View>(R.id.tv_edit_profile).setOnClickListener {
             startActivity(Intent(this, EditProfileActivity::class.java))
         }
+
+        findViewById<View>(R.id.profileCard)?.setOnClickListener {
+            startActivity(Intent(this, EditProfileActivity::class.java))
+        }
+
+        bindProfileCard()
 
         findViewById<View>(R.id.btn_personal_info).setOnClickListener {
             startActivity(Intent(this, PersonalInfoActivity::class.java))
@@ -94,8 +103,23 @@ class SettingsFragmentActivity : AppCompatActivity() {
         } catch (_: Exception) { }
     }
 
+    override fun onResume() {
+        super.onResume()
+        bindProfileCard()
+    }
+
+    private fun bindProfileCard() {
+        val name = AppPreferences.getSessionName(this)
+        findViewById<TextView>(R.id.tv_name)?.text =
+            if (name.isNotBlank()) name else getString(R.string.dummy_user_name)
+
+        findViewById<ImageView>(R.id.img_profile)?.let { avatar ->
+            ProfilePhotoHelper.loadAvatar(this, avatar, name)
+        }
+    }
+
     private fun showLanguageDialog() {
-        val dialog = android.app.AlertDialog.Builder(this, R.style.Theme_MaterialComponents_Light_Dialog_MinWidth)
+        val dialog = android.app.AlertDialog.Builder(this, com.google.android.material.R.style.Theme_MaterialComponents_Light_Dialog_MinWidth)
             .create()
 
         val view = LayoutInflater.from(this).inflate(R.layout.dialog_select_language, null)

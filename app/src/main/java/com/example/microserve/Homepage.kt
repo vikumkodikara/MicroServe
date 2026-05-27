@@ -49,26 +49,43 @@ class Homepage : AppCompatActivity() {
         HomeBottomNavHelper.setup(this, HomeBottomNavHelper.TAB_HOME)
     }
 
+    override fun onResume() {
+        super.onResume()
+        if (::binding.isInitialized) {
+            setupUserProfile()
+        }
+    }
+
     /**
      * Loads the logged-in user's name and profile photo from session.
      */
     private fun setupUserProfile() {
         val name = AppPreferences.getSessionName(this)
+        val displayName = if (name.isNotBlank()) name else "User"
+        binding.userName.text = displayName
+
+        if (ProfilePhotoHelper.hasLocalPhoto(this)) {
+            Glide.with(this)
+                .load(ProfilePhotoHelper.getPhotoFile(this))
+                .circleCrop()
+                .placeholder(R.drawable.navprofile)
+                .error(buildInitialsDrawable(displayName))
+                .into(binding.profileAvatar)
+            return
+        }
+
         val photoUrl = AppPreferences.getSessionPhotoUrl(this)
-
-        // Set user name (fallback to "User" if empty)
-        binding.userName.text = if (name.isNotBlank()) name else "User"
-
-        // Load profile photo
-        if (photoUrl.isNotBlank()) {
+        if (photoUrl.startsWith("http://", ignoreCase = true) ||
+            photoUrl.startsWith("https://", ignoreCase = true)
+        ) {
             Glide.with(this)
                 .load(photoUrl)
                 .circleCrop()
                 .placeholder(R.drawable.navprofile)
-                .error(buildInitialsDrawable(name))
+                .error(buildInitialsDrawable(displayName))
                 .into(binding.profileAvatar)
         } else {
-            binding.profileAvatar.setImageDrawable(buildInitialsDrawable(name))
+            binding.profileAvatar.setImageDrawable(buildInitialsDrawable(displayName))
         }
     }
 
@@ -180,7 +197,7 @@ class Homepage : AppCompatActivity() {
 
         binding.menuAccount.setOnClickListener {
             closeMenu()
-            startActivity(Intent(this, AdminProfileActivity::class.java))
+            startActivity(Intent(this, PersonalInfoActivity::class.java))
         }
         binding.menuFeedback.setOnClickListener {
             closeMenu()
@@ -292,4 +309,3 @@ class Homepage : AppCompatActivity() {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
     }
 }
-

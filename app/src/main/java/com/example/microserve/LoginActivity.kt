@@ -11,7 +11,6 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.example.microserve.databinding.ActivityLoginBinding
 import com.google.android.gms.auth.api.signin.GoogleSignIn
-import com.google.android.gms.common.SignInButton
 import com.google.android.gms.common.api.ApiException
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
@@ -68,13 +67,6 @@ class LoginActivity : AppCompatActivity() {
         setupActions()
     }
 
-    override fun onStart() {
-        super.onStart()
-        auth.currentUser?.let { user ->
-            loadProfileAndRoute(user)
-        }
-    }
-
     private fun setupWindowInsets() {
         ViewCompat.setOnApplyWindowInsetsListener(binding.loginScroll) { view, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
@@ -116,9 +108,6 @@ class LoginActivity : AppCompatActivity() {
             googleSignInLauncher.launch(GoogleAuthHelper.buildSignInClient(this).signInIntent)
             showLoading(true)
         }
-
-        binding.googleSignInButton.setSize(SignInButton.SIZE_WIDE)
-        binding.googleSignInButton.setColorScheme(SignInButton.COLOR_LIGHT)
     }
 
     private fun signInWithEmail(email: String, password: String) {
@@ -152,18 +141,9 @@ class LoginActivity : AppCompatActivity() {
         )
     }
 
-    private fun routeByRole(role: String) {
+    private fun routeByRole(@Suppress("UNUSED_PARAMETER") role: String) {
         showLoading(false)
-        val target = if (role.equals(UserProfile.ROLE_ADMIN, ignoreCase = true)) {
-            AdminDashboardActivity::class.java
-        } else {
-            Homepage::class.java
-        }
-
-        startActivity(
-            Intent(this, target)
-                .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
-        )
+        startActivity(SessionNavigator.mainIntent(this))
         finish()
     }
 

@@ -5,6 +5,8 @@ import android.view.View
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
 
 class GetHelpActivity : AppCompatActivity() {
 
@@ -12,6 +14,12 @@ class GetHelpActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContentView(R.layout.activity_gethelp)
+
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.header_bg)) { view, insets ->
+            val top = insets.getInsets(WindowInsetsCompat.Type.systemBars()).top
+            view.setPadding(view.paddingLeft, top, view.paddingRight, view.paddingBottom)
+            insets
+        }
 
         findViewById<View>(R.id.btn_back).setOnClickListener { finish() }
 

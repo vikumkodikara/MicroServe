@@ -1,10 +1,12 @@
 package com.example.microserve
 
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.view.View
 import android.widget.ArrayAdapter
 import androidx.activity.enableEdgeToEdge
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
@@ -13,6 +15,17 @@ import com.example.microserve.databinding.ActivityPostAdsBinding
 class PostAdsActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityPostAdsBinding
+    private var selectedImageUri: Uri? = null
+
+    private val imagePicker = registerForActivityResult(ActivityResultContracts.GetContent()) { uri ->
+        if (uri != null) {
+            selectedImageUri = uri
+            binding.selectedImagePreview.setImageURI(uri)
+            binding.selectedImagePreview.visibility = View.VISIBLE
+            binding.addImagePlaceholder.visibility = View.GONE
+            binding.imageActionText.text = "Image selected"
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -51,6 +64,10 @@ class PostAdsActivity : AppCompatActivity() {
     private fun setupClickListeners() {
         binding.backBtn.setOnClickListener {
             finish()
+        }
+
+        binding.addImageBtn.setOnClickListener {
+            imagePicker.launch("image/*")
         }
 
         binding.editBtn.setOnClickListener {

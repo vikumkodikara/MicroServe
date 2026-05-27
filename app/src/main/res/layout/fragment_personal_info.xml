@@ -86,6 +86,7 @@
                 android:layout_gravity="bottom|end"
                 android:layout_marginEnd="4dp"
                 android:layout_marginBottom="4dp"
+                android:visibility="gone"
                 app:cardBackgroundColor="#6200EA"
                 app:cardCornerRadius="20dp"
                 app:cardElevation="10dp">
@@ -143,7 +144,6 @@
                     android:background="@null"
                     android:inputType="textPersonName"
                     android:paddingHorizontal="22dp"
-                    android:text="Nethmina Malshan"
                     android:textColor="@color/black"
                     android:textSize="14sp" />
             </com.google.android.material.card.MaterialCardView>
@@ -172,7 +172,6 @@
                     android:background="@null"
                     android:inputType="textEmailAddress"
                     android:paddingHorizontal="22dp"
-                    android:text="nethmina@gmail.com"
                     android:textColor="@color/black"
                     android:textSize="14sp" />
             </com.google.android.material.card.MaterialCardView>
@@ -201,7 +200,6 @@
                     android:background="@null"
                     android:inputType="phone"
                     android:paddingHorizontal="22dp"
-                    android:text="+94 77 123 4567"
                     android:textColor="@color/black"
                     android:textSize="14sp" />
             </com.google.android.material.card.MaterialCardView>
@@ -230,7 +228,6 @@
                     android:background="@null"
                     android:inputType="textPostalAddress"
                     android:paddingHorizontal="22dp"
-                    android:text="Kaluthara, Sri Lanka"
                     android:textColor="@color/black"
                     android:textSize="14sp" />
             </com.google.android.material.card.MaterialCardView>

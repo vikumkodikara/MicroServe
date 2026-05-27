@@ -59,6 +59,7 @@ class ServiceMainActivity : AppCompatActivity() {
             }
         }
 
+        HomeBottomNavHelper.setup(this, HomeBottomNavHelper.TAB_SERVICE)
         loadServices()
     }
 

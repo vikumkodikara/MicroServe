@@ -48,6 +48,7 @@ class RequestMainActivity : AppCompatActivity() {
             }
         }
 
+        HomeBottomNavHelper.setup(this, HomeBottomNavHelper.TAB_REQUEST)
         loadSampleRequests()
     }
 

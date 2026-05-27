@@ -9,7 +9,9 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.example.microserve.databinding.ActivitySignUpBinding
+import com.google.firebase.FirebaseNetworkException
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseAuthUserCollisionException
 
 class SignUpActivity : AppCompatActivity() {
 
@@ -56,11 +58,29 @@ class SignUpActivity : AppCompatActivity() {
                 email.isEmpty() -> toast(getString(R.string.sign_up_error_email))
                 !Patterns.EMAIL_ADDRESS.matcher(email).matches() -> toast(getString(R.string.login_error_invalid_email))
                 mobile.isEmpty() -> toast(getString(R.string.sign_up_error_mobile))
-                else -> {
-                    createAccount(username, email, mobile, password)
-                }
+                else -> checkEmailThenCreateAccount(
+                    name = username,
+                    email = email.lowercase(),
+                    phone = mobile,
+                    password = password
+                )
             }
         }
+    }
+
+    private fun checkEmailThenCreateAccount(name: String, email: String, phone: String, password: String) {
+        auth.fetchSignInMethodsForEmail(email)
+            .addOnSuccessListener { result ->
+                val methods = result.signInMethods.orEmpty()
+                if (methods.isNotEmpty()) {
+                    toast(getString(R.string.sign_up_error_email_in_use))
+                    return@addOnSuccessListener
+                }
+                createAccount(name, email, phone, password)
+            }
+            .addOnFailureListener { error ->
+                toast(error.localizedMessage ?: getString(R.string.sign_up_error_check_email))
+            }
     }
 
     private fun createAccount(name: String, email: String, phone: String, password: String) {
@@ -85,24 +105,24 @@ class SignUpActivity : AppCompatActivity() {
                     profile = profile,
                     onSuccess = {
                         toast(getString(R.string.sign_up_success))
-                        startActivity(
-                            Intent(this, Homepage::class.java)
-                                .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
-                        )
+                        startActivity(SessionNavigator.mainIntent(this))
                         finish()
                     },
                     onFailure = { message ->
                         toast(message)
-                        startActivity(
-                            Intent(this, Homepage::class.java)
-                                .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
-                        )
+                        AppPreferences.saveSession(this, profile)
+                        startActivity(SessionNavigator.mainIntent(this))
                         finish()
                     }
                 )
             }
             .addOnFailureListener { error ->
-                toast(error.localizedMessage ?: "Sign up failed")
+                val message = when (error) {
+                    is FirebaseAuthUserCollisionException -> getString(R.string.sign_up_error_email_in_use)
+                    is FirebaseNetworkException -> getString(R.string.sign_up_error_network)
+                    else -> error.localizedMessage ?: getString(R.string.sign_up_error_generic)
+                }
+                toast(message)
             }
     }
 

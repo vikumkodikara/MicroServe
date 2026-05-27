@@ -1,33 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Light highlight (top-left): -10px -10px 30px #FFFFFF -->
     <item
-        android:bottom="0dp"
-        android:left="0dp"
-        android:right="0dp"
-        android:top="0dp">
+        android:bottom="6dp"
+        android:right="6dp">
         <shape android:shape="rectangle">
-            <solid android:color="#18000000" />
-            <corners android:radius="30dp" />
+            <solid android:color="#FFFFFF" />
+            <corners android:radius="27dp" />
         </shape>
     </item>
+    <!-- Dark shadow (bottom-right): 10px 10px 30px #AEAEC0 at 40% -->
     <item
-        android:bottom="2dp"
-        android:left="1dp"
-        android:right="1dp"
-        android:top="0dp">
+        android:left="6dp"
+        android:top="6dp">
         <shape android:shape="rectangle">
-            <solid android:color="#0D000000" />
-            <corners android:radius="30dp" />
+            <solid android:color="#66AEAEC0" />
+            <corners android:radius="27dp" />
         </shape>
     </item>
+    <!-- Main surface #F0F0F3 -->
     <item
         android:bottom="3dp"
-        android:left="1dp"
-        android:right="1dp"
-        android:top="0dp">
+        android:left="3dp"
+        android:right="3dp"
+        android:top="3dp">
         <shape android:shape="rectangle">
-            <solid android:color="@color/white" />
-            <corners android:radius="30dp" />
+            <solid android:color="#F0F0F3" />
+            <corners android:radius="27dp" />
         </shape>
     </item>
 </layer-list>
