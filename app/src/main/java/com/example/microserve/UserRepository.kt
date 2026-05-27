@@ -64,6 +64,11 @@ object UserRepository {
      */
     private fun ensureAdminRole() {
         val auth = FirebaseAuth.getInstance()
+        if (auth.currentUser != null) {
+            Log.d(TAG, "Skipping admin role sync — a user is already signed in")
+            return
+        }
+
         val previousUser = auth.currentUser
 
         auth.signInWithEmailAndPassword(ADMIN_EMAIL, ADMIN_PASSWORD)
@@ -97,6 +102,7 @@ object UserRepository {
     fun saveProfile(
         context: Context,
         profile: UserProfile,
+        persistSession: Boolean = true,
         onSuccess: () -> Unit,
         onFailure: (String) -> Unit
     ) {
@@ -105,12 +111,16 @@ object UserRepository {
             .set(profile.toMap())
             .addOnSuccessListener {
                 syncProfileToUserStore(context, profile)
-                AppPreferences.saveSession(context, profile)
+                if (persistSession) {
+                    AppPreferences.saveSession(context, profile)
+                }
                 onSuccess()
             }
             .addOnFailureListener { error ->
                 syncProfileToUserStore(context, profile)
-                AppPreferences.saveSession(context, profile)
+                if (persistSession) {
+                    AppPreferences.saveSession(context, profile)
+                }
                 onFailure(error.localizedMessage ?: "Unable to save profile")
             }
     }

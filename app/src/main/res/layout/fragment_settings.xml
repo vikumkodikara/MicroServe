@@ -200,12 +200,13 @@
                                 android:textColor="#1A1A1A"
                                 android:textSize="15sp" />
 
-                            <TextView
+                            <com.google.android.material.switchmaterial.SwitchMaterial
+                                android:id="@+id/switchDarkMode"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="›"
-                                android:textColor="#BBBBBB"
-                                android:textSize="22sp" />
+                                android:checked="false"
+                                app:thumbTint="#FFFFFF"
+                                app:trackTint="#7A6BB3" />
                         </LinearLayout>
 
                         <LinearLayout

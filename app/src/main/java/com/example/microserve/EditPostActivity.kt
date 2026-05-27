@@ -1,6 +1,6 @@
 package com.example.microserve
 
-import android.net.Uri
+import android.view.View
 import android.os.Bundle
 import android.widget.ArrayAdapter
 import android.widget.Toast
@@ -14,13 +14,23 @@ import com.example.microserve.databinding.ActivityEditPostBinding
 class EditPostActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityEditPostBinding
-    private var selectedImageUri: Uri? = null
+    private var serviceId: String = ""
+    private var selectedImagePath: String? = null
+    private var imageChanged = false
 
     private val imagePicker = registerForActivityResult(ActivityResultContracts.GetContent()) { uri ->
         if (uri != null) {
-            selectedImageUri = uri
-            binding.selectedImagePreview.setImageURI(uri)
-            binding.imageActionText.text = "Image selected"
+            val savedPath = PostImageHelper.copyPickedImage(this, uri)
+            if (savedPath == null) {
+                showToast(getString(R.string.post_ads_image_save_failed))
+                return@registerForActivityResult
+            }
+            selectedImagePath = savedPath
+            imageChanged = true
+            PostImageHelper.loadPostImage(binding.selectedImagePreview, savedPath)
+            binding.addImagePlaceholder.visibility = View.GONE
+            binding.tvImageChangeHint.visibility = View.VISIBLE
+            binding.imageActionText.text = getString(R.string.post_ads_image_selected)
         }
     }
 
@@ -53,14 +63,29 @@ class EditPostActivity : AppCompatActivity() {
     }
 
     private fun prefillExistingData() {
-        val defaultCategory = intent.getStringExtra("category") ?: "Plumbing"
-        val defaultName = intent.getStringExtra("provider_name") ?: "Sunil Perera"
-        val defaultLocation = intent.getStringExtra("location") ?: "Galle"
-        val defaultContact = intent.getStringExtra("contact") ?: "072587456"
+        serviceId = intent.getStringExtra(ServiceStore.EXTRA_SERVICE_ID).orEmpty()
+        val service = if (serviceId.isNotBlank()) {
+            ServiceStore.getServiceById(this, serviceId)
+        } else {
+            null
+        }
+
+        val defaultCategory = service?.category ?: intent.getStringExtra("category") ?: "Plumbing"
+        val defaultName = service?.providerName ?: intent.getStringExtra("provider_name") ?: ""
+        val defaultLocation = service?.location ?: intent.getStringExtra("location") ?: ""
+        val defaultContact = service?.contact ?: intent.getStringExtra("contact") ?: ""
 
         binding.providerNameET.setText(defaultName)
         binding.locationET.setText(defaultLocation)
         binding.contactET.setText(defaultContact)
+
+        service?.imageUri?.takeIf { it.isNotBlank() }?.let { imagePath ->
+            selectedImagePath = imagePath
+            PostImageHelper.loadPostImage(binding.selectedImagePreview, imagePath)
+            binding.addImagePlaceholder.visibility = View.GONE
+            binding.tvImageChangeHint.visibility = View.VISIBLE
+            binding.imageActionText.text = getString(R.string.post_ads_image_selected)
+        }
 
         val categoryPosition = (0 until binding.categorySpinner.count)
             .firstOrNull { binding.categorySpinner.getItemAtPosition(it) == defaultCategory }
@@ -78,15 +103,36 @@ class EditPostActivity : AppCompatActivity() {
         }
 
         binding.deleteBtn.setOnClickListener {
-            showToast("Post deleted")
+            if (serviceId.isNotBlank()) {
+                ServiceStore.deleteService(this, serviceId)
+            }
+            showToast(getString(R.string.post_ads_deleted))
             finish()
         }
 
         binding.saveBtn.setOnClickListener {
-            if (validateFields()) {
-                showToast("Post updated successfully")
+            if (!validateFields()) return@setOnClickListener
+            if (serviceId.isBlank()) {
+                showToast(getString(R.string.post_ads_updated))
                 finish()
+                return@setOnClickListener
             }
+            val category = binding.categorySpinner.selectedItem.toString()
+            val name = binding.providerNameET.text.toString().trim()
+            val location = binding.locationET.text.toString().trim()
+            val contact = binding.contactET.text.toString().trim()
+            ServiceStore.updateService(
+                context = this,
+                serviceId = serviceId,
+                category = category,
+                providerName = name,
+                contact = contact,
+                location = location,
+                imageUri = selectedImagePath,
+                replaceImage = imageChanged
+            )
+            showToast(getString(R.string.post_ads_updated))
+            finish()
         }
     }
 
