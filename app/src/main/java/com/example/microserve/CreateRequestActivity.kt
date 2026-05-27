@@ -8,6 +8,7 @@ import android.widget.EditText
 import android.widget.Spinner
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.auth.FirebaseAuth
 
@@ -151,8 +152,7 @@ class CreateRequestActivity : AppCompatActivity() {
                                 ServiceRequest.FIELD_DESCRIPTION to description
                             ),
                             onSuccess = {
-                                Toast.makeText(this, "Request updated", Toast.LENGTH_SHORT).show()
-                                finish()
+                                showSuccessDialog(getString(R.string.request_success_updated))
                             },
                             onFailure = { message ->
                                 Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
@@ -162,8 +162,7 @@ class CreateRequestActivity : AppCompatActivity() {
                         ServiceRequestRepository.create(
                             request = request,
                             onSuccess = {
-                                Toast.makeText(this, "Request posted", Toast.LENGTH_SHORT).show()
-                                finish()
+                                showSuccessDialog(getString(R.string.request_success_added))
                             },
                             onFailure = { message ->
                                 Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
@@ -225,5 +224,16 @@ class CreateRequestActivity : AppCompatActivity() {
                 return
             }
         }
+    }
+
+    private fun showSuccessDialog(message: String) {
+        AlertDialog.Builder(this)
+            .setMessage(message)
+            .setCancelable(false)
+            .setPositiveButton(R.string.ok) { dialog, _ ->
+                dialog.dismiss()
+                finish()
+            }
+            .show()
     }
 }

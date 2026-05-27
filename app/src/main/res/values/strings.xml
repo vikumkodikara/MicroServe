@@ -96,6 +96,9 @@
     <string name="transaction_not_found">Transaction not found</string>
     <string name="request_deleted">Request deleted</string>
     <string name="no_open_requests_category">No open requests in this category yet</string>
+    <string name="request_success_added">Your request was successfully added.</string>
+    <string name="request_success_updated">Your request was successfully updated.</string>
+    <string name="ok">OK</string>
     <string name="request_list_subtitle">By %1$s • %2$s</string>
     <string name="invalid_bid_amount">Enter a valid bid amount in M Points</string>
     <string name="agree_terms_required">Please agree to terms</string>
