@@ -7,6 +7,7 @@ import android.util.TypedValue
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
+import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
@@ -18,17 +19,15 @@ class CategoryDetailActivity : AppCompatActivity() {
 
     companion object {
         const val EXTRA_CATEGORY = "category"
+        const val EXTRA_CATEGORY_ID = "category_id"
     }
 
     private lateinit var chipsContainer: LinearLayout
     private lateinit var providersContainer: LinearLayout
-    private var currentCategory: String = ""
+    private lateinit var categoryTitle: TextView
+    private lateinit var categoryIcon: ImageView
+    private lateinit var currentCategory: CategoryCatalog.Category
     private var requestListener: ListenerRegistration? = null
-
-    private val allCategories = listOf(
-        "Plumbing", "Cleaning", "Gardening", "Painting", "Electric", "Handyman",
-        "Carpentry", "Mechanic", "HVAC"
-    )
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -37,12 +36,14 @@ class CategoryDetailActivity : AppCompatActivity() {
 
         chipsContainer = findViewById(R.id.chipsContainer)
         providersContainer = findViewById(R.id.providersContainer)
+        categoryTitle = findViewById(R.id.tv_category_title)
+        categoryIcon = findViewById(R.id.iv_category_icon)
 
-        currentCategory = intent.getStringExtra(EXTRA_CATEGORY) ?: allCategories.first()
+        currentCategory = resolveInitialCategory()
 
-        findViewById<TextView>(R.id.tv_category_title).text = currentCategory
         findViewById<View>(R.id.btn_back).setOnClickListener { finish() }
 
+        bindCategoryHeader()
         buildChips()
     }
 
@@ -57,12 +58,35 @@ class CategoryDetailActivity : AppCompatActivity() {
         super.onStop()
     }
 
+    private fun resolveInitialCategory(): CategoryCatalog.Category {
+        val categoryId = intent.getStringExtra(EXTRA_CATEGORY_ID)
+        if (!categoryId.isNullOrBlank()) {
+            CategoryCatalog.findById(categoryId)?.let { return it }
+        }
+
+        val categoryName = intent.getStringExtra(EXTRA_CATEGORY)
+        if (!categoryName.isNullOrBlank()) {
+            CategoryCatalog.findByStoreKey(categoryName)?.let { return it }
+            CategoryCatalog.all.firstOrNull {
+                it.displayName.equals(categoryName, ignoreCase = true)
+            }?.let { return it }
+        }
+
+        return CategoryCatalog.all.first()
+    }
+
+    private fun bindCategoryHeader() {
+        categoryTitle.text = chipLabel(currentCategory)
+        categoryIcon.setImageResource(currentCategory.imageRes)
+    }
+
     private fun buildChips() {
         chipsContainer.removeAllViews()
 
-        for (cat in allCategories) {
+        for (category in CategoryCatalog.all) {
             val chip = TextView(this).apply {
-                text = cat
+                text = chipLabel(category)
+                tag = category.id
                 textSize = 13f
                 setPadding(dpToPx(16), dpToPx(8), dpToPx(16), dpToPx(8))
                 gravity = Gravity.CENTER
@@ -74,36 +98,58 @@ class CategoryDetailActivity : AppCompatActivity() {
                 lp.setMargins(dpToPx(4), 0, dpToPx(4), 0)
                 layoutParams = lp
 
-                if (cat == currentCategory) {
-                    setBackgroundResource(R.drawable.chip_selected_bg)
-                    setTextColor(Color.WHITE)
-                } else {
-                    setBackgroundResource(R.drawable.chip_unselected_bg)
-                    setTextColor(Color.parseColor("#4a4458"))
-                }
-
                 setOnClickListener {
-                    currentCategory = cat
-                    findViewById<TextView>(R.id.tv_category_title).text = cat
-                    buildChips()
-                    listenRequests()
+                    val selected = CategoryCatalog.findById(category.id) ?: return@setOnClickListener
+                    if (selected.id != currentCategory.id) {
+                        selectCategory(selected)
+                    }
                 }
             }
             chipsContainer.addView(chip)
+        }
+
+        updateChipStyles()
+    }
+
+    private fun selectCategory(category: CategoryCatalog.Category) {
+        currentCategory = category
+        bindCategoryHeader()
+        updateChipStyles()
+        listenRequests()
+    }
+
+    private fun updateChipStyles() {
+        for (index in 0 until chipsContainer.childCount) {
+            val chip = chipsContainer.getChildAt(index) as TextView
+            val selected = chip.tag == currentCategory.id
+            if (selected) {
+                chip.setBackgroundResource(R.drawable.chip_selected_bg)
+                chip.setTextColor(Color.WHITE)
+            } else {
+                chip.setBackgroundResource(R.drawable.chip_unselected_bg)
+                chip.setTextColor(Color.parseColor("#4a4458"))
+            }
         }
     }
 
     private fun listenRequests() {
         requestListener?.remove()
-        val storeKeys = CategoryCatalog.findByStoreKey(currentCategory)?.storeKeys ?: listOf(currentCategory)
         requestListener = ServiceRequestRepository.listenOpenByCategories(
-            storeKeys = storeKeys,
-            onUpdate = { requests -> renderRequests(requests) },
-            onError = { message -> Toast.makeText(this, message, Toast.LENGTH_SHORT).show() }
+            storeKeys = currentCategory.storeKeys,
+            onUpdate = { requests ->
+                if (isFinishing || isDestroyed) return@listenOpenByCategories
+                renderRequests(requests)
+            },
+            onError = { message ->
+                if (isFinishing || isDestroyed) return@listenOpenByCategories
+                Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
+            }
         )
     }
 
     private fun renderRequests(requests: List<ServiceRequest>) {
+        if (isFinishing || isDestroyed) return
+
         providersContainer.removeAllViews()
 
         if (requests.isEmpty()) {
@@ -132,6 +178,12 @@ class CategoryDetailActivity : AppCompatActivity() {
             }
             providersContainer.addView(item)
         }
+    }
+
+    private fun chipLabel(category: CategoryCatalog.Category): String = when (category.id) {
+        "electric" -> "Electric"
+        "painting" -> "Painting"
+        else -> category.storeKeys.first()
     }
 
     private fun dpToPx(dp: Int): Int =

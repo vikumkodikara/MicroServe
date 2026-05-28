@@ -127,7 +127,8 @@ class PlaceBidActivity : AppCompatActivity() {
         for (bid in bids) {
             val item = LayoutInflater.from(this).inflate(R.layout.item_previous_bid, bidsContainer, false)
             item.findViewById<TextView>(R.id.tv_bidder_name).text = bid.providerName
-            item.findViewById<TextView>(R.id.tv_bid_price).text = "Bid Price: Rs. ${bid.points}"
+            item.findViewById<TextView>(R.id.tv_bid_price).text =
+                getString(R.string.bid_price_format, bid.points)
 
             item.findViewById<View>(R.id.btn_purchase).setOnClickListener {
                 val price = bid.points
