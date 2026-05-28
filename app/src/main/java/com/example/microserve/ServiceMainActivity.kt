@@ -54,7 +54,7 @@ class ServiceMainActivity : AppCompatActivity() {
             findViewById<View>(viewId).setOnClickListener {
                 startActivity(
                     Intent(this, CategoryDetailActivity::class.java)
-                        .putExtra("category", catName)
+                        .putExtra(CategoryDetailActivity.EXTRA_CATEGORY, catName)
                 )
             }
         }
@@ -65,6 +65,15 @@ class ServiceMainActivity : AppCompatActivity() {
 
     private fun loadServices() {
         container.removeAllViews()
+
+        val myJobsHeader = LayoutInflater.from(this).inflate(R.layout.item_my_service, container, false)
+        myJobsHeader.findViewById<TextView>(R.id.tv_service_name).text = getString(R.string.my_jobs_title)
+        myJobsHeader.findViewById<ImageView>(R.id.iv_service_icon).setImageResource(R.drawable.request)
+        myJobsHeader.findViewById<MaterialButton>(R.id.btn_activate).text = getString(R.string.view_jobs)
+        myJobsHeader.findViewById<MaterialButton>(R.id.btn_activate).setOnClickListener {
+            startActivity(Intent(this, ProviderJobsActivity::class.java))
+        }
+        container.addView(myJobsHeader)
 
         for (service in services) {
             val item = LayoutInflater.from(this).inflate(R.layout.item_my_service, container, false)

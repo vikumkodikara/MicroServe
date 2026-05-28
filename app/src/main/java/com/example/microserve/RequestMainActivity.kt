@@ -10,10 +10,13 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.ListenerRegistration
 
 class RequestMainActivity : AppCompatActivity() {
 
     private lateinit var container: LinearLayout
+    private var requestListener: ListenerRegistration? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -43,38 +46,41 @@ class RequestMainActivity : AppCompatActivity() {
             findViewById<View>(viewId).setOnClickListener {
                 startActivity(
                     Intent(this, CategoryDetailActivity::class.java)
-                        .putExtra("category", catName)
+                        .putExtra(CategoryDetailActivity.EXTRA_CATEGORY, catName)
                 )
             }
         }
 
         HomeBottomNavHelper.setup(this, HomeBottomNavHelper.TAB_REQUEST)
-        loadSampleRequests()
     }
 
-    override fun onResume() {
-        super.onResume()
-        loadSampleRequests()
+    override fun onStart() {
+        super.onStart()
+        val uid = FirebaseAuth.getInstance().currentUser?.uid
+        if (uid.isNullOrBlank()) {
+            renderRequests(emptyList())
+            return
+        }
+        requestListener?.remove()
+        requestListener = ServiceRequestRepository.listenByRequester(
+            requesterUid = uid,
+            onUpdate = { requests -> renderRequests(requests) },
+            onError = { message -> Toast.makeText(this, message, Toast.LENGTH_SHORT).show() }
+        )
     }
 
-    private fun seedSampleData() {
-        val prefs = getSharedPreferences("request_store", MODE_PRIVATE)
-        if (prefs.getBoolean("seeded", false)) return
-        RequestStore.addRequest(this, "Sisira Kumara", "Plumber", "Plumbing", "0771234567", "Colombo", "Pipe leak repair")
-        RequestStore.addRequest(this, "Nimal Herath", "Painter", "Painting", "0789876543", "Kandy", "House repainting")
-        RequestStore.addRequest(this, "Sunil Rathnayake", "Gardening", "Gardening", "0761112233", "Galle", "Weed removal")
-        prefs.edit().putBoolean("seeded", true).apply()
+    override fun onStop() {
+        requestListener?.remove()
+        requestListener = null
+        super.onStop()
     }
 
-    private fun loadSampleRequests() {
+    private fun renderRequests(requests: List<ServiceRequest>) {
         container.removeAllViews()
-
-        seedSampleData()
-        val requests = RequestStore.getAllRequests(this)
 
         if (requests.isEmpty()) {
             val empty = TextView(this).apply {
-                text = "No requests yet. Tap 'Requests' to create one."
+                text = getString(R.string.no_requests_yet)
                 textSize = 14f
                 setTextColor(0xFF777777.toInt())
                 setPadding(0, 40, 0, 0)
@@ -89,19 +95,39 @@ class RequestMainActivity : AppCompatActivity() {
 
             item.findViewById<TextView>(R.id.tv_number).text = "${index + 1}."
             item.findViewById<TextView>(R.id.tv_title).text = req.title.ifBlank { "Request" }
-            item.findViewById<TextView>(R.id.tv_description).text = req.description.ifBlank { req.category }
+            item.findViewById<TextView>(R.id.tv_description).text =
+                "${req.city} • ${req.status.replace('_', ' ')}"
 
-            item.findViewById<View>(R.id.btn_edit).setOnClickListener {
+            item.setOnClickListener {
                 startActivity(
-                    Intent(this, CreateRequestActivity::class.java)
-                        .putExtra("request_id", req.id)
+                    Intent(this, RequestDetailActivity::class.java)
+                        .putExtra(RequestDetailActivity.EXTRA_REQUEST_ID, req.id)
                 )
             }
 
-            item.findViewById<ImageView>(R.id.btn_delete).setOnClickListener {
-                RequestStore.deleteRequest(this, req.id)
-                Toast.makeText(this, "Request deleted", Toast.LENGTH_SHORT).show()
-                loadSampleRequests()
+            val editButton = item.findViewById<View>(R.id.btn_edit)
+            val deleteButton = item.findViewById<ImageView>(R.id.btn_delete)
+            if (req.status == ServiceRequestStatus.OPEN) {
+                editButton.setOnClickListener {
+                    startActivity(
+                        Intent(this, CreateRequestActivity::class.java)
+                            .putExtra(CreateRequestActivity.EXTRA_REQUEST_ID, req.id)
+                    )
+                }
+                deleteButton.setOnClickListener {
+                    ServiceRequestRepository.delete(
+                        requestId = req.id,
+                        onSuccess = {
+                            Toast.makeText(this, R.string.request_deleted, Toast.LENGTH_SHORT).show()
+                        },
+                        onFailure = { message ->
+                            Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
+                        }
+                    )
+                }
+            } else {
+                editButton.visibility = View.GONE
+                deleteButton.visibility = View.GONE
             }
 
             container.addView(item)

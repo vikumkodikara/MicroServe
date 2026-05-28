@@ -1,5 +1,6 @@
 package com.example.microserve
 
+import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
 import android.util.TypedValue
@@ -8,84 +9,25 @@ import android.view.LayoutInflater
 import android.view.View
 import android.widget.LinearLayout
 import android.widget.TextView
+import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
+import com.google.firebase.firestore.ListenerRegistration
 
 class CategoryDetailActivity : AppCompatActivity() {
+
+    companion object {
+        const val EXTRA_CATEGORY = "category"
+    }
 
     private lateinit var chipsContainer: LinearLayout
     private lateinit var providersContainer: LinearLayout
     private var currentCategory: String = ""
+    private var requestListener: ListenerRegistration? = null
 
     private val allCategories = listOf(
         "Plumbing", "Cleaning", "Gardening", "Painting", "Electric", "Handyman",
         "Carpentry", "Mechanic", "HVAC"
-    )
-
-    private val sampleProviders = mapOf(
-        "Plumbing" to listOf(
-            "Sisira Kumara" to "Pipe leak repair",
-            "Kulathunga Herath" to "Tap & faucet installation",
-            "Kavindya Sathsarani" to "Bathroom fitting",
-            "Yohan Silva" to "Blocked drain cleaning",
-            "Mihiri Katunayaka" to "Pipe leak repair"
-        ),
-        "Cleaning" to listOf(
-            "Nimal Perera" to "House deep cleaning",
-            "Sanduni Fernando" to "Office cleaning service",
-            "Kamal Jayasinghe" to "Window & glass cleaning",
-            "Dilini Weerasinghe" to "Carpet & upholstery cleaning",
-            "Ruwan Bandara" to "Post-construction cleaning"
-        ),
-        "Gardening" to listOf(
-            "Sunil Rathnayake" to "Garden maintenance",
-            "Amara Dissanayake" to "Lawn mowing & trimming",
-            "Pradeep Kumara" to "Tree pruning service",
-            "Nimali Jayawardena" to "Weed removal",
-            "Kasun Wickramasinghe" to "Landscaping design"
-        ),
-        "Painting" to listOf(
-            "Nimal Herath" to "House repainting",
-            "Saman Kumara" to "Interior wall painting",
-            "Lakshitha Fernando" to "Exterior painting",
-            "Chaminda Rajapakse" to "Fence & gate painting",
-            "Dinesh Gunawardena" to "Waterproofing & painting"
-        ),
-        "Electric" to listOf(
-            "Rajitha Perera" to "Wiring & rewiring",
-            "Amal Gunaratne" to "Electrical panel upgrade",
-            "Chathura Bandara" to "Light fixture installation",
-            "Sampath Jayasuriya" to "Generator installation",
-            "Nuwan Liyanage" to "Ceiling fan installation"
-        ),
-        "Handyman" to listOf(
-            "Asanka Kumara" to "Furniture assembly",
-            "Roshan Perera" to "Door & lock repair",
-            "Thilina Madushanka" to "Wall mounting service",
-            "Janaka Wijesinghe" to "Shelf & cabinet installation",
-            "Lasith Dissanayake" to "General home repairs"
-        ),
-        "Carpentry" to listOf(
-            "Chamara Wimalasena" to "Custom furniture making",
-            "Nishantha Perera" to "Door frame repair",
-            "Ranjith Senanayake" to "Wooden deck building",
-            "Mahinda Rajapakse" to "Cabinet & wardrobe work",
-            "Sarath Kumara" to "Roof timber framing"
-        ),
-        "Mechanic" to listOf(
-            "Dhananjaya Silva" to "Vehicle engine repair",
-            "Prasanna Kumara" to "Brake & suspension service",
-            "Gayan Wickrama" to "Motorbike servicing",
-            "Lahiru Fernando" to "Oil change & tune-up",
-            "Tharindu Jayasena" to "Battery & electrical fix"
-        ),
-        "HVAC" to listOf(
-            "Samantha Perera" to "AC installation & repair",
-            "Kumara Herath" to "Central air maintenance",
-            "Dilshan Jayawardena" to "Duct cleaning service",
-            "Naveen Bandara" to "Refrigerator repair",
-            "Asela Gunawardena" to "Heating system installation"
-        )
     )
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -96,13 +38,23 @@ class CategoryDetailActivity : AppCompatActivity() {
         chipsContainer = findViewById(R.id.chipsContainer)
         providersContainer = findViewById(R.id.providersContainer)
 
-        currentCategory = intent.getStringExtra("category") ?: allCategories.first()
+        currentCategory = intent.getStringExtra(EXTRA_CATEGORY) ?: allCategories.first()
 
         findViewById<TextView>(R.id.tv_category_title).text = currentCategory
         findViewById<View>(R.id.btn_back).setOnClickListener { finish() }
 
         buildChips()
-        loadProviders()
+    }
+
+    override fun onStart() {
+        super.onStart()
+        listenRequests()
+    }
+
+    override fun onStop() {
+        requestListener?.remove()
+        requestListener = null
+        super.onStop()
     }
 
     private fun buildChips() {
@@ -134,21 +86,29 @@ class CategoryDetailActivity : AppCompatActivity() {
                     currentCategory = cat
                     findViewById<TextView>(R.id.tv_category_title).text = cat
                     buildChips()
-                    loadProviders()
+                    listenRequests()
                 }
             }
             chipsContainer.addView(chip)
         }
     }
 
-    private fun loadProviders() {
+    private fun listenRequests() {
+        requestListener?.remove()
+        val storeKeys = CategoryCatalog.findByStoreKey(currentCategory)?.storeKeys ?: listOf(currentCategory)
+        requestListener = ServiceRequestRepository.listenOpenByCategories(
+            storeKeys = storeKeys,
+            onUpdate = { requests -> renderRequests(requests) },
+            onError = { message -> Toast.makeText(this, message, Toast.LENGTH_SHORT).show() }
+        )
+    }
+
+    private fun renderRequests(requests: List<ServiceRequest>) {
         providersContainer.removeAllViews()
 
-        val providers = sampleProviders[currentCategory] ?: emptyList()
-
-        if (providers.isEmpty()) {
+        if (requests.isEmpty()) {
             val empty = TextView(this).apply {
-                text = "No providers available for this category"
+                text = getString(R.string.no_open_requests_category)
                 textSize = 14f
                 setTextColor(0xFF777777.toInt())
                 setPadding(0, dpToPx(30), 0, 0)
@@ -158,11 +118,18 @@ class CategoryDetailActivity : AppCompatActivity() {
             return
         }
 
-        for ((name, desc) in providers) {
+        for (request in requests) {
             val item = LayoutInflater.from(this)
                 .inflate(R.layout.item_service_provider, providersContainer, false)
-            item.findViewById<TextView>(R.id.tv_provider_name).text = name
-            item.findViewById<TextView>(R.id.tv_provider_desc).text = "Description :- $desc"
+            item.findViewById<TextView>(R.id.tv_provider_name).text = request.title
+            item.findViewById<TextView>(R.id.tv_provider_desc).text =
+                getString(R.string.request_list_subtitle, request.requesterName, request.city)
+            item.setOnClickListener {
+                startActivity(
+                    Intent(this, RequestDetailActivity::class.java)
+                        .putExtra(RequestDetailActivity.EXTRA_REQUEST_ID, request.id)
+                )
+            }
             providersContainer.addView(item)
         }
     }

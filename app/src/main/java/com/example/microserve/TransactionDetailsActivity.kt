@@ -11,12 +11,18 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.example.microserve.databinding.ActivityTransactionDetailsBinding
+import com.google.firebase.firestore.ListenerRegistration
 
 class TransactionDetailsActivity : AppCompatActivity() {
 
+    companion object {
+        const val EXTRA_TRANSACTION_ID = "TRANSACTION_ID"
+    }
+
     private lateinit var binding: ActivityTransactionDetailsBinding
     private var transactionId: String? = null
-    private var currentTransaction: TransactionStore.Transaction? = null
+    private var currentTransaction: ServiceTransaction? = null
+    private var transactionListener: ListenerRegistration? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -27,12 +33,41 @@ class TransactionDetailsActivity : AppCompatActivity() {
         setupBackButton()
         setupBottomNavigation()
         setupTransferButton()
-        loadTransaction()
+
+        transactionId = intent.getStringExtra(EXTRA_TRANSACTION_ID)
+        if (transactionId.isNullOrBlank()) {
+            Toast.makeText(this, R.string.transaction_not_found, Toast.LENGTH_SHORT).show()
+            finish()
+        }
     }
 
-    override fun onResume() {
-        super.onResume()
-        loadTransaction()
+    override fun onStart() {
+        super.onStart()
+        val id = transactionId ?: return
+        transactionListener?.remove()
+        transactionListener = com.google.firebase.firestore.FirebaseFirestore.getInstance()
+            .collection(ServiceTransaction.COLLECTION)
+            .document(id)
+            .addSnapshotListener { snapshot, error ->
+                if (error != null) {
+                    Toast.makeText(this, error.localizedMessage, Toast.LENGTH_SHORT).show()
+                    return@addSnapshotListener
+                }
+                if (snapshot == null || !snapshot.exists()) {
+                    Toast.makeText(this, R.string.transaction_not_found, Toast.LENGTH_SHORT).show()
+                    finish()
+                    return@addSnapshotListener
+                }
+                val item = ServiceTransaction.fromMap(snapshot.id, snapshot.data.orEmpty())
+                currentTransaction = item
+                bindTransaction(item)
+            }
+    }
+
+    override fun onStop() {
+        transactionListener?.remove()
+        transactionListener = null
+        super.onStop()
     }
 
     private fun setupWindowInsets() {
@@ -47,58 +82,58 @@ class TransactionDetailsActivity : AppCompatActivity() {
         binding.btnBack.setOnClickListener { finish() }
     }
 
-    private fun loadTransaction() {
-        transactionId = intent.getStringExtra("TRANSACTION_ID")
-        val id = transactionId
-        if (id.isNullOrBlank()) {
-            Toast.makeText(this, "Transaction not found", Toast.LENGTH_SHORT).show()
-            finish()
-            return
-        }
-
-        val item = TransactionStore.getTransactionById(this, id)
-        if (item == null) {
-            Toast.makeText(this, "Transaction not found", Toast.LENGTH_SHORT).show()
-            finish()
-            return
-        }
-
-        currentTransaction = item
-
+    private fun bindTransaction(item: ServiceTransaction) {
         binding.tvProviderId.text = item.providerCode
         binding.tvProviderName.text = item.providerName
-        binding.tvAmount.text = TransactionStore.formatAmount(item.amount)
+        binding.tvAmount.text = ServiceTransaction.formatAmount(item.amount)
         binding.tvTransactionCode.text = item.transactionCode
-        binding.tvStatus.text = item.status
+        binding.tvStatus.text = item.status.replace('_', ' ')
 
-        if (item.status.equals(TransactionStore.STATUS_SUCCESS, ignoreCase = true)) {
-            binding.tvHeaderLine1.text = "Transaction Success"
+        val canApprove = item.status == ServiceTransactionStatus.AWAITING_ADMIN
+
+        if (item.status == ServiceTransactionStatus.SUCCESS) {
+            binding.tvHeaderLine1.text = getString(R.string.transaction_success_title)
             binding.tvStatus.setBackgroundResource(R.drawable.txn_success_tag_bg)
             binding.tvStatus.setTextColor(resources.getColor(R.color.white, null))
             binding.btnTransfer.visibility = View.GONE
         } else {
-            binding.tvHeaderLine1.text = "Transfer Money"
+            binding.tvHeaderLine1.text = if (canApprove) {
+                getString(R.string.approve_payout_title)
+            } else {
+                getString(R.string.transfer_money_title)
+            }
             binding.tvStatus.setBackgroundResource(R.drawable.txn_pending_tag_bg)
             binding.tvStatus.setTextColor(resources.getColor(android.R.color.black, null))
-            binding.btnTransfer.visibility = View.VISIBLE
+            binding.btnTransfer.visibility = if (canApprove) View.VISIBLE else View.GONE
+            binding.btnTransfer.text = getString(R.string.approve_transfer)
         }
     }
 
     private fun setupTransferButton() {
         binding.btnTransfer.setOnClickListener {
-            val id = transactionId
-            if (id.isNullOrBlank()) {
-                Toast.makeText(this, "Invalid transaction", Toast.LENGTH_SHORT).show()
+            val transaction = currentTransaction
+            if (transaction == null || transaction.status != ServiceTransactionStatus.AWAITING_ADMIN) {
+                Toast.makeText(this, R.string.transaction_not_ready, Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
 
-            val moved = TransactionStore.markTransactionSuccessAndCreditUser(this, id)
-            if (!moved) {
-                Toast.makeText(this, "Unable to transfer", Toast.LENGTH_SHORT).show()
-                return@setOnClickListener
-            }
-
-            showSuccessDialog()
+            TransactionRepository.approveTransaction(
+                transaction = transaction,
+                onSuccess = {
+                    ServiceRequestRepository.update(
+                        requestId = transaction.requestId,
+                        fields = mapOf(ServiceRequest.FIELD_STATUS to ServiceRequestStatus.ADMIN_APPROVED),
+                        onSuccess = { showSuccessDialog() },
+                        onFailure = { message ->
+                            Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
+                            showSuccessDialog()
+                        }
+                    )
+                },
+                onFailure = { message ->
+                    Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
+                }
+            )
         }
     }
 

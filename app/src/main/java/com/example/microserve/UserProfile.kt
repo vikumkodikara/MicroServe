@@ -11,6 +11,7 @@ data class UserProfile(
     val location: String = "",
     val photoUrl: String = "",
     val role: String = ROLE_USER,
+    val cashPoints: Int = 0,
     val createdAt: Long = System.currentTimeMillis()
 ) {
     fun toMap(): Map<String, Any> {
@@ -22,6 +23,7 @@ data class UserProfile(
             FIELD_LOCATION to location,
             FIELD_PHOTO_URL to photoUrl,
             FIELD_ROLE to role,
+            FIELD_CASH_POINTS to cashPoints,
             FIELD_CREATED_AT to createdAt
         )
     }
@@ -39,6 +41,7 @@ data class UserProfile(
         const val FIELD_LOCATION = "location"
         const val FIELD_PHOTO_URL = "photoUrl"
         const val FIELD_ROLE = "role"
+        const val FIELD_CASH_POINTS = "cashPoints"
         const val FIELD_CREATED_AT = "createdAt"
     }
 }
