@@ -11,6 +11,9 @@ import com.google.firebase.FirebaseApp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.FirebaseFirestoreSettings
+import com.google.firebase.firestore.PersistentCacheSettings
+import org.osmdroid.config.Configuration
+import java.io.File
 
 class MicroServeApp : Application() {
 
@@ -18,6 +21,7 @@ class MicroServeApp : Application() {
         super.onCreate()
         FirebaseApp.initializeApp(this)
         enableFirestoreOfflineCache()
+        initOsmdroid()
         applySavedTheme()
         registerSystemUiCallbacks()
         applySavedLanguage()
@@ -29,9 +33,18 @@ class MicroServeApp : Application() {
         }, 4000L)
     }
 
+    private fun initOsmdroid() {
+        val config = Configuration.getInstance()
+        config.userAgentValue = packageName
+        val base = File(cacheDir, "osmdroid").apply { mkdirs() }
+        val tiles = File(base, "tiles").apply { mkdirs() }
+        config.osmdroidBasePath = base
+        config.osmdroidTileCache = tiles
+    }
+
     private fun enableFirestoreOfflineCache() {
         val settings = FirebaseFirestoreSettings.Builder()
-            .setPersistenceEnabled(true)
+            .setLocalCacheSettings(PersistentCacheSettings.newBuilder().build())
             .build()
         FirebaseFirestore.getInstance().firestoreSettings = settings
     }
