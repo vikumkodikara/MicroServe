@@ -34,6 +34,7 @@ class ServiceMainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContentView(R.layout.activity_service_main)
+        setupWindowInsets()
 
         container = findViewById(R.id.servicesListContainer)
 
@@ -61,6 +62,12 @@ class ServiceMainActivity : AppCompatActivity() {
 
         HomeBottomNavHelper.setup(this, HomeBottomNavHelper.TAB_SERVICE)
         loadServices()
+    }
+
+    private fun setupWindowInsets() {
+        findViewById<View>(R.id.serviceMainRoot).applyHorizontalSystemBarInsets()
+        findViewById<View>(R.id.header_bg).applyStatusBarTopInset()
+        applyNavBarSpacer(R.id.navSystemBarSpacer)
     }
 
     private fun loadServices() {

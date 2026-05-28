@@ -59,7 +59,11 @@ class MicroServeApp : Application() {
                 }
             }
 
-            override fun onActivityResumed(activity: Activity) = Unit
+            override fun onActivityResumed(activity: Activity) {
+                if (activity is AppCompatActivity && activity !is SplashActivity) {
+                    SystemUiHelper.applyPurpleSystemBars(activity)
+                }
+            }
             override fun onActivityPaused(activity: Activity) = Unit
             override fun onActivityStopped(activity: Activity) = Unit
             override fun onActivitySaveInstanceState(activity: Activity, outState: Bundle) = Unit

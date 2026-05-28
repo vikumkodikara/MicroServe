@@ -9,7 +9,6 @@ import android.view.WindowManager
 import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
-import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import java.text.NumberFormat
@@ -21,8 +20,14 @@ class WalletActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
         setContentView(R.layout.activity_wallet)
+
+        SystemUiHelper.setupPurpleHeaderScreen(
+            activity = this,
+            root = findViewById(R.id.walletRoot),
+            headerView = findViewById(R.id.headerContainer),
+            footerBar = findViewById(R.id.footerBar)
+        )
 
         tvPoints = findViewById(R.id.tv_points)
 

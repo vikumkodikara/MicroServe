@@ -5,12 +5,15 @@ import android.os.Bundle
 import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.example.microserve.databinding.ActivityRequestServiceBinding
 
 class RequestServiceActivity : AppCompatActivity() {
 
     companion object {
         const val EXTRA_CATEGORY = "extra_category"
     }
+
+    private lateinit var binding: ActivityRequestServiceBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -99,7 +102,6 @@ class RequestServiceActivity : AppCompatActivity() {
                 Toast.makeText(this, R.string.request_service_success, Toast.LENGTH_LONG).show()
                 finish()
             }
-        )
-        finish()
+        }
     }
 }

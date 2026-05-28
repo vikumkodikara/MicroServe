@@ -34,8 +34,8 @@
     <color name="dark_gray_search">#2A2A3E</color>
     <color name="search_hint">#888899</color>
 
-    <!-- Matches bottom of rectanglenav — system-bar spacer under home nav -->
-    <color name="home_nav_inset_fill">#483C72</color>
+    <!-- Match exactly with home_nav_bar_shape fillColor (#5F4B8A). -->
+    <color name="home_nav_inset_fill">#5F4B8A</color>
     <color name="login_button_lavender">#D199FF</color>
     <color name="login_hint_gray">#B0B0B0</color>
     <color name="login_link_gray">#B0B0B0</color>
