@@ -96,49 +96,100 @@
 
                 <TextView
                     android:id="@+id/detailsTitle"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:fontFamily="sans-serif-medium"
+                    android:paddingBottom="4dp"
                     android:text="@string/service_request_details"
                     android:textColor="@color/admin_text_primary"
-                    android:textSize="18sp"
+                    android:textSize="20sp"
+                    android:textStyle="bold" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginBottom="4dp"
+                    android:background="#E8E8E8" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:fontFamily="sans-serif-medium"
+                    android:text="@string/service_label"
+                    android:textColor="@color/admin_text_primary"
+                    android:textSize="13sp"
                     android:textStyle="bold" />
 
                 <TextView
                     android:id="@+id/serviceValueText"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="12dp"
-                    android:textColor="@color/admin_text_primary"
+                    android:layout_marginTop="4dp"
+                    android:textColor="@color/admin_text_secondary"
                     android:textSize="15sp"
-                    tools:text="Service: Painting" />
+                    tools:text="Painting" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="14dp"
+                    android:fontFamily="sans-serif-medium"
+                    android:text="@string/location_label"
+                    android:textColor="@color/admin_text_primary"
+                    android:textSize="13sp"
+                    android:textStyle="bold" />
 
                 <TextView
                     android:id="@+id/locationValueText"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
-                    android:textColor="@color/admin_text_primary"
+                    android:layout_marginTop="4dp"
+                    android:lineSpacingExtra="2dp"
+                    android:textColor="@color/admin_text_secondary"
                     android:textSize="15sp"
-                    tools:text="Location: Kalutara, Western Province" />
+                    tools:text="Near to Lake, Kuliyapitiya, Kurunegala, North Western" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="14dp"
+                    android:fontFamily="sans-serif-medium"
+                    android:text="@string/job_label"
+                    android:textColor="@color/admin_text_primary"
+                    android:textSize="13sp"
+                    android:textStyle="bold" />
 
                 <TextView
                     android:id="@+id/jobValueText"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
-                    android:textColor="@color/admin_text_primary"
+                    android:layout_marginTop="4dp"
+                    android:lineSpacingExtra="2dp"
+                    android:textColor="@color/admin_text_secondary"
                     android:textSize="15sp"
-                    tools:text="Job: Paint house (20 sq.ft)" />
+                    tools:text="Painting My House (To clean and paint My home)" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="14dp"
+                    android:fontFamily="sans-serif-medium"
+                    android:text="@string/status_label"
+                    android:textColor="@color/admin_text_primary"
+                    android:textSize="13sp"
+                    android:textStyle="bold" />
 
                 <TextView
                     android:id="@+id/statusValueText"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
-                    android:textColor="@color/admin_text_primary"
+                    android:layout_marginTop="4dp"
+                    android:fontFamily="sans-serif-medium"
+                    android:textColor="@color/purple_dark"
                     android:textSize="15sp"
-                    tools:text="Status: open" />
+                    tools:text="Bid selected" />
 
                 <TextView
                     android:id="@+id/bidButton"

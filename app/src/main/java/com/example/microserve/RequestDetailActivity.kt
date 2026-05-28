@@ -96,22 +96,10 @@ class RequestDetailActivity : AppCompatActivity() {
         binding.requesterAgeText.text = request.city
         binding.requesterAvatar.setImageResource(avatarRes)
 
-        binding.serviceValueText.text = getString(R.string.detail_row_format, getString(R.string.service_label), serviceName)
-        binding.locationValueText.text = getString(
-            R.string.detail_row_format,
-            getString(R.string.location_label),
-            request.fullLocation()
-        )
-        binding.jobValueText.text = getString(
-            R.string.detail_row_format,
-            getString(R.string.job_label),
-            formatJobText(request)
-        )
-        binding.statusValueText.text = getString(
-            R.string.detail_row_format,
-            getString(R.string.status_label),
-            request.status.replace('_', ' ')
-        )
+        binding.serviceValueText.text = serviceName
+        binding.locationValueText.text = request.fullLocation()
+        binding.jobValueText.text = formatJobText(request)
+        binding.statusValueText.text = formatStatusText(request.status)
 
         val uid = auth.currentUser?.uid
         val isRequester = uid == request.requesterUid
@@ -133,6 +121,14 @@ class RequestDetailActivity : AppCompatActivity() {
             title.isNotEmpty() -> title
             else -> description
         }
+    }
+
+    private fun formatStatusText(status: String): String {
+        return status.split('_')
+            .filter { it.isNotBlank() }
+            .joinToString(" ") { word ->
+                word.replaceFirstChar { if (it.isLowerCase()) it.titlecase() else it.toString() }
+            }
     }
 
     private fun bindBids(bids: List<Bid>) {
