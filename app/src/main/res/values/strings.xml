@@ -85,6 +85,7 @@
     <string name="previous_bids">Previous bids</string>
     <string name="bid_button">Bid</string>
     <string name="purchase_button">Purchase</string>
+    <string name="select_button">Select</string>
     <string name="age_label_format">Age: %1$d</string>
     <string name="bid_price_format">Bid Price: Rs. %1$,d</string>
     <string name="bid_submitted_toast">Bid submitted</string>
@@ -96,6 +97,10 @@
     <string name="select_bid">Select</string>
     <string name="bid_selected">Selected</string>
     <string name="bid_selected_success">Bid selected</string>
+    <string name="bid_selection_restricted">Only the requester can select a provider while request is open.</string>
+    <string name="select_provider_title">Select Service Provider</string>
+    <string name="select_provider_message">Select %1$s with bid amount Rs. %2$,d and continue payment using M Points?</string>
+    <string name="provider_selected_payment_success">Provider selected. Payment held in escrow. Provider can now start this service.</string>
     <string name="bid_points_format">Bid: %1$d M Points</string>
     <string name="proceed_payment">Proceed Payment</string>
     <string name="finished_button">Finished</string>

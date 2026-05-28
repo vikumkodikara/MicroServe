@@ -11,12 +11,15 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.ListenerRegistration
 import java.text.NumberFormat
 import java.util.Locale
 
 class WalletActivity : AppCompatActivity() {
 
     private lateinit var tvPoints: TextView
+    private var balanceListener: ListenerRegistration? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -48,12 +51,44 @@ class WalletActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-        refreshBalance()
+        refreshBalanceFromFirestore()
     }
 
-    private fun refreshBalance() {
-        val balance = AppPreferences.getMPoints(this)
-        tvPoints.text = "M ${formatNumber(balance)}"
+    override fun onStart() {
+        super.onStart()
+        val uid = FirebaseAuth.getInstance().currentUser?.uid ?: return
+        balanceListener?.remove()
+        balanceListener = PointsRepository.listenBalance(
+            uid = uid,
+            onUpdate = { points ->
+                tvPoints.text = "M ${formatNumber(points)}"
+                AppPreferences.setMPoints(this, points)
+            },
+            onError = { message ->
+                Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
+            }
+        )
+    }
+
+    override fun onStop() {
+        balanceListener?.remove()
+        balanceListener = null
+        super.onStop()
+    }
+
+    private fun refreshBalanceFromFirestore() {
+        val uid = FirebaseAuth.getInstance().currentUser?.uid ?: return
+        PointsRepository.getBalance(
+            uid = uid,
+            onSuccess = { balance ->
+                tvPoints.text = "M ${formatNumber(balance)}"
+                AppPreferences.setMPoints(this, balance)
+            },
+            onFailure = {
+                val fallback = AppPreferences.getMPoints(this)
+                tvPoints.text = "M ${formatNumber(fallback)}"
+            }
+        )
     }
 
     private fun showAddPointsDialog() {
@@ -133,20 +168,32 @@ class WalletActivity : AppCompatActivity() {
                 return@setOnClickListener
             }
 
-            // Add points
-            val newBalance = AppPreferences.addMPoints(this, amount)
-            dialog.dismiss()
+            val uid = FirebaseAuth.getInstance().currentUser?.uid
+            if (uid.isNullOrBlank()) {
+                Toast.makeText(this, R.string.login_required, Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
 
-            // Refresh balance on wallet
-            refreshBalance()
+            PointsRepository.topUp(
+                uid = uid,
+                amount = amount,
+                onSuccess = { newBalance ->
+                    AppPreferences.setMPoints(this, newBalance)
+                    dialog.dismiss()
+                    tvPoints.text = "M ${formatNumber(newBalance)}"
+                    tvCurrentBalance.text = "Current balance: M ${formatNumber(newBalance)}"
 
-            // Show success notification
-            val cardName = cards.first().cardName
-            Toast.makeText(
-                this,
-                "Rs. ${formatNumber(amount)} debited from $cardName.\nM Points added successfully!",
-                Toast.LENGTH_LONG
-            ).show()
+                    val cardName = cards.first().cardName
+                    Toast.makeText(
+                        this,
+                        "Rs. ${formatNumber(amount)} debited from $cardName.\nM Points added successfully!",
+                        Toast.LENGTH_LONG
+                    ).show()
+                },
+                onFailure = { message ->
+                    Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
+                }
+            )
         }
 
         dialog.show()

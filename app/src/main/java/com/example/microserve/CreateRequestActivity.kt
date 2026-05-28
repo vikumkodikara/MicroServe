@@ -1,5 +1,6 @@
 package com.example.microserve
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.widget.AdapterView
@@ -8,6 +9,7 @@ import android.widget.EditText
 import android.widget.Spinner
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.auth.FirebaseAuth
@@ -23,7 +25,31 @@ class CreateRequestActivity : AppCompatActivity() {
     private lateinit var spinnerProvince: Spinner
     private lateinit var spinnerDistrict: Spinner
     private lateinit var spinnerCity: Spinner
+    private lateinit var etLocationField: EditText
     private var suppressSpinnerCallbacks = false
+    private var selectedLocation: SelectedLocation? = null
+
+    private val mapPicker = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+        val data = result.data ?: return@registerForActivityResult
+        if (result.resultCode != RESULT_OK) return@registerForActivityResult
+        val location = SelectedLocation.fromIntent(data) ?: return@registerForActivityResult
+
+        selectedLocation = location
+        suppressSpinnerCallbacks = true
+        selectSpinnerValue(spinnerProvince, location.province)
+        bindSpinner(
+            spinnerDistrict,
+            listOf("-Select-") + SriLankaLocations.districtsForProvince(location.province).map { it.name }
+        )
+        selectSpinnerValue(spinnerDistrict, location.district)
+        bindSpinner(
+            spinnerCity,
+            listOf("-Select-") + SriLankaLocations.citiesForDistrict(location.province, location.district).map { it.name }
+        )
+        selectSpinnerValue(spinnerCity, location.city)
+        suppressSpinnerCallbacks = false
+        etLocationField.setText(location.address)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -44,6 +70,7 @@ class CreateRequestActivity : AppCompatActivity() {
         val etContact = findViewById<EditText>(R.id.et_contact)
         val etLocation = findViewById<EditText>(R.id.et_location)
         val etDescription = findViewById<EditText>(R.id.et_description)
+        etLocationField = etLocation
         spinnerProvince = findViewById(R.id.spinner_province)
         spinnerDistrict = findViewById(R.id.spinner_district)
         spinnerCity = findViewById(R.id.spinner_city)
@@ -72,6 +99,14 @@ class CreateRequestActivity : AppCompatActivity() {
                     val catIndex = categories.indexOf(req.category)
                     if (catIndex >= 0) spinner.setSelection(catIndex)
                     prefillLocation(req.province, req.district, req.city)
+                    selectedLocation = SelectedLocation(
+                        province = req.province,
+                        district = req.district,
+                        city = req.city,
+                        address = req.location,
+                        latitude = 6.9271,
+                        longitude = 79.8612
+                    )
                 },
                 onFailure = { message ->
                     Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
@@ -85,6 +120,9 @@ class CreateRequestActivity : AppCompatActivity() {
         }
 
         findViewById<View>(R.id.btn_back).setOnClickListener { finish() }
+        findViewById<View>(R.id.btn_pick_location).setOnClickListener {
+            launchMapPicker()
+        }
 
         findViewById<View>(R.id.btn_post).setOnClickListener {
             val uid = auth.currentUser?.uid
@@ -184,6 +222,38 @@ class CreateRequestActivity : AppCompatActivity() {
         )
     }
 
+    private fun launchMapPicker() {
+        val province = spinnerProvince.selectedItem?.toString()?.trim().orEmpty()
+        val district = spinnerDistrict.selectedItem?.toString()?.trim().orEmpty()
+        val city = spinnerCity.selectedItem?.toString()?.trim().orEmpty()
+
+        if (province.isBlank() || province == "-Select-") {
+            Toast.makeText(this, "Please select a province first", Toast.LENGTH_SHORT).show()
+            return
+        }
+        if (district.isBlank() || district == "-Select-") {
+            Toast.makeText(this, "Please select a district first", Toast.LENGTH_SHORT).show()
+            return
+        }
+        if (city.isBlank() || city == "-Select-") {
+            Toast.makeText(this, "Please select a city first", Toast.LENGTH_SHORT).show()
+            return
+        }
+
+        val (lat, lng) = selectedLocation?.let { it.latitude to it.longitude }
+            ?: SriLankaLocations.cityCoordinates(province, district, city)
+            ?: (6.9271 to 79.8612)
+
+        val intent = Intent(this, PickLocationActivity::class.java).apply {
+            putExtra(PickLocationActivity.EXTRA_PROVINCE, province)
+            putExtra(PickLocationActivity.EXTRA_DISTRICT, district)
+            putExtra(PickLocationActivity.EXTRA_CITY, city)
+            putExtra(PickLocationActivity.EXTRA_LAT, lat)
+            putExtra(PickLocationActivity.EXTRA_LNG, lng)
+        }
+        mapPicker.launch(intent)
+    }
+
     private fun setupLocationSpinners() {
         bindSpinner(spinnerProvince, listOf("-Select-") + SriLankaLocations.provinces.map { it.name })
 
@@ -250,6 +320,10 @@ class CreateRequestActivity : AppCompatActivity() {
             .setCancelable(false)
             .setPositiveButton(R.string.ok) { dialog, _ ->
                 dialog.dismiss()
+                startActivity(
+                    Intent(this, RequestMainActivity::class.java)
+                        .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP)
+                )
                 finish()
             }
             .show()
