@@ -31,6 +31,7 @@ class PersonalInfoActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContentView(R.layout.fragment_personal_info)
+        setupWindowInsets()
 
         imgProfile = findViewById(R.id.img_profile)
         etFullName = findViewById(R.id.et_full_name)
@@ -50,6 +51,12 @@ class PersonalInfoActivity : AppCompatActivity() {
         }
 
         HomeBottomNavHelper.setup(this, HomeBottomNavHelper.TAB_PROFILE)
+    }
+
+    private fun setupWindowInsets() {
+        findViewById<View>(R.id.personalInfoRoot).applyHorizontalSystemBarInsets()
+        findViewById<View>(R.id.headerTopRow).applyStatusBarTopInset()
+        applyNavBarSpacer(R.id.navSystemBarSpacer)
     }
 
     override fun onResume() {
