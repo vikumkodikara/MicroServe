@@ -118,6 +118,10 @@ class SplashActivity : AppCompatActivity() {
         navigated = true
 
         val nextIntent = if (SessionNavigator.isLoggedIn(this)) {
+            // Sync Firestore data to local cache on app restart
+            CardStore.syncOnLogin(this)
+            ServiceStore.loadFromFirestore(this)
+            FeedbackStore.loadFromFirestore(this) {}
             SessionNavigator.mainIntent(this)
         } else {
             SessionNavigator.clearAuth(this)
