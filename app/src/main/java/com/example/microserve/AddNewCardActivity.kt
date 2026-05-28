@@ -7,15 +7,20 @@ import android.view.View
 import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
-import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 
 class AddNewCardActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
         setContentView(R.layout.activity_addnewcd)
+
+        SystemUiHelper.setupPurpleHeaderScreen(
+            activity = this,
+            root = findViewById(R.id.addCardRoot),
+            headerView = findViewById(R.id.headerContainer),
+            footerBar = findViewById(R.id.footerBar)
+        )
 
         val etNumber = findViewById<EditText>(R.id.et_card_number)
         val etName = findViewById<EditText>(R.id.et_card_name)

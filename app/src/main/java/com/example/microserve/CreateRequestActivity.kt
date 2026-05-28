@@ -29,6 +29,7 @@ class CreateRequestActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContentView(R.layout.activity_create_request)
+        setupWindowInsets()
 
         val auth = FirebaseAuth.getInstance()
         if (auth.currentUser == null) {
@@ -174,6 +175,15 @@ class CreateRequestActivity : AppCompatActivity() {
         }
     }
 
+    private fun setupWindowInsets() {
+        SystemUiHelper.setupPurpleHeaderScreen(
+            activity = this,
+            root = findViewById(R.id.createRequestRoot),
+            headerView = findViewById(R.id.headerContainer),
+            footerBar = findViewById(R.id.footerBar)
+        )
+    }
+
     private fun setupLocationSpinners() {
         bindSpinner(spinnerProvince, listOf("-Select-") + SriLankaLocations.provinces.map { it.name })
 
@@ -181,8 +191,11 @@ class CreateRequestActivity : AppCompatActivity() {
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
                 if (suppressSpinnerCallbacks) return
                 val province = spinnerProvince.selectedItem?.toString().orEmpty()
-                val districts = if (province == "-Select-") emptyList()
-                else SriLankaLocations.districtsForProvince(province).map { it.name }
+                val districts = if (province == "-Select-") {
+                    emptyList()
+                } else {
+                    SriLankaLocations.districtsForProvince(province).map { it.name }
+                }
                 bindSpinner(spinnerDistrict, listOf("-Select-") + districts)
                 bindSpinner(spinnerCity, listOf("-Select-"))
             }
@@ -195,8 +208,11 @@ class CreateRequestActivity : AppCompatActivity() {
                 if (suppressSpinnerCallbacks) return
                 val province = spinnerProvince.selectedItem?.toString().orEmpty()
                 val district = spinnerDistrict.selectedItem?.toString().orEmpty()
-                val cities = if (district == "-Select-") emptyList()
-                else SriLankaLocations.citiesForDistrict(province, district).map { it.name }
+                val cities = if (district == "-Select-") {
+                    emptyList()
+                } else {
+                    SriLankaLocations.citiesForDistrict(province, district).map { it.name }
+                }
                 bindSpinner(spinnerCity, listOf("-Select-") + cities)
             }
 

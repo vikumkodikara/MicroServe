@@ -26,6 +26,7 @@
 
         <!-- Back + Title -->
         <LinearLayout
+            android:id="@+id/headerTopRow"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="24dp"

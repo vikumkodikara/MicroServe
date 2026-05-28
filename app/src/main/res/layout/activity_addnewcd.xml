@@ -1,59 +1,80 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/addCardRoot"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/wallet_dark_bg"
-    android:fitsSystemWindows="true"
-    android:orientation="vertical">
+    android:background="@color/light_background"
+    android:clipChildren="false"
+    android:clipToPadding="false"
+    tools:context=".AddNewCardActivity">
 
     <!-- ═══════════ HEADER ═══════════ -->
-    <FrameLayout
-        android:id="@+id/header_bg"
-        android:layout_width="match_parent"
-        android:layout_height="160dp"
-        android:background="@drawable/header_gradient">
+    <RelativeLayout
+        android:id="@+id/headerContainer"
+        android:layout_width="0dp"
+        android:layout_height="200dp"
+        android:background="@drawable/header_gradient"
+        android:paddingHorizontal="20dp"
+        android:paddingTop="16dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
-        <LinearLayout
-            android:layout_width="match_parent"
+        <ImageView
+            android:id="@+id/btn_back"
+            android:layout_width="34dp"
+            android:layout_height="34dp"
+            android:contentDescription="@string/cd_back"
+            android:padding="6dp"
+            android:src="@drawable/back_arrow" />
+
+        <TextView
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:gravity="center_vertical"
-            android:orientation="horizontal"
-            android:paddingStart="20dp"
-            android:paddingEnd="20dp"
-            android:paddingTop="30dp">
-
-            <ImageView
-                android:id="@+id/btn_back"
-                android:layout_width="28dp"
-                android:layout_height="28dp"
-                android:importantForAccessibility="no"
-                android:padding="2dp"
-                android:src="@drawable/back_arrow" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="12dp"
-                android:fontFamily="sans-serif-bold"
-                android:text="Add New Card"
-                android:textColor="#FFFFFF"
-                android:textSize="22sp" />
-        </LinearLayout>
-    </FrameLayout>
+            android:layout_below="@id/btn_back"
+            android:layout_marginTop="16dp"
+            android:text="Add New Card"
+            android:textColor="@color/white"
+            android:textSize="32sp"
+            android:textStyle="bold" />
+    </RelativeLayout>
 
     <!-- ═══════════ CARD PREVIEW ═══════════ -->
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="20dp"
-        android:layout_marginTop="-30dp"
-        android:layout_marginEnd="20dp"
-        android:background="@drawable/wallet_card_preview_bg"
-        android:elevation="8dp"
-        android:orientation="vertical"
-        android:padding="24dp">
+    <FrameLayout
+        android:id="@+id/blackFrame"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginHorizontal="16dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="8dp"
+        android:background="@drawable/post_form_card"
+        android:padding="2dp"
+        app:layout_constraintBottom_toTopOf="@id/btn_save"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/headerContainer">
+
+        <androidx.core.widget.NestedScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:clipToPadding="false"
+            android:overScrollMode="never"
+            android:padding="16dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/wallet_m_points_card"
+                    android:elevation="4dp"
+                    android:orientation="vertical"
+                    android:padding="20dp">
 
         <!-- Card chip + logo row -->
         <LinearLayout
@@ -95,24 +116,24 @@
             </FrameLayout>
         </LinearLayout>
 
-        <!-- Card number preview -->
-        <TextView
-            android:id="@+id/tv_card_number_preview"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:fontFamily="monospace"
-            android:letterSpacing="0.15"
-            android:text="•••• •••• •••• ••••"
-            android:textColor="#E0D4FF"
-            android:textSize="18sp" />
+                    <!-- Card number preview -->
+                    <TextView
+                        android:id="@+id/tv_card_number_preview"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="20dp"
+                        android:fontFamily="monospace"
+                        android:letterSpacing="0.15"
+                        android:text="•••• •••• •••• ••••"
+                        android:textColor="#E0D4FF"
+                        android:textSize="18sp" />
 
-        <!-- Name + Date row -->
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:orientation="horizontal">
+                    <!-- Name + Date row -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp"
+                        android:orientation="horizontal">
 
             <LinearLayout
                 android:layout_width="0dp"
@@ -160,45 +181,35 @@
                     android:textSize="12sp"
                     android:textStyle="bold" />
             </LinearLayout>
-        </LinearLayout>
-    </LinearLayout>
+                    </LinearLayout>
+                </LinearLayout>
 
-    <!-- ═══════════ FORM ═══════════ -->
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:fillViewport="true">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:paddingHorizontal="24dp"
-            android:paddingTop="28dp"
-            android:paddingBottom="20dp">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:paddingTop="20dp">
 
             <!-- Card Number -->
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Card Number"
-                android:textColor="#C4B5E0"
-                android:textSize="14sp"
+                android:textColor="@color/admin_text_primary"
+                android:textSize="16sp"
                 android:textStyle="bold" />
 
             <EditText
                 android:id="@+id/et_card_number"
                 android:layout_width="match_parent"
-                android:layout_height="52dp"
+                android:layout_height="48dp"
                 android:layout_marginTop="8dp"
-                android:layout_marginBottom="20dp"
-                android:background="@drawable/wallet_input_bg"
+                android:background="@drawable/edittext_bg"
                 android:hint="1234 5678 9012 3456"
                 android:inputType="number"
-                android:paddingHorizontal="20dp"
-                android:textColor="#FFFFFF"
-                android:textColorHint="#665A80"
+                android:paddingHorizontal="12dp"
+                android:textColor="@color/admin_text_primary"
+                android:textColorHint="@color/admin_text_secondary"
                 android:textSize="16sp" />
 
             <!-- Card Name -->
@@ -206,22 +217,21 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Card Holder Name"
-                android:textColor="#C4B5E0"
-                android:textSize="14sp"
+                android:textColor="@color/admin_text_primary"
+                android:textSize="16sp"
                 android:textStyle="bold" />
 
             <EditText
                 android:id="@+id/et_card_name"
                 android:layout_width="match_parent"
-                android:layout_height="52dp"
+                android:layout_height="48dp"
                 android:layout_marginTop="8dp"
-                android:layout_marginBottom="20dp"
-                android:background="@drawable/wallet_input_bg"
+                android:background="@drawable/edittext_bg"
                 android:hint="John Doe"
                 android:inputType="textPersonName"
-                android:paddingHorizontal="20dp"
-                android:textColor="#FFFFFF"
-                android:textColorHint="#665A80"
+                android:paddingHorizontal="12dp"
+                android:textColor="@color/admin_text_primary"
+                android:textColorHint="@color/admin_text_secondary"
                 android:textSize="16sp" />
 
             <!-- Date + CVV row -->
@@ -241,21 +251,21 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Expiry Date"
-                        android:textColor="#C4B5E0"
-                        android:textSize="14sp"
+                        android:textColor="@color/admin_text_primary"
+                        android:textSize="16sp"
                         android:textStyle="bold" />
 
                     <EditText
                         android:id="@+id/et_date"
                         android:layout_width="match_parent"
-                        android:layout_height="52dp"
+                        android:layout_height="48dp"
                         android:layout_marginTop="8dp"
-                        android:background="@drawable/wallet_input_bg"
+                        android:background="@drawable/edittext_bg"
                         android:hint="MM/YY"
                         android:inputType="date"
-                        android:paddingHorizontal="20dp"
-                        android:textColor="#FFFFFF"
-                        android:textColorHint="#665A80"
+                        android:paddingHorizontal="12dp"
+                        android:textColor="@color/admin_text_primary"
+                        android:textColorHint="@color/admin_text_secondary"
                         android:textSize="16sp" />
                 </LinearLayout>
 
@@ -270,50 +280,57 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="CVV"
-                        android:textColor="#C4B5E0"
-                        android:textSize="14sp"
+                        android:textColor="@color/admin_text_primary"
+                        android:textSize="16sp"
                         android:textStyle="bold" />
 
                     <EditText
                         android:id="@+id/et_cvv"
                         android:layout_width="match_parent"
-                        android:layout_height="52dp"
+                        android:layout_height="48dp"
                         android:layout_marginTop="8dp"
-                        android:background="@drawable/wallet_input_bg"
+                        android:background="@drawable/edittext_bg"
                         android:hint="•••"
                         android:inputType="numberPassword"
                         android:maxLength="4"
-                        android:paddingHorizontal="20dp"
-                        android:textColor="#FFFFFF"
-                        android:textColorHint="#665A80"
+                        android:paddingHorizontal="12dp"
+                        android:textColor="@color/admin_text_primary"
+                        android:textColorHint="@color/admin_text_secondary"
                         android:textSize="16sp" />
                 </LinearLayout>
             </LinearLayout>
         </LinearLayout>
-    </ScrollView>
-
-    <!-- ═══════════ SAVE BUTTON ═══════════ -->
-    <FrameLayout
-        android:id="@+id/btn_save"
-        android:layout_width="match_parent"
-        android:layout_height="56dp"
-        android:layout_marginStart="24dp"
-        android:layout_marginEnd="24dp"
-        android:layout_marginBottom="24dp"
-        android:background="@drawable/wallet_button_gradient"
-        android:clickable="true"
-        android:focusable="true"
-        android:foreground="?attr/selectableItemBackground"
-        android:elevation="6dp">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:fontFamily="sans-serif-bold"
-            android:text="Save Card"
-            android:textColor="@color/white"
-            android:textSize="16sp" />
+            </LinearLayout>
+        </androidx.core.widget.NestedScrollView>
     </FrameLayout>
 
-</LinearLayout>
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btn_save"
+        android:layout_width="0dp"
+        android:layout_height="48dp"
+        android:layout_marginHorizontal="24dp"
+        android:layout_marginBottom="8dp"
+        android:insetTop="0dp"
+        android:insetBottom="0dp"
+        android:text="Save Card"
+        android:textAllCaps="false"
+        android:textColor="@color/white"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        app:backgroundTint="@color/brand_purple"
+        app:cornerRadius="24dp"
+        app:layout_constraintBottom_toTopOf="@id/footerBar"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:rippleColor="#33FFFFFF" />
+
+    <View
+        android:id="@+id/footerBar"
+        android:layout_width="0dp"
+        android:layout_height="38dp"
+        android:background="@drawable/footer_gradient_bar"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

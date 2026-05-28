@@ -22,6 +22,7 @@ class RequestMainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContentView(R.layout.activity_request_main)
+        setupWindowInsets()
 
         container = findViewById(R.id.requestsListContainer)
 
@@ -49,6 +50,12 @@ class RequestMainActivity : AppCompatActivity() {
         }
 
         HomeBottomNavHelper.setup(this, HomeBottomNavHelper.TAB_REQUEST)
+    }
+
+    private fun setupWindowInsets() {
+        findViewById<View>(R.id.requestMainRoot).applyHorizontalSystemBarInsets()
+        findViewById<View>(R.id.header_bg).applyStatusBarTopInset()
+        applyNavBarSpacer(R.id.navSystemBarSpacer)
     }
 
     override fun onStart() {
