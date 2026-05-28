@@ -64,6 +64,14 @@ service cloud.firestore {
           && get(/databases/$(database)/documents/service_requests/$(requestId)).data.requesterUid != request.auth.uid;
         allow update: if isSignedIn() && (
           get(/databases/$(database)/documents/service_requests/$(requestId)).data.requesterUid == request.auth.uid
+          || (
+            resource.data.providerUid == request.auth.uid
+            && resource.data.status == 'pending'
+            && get(/databases/$(database)/documents/service_requests/$(requestId)).data.status == 'open'
+            && request.resource.data.providerUid == resource.data.providerUid
+            && request.resource.data.status == resource.data.status
+            && request.resource.data.requestId == resource.data.requestId
+          )
           || isAdmin()
         );
       }

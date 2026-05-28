@@ -96,22 +96,10 @@ class RequestDetailActivity : AppCompatActivity() {
         binding.requesterAgeText.text = request.city
         binding.requesterAvatar.setImageResource(avatarRes)
 
-        binding.serviceValueText.text = getString(R.string.detail_row_format, getString(R.string.service_label), serviceName)
-        binding.locationValueText.text = getString(
-            R.string.detail_row_format,
-            getString(R.string.location_label),
-            request.fullLocation()
-        )
-        binding.jobValueText.text = getString(
-            R.string.detail_row_format,
-            getString(R.string.job_label),
-            formatJobText(request)
-        )
-        binding.statusValueText.text = getString(
-            R.string.detail_row_format,
-            getString(R.string.status_label),
-            request.status.replace('_', ' ')
-        )
+        binding.serviceValueText.text = serviceName
+        binding.locationValueText.text = request.fullLocation()
+        binding.jobValueText.text = formatJobText(request)
+        binding.statusValueText.text = formatStatusText(request.status)
 
         val uid = auth.currentUser?.uid
         val isRequester = uid == request.requesterUid
@@ -135,6 +123,14 @@ class RequestDetailActivity : AppCompatActivity() {
         }
     }
 
+    private fun formatStatusText(status: String): String {
+        return status.split('_')
+            .filter { it.isNotBlank() }
+            .joinToString(" ") { word ->
+                word.replaceFirstChar { if (it.isLowerCase()) it.titlecase() else it.toString() }
+            }
+    }
+
     private fun bindBids(bids: List<Bid>) {
         binding.bidsContainer.removeAllViews()
         val request = currentRequest ?: return
@@ -153,17 +149,10 @@ class RequestDetailActivity : AppCompatActivity() {
             val rowBinding = ItemBidRowBinding.inflate(inflater, binding.bidsContainer, false)
             rowBinding.bidProviderName.text = bid.providerName
             rowBinding.bidPriceText.text = getString(R.string.bid_price_format, bid.points)
+            rowBinding.purchaseButton.visibility = if (canSelect) View.VISIBLE else View.GONE
             rowBinding.purchaseButton.setOnClickListener {
                 if (canSelect) {
                     selectBid(bid)
-                } else {
-                    MPointsPaymentHelper.showPaymentDialog(
-                        activity = this,
-                        amount = bid.points,
-                        providerName = bid.providerName
-                    ) {
-                        // Payment successful
-                    }
                 }
             }
             binding.bidsContainer.addView(rowBinding.root)
