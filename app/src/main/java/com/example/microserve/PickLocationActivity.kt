@@ -1,7 +1,11 @@
 package com.example.microserve
 
 import android.content.Intent
+import android.graphics.Bitmap
+import android.graphics.Canvas
 import android.graphics.PorterDuff
+import android.graphics.drawable.BitmapDrawable
+import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.view.View
 import android.widget.TextView
@@ -92,12 +96,7 @@ class PickLocationActivity : AppCompatActivity() {
             position = GeoPoint(lat, lng)
             setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM)
             isDraggable = true
-            icon = ContextCompat.getDrawable(this@PickLocationActivity, R.drawable.location)?.apply {
-                setColorFilter(
-                    ContextCompat.getColor(this@PickLocationActivity, R.color.admin_purple_dark),
-                    PorterDuff.Mode.SRC_IN
-                )
-            }
+            icon = createMarkerIcon()
             setOnMarkerDragListener(object : Marker.OnMarkerDragListener {
                 override fun onMarkerDrag(marker: Marker) {
                     selectedLat = marker.position.latitude
@@ -116,6 +115,22 @@ class PickLocationActivity : AppCompatActivity() {
         }
         mapView.overlays.add(marker)
         mapView.invalidate()
+    }
+
+    private fun createMarkerIcon(): Drawable? {
+        val base = ContextCompat.getDrawable(this, R.drawable.location)?.mutate() ?: return null
+        base.setColorFilter(
+            ContextCompat.getColor(this, R.color.admin_purple_dark),
+            PorterDuff.Mode.SRC_IN
+        )
+
+        // Keep the marker compact so users can tap and place precisely.
+        val targetPx = (34 * resources.displayMetrics.density).toInt()
+        val bitmap = Bitmap.createBitmap(targetPx, targetPx, Bitmap.Config.ARGB_8888)
+        val canvas = Canvas(bitmap)
+        base.setBounds(0, 0, targetPx, targetPx)
+        base.draw(canvas)
+        return BitmapDrawable(resources, bitmap)
     }
 
     private fun updateSummary() {

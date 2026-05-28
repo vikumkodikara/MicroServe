@@ -272,7 +272,7 @@ class Homepage : AppCompatActivity() {
         if (!isMenuOpen) return
         isMenuOpen = false
 
-        window.decorView.setBackgroundColor(android.graphics.Color.WHITE)
+        window.decorView.setBackgroundColor(android.graphics.Color.parseColor("#483C72"))
 
         val card = binding.mainContentCard
         val back = binding.backShadowCard
