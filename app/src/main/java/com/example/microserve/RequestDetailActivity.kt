@@ -153,17 +153,10 @@ class RequestDetailActivity : AppCompatActivity() {
             val rowBinding = ItemBidRowBinding.inflate(inflater, binding.bidsContainer, false)
             rowBinding.bidProviderName.text = bid.providerName
             rowBinding.bidPriceText.text = getString(R.string.bid_price_format, bid.points)
+            rowBinding.purchaseButton.visibility = if (canSelect) View.VISIBLE else View.GONE
             rowBinding.purchaseButton.setOnClickListener {
                 if (canSelect) {
                     selectBid(bid)
-                } else {
-                    MPointsPaymentHelper.showPaymentDialog(
-                        activity = this,
-                        amount = bid.points,
-                        providerName = bid.providerName
-                    ) {
-                        // Payment successful
-                    }
                 }
             }
             binding.bidsContainer.addView(rowBinding.root)
