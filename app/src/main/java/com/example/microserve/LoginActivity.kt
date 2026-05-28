@@ -173,6 +173,11 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun routeByRole(role: String) {
+        // Sync Firestore data to local cache before navigating
+        CardStore.syncOnLogin(this)
+        ServiceStore.loadFromFirestore(this)
+        FeedbackStore.loadFromFirestore(this) {}
+
         showLoading(false)
         val target = if (role.equals(UserProfile.ROLE_ADMIN, ignoreCase = true)) {
             AdminDashboardActivity::class.java

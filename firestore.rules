@@ -17,11 +17,33 @@ service cloud.firestore {
       allow create: if isSignedIn() && request.auth.uid == userId;
       allow update: if isSignedIn() && (request.auth.uid == userId || isAdmin());
       allow delete: if isSignedIn() && request.auth.uid == userId;
+
+      // Cards subcollection (per-user)
+      match /cards/{cardId} {
+        allow read: if isSignedIn() && request.auth.uid == userId;
+        allow create: if isSignedIn() && request.auth.uid == userId;
+        allow update: if isSignedIn() && request.auth.uid == userId;
+        allow delete: if isSignedIn() && request.auth.uid == userId;
+      }
     }
 
     match /platform/{docId} {
       allow read: if isSignedIn();
       allow write: if isSignedIn();
+    }
+
+    // Service provider listings / advertisements
+    match /services/{serviceId} {
+      allow read: if isSignedIn();
+      allow create: if isSignedIn();
+      allow update: if isSignedIn() && (
+        resource.data.ownerUid == request.auth.uid
+        || isAdmin()
+      );
+      allow delete: if isSignedIn() && (
+        resource.data.ownerUid == request.auth.uid
+        || isAdmin()
+      );
     }
 
     match /service_requests/{requestId} {

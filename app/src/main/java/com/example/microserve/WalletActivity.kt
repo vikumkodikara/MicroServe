@@ -11,12 +11,15 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.ListenerRegistration
 import java.text.NumberFormat
 import java.util.Locale
 
 class WalletActivity : AppCompatActivity() {
 
     private lateinit var tvPoints: TextView
+    private var balanceListener: ListenerRegistration? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -48,12 +51,38 @@ class WalletActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-        refreshBalance()
+        startBalanceListener()
     }
 
-    private fun refreshBalance() {
-        val balance = AppPreferences.getMPoints(this)
-        tvPoints.text = "M ${formatNumber(balance)}"
+    override fun onPause() {
+        super.onPause()
+        balanceListener?.remove()
+        balanceListener = null
+    }
+
+    private fun startBalanceListener() {
+        val uid = FirebaseAuth.getInstance().currentUser?.uid
+        if (uid.isNullOrBlank()) {
+            // Fallback to local if not logged in
+            val balance = AppPreferences.getMPoints(this)
+            tvPoints.text = "M ${formatNumber(balance)}"
+            return
+        }
+
+        balanceListener?.remove()
+        balanceListener = PointsRepository.listenBalance(
+            uid = uid,
+            onUpdate = { balance ->
+                tvPoints.text = "M ${formatNumber(balance)}"
+                // Keep local cache in sync
+                AppPreferences.setMPoints(this, balance)
+            },
+            onError = { _ ->
+                // Fallback to local cache
+                val balance = AppPreferences.getMPoints(this)
+                tvPoints.text = "M ${formatNumber(balance)}"
+            }
+        )
     }
 
     private fun showAddPointsDialog() {
@@ -133,20 +162,39 @@ class WalletActivity : AppCompatActivity() {
                 return@setOnClickListener
             }
 
-            // Add points
-            val newBalance = AppPreferences.addMPoints(this, amount)
-            dialog.dismiss()
+            val uid = FirebaseAuth.getInstance().currentUser?.uid
+            if (uid.isNullOrBlank()) {
+                // Fallback to local-only
+                val newBalance = AppPreferences.addMPoints(this, amount)
+                dialog.dismiss()
+                tvPoints.text = "M ${formatNumber(newBalance)}"
+                val cardName = cards.first().cardName
+                Toast.makeText(
+                    this,
+                    "Rs. ${formatNumber(amount)} debited from $cardName.\nM Points added successfully!",
+                    Toast.LENGTH_LONG
+                ).show()
+                return@setOnClickListener
+            }
 
-            // Refresh balance on wallet
-            refreshBalance()
-
-            // Show success notification
-            val cardName = cards.first().cardName
-            Toast.makeText(
-                this,
-                "Rs. ${formatNumber(amount)} debited from $cardName.\nM Points added successfully!",
-                Toast.LENGTH_LONG
-            ).show()
+            // Top up via Firestore transaction
+            PointsRepository.topUp(
+                uid = uid,
+                amount = amount,
+                onSuccess = { newBalance ->
+                    AppPreferences.setMPoints(this, newBalance)
+                    dialog.dismiss()
+                    val cardName = cards.first().cardName
+                    Toast.makeText(
+                        this,
+                        "Rs. ${formatNumber(amount)} debited from $cardName.\nM Points added successfully!",
+                        Toast.LENGTH_LONG
+                    ).show()
+                },
+                onFailure = { message ->
+                    Toast.makeText(this, "Top-up failed: $message", Toast.LENGTH_SHORT).show()
+                }
+            )
         }
 
         dialog.show()
