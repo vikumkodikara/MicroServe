@@ -1,8 +1,11 @@
 package com.example.microserve
 
+import android.app.Dialog
 import android.os.Bundle
+import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
+import android.view.WindowManager
 import android.widget.CheckBox
 import android.widget.EditText
 import android.widget.LinearLayout
@@ -175,8 +178,72 @@ class PlaceBidActivity : AppCompatActivity() {
                 }
             }
 
+            val canEdit = request != null &&
+                uid == bid.providerUid &&
+                uid != request.requesterUid &&
+                request.status == ServiceRequestStatus.OPEN &&
+                bid.status == BidStatus.PENDING
+
+            val editButton = item.findViewById<View>(R.id.btn_edit)
+            editButton.visibility = if (canEdit) View.VISIBLE else View.GONE
+            editButton.setOnClickListener {
+                if (canEdit) {
+                    showEditBidDialog(bid)
+                }
+            }
+
             bidsContainer.addView(item)
         }
+    }
+
+    private fun showEditBidDialog(bid: Bid) {
+        val dialog = Dialog(this, com.google.android.material.R.style.Theme_MaterialComponents_Light_Dialog)
+        dialog.setContentView(R.layout.dialog_edit_bid)
+
+        dialog.window?.apply {
+            setLayout(
+                WindowManager.LayoutParams.MATCH_PARENT,
+                WindowManager.LayoutParams.WRAP_CONTENT
+            )
+            setGravity(Gravity.BOTTOM)
+            setBackgroundDrawableResource(android.R.color.transparent)
+            attributes = attributes.also {
+                it.windowAnimations = com.google.android.material.R.style.Animation_Design_BottomSheetDialog
+            }
+        }
+
+        val etAmount = dialog.findViewById<EditText>(R.id.et_bid_amount)
+        val etTime = dialog.findViewById<EditText>(R.id.et_completion_time)
+        etAmount.setText(bid.points.toString())
+        etTime.setText(
+            if (bid.completionHours > 0) "${bid.completionHours}h" else ""
+        )
+
+        dialog.findViewById<View>(R.id.btn_cancel).setOnClickListener { dialog.dismiss() }
+        dialog.findViewById<View>(R.id.btn_save).setOnClickListener {
+            val points = etAmount.text.toString().trim().toIntOrNull()
+            if (points == null || points <= 0) {
+                Toast.makeText(this, R.string.invalid_bid_amount, Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+
+            val completionHours = etTime.text.toString().filter { it.isDigit() }.toIntOrNull() ?: 0
+            BidRepository.updateBid(
+                requestId = requestId,
+                bidId = bid.id,
+                points = points,
+                completionHours = completionHours,
+                onSuccess = {
+                    dialog.dismiss()
+                    Toast.makeText(this, R.string.bid_updated_success, Toast.LENGTH_SHORT).show()
+                },
+                onFailure = { message ->
+                    Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
+                }
+            )
+        }
+
+        dialog.show()
     }
 
     private fun acceptBid(bid: Bid) {
