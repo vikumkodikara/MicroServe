@@ -44,10 +44,7 @@ class RequestMainActivity : AppCompatActivity() {
         )
         for ((viewId, catName) in categoryMap) {
             findViewById<View>(viewId).setOnClickListener {
-                startActivity(
-                    Intent(this, CategoryDetailActivity::class.java)
-                        .putExtra(CategoryDetailActivity.EXTRA_CATEGORY, catName)
-                )
+                openCategoryDetail(catName)
             }
         }
 
@@ -132,5 +129,15 @@ class RequestMainActivity : AppCompatActivity() {
 
             container.addView(item)
         }
+    }
+
+    private fun openCategoryDetail(catName: String) {
+        val category = CategoryCatalog.findByStoreKey(catName)
+        startActivity(
+            Intent(this, CategoryDetailActivity::class.java).apply {
+                putExtra(CategoryDetailActivity.EXTRA_CATEGORY, catName)
+                category?.id?.let { putExtra(CategoryDetailActivity.EXTRA_CATEGORY_ID, it) }
+            }
+        )
     }
 }

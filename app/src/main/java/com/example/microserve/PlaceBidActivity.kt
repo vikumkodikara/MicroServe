@@ -126,16 +126,17 @@ class PlaceBidActivity : AppCompatActivity() {
 
         for (bid in bids) {
             val item = LayoutInflater.from(this).inflate(R.layout.item_previous_bid, bidsContainer, false)
-            item.findViewById<TextView>(R.id.tv_bidder_name).text = bid.name
-            item.findViewById<TextView>(R.id.tv_bid_price).text = "Bid Price: ${bid.price}"
+            item.findViewById<TextView>(R.id.tv_bidder_name).text = bid.providerName
+            item.findViewById<TextView>(R.id.tv_bid_price).text =
+                getString(R.string.bid_price_format, bid.points)
 
             item.findViewById<View>(R.id.btn_purchase).setOnClickListener {
-                val price = bid.price.replace("Rs.", "").replace(",", "").trim().toIntOrNull() ?: 0
+                val price = bid.points
                 if (price > 0) {
                     MPointsPaymentHelper.showPaymentDialog(
                         activity = this,
                         amount = price,
-                        providerName = bid.name
+                        providerName = bid.providerName
                     ) {
                         // Payment successful
                     }

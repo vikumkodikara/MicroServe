@@ -175,13 +175,14 @@ class CreateRequestActivity : AppCompatActivity() {
     }
 
     private fun setupLocationSpinners() {
-        bindSpinner(spinnerProvince, listOf("-Select-") + SriLankaLocations.getProvinces())
+        bindSpinner(spinnerProvince, listOf("-Select-") + SriLankaLocations.provinces.map { it.name })
 
         spinnerProvince.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
                 if (suppressSpinnerCallbacks) return
                 val province = spinnerProvince.selectedItem?.toString().orEmpty()
-                val districts = if (province == "-Select-") emptyList() else SriLankaLocations.getDistricts(province)
+                val districts = if (province == "-Select-") emptyList()
+                else SriLankaLocations.districtsForProvince(province).map { it.name }
                 bindSpinner(spinnerDistrict, listOf("-Select-") + districts)
                 bindSpinner(spinnerCity, listOf("-Select-"))
             }
@@ -194,7 +195,8 @@ class CreateRequestActivity : AppCompatActivity() {
                 if (suppressSpinnerCallbacks) return
                 val province = spinnerProvince.selectedItem?.toString().orEmpty()
                 val district = spinnerDistrict.selectedItem?.toString().orEmpty()
-                val cities = if (district == "-Select-") emptyList() else SriLankaLocations.getCities(province, district)
+                val cities = if (district == "-Select-") emptyList()
+                else SriLankaLocations.citiesForDistrict(province, district).map { it.name }
                 bindSpinner(spinnerCity, listOf("-Select-") + cities)
             }
 
@@ -205,9 +207,9 @@ class CreateRequestActivity : AppCompatActivity() {
     private fun prefillLocation(province: String, district: String, city: String) {
         suppressSpinnerCallbacks = true
         selectSpinnerValue(spinnerProvince, province)
-        bindSpinner(spinnerDistrict, listOf("-Select-") + SriLankaLocations.getDistricts(province))
+        bindSpinner(spinnerDistrict, listOf("-Select-") + SriLankaLocations.districtsForProvince(province).map { it.name })
         selectSpinnerValue(spinnerDistrict, district)
-        bindSpinner(spinnerCity, listOf("-Select-") + SriLankaLocations.getCities(province, district))
+        bindSpinner(spinnerCity, listOf("-Select-") + SriLankaLocations.citiesForDistrict(province, district).map { it.name })
         selectSpinnerValue(spinnerCity, city)
         suppressSpinnerCallbacks = false
     }
