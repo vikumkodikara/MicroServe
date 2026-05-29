@@ -71,10 +71,10 @@ class ServiceMainActivity : AppCompatActivity() {
         container.removeAllViews()
 
         val myJobsHeader = LayoutInflater.from(this).inflate(R.layout.item_my_service, container, false)
-        myJobsHeader.findViewById<TextView>(R.id.tv_service_name).text = getString(R.string.my_jobs_title)
-        myJobsHeader.findViewById<ImageView>(R.id.iv_service_icon).setImageResource(R.drawable.request)
-        myJobsHeader.findViewById<MaterialButton>(R.id.btn_activate).text = getString(R.string.view_jobs)
-        myJobsHeader.findViewById<MaterialButton>(R.id.btn_activate).setOnClickListener {
+        myJobsHeader.findViewById<TextView>(R.id.txtServiceTitle).text = getString(R.string.my_jobs_title)
+        myJobsHeader.findViewById<ImageView>(R.id.imgService).setImageResource(R.drawable.request)
+        myJobsHeader.findViewById<MaterialButton>(R.id.btnActivate).text = getString(R.string.view_jobs)
+        myJobsHeader.findViewById<MaterialButton>(R.id.btnActivate).setOnClickListener {
             startActivity(Intent(this, ProviderJobsActivity::class.java))
         }
         container.addView(myJobsHeader)
@@ -82,15 +82,35 @@ class ServiceMainActivity : AppCompatActivity() {
         for (service in services) {
             val item = LayoutInflater.from(this).inflate(R.layout.item_my_service, container, false)
 
-            item.findViewById<ImageView>(R.id.iv_service_icon).setImageResource(service.iconRes)
-            item.findViewById<TextView>(R.id.tv_service_name).text = service.name
+            item.findViewById<ImageView>(R.id.imgService).setImageResource(service.iconRes)
+            item.findViewById<TextView>(R.id.txtServiceTitle).text = service.name
 
-            item.findViewById<MaterialButton>(R.id.btn_activate).setOnClickListener {
+            item.findViewById<MaterialButton>(R.id.btnActivate).setOnClickListener {
                 Toast.makeText(this, "${service.name} activated", Toast.LENGTH_SHORT).show()
             }
 
             container.addView(item)
         }
+
+        // Append Add Service Button Card at the end
+        val addServiceItem = LayoutInflater.from(this).inflate(R.layout.item_my_service, container, false)
+        
+        // Hide regular service views
+        addServiceItem.findViewById<View>(R.id.cardImage).visibility = View.GONE
+        addServiceItem.findViewById<View>(R.id.txtServiceTitle).visibility = View.GONE
+        addServiceItem.findViewById<View>(R.id.btnActivate).visibility = View.GONE
+        
+        // Show and configure the Add button
+        val imgAdd = addServiceItem.findViewById<ImageView>(R.id.imgAdd)
+        imgAdd.visibility = View.VISIBLE
+        imgAdd.setImageResource(R.drawable.ic_add_service)
+        
+        // Navigate to Edit Service screen
+        addServiceItem.setOnClickListener {
+            startActivity(Intent(this, EditServiceActivity::class.java))
+        }
+        
+        container.addView(addServiceItem)
     }
 
     private fun openCategoryDetail(catName: String) {

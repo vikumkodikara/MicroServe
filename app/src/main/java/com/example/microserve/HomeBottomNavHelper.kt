@@ -37,7 +37,8 @@ object HomeBottomNavHelper {
 
         activity.findViewById<View>(R.id.navTabService)?.setOnClickListener {
             navigate(activity, currentTab, TAB_SERVICE) {
-                Intent(activity, ServiceMainActivity::class.java)
+                Intent(activity, MainActivity::class.java)
+                    .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP)
             }
         }
 

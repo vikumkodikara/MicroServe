@@ -100,9 +100,7 @@
         <activity
             android:name=".SettingsFragmentActivity"
             android:exported="false" />
-        <activity
-            android:name=".AddNewCardActivity"
-            android:exported="false" />
+
         <activity
             android:name=".GetHelpActivity"
             android:exported="false" />
@@ -156,6 +154,30 @@
             android:exported="false" />
         <activity
             android:name=".ServiceMainActivity"
+            android:exported="false" />
+        <activity
+            android:name=".MainActivity"
+            android:exported="false" />
+        <activity
+            android:name=".CategoryActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ProfileActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ServiceRequestActivity"
+            android:exported="false" />
+        <activity
+            android:name=".AddNewCardActivity"
+            android:exported="false" />
+        <activity
+            android:name=".BillActivity"
+            android:exported="false" />
+        <activity
+            android:name=".RatingActivity"
+            android:exported="false" />
+        <activity
+            android:name=".EditServiceActivity"
             android:exported="false" />
         <provider
             android:name="androidx.core.content.FileProvider"
