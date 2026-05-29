@@ -37,7 +37,9 @@ class PickLocationActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        Configuration.getInstance().userAgentValue = packageName
+        val osmConfig = Configuration.getInstance()
+        osmConfig.load(applicationContext, getSharedPreferences("osmdroid", MODE_PRIVATE))
+        osmConfig.userAgentValue = packageName
         enableEdgeToEdge()
         setContentView(R.layout.activity_pick_location)
 

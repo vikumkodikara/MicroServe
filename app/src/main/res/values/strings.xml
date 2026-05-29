@@ -85,6 +85,7 @@
     <string name="previous_bids">Previous bids</string>
     <string name="bid_button">Bid</string>
     <string name="purchase_button">Purchase</string>
+    <string name="select_button">Select</string>
     <string name="age_label_format">Age: %1$d</string>
     <string name="bid_price_format">Bid Price: Rs. %1$,d</string>
     <string name="bid_submitted_toast">Bid submitted</string>
@@ -96,6 +97,10 @@
     <string name="select_bid">Select</string>
     <string name="bid_selected">Selected</string>
     <string name="bid_selected_success">Bid selected</string>
+    <string name="bid_selection_restricted">Only the requester can select a provider while request is open.</string>
+    <string name="select_provider_title">Select Service Provider</string>
+    <string name="select_provider_message">Select %1$s with bid amount Rs. %2$,d and continue payment using M Points?</string>
+    <string name="provider_selected_payment_success">Provider selected. Payment held in escrow. Provider can now start this service.</string>
     <string name="bid_points_format">Bid: %1$d M Points</string>
     <string name="proceed_payment">Proceed Payment</string>
     <string name="finished_button">Finished</string>
@@ -107,6 +112,13 @@
     <string name="no_open_requests_category">No open requests in this category yet</string>
     <string name="request_success_added">Your request was successfully added.</string>
     <string name="request_success_updated">Your request was successfully updated.</string>
+    <string name="create_request_success_title">Post successful</string>
+    <string name="create_request_failed_title">Post failed</string>
+    <string name="create_request_post_failed">Failed to post request. Please try again.</string>
+    <string name="create_request_post_timeout">Could not save request in time. Check your internet and try again.</string>
+    <string name="create_request_posting">Posting…</string>
+    <string name="create_request_post">Post</string>
+    <string name="create_request_location_pinned">Location pinned on map</string>
     <string name="ok">OK</string>
     <string name="request_list_subtitle">By %1$s • %2$s</string>
     <string name="invalid_bid_amount">Enter a valid bid amount in M Points</string>

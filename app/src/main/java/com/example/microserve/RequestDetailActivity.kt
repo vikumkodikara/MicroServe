@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
@@ -150,13 +151,25 @@ class RequestDetailActivity : AppCompatActivity() {
             rowBinding.bidProviderName.text = bid.providerName
             rowBinding.bidPriceText.text = getString(R.string.bid_price_format, bid.points)
             rowBinding.purchaseButton.visibility = if (canSelect) View.VISIBLE else View.GONE
+            rowBinding.purchaseButton.text = getString(R.string.select_button)
             rowBinding.purchaseButton.setOnClickListener {
                 if (canSelect) {
-                    selectBid(bid)
+                    confirmSelectBid(bid)
                 }
             }
             binding.bidsContainer.addView(rowBinding.root)
         }
+    }
+
+    private fun confirmSelectBid(bid: Bid) {
+        AlertDialog.Builder(this)
+            .setTitle(R.string.select_provider_title)
+            .setMessage(getString(R.string.select_provider_message, bid.providerName, bid.points))
+            .setPositiveButton(R.string.action_ok) { _, _ ->
+                selectBid(bid)
+            }
+            .setNegativeButton(android.R.string.cancel, null)
+            .show()
     }
 
     private fun openPlaceBid() {
@@ -167,11 +180,80 @@ class RequestDetailActivity : AppCompatActivity() {
     }
 
     private fun selectBid(bid: Bid) {
+        val request = currentRequest ?: return
+        val requesterUid = auth.currentUser?.uid
+        if (requesterUid == null || requesterUid != request.requesterUid) {
+            Toast.makeText(this, R.string.bid_selection_restricted, Toast.LENGTH_SHORT).show()
+            return
+        }
+
         BidRepository.acceptBid(
             requestId = requestId,
             bid = bid,
             onSuccess = {
                 Toast.makeText(this, R.string.bid_selected_success, Toast.LENGTH_SHORT).show()
+                processPaymentForSelectedBid(request, bid, requesterUid)
+            },
+            onFailure = { message ->
+                Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
+            }
+        )
+    }
+
+    private fun processPaymentForSelectedBid(request: ServiceRequest, bid: Bid, requesterUid: String) {
+        PointsRepository.getBalance(
+            uid = requesterUid,
+            onSuccess = { balance ->
+                if (balance < bid.points) {
+                    Toast.makeText(this, R.string.insufficient_points, Toast.LENGTH_LONG).show()
+                    startActivity(Intent(this, WalletActivity::class.java))
+                    return@getBalance
+                }
+
+                PointsRepository.processEscrowPayment(
+                    requesterUid = requesterUid,
+                    amount = bid.points,
+                    onSuccess = {
+                        val transaction = ServiceTransaction(
+                            requestId = request.id,
+                            requestTitle = request.title,
+                            requesterUid = requesterUid,
+                            requesterName = request.requesterName,
+                            providerUid = bid.providerUid,
+                            providerName = bid.providerName,
+                            providerCode = ServiceTransaction.generateProviderCode(bid.providerUid),
+                            amount = bid.points
+                        )
+                        TransactionRepository.createEscrowTransaction(
+                            transaction = transaction,
+                            onSuccess = { created ->
+                                ServiceRequestRepository.update(
+                                    requestId = request.id,
+                                    fields = mapOf(
+                                        ServiceRequest.FIELD_STATUS to ServiceRequestStatus.IN_PROGRESS,
+                                        ServiceRequest.FIELD_TRANSACTION_ID to created.id
+                                    ),
+                                    onSuccess = {
+                                        Toast.makeText(
+                                            this,
+                                            R.string.provider_selected_payment_success,
+                                            Toast.LENGTH_LONG
+                                        ).show()
+                                    },
+                                    onFailure = { message ->
+                                        Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
+                                    }
+                                )
+                            },
+                            onFailure = { message ->
+                                Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
+                            }
+                        )
+                    },
+                    onFailure = { message ->
+                        Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
+                    }
+                )
             },
             onFailure = { message ->
                 Toast.makeText(this, message, Toast.LENGTH_SHORT).show()

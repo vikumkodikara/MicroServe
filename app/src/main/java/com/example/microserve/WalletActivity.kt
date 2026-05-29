@@ -9,7 +9,6 @@ import android.view.WindowManager
 import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
-import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.ListenerRegistration
@@ -63,7 +62,6 @@ class WalletActivity : AppCompatActivity() {
     private fun startBalanceListener() {
         val uid = FirebaseAuth.getInstance().currentUser?.uid
         if (uid.isNullOrBlank()) {
-            // Fallback to local if not logged in
             val balance = AppPreferences.getMPoints(this)
             tvPoints.text = "M ${formatNumber(balance)}"
             return
@@ -74,11 +72,9 @@ class WalletActivity : AppCompatActivity() {
             uid = uid,
             onUpdate = { balance ->
                 tvPoints.text = "M ${formatNumber(balance)}"
-                // Keep local cache in sync
                 AppPreferences.setMPoints(this, balance)
             },
             onError = { _ ->
-                // Fallback to local cache
                 val balance = AppPreferences.getMPoints(this)
                 tvPoints.text = "M ${formatNumber(balance)}"
             }
@@ -108,11 +104,9 @@ class WalletActivity : AppCompatActivity() {
         val tvNoCard = dialog.findViewById<TextView>(R.id.tv_no_card)
         val btnAddToWallet = dialog.findViewById<View>(R.id.btn_add_to_wallet)
 
-        // Show current balance
         val currentBalance = AppPreferences.getMPoints(this)
         tvCurrentBalance.text = "Current balance: M ${formatNumber(currentBalance)}"
 
-        // Show card info or warning
         val cards = CardStore.getAllCards(this)
         if (cards.isNotEmpty()) {
             val card = cards.first()
@@ -125,7 +119,6 @@ class WalletActivity : AppCompatActivity() {
             tvNoCard.visibility = View.VISIBLE
         }
 
-        // Quick amount chips
         dialog.findViewById<View>(R.id.chip_500).setOnClickListener {
             etAmount.setText("500")
             etAmount.setSelection(etAmount.text.length)
@@ -143,7 +136,6 @@ class WalletActivity : AppCompatActivity() {
             etAmount.setSelection(etAmount.text.length)
         }
 
-        // Add to wallet button
         btnAddToWallet.setOnClickListener {
             val amountStr = etAmount.text.toString().trim()
             if (amountStr.isEmpty()) {
@@ -164,26 +156,17 @@ class WalletActivity : AppCompatActivity() {
 
             val uid = FirebaseAuth.getInstance().currentUser?.uid
             if (uid.isNullOrBlank()) {
-                // Fallback to local-only
-                val newBalance = AppPreferences.addMPoints(this, amount)
-                dialog.dismiss()
-                tvPoints.text = "M ${formatNumber(newBalance)}"
-                val cardName = cards.first().cardName
-                Toast.makeText(
-                    this,
-                    "Rs. ${formatNumber(amount)} debited from $cardName.\nM Points added successfully!",
-                    Toast.LENGTH_LONG
-                ).show()
+                Toast.makeText(this, R.string.login_required, Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
 
-            // Top up via Firestore transaction
             PointsRepository.topUp(
                 uid = uid,
                 amount = amount,
                 onSuccess = { newBalance ->
                     AppPreferences.setMPoints(this, newBalance)
                     dialog.dismiss()
+                    tvPoints.text = "M ${formatNumber(newBalance)}"
                     val cardName = cards.first().cardName
                     Toast.makeText(
                         this,
