@@ -140,15 +140,15 @@ class FeedbacksActivity : AppCompatActivity() {
             holder.tvMessage.text = item.message
             holder.tvDate.text = formatDate(item.createdAt)
 
-            val filledColor = resources.getColor(R.color.admin_stat_orange, null)
-            val emptyColor = resources.getColor(R.color.admin_purple_light, null)
+            val filledColor = resources.getColor(R.color.star_gold, null)
+            val emptyColor = resources.getColor(R.color.star_unselected, null)
             holder.stars.forEachIndexed { index, imageView ->
                 if (index < item.rating) {
                     imageView.setColorFilter(filledColor)
                     imageView.alpha = 1f
                 } else {
                     imageView.setColorFilter(emptyColor)
-                    imageView.alpha = 0.6f
+                    imageView.alpha = 1f
                 }
             }
 
