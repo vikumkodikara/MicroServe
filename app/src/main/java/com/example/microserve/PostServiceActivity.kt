@@ -281,14 +281,36 @@ class PostServiceActivity : AppCompatActivity() {
 
         binding.postBtn.setOnClickListener {
             val category = binding.categorySpinner.selectedItem.toString()
+            val province = binding.spinnerProvince.selectedItem?.toString() ?: ""
+            val district = binding.spinnerDistrict.selectedItem?.toString() ?: ""
+            val city = binding.spinnerCity.selectedItem?.toString() ?: ""
             val startTime = binding.startTimeBtn.text.toString()
             val endTime = binding.endTimeBtn.text.toString()
 
             when {
                 category == "-Select-" -> showToast("Please select a category")
+                province == "-Select Province-" || province.isBlank() -> showToast("Please select a province")
+                district == "-Select District-" || district.isBlank() -> showToast("Please select a district")
+                city == "-Select City-" || city.isBlank() -> showToast("Please select a city")
                 startTime == "Select Time" || endTime == "Select Time" -> showToast("Please select time scheduling")
                 interiorCount == 0 && exteriorCount == 0 -> showToast("Please set at least one measurement")
                 else -> {
+                    val uid = com.google.firebase.auth.FirebaseAuth.getInstance().currentUser?.uid ?: ""
+                    val userName = AppPreferences.getSessionName(this)
+                    val userEmail = AppPreferences.getSessionEmail(this)
+                    val userPhone = AppPreferences.getSessionPhone(this)
+                    val location = "$city, $district, $province"
+
+                    ServiceStore.addService(
+                        context = this,
+                        category = category,
+                        providerName = userName,
+                        contact = userPhone,
+                        location = location,
+                        email = userEmail,
+                        ownerUid = uid
+                    )
+
                     showToast("Service Posted Successfully!")
                     finish()
                 }
