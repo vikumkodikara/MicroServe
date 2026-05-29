@@ -63,17 +63,8 @@ class MainActivity : AppCompatActivity() {
         val myServicesLayoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
         rvMyServices.layoutManager = myServicesLayoutManager
         
-        // Using sample data
-        val myServices = listOf(
-            MyService("Plumbing", R.drawable.img_plumber, true),
-            MyService("Add", 0, false)
-        )
-        
-        val myServiceAdapter = MyServiceAdapter(myServices) { selectedService ->
-            val intent = Intent(this, EditServiceActivity::class.java)
-            startActivity(intent)
-        }
-        rvMyServices.adapter = myServiceAdapter
+        // Using Firebase data
+        loadMyServices(rvMyServices)
 
         // Apply Navigation Bar Inset so it perfectly aligns with Home
         applyNavBarSpacer(R.id.navSystemBarSpacer)
@@ -99,6 +90,35 @@ class MainActivity : AppCompatActivity() {
             flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
         })
         finish()
+    }
+
+    private fun loadMyServices(rvMyServices: RecyclerView) {
+        val uid = com.google.firebase.auth.FirebaseAuth.getInstance().currentUser?.uid ?: ""
+
+        ServiceStore.loadFromFirestore(this) { allServices ->
+            val myPosts = allServices.filter { it.ownerUid == uid }
+
+            val myServiceItems = myPosts.map { service ->
+                val catalog = CategoryCatalog.findByStoreKey(service.category)
+                val iconRes = catalog?.imageRes ?: R.drawable.img_plumber
+                MyService(service.category, iconRes, true)
+            }.toMutableList()
+
+            // Always add the "Add" card at the end
+            myServiceItems.add(MyService("Add", 0, false))
+
+            val adapter = MyServiceAdapter(myServiceItems) { selectedService ->
+                val intent = Intent(this, EditServiceActivity::class.java)
+                startActivity(intent)
+            }
+            rvMyServices.adapter = adapter
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        val rvMyServices: RecyclerView = findViewById(R.id.rvMyServices)
+        loadMyServices(rvMyServices)
     }
 
     private fun setupBottomNavigation() {
