@@ -79,7 +79,22 @@ object ServiceStore {
                         null
                     }
                 }
-                saveAllLocally(context, services)
+                // Preserve local image paths when Firestore hasn't received
+                // the download URL yet (upload still in progress).
+                val localCache = getAllServices(context).associateBy { it.id }
+                val merged = services.map { svc ->
+                    if (svc.imageUri.isNullOrBlank()) {
+                        val localImage = localCache[svc.id]?.imageUri
+                        if (!localImage.isNullOrBlank() && !localImage.startsWith("http")) {
+                            svc.copy(imageUri = localImage)
+                        } else {
+                            svc
+                        }
+                    } else {
+                        svc
+                    }
+                }
+                saveAllLocally(context, merged)
             }
     }
 
@@ -115,8 +130,21 @@ object ServiceStore {
                         null
                     }
                 }
-                saveAllLocally(context, services)
-                onComplete?.invoke(services)
+                val localCache = getAllServices(context).associateBy { it.id }
+                val merged = services.map { svc ->
+                    if (svc.imageUri.isNullOrBlank()) {
+                        val localImage = localCache[svc.id]?.imageUri
+                        if (!localImage.isNullOrBlank() && !localImage.startsWith("http")) {
+                            svc.copy(imageUri = localImage)
+                        } else {
+                            svc
+                        }
+                    } else {
+                        svc
+                    }
+                }
+                saveAllLocally(context, merged)
+                onComplete?.invoke(merged)
             }
             .addOnFailureListener { error ->
                 Log.w(TAG, "Failed to load services from Firestore", error)
@@ -220,10 +248,17 @@ object ServiceStore {
         val updated = getAllServices(context).toMutableList().apply { add(0, newService) }
         saveAllLocally(context, updated)
 
-        // Sync to Firestore
+        // Sync to Firestore – use an empty imageUri in the initial doc;
+        // the real download URL is set by uploadImageToStorage after upload.
+        val firestoreMap = newService.toMap().toMutableMap().apply {
+            val img = this["imageUri"] as? String
+            if (img != null && !img.startsWith("http://") && !img.startsWith("https://")) {
+                this["imageUri"] = ""
+            }
+        }
         firestore.collection(COLLECTION)
             .document(serviceId)
-            .set(newService.toMap())
+            .set(firestoreMap)
             .addOnSuccessListener {
                 Log.d(TAG, "Service created in Firestore: $serviceId")
                 // Upload image to Firebase Storage after Firestore doc is created
@@ -281,9 +316,15 @@ object ServiceStore {
 
             // Sync to Firestore
             updatedService?.let { svc ->
+                val firestoreMap = svc.toMap().toMutableMap().apply {
+                    val img = this["imageUri"] as? String
+                    if (img != null && !img.startsWith("http://") && !img.startsWith("https://")) {
+                        this["imageUri"] = ""
+                    }
+                }
                 firestore.collection(COLLECTION)
                     .document(serviceId)
-                    .set(svc.toMap())
+                    .set(firestoreMap)
                     .addOnSuccessListener {
                         Log.d(TAG, "Service updated in Firestore: $serviceId")
                         // Upload new image if it changed
