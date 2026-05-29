@@ -539,12 +539,16 @@ We welcome contributions from team members and collaborators. Please follow thes
 
 ### Branch strategy
 
-| Branch | Purpose |
-|--------|---------|
-| `main` | Stable user app — splash, login, homepage, post/discover/profile |
-| `develop` | Integration branch for team merges |
-| `feature/*` | Feature work (e.g. `feature/nethmina-request-category-screens`) |
-| `bugfix/*` | Bug fixes and sync branches |
+| Branch | Purpose | Primary contributors |
+|--------|---------|---------------------|
+| `main` | Stable integrated app — splash, login, homepage, post/discover/profile | Vikum, Hiranya, Anjana, Nethmina |
+| `develop` | Integration branch for team merges | All |
+| `feature/nethmina-request-category-screens` | Request categories, detail screens, nav integration | Nethmina, Vikum |
+| `feature/request-system` | Early request feature UI | Hiranya, Nethmina |
+| `admin_panel` | Admin dashboard and request UI merge | Hiranya, Nethmina |
+| `Hiranya` | Post ads, login flow, navbar work | Hiranya, Vikum |
+| `feature/*` | General feature work | Team |
+| `bugfix/*` | Bug fixes and main-branch sync (e.g. `bugfix/main-sync`) | Nethmina, Vikum |
 
 ### How to contribute
 
@@ -568,6 +572,15 @@ We welcome contributions from team members and collaborators. Please follow thes
 | `RequestServiceActivity.kt` | Create/edit request form |
 | `CategoryCatalog.kt` | Single source of truth for 9 categories |
 | `HomeBottomNavHelper.kt` | User 5-tab bottom navigation |
+
+### Team & contribution areas
+
+| Contributor | GitHub / Git identity | Commits | Focus |
+|-------------|----------------------|---------|-------|
+| **Vikum Kodikara** | [vikumkodikara](https://github.com/vikumkodikara) | 92 | Firebase backend, Firestore repos, M-Points wallet & escrow, bidding lifecycle, admin transactions, DevOps |
+| **Nethmina Malshan** | [NethminaSeeman](https://github.com/NethminaSeeman) | 69 | Request module UI, category grid, detail screens, bottom nav, bid UX, Figma assets |
+| **Hiranya Pahasara** | `D.A.H. Pahasara De Silva` · branch `Hiranya` | 29 | User app screens, post ads, login flow, admin panel, early request UI |
+| **Anjana Madhushan** | `Anjana Madhushan` | 7 | Settings, dark mode, profile, discover, legal/help screens, localization |
 
 ---
 
@@ -606,15 +619,20 @@ This software is not open source. Unauthorized copying, modification, distributi
 
 | Name | Role | Focus |
 |------|------|-------|
-| [vikumkodikara](https://github.com/vikumkodikara) | Maintainer | Core app, Firebase integration, admin module, navigation |
-| Nethmina Malshan | Contributor | Request module — categories, detail screens, Figma assets |
+| [Vikum Kodikara](https://github.com/vikumkodikara) | Maintainer | Core app, Firebase integration, M-Points & escrow, bidding backend, admin module, Firestore rules |
+| [Nethmina Malshan](https://github.com/NethminaSeeman) | Contributor | Request module — categories, detail screens, navigation, bid UX, Figma assets |
+| D.A.H. Pahasara De Silva (Hiranya) | Contributor | User app, post ads, login, discover, admin panel, early request UI |
+| Anjana Madhushan | Contributor | Settings, dark mode, profile, discover, legal/help screens, Sinhala/Tamil localization |
 
 ### Contributors by branch
 
 | Branch | Focus |
 |--------|-------|
-| `main` | User app, splash, login, homepage, post/discover/profile |
+| `main` | Stable user app, splash, login, homepage, post/discover/profile |
 | `feature/nethmina-request-category-screens` | Request Main, categories, detail screens, nav integration |
+| `feature/request-system` | Early request feature UI |
+| `admin_panel` | Admin dashboard and request UI |
+| `Hiranya` | Post ads, login flow, navbar |
 | `develop` | Team integration branch |
 
 ---
