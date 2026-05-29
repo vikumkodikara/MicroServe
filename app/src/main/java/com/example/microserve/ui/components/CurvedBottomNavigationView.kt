@@ -57,6 +57,7 @@ class CurvedBottomNavigationView @JvmOverloads constructor(
         // 3. Dark Active Puck Circle Background
         activeEllipse.setImageResource(R.drawable.ellipsenav)
         activeEllipse.scaleType = ImageView.ScaleType.FIT_CENTER
+        activeEllipse.setColorFilter(Color.BLACK)
         addView(activeEllipse, LayoutParams(ellipseSize.toInt(), ellipseSize.toInt(), Gravity.TOP or Gravity.LEFT))
 
         // 4. Floating Active Tab Icon

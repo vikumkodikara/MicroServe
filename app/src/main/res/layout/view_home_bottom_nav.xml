@@ -9,7 +9,7 @@
     <com.example.microserve.ui.components.CurvedBottomNavigationView
         android:id="@+id/curvedBottomNavView"
         android:layout_width="match_parent"
-        android:layout_height="100dp" />
+        android:layout_height="115dp" />
 
     <View
         android:id="@+id/navSystemBarSpacer"
