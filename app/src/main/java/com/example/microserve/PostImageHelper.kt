@@ -77,8 +77,21 @@ object PostImageHelper {
     fun loadPostImage(imageView: ImageView, imageUri: String?) {
         val context = imageView.context
         val path = imageUri?.takeIf { it.isNotBlank() }
-        val localFile = resolveLocalFile(context, path)
 
+        // 1. Try cloud / content URLs first (Firebase Storage download URLs)
+        if (path != null && (path.startsWith("http://") || path.startsWith("https://") || path.startsWith("content://"))) {
+            Glide.with(context)
+                .load(Uri.parse(path))
+                .centerCrop()
+                .placeholder(R.drawable.home_job_done_placeholder)
+                .error(R.drawable.home_job_done_placeholder)
+                .into(imageView)
+            imageView.scaleType = ImageView.ScaleType.CENTER_CROP
+            return
+        }
+
+        // 2. Try local file
+        val localFile = resolveLocalFile(context, path)
         if (localFile != null && localFile.exists()) {
             Glide.with(context)
                 .load(localFile)
@@ -92,17 +105,7 @@ object PostImageHelper {
             return
         }
 
-        if (path != null && (path.startsWith("content://") || path.startsWith("http://") || path.startsWith("https://"))) {
-            Glide.with(context)
-                .load(Uri.parse(path))
-                .centerCrop()
-                .placeholder(R.drawable.home_job_done_placeholder)
-                .error(R.drawable.home_job_done_placeholder)
-                .into(imageView)
-            imageView.scaleType = ImageView.ScaleType.CENTER_CROP
-            return
-        }
-
+        // 3. Fallback to placeholder
         imageView.setImageResource(R.drawable.home_job_done_placeholder)
         imageView.scaleType = ImageView.ScaleType.CENTER_CROP
     }
