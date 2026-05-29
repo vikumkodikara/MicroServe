@@ -2,15 +2,19 @@ package com.example.microserve
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.example.microserve.databinding.ActivityAdminDashboardBinding
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.ListenerRegistration
 
 class AdminDashboardActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityAdminDashboardBinding
+    private val listeners = mutableListOf<ListenerRegistration>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -22,12 +26,18 @@ class AdminDashboardActivity : AppCompatActivity() {
         setupWindowInsets()
         setupQuickActions()
         AdminBottomNavHelper.setup(this, AdminBottomNavHelper.TAB_HOME)
-        bindStats()
+        bindStatsFromFirestore()
     }
 
     override fun onResume() {
         super.onResume()
-        bindStats()
+        // Listeners are already active; no need to re-bind
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        listeners.forEach { it.remove() }
+        listeners.clear()
     }
 
     private fun setupWindowInsets() {
@@ -54,15 +64,47 @@ class AdminDashboardActivity : AppCompatActivity() {
         }
     }
 
-    private fun bindStats() {
-        val pendingRequests = RequestStore.getPendingRequests(this).size
-        val completedTransactions = TransactionStore.getSuccessCount(this)
-        val feedbackCount = FeedbackStore.getFeedbackCount(this)
-        val revenue = TransactionStore.getTotalSuccessAmount(this)
+    private fun bindStatsFromFirestore() {
+        val firestore = FirebaseFirestore.getInstance()
 
-        binding.requestsCount.text = pendingRequests.toString()
-        binding.completedCount.text = completedTransactions.toString()
-        binding.feedbacksCount.text = feedbackCount.toString()
-        binding.revenueCount.text = TransactionStore.formatAmount(revenue)
+        // ── Pending requests count (service_requests where status == "open") ──
+        listeners += firestore.collection(ServiceRequest.COLLECTION)
+            .whereEqualTo(ServiceRequest.FIELD_STATUS, ServiceRequestStatus.OPEN)
+            .addSnapshotListener { snapshot, error ->
+                if (error != null) {
+                    Log.w("AdminDashboard", "Request listener failed", error)
+                    return@addSnapshotListener
+                }
+                val count = snapshot?.size() ?: 0
+                binding.requestsCount.text = count.toString()
+            }
+
+        // ── Completed transactions count ──
+        listeners += firestore.collection(ServiceTransaction.COLLECTION)
+            .whereEqualTo(ServiceTransaction.FIELD_STATUS, ServiceTransactionStatus.SUCCESS)
+            .addSnapshotListener { snapshot, error ->
+                if (error != null) {
+                    Log.w("AdminDashboard", "Transaction listener failed", error)
+                    return@addSnapshotListener
+                }
+                val docs = snapshot?.documents.orEmpty()
+                val count = docs.size
+                val totalRevenue = docs.sumOf { doc ->
+                    (doc.getLong(ServiceTransaction.FIELD_AMOUNT) ?: 0L).toInt()
+                }
+                binding.completedCount.text = count.toString()
+                binding.revenueCount.text = ServiceTransaction.formatAmount(totalRevenue)
+            }
+
+        // ── Feedbacks count ──
+        listeners += firestore.collection("feedbacks")
+            .addSnapshotListener { snapshot, error ->
+                if (error != null) {
+                    Log.w("AdminDashboard", "Feedback listener failed", error)
+                    return@addSnapshotListener
+                }
+                val count = snapshot?.size() ?: 0
+                binding.feedbacksCount.text = count.toString()
+            }
     }
 }

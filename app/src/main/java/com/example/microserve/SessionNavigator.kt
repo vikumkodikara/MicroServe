@@ -37,6 +37,11 @@ object SessionNavigator {
 
     /** Clears local session and Firebase/Google sign-in so Login is shown fresh. */
     fun clearAuth(context: Context) {
+        // Stop Firestore listeners and clear local caches
+        CardStore.clearOnLogout(context)
+        ServiceStore.stopListening()
+        FeedbackStore.stopListening()
+
         AppPreferences.clearSession(context)
         FirebaseAuth.getInstance().signOut()
         try {

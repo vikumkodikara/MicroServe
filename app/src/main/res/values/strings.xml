@@ -126,6 +126,11 @@
     <string name="cannot_bid_own_request">You cannot bid on your own request</string>
     <string name="request_not_open">This request is no longer open for bids</string>
     <string name="bid_placed_success">Bid placed successfully</string>
+    <string name="edit_bid_title">Edit Bid</string>
+    <string name="edit_bid_save">Save</string>
+    <string name="edit_bid_cancel">Cancel</string>
+    <string name="bid_updated_success">Bid updated successfully</string>
+    <string name="cannot_edit_bid">This bid can no longer be edited</string>
     <string name="add_card_first">Add a card before topping up points</string>
     <string name="add_points_title">Add M Points</string>
     <string name="add_points_confirm">Add Points</string>

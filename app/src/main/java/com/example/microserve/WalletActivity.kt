@@ -9,7 +9,6 @@ import android.view.WindowManager
 import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
-import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.ListenerRegistration
@@ -51,42 +50,33 @@ class WalletActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-        refreshBalanceFromFirestore()
+        startBalanceListener()
     }
 
-    override fun onStart() {
-        super.onStart()
-        val uid = FirebaseAuth.getInstance().currentUser?.uid ?: return
+    override fun onPause() {
+        super.onPause()
+        balanceListener?.remove()
+        balanceListener = null
+    }
+
+    private fun startBalanceListener() {
+        val uid = FirebaseAuth.getInstance().currentUser?.uid
+        if (uid.isNullOrBlank()) {
+            val balance = AppPreferences.getMPoints(this)
+            tvPoints.text = "M ${formatNumber(balance)}"
+            return
+        }
+
         balanceListener?.remove()
         balanceListener = PointsRepository.listenBalance(
             uid = uid,
-            onUpdate = { points ->
-                tvPoints.text = "M ${formatNumber(points)}"
-                AppPreferences.setMPoints(this, points)
-            },
-            onError = { message ->
-                Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
-            }
-        )
-    }
-
-    override fun onStop() {
-        balanceListener?.remove()
-        balanceListener = null
-        super.onStop()
-    }
-
-    private fun refreshBalanceFromFirestore() {
-        val uid = FirebaseAuth.getInstance().currentUser?.uid ?: return
-        PointsRepository.getBalance(
-            uid = uid,
-            onSuccess = { balance ->
+            onUpdate = { balance ->
                 tvPoints.text = "M ${formatNumber(balance)}"
                 AppPreferences.setMPoints(this, balance)
             },
-            onFailure = {
-                val fallback = AppPreferences.getMPoints(this)
-                tvPoints.text = "M ${formatNumber(fallback)}"
+            onError = { _ ->
+                val balance = AppPreferences.getMPoints(this)
+                tvPoints.text = "M ${formatNumber(balance)}"
             }
         )
     }
@@ -114,11 +104,9 @@ class WalletActivity : AppCompatActivity() {
         val tvNoCard = dialog.findViewById<TextView>(R.id.tv_no_card)
         val btnAddToWallet = dialog.findViewById<View>(R.id.btn_add_to_wallet)
 
-        // Show current balance
         val currentBalance = AppPreferences.getMPoints(this)
         tvCurrentBalance.text = "Current balance: M ${formatNumber(currentBalance)}"
 
-        // Show card info or warning
         val cards = CardStore.getAllCards(this)
         if (cards.isNotEmpty()) {
             val card = cards.first()
@@ -131,7 +119,6 @@ class WalletActivity : AppCompatActivity() {
             tvNoCard.visibility = View.VISIBLE
         }
 
-        // Quick amount chips
         dialog.findViewById<View>(R.id.chip_500).setOnClickListener {
             etAmount.setText("500")
             etAmount.setSelection(etAmount.text.length)
@@ -149,7 +136,6 @@ class WalletActivity : AppCompatActivity() {
             etAmount.setSelection(etAmount.text.length)
         }
 
-        // Add to wallet button
         btnAddToWallet.setOnClickListener {
             val amountStr = etAmount.text.toString().trim()
             if (amountStr.isEmpty()) {
@@ -181,8 +167,6 @@ class WalletActivity : AppCompatActivity() {
                     AppPreferences.setMPoints(this, newBalance)
                     dialog.dismiss()
                     tvPoints.text = "M ${formatNumber(newBalance)}"
-                    tvCurrentBalance.text = "Current balance: M ${formatNumber(newBalance)}"
-
                     val cardName = cards.first().cardName
                     Toast.makeText(
                         this,
@@ -191,7 +175,7 @@ class WalletActivity : AppCompatActivity() {
                     ).show()
                 },
                 onFailure = { message ->
-                    Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, "Top-up failed: $message", Toast.LENGTH_SHORT).show()
                 }
             )
         }
