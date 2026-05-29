@@ -47,11 +47,19 @@ class CurvedBottomNavigationView @JvmOverloads constructor(
         // 1. Purple Base Bar Background
         navBase.setImageResource(R.drawable.rectanglenav)
         navBase.scaleType = ImageView.ScaleType.FIT_XY
+        try {
+            val navColor = androidx.core.content.ContextCompat.getColor(context, R.color.home_nav_inset_fill)
+            navBase.setColorFilter(navColor)
+        } catch (_: Exception) {}
         addView(navBase, LayoutParams(LayoutParams.MATCH_PARENT, navBaseHeight.toInt(), Gravity.BOTTOM))
 
         // 2. White Cutout Notch Overlay
         navSubtract.setImageResource(R.drawable.subtractnav)
         navSubtract.scaleType = ImageView.ScaleType.FIT_CENTER
+        try {
+            val bgColor = androidx.core.content.ContextCompat.getColor(context, R.color.light_background)
+            navSubtract.setColorFilter(bgColor)
+        } catch (_: Exception) {}
         addView(navSubtract, LayoutParams(navSubtractWidth.toInt(), navSubtractHeight.toInt(), Gravity.TOP or Gravity.LEFT))
 
         // 3. Dark Active Puck Circle Background
