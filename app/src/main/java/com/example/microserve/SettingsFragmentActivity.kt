@@ -13,6 +13,7 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import com.google.android.material.bottomsheet.BottomSheetDialog
 
 class SettingsFragmentActivity : AppCompatActivity() {
 
@@ -147,27 +148,59 @@ class SettingsFragmentActivity : AppCompatActivity() {
     }
 
     private fun showLanguageDialog() {
-        val dialog = android.app.AlertDialog.Builder(this, com.google.android.material.R.style.Theme_MaterialComponents_Light_Dialog_MinWidth)
-            .create()
-
+        val dialog = BottomSheetDialog(this)
         val view = LayoutInflater.from(this).inflate(R.layout.dialog_select_language, null)
-        dialog.setView(view)
-        dialog.window?.setBackgroundDrawableResource(android.R.color.transparent)
+        dialog.setContentView(view)
+
+        // Make the parent container transparent so our custom rounded neumorphic background is visible without any white corners
+        val bottomSheet = dialog.findViewById<View>(com.google.android.material.R.id.design_bottom_sheet)
+        bottomSheet?.setBackgroundResource(android.R.color.transparent)
+
+        // Identify current language selection (handle legacy/inconsistent preference storage)
+        val rawLanguage = AppPreferences.getLanguage(this)
+        val currentLanguage = when (rawLanguage) {
+            "en", "English" -> "English"
+            "si", "Sinhala" -> "Sinhala"
+            "ta", "Tamil" -> "Tamil"
+            else -> "English"
+        }
+
+        // Style helper to highlight selected language with premium black background and white text
+        fun highlightButton(cardId: Int, textId: Int, isSelected: Boolean) {
+            val card = view.findViewById<com.google.android.material.card.MaterialCardView>(cardId)
+            val text = view.findViewById<TextView>(textId)
+            if (isSelected) {
+                card.setCardBackgroundColor(android.content.res.ColorStateList.valueOf(Color.BLACK))
+                card.strokeColor = Color.BLACK
+                text.setTextColor(Color.WHITE)
+            } else {
+                card.setCardBackgroundColor(android.content.res.ColorStateList.valueOf(Color.parseColor("#F5F5F5")))
+                card.strokeColor = Color.parseColor("#E0E0E0")
+                text.setTextColor(Color.parseColor("#1A1A1A"))
+            }
+        }
+
+        highlightButton(R.id.btn_english, R.id.tv_english, currentLanguage == "English")
+        highlightButton(R.id.btn_sinhala, R.id.tv_sinhala, currentLanguage == "Sinhala")
+        highlightButton(R.id.btn_tamil, R.id.tv_tamil, currentLanguage == "Tamil")
+
+        fun applyLanguage(language: String, langCode: String) {
+            AppPreferences.setLanguage(this, language)
+            androidx.appcompat.app.AppCompatDelegate.setApplicationLocales(
+                androidx.core.os.LocaleListCompat.forLanguageTags(langCode)
+            )
+            dialog.dismiss()
+            recreate()
+        }
 
         view.findViewById<View>(R.id.btn_english).setOnClickListener {
-            AppPreferences.setLanguage(this, "en")
-            Toast.makeText(this, "Language set to English", Toast.LENGTH_SHORT).show()
-            dialog.dismiss()
+            applyLanguage("English", "en")
         }
         view.findViewById<View>(R.id.btn_sinhala).setOnClickListener {
-            AppPreferences.setLanguage(this, "si")
-            Toast.makeText(this, "Language set to Sinhala", Toast.LENGTH_SHORT).show()
-            dialog.dismiss()
+            applyLanguage("Sinhala", "si")
         }
         view.findViewById<View>(R.id.btn_tamil).setOnClickListener {
-            AppPreferences.setLanguage(this, "ta")
-            Toast.makeText(this, "Language set to Tamil", Toast.LENGTH_SHORT).show()
-            dialog.dismiss()
+            applyLanguage("Tamil", "ta")
         }
 
         dialog.show()

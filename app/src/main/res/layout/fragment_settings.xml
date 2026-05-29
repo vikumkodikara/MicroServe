@@ -4,7 +4,7 @@
     android:id="@+id/settingsFragRoot"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#F0EDF5"
+    android:background="@color/light_background"
     android:orientation="vertical">
 
     <!-- Main content area: ScrollView behind fixed header+profile -->
@@ -35,7 +35,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="24dp"
                     android:layout_marginEnd="24dp"
-                    app:cardBackgroundColor="#FFFFFF"
+                    app:cardBackgroundColor="@color/white_card_bg"
                     app:cardCornerRadius="20dp"
                     app:cardElevation="3dp">
 
@@ -63,7 +63,7 @@
                                 android:layout_height="26dp"
                                 android:importantForAccessibility="no"
                                 android:src="@drawable/user"
-                                app:tint="#483C72" />
+                                app:tint="@color/admin_primary_purple" />
 
                             <TextView
                                 android:layout_width="0dp"
@@ -71,7 +71,7 @@
                                 android:layout_marginStart="14dp"
                                 android:layout_weight="1"
                                 android:text="Personal Information"
-                                android:textColor="#1A1A1A"
+                                android:textColor="@color/text_dark"
                                 android:textSize="15sp" />
 
                             <TextView
@@ -99,7 +99,7 @@
                                 android:layout_height="26dp"
                                 android:importantForAccessibility="no"
                                 android:src="@drawable/location"
-                                app:tint="#483C72" />
+                                app:tint="@color/admin_primary_purple" />
 
                             <TextView
                                 android:layout_width="0dp"
@@ -107,7 +107,7 @@
                                 android:layout_marginStart="14dp"
                                 android:layout_weight="1"
                                 android:text="Saved Addresses"
-                                android:textColor="#1A1A1A"
+                                android:textColor="@color/text_dark"
                                 android:textSize="15sp" />
 
                             <TextView
@@ -135,7 +135,7 @@
                                 android:layout_height="26dp"
                                 android:importantForAccessibility="no"
                                 android:src="@drawable/wallet"
-                                app:tint="#483C72" />
+                                app:tint="@color/admin_primary_purple" />
 
                             <TextView
                                 android:layout_width="0dp"
@@ -143,7 +143,7 @@
                                 android:layout_marginStart="14dp"
                                 android:layout_weight="1"
                                 android:text="Wallet"
-                                android:textColor="#1A1A1A"
+                                android:textColor="@color/text_dark"
                                 android:textSize="15sp" />
 
                             <TextView
@@ -162,7 +162,7 @@
                     android:layout_marginStart="24dp"
                     android:layout_marginTop="8dp"
                     android:layout_marginEnd="24dp"
-                    app:cardBackgroundColor="#FFFFFF"
+                    app:cardBackgroundColor="@color/white_card_bg"
                     app:cardCornerRadius="20dp"
                     app:cardElevation="3dp">
 
@@ -189,7 +189,7 @@
                                 android:layout_height="26dp"
                                 android:importantForAccessibility="no"
                                 android:src="@drawable/ic_setting_darkmode"
-                                app:tint="#483C72" />
+                                app:tint="@color/admin_primary_purple" />
 
                             <TextView
                                 android:layout_width="0dp"
@@ -197,7 +197,7 @@
                                 android:layout_marginStart="14dp"
                                 android:layout_weight="1"
                                 android:text="Dark Mode"
-                                android:textColor="#1A1A1A"
+                                android:textColor="@color/text_dark"
                                 android:textSize="15sp" />
 
                             <com.google.android.material.switchmaterial.SwitchMaterial
@@ -226,7 +226,7 @@
                                 android:layout_height="26dp"
                                 android:importantForAccessibility="no"
                                 android:src="@drawable/ic_setting_language"
-                                app:tint="#483C72" />
+                                app:tint="@color/admin_primary_purple" />
 
                             <TextView
                                 android:layout_width="0dp"
@@ -234,7 +234,7 @@
                                 android:layout_marginStart="14dp"
                                 android:layout_weight="1"
                                 android:text="Language"
-                                android:textColor="#1A1A1A"
+                                android:textColor="@color/text_dark"
                                 android:textSize="15sp" />
 
                             <TextView
@@ -253,7 +253,7 @@
                     android:layout_marginStart="24dp"
                     android:layout_marginTop="8dp"
                     android:layout_marginEnd="24dp"
-                    app:cardBackgroundColor="#FFFFFF"
+                    app:cardBackgroundColor="@color/white_card_bg"
                     app:cardCornerRadius="20dp"
                     app:cardElevation="3dp">
 
@@ -281,7 +281,7 @@
                                 android:layout_height="26dp"
                                 android:importantForAccessibility="no"
                                 android:src="@drawable/ic_setting_help"
-                                app:tint="#483C72" />
+                                app:tint="@color/admin_primary_purple" />
 
                             <TextView
                                 android:layout_width="0dp"
@@ -289,7 +289,7 @@
                                 android:layout_marginStart="14dp"
                                 android:layout_weight="1"
                                 android:text="Get Help"
-                                android:textColor="#1A1A1A"
+                                android:textColor="@color/text_dark"
                                 android:textSize="15sp" />
 
                             <TextView
@@ -313,7 +313,7 @@
                                 android:layout_height="26dp"
                                 android:importantForAccessibility="no"
                                 android:src="@drawable/ic_setting_notification"
-                                app:tint="#483C72" />
+                                app:tint="@color/admin_primary_purple" />
 
                             <TextView
                                 android:layout_width="0dp"
@@ -321,7 +321,7 @@
                                 android:layout_marginStart="14dp"
                                 android:layout_weight="1"
                                 android:text="Notifications"
-                                android:textColor="#1A1A1A"
+                                android:textColor="@color/text_dark"
                                 android:textSize="15sp" />
 
                             <com.google.android.material.switchmaterial.SwitchMaterial
@@ -350,7 +350,7 @@
                                 android:layout_height="26dp"
                                 android:importantForAccessibility="no"
                                 android:src="@drawable/ic_setting_privacy"
-                                app:tint="#483C72" />
+                                app:tint="@color/admin_primary_purple" />
 
                             <TextView
                                 android:layout_width="0dp"
@@ -358,7 +358,7 @@
                                 android:layout_marginStart="14dp"
                                 android:layout_weight="1"
                                 android:text="Privacy Policy"
-                                android:textColor="#1A1A1A"
+                                android:textColor="@color/text_dark"
                                 android:textSize="15sp" />
 
                             <TextView
@@ -386,7 +386,7 @@
                                 android:layout_height="26dp"
                                 android:importantForAccessibility="no"
                                 android:src="@android:drawable/ic_menu_agenda"
-                                app:tint="#483C72" />
+                                app:tint="@color/admin_primary_purple" />
 
                             <TextView
                                 android:layout_width="0dp"
@@ -394,7 +394,7 @@
                                 android:layout_marginStart="14dp"
                                 android:layout_weight="1"
                                 android:text="Terms of Services"
-                                android:textColor="#1A1A1A"
+                                android:textColor="@color/text_dark"
                                 android:textSize="15sp" />
 
                             <TextView
@@ -475,7 +475,7 @@
             android:layout_marginEnd="24dp"
             android:clickable="true"
             android:focusable="true"
-            app:cardBackgroundColor="#FFFFFF"
+            app:cardBackgroundColor="@color/white_card_bg"
             app:cardCornerRadius="20dp"
             app:cardElevation="6dp">
 
@@ -520,7 +520,7 @@
                         android:layout_height="wrap_content"
                         android:fontFamily="sans-serif-medium"
                         android:text="Nethmina Malshan"
-                        android:textColor="#1A1A1A"
+                        android:textColor="@color/text_dark"
                         android:textSize="20sp" />
 
                     <TextView

@@ -12,6 +12,7 @@
     <color name="admin_text_primary">#EAEAEA</color>
     <color name="admin_text_secondary">#A5A6C2</color>
     <color name="admin_icon_color">#EAEAEA</color>
+    <color name="text_dark">#EAEAEA</color>
     
     <!-- Quick actions background -->
     <color name="admin_quick_action_bg">#25263F</color>
@@ -46,4 +47,5 @@
     
     <!-- Divider for dark mode settings -->
     <color name="white">#FFFFFFFF</color>
+    <color name="bg_light">#25263F</color>
 </resources>

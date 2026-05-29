@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#F8F9FA"
+    android:background="@color/light_background"
     android:fitsSystemWindows="true"
     android:orientation="vertical">
 
@@ -57,7 +57,7 @@
             android:layout_marginHorizontal="24dp"
             android:layout_marginTop="24dp"
             android:layout_marginBottom="8dp"
-            app:cardBackgroundColor="@android:color/white"
+            app:cardBackgroundColor="@color/white_card_bg"
             app:cardCornerRadius="16dp"
             app:cardElevation="4dp">
 
@@ -72,7 +72,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="8dp"
                     android:text="1. Introduction"
-                    android:textColor="@android:color/black"
+                    android:textColor="@color/text_dark"
                     android:textSize="16sp"
                     android:textStyle="bold" />
 
@@ -82,7 +82,7 @@
                     android:layout_marginBottom="20dp"
                     android:lineSpacingExtra="6dp"
                     android:text="Welcome to our App. We are committed to protecting your personal information and your right to privacy. This Privacy Policy explains how we collect, use, and share your information when you use our mobile application to book or provide services."
-                    android:textColor="#555555"
+                    android:textColor="@color/admin_text_secondary"
                     android:textSize="14sp" />
 
                 <TextView
@@ -90,7 +90,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="8dp"
                     android:text="2. Information We Collect"
-                    android:textColor="@android:color/black"
+                    android:textColor="@color/text_dark"
                     android:textSize="16sp"
                     android:textStyle="bold" />
 
@@ -100,7 +100,7 @@
                     android:layout_marginBottom="12dp"
                     android:lineSpacingExtra="6dp"
                     android:text="We collect personal information that you voluntarily provide to us when you register on the App. This includes:"
-                    android:textColor="#555555"
+                    android:textColor="@color/admin_text_secondary"
                     android:textSize="14sp" />
 
                 <TextView
@@ -110,7 +110,7 @@
                     android:layout_marginBottom="20dp"
                     android:lineSpacingExtra="8dp"
                     android:text="•  Personal Details: Name, phone number, and email address.\n•  Location Data: Your home or service address to connect you with nearby service providers.\n•  Payment Information: Credit/Debit card details (processed securely via third-party payment gateways)."
-                    android:textColor="#555555"
+                    android:textColor="@color/admin_text_secondary"
                     android:textSize="14sp" />
 
                 <TextView
@@ -118,7 +118,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="8dp"
                     android:text="3. How We Use Your Information"
-                    android:textColor="@android:color/black"
+                    android:textColor="@color/text_dark"
                     android:textSize="16sp"
                     android:textStyle="bold" />
 
@@ -127,7 +127,7 @@
                     android:layout_height="wrap_content"
                     android:lineSpacingExtra="6dp"
                     android:text="We use personal information collected via our App for a variety of business purposes including to provide and manage services, process payments, communicate with you, and improve our App experience."
-                    android:textColor="#555555"
+                    android:textColor="@color/admin_text_secondary"
                     android:textSize="14sp" />
 
             </LinearLayout>
@@ -141,7 +141,7 @@
         android:layout_height="56dp"
         android:layout_marginHorizontal="24dp"
         android:layout_marginBottom="16dp"
-        android:backgroundTint="#4a4458"
+        android:backgroundTint="@color/primary_purple"
         android:text="I Agree"
         android:textAllCaps="false"
         android:textColor="#FFFFFF"

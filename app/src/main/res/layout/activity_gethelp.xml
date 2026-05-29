@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#F8F9FA"
+    android:background="@color/light_background"
     android:clipChildren="false"
     android:clipToPadding="false"
     android:fitsSystemWindows="true"
@@ -70,7 +70,7 @@
             android:layout_marginStart="20dp"
             android:layout_marginEnd="20dp"
             android:layout_marginBottom="4dp"
-            app:cardBackgroundColor="@android:color/white"
+            app:cardBackgroundColor="@color/white_card_bg"
             app:cardCornerRadius="25dp"
             app:cardElevation="8dp">
 
@@ -96,7 +96,7 @@
                     android:background="@null"
                     android:hint="Search for issues, topics....."
                     android:inputType="text"
-                    android:textColor="@android:color/black"
+                    android:textColor="@color/text_dark"
                     android:textColorHint="#999999"
                     android:textSize="14sp" />
             </LinearLayout>
@@ -126,7 +126,7 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="8dp"
                 android:layout_weight="1"
-                app:cardBackgroundColor="@android:color/white"
+                app:cardBackgroundColor="@color/white_card_bg"
                 app:cardCornerRadius="16dp"
                 app:cardElevation="4dp"
                 android:clickable="true"
@@ -144,14 +144,14 @@
                         android:layout_height="40dp"
                         android:importantForAccessibility="no"
                         android:src="@android:drawable/ic_menu_today"
-                        app:tint="#4a4458" />
+                        app:tint="@color/admin_primary_purple" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="12dp"
                         android:text="Bookings"
-                        android:textColor="@android:color/black"
+                        android:textColor="@color/text_dark"
                         android:textSize="14sp"
                         android:textStyle="bold" />
                 </LinearLayout>
@@ -164,7 +164,7 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="8dp"
                 android:layout_weight="1"
-                app:cardBackgroundColor="@android:color/white"
+                app:cardBackgroundColor="@color/white_card_bg"
                 app:cardCornerRadius="16dp"
                 app:cardElevation="4dp"
                 android:clickable="true"
@@ -182,14 +182,14 @@
                         android:layout_height="40dp"
                         android:importantForAccessibility="no"
                         android:src="@android:drawable/ic_menu_myplaces"
-                        app:tint="#4a4458" />
+                        app:tint="@color/admin_primary_purple" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="12dp"
                         android:text="Payments"
-                        android:textColor="@android:color/black"
+                        android:textColor="@color/text_dark"
                         android:textSize="14sp"
                         android:textStyle="bold" />
                 </LinearLayout>
@@ -211,7 +211,7 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="8dp"
                 android:layout_weight="1"
-                app:cardBackgroundColor="@android:color/white"
+                app:cardBackgroundColor="@color/white_card_bg"
                 app:cardCornerRadius="16dp"
                 app:cardElevation="4dp"
                 android:clickable="true"
@@ -229,14 +229,14 @@
                         android:layout_height="40dp"
                         android:importantForAccessibility="no"
                         android:src="@android:drawable/ic_menu_info_details"
-                        app:tint="#4a4458" />
+                        app:tint="@color/admin_primary_purple" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="12dp"
                         android:text="Account"
-                        android:textColor="@android:color/black"
+                        android:textColor="@color/text_dark"
                         android:textSize="14sp"
                         android:textStyle="bold" />
                 </LinearLayout>
@@ -249,7 +249,7 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="8dp"
                 android:layout_weight="1"
-                app:cardBackgroundColor="@android:color/white"
+                app:cardBackgroundColor="@color/white_card_bg"
                 app:cardCornerRadius="16dp"
                 app:cardElevation="4dp"
                 android:clickable="true"
@@ -267,14 +267,14 @@
                         android:layout_height="40dp"
                         android:importantForAccessibility="no"
                         android:src="@android:drawable/ic_dialog_info"
-                        app:tint="#4a4458" />
+                        app:tint="@color/admin_primary_purple" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="12dp"
                         android:text="Safety &amp; Legal"
-                        android:textColor="@android:color/black"
+                        android:textColor="@color/text_dark"
                         android:textSize="14sp"
                         android:textStyle="bold" />
                 </LinearLayout>
@@ -293,7 +293,7 @@
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="8dp"
             android:layout_marginBottom="16dp"
-            app:cardBackgroundColor="@android:color/white"
+            app:cardBackgroundColor="@color/white_card_bg"
             app:cardCornerRadius="16dp"
             app:cardElevation="4dp">
 
