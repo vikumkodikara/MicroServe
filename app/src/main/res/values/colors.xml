@@ -45,4 +45,12 @@
     <color name="google_button_stroke">#DADCE0</color>
     <color name="white_card_bg">#FFFFFF</color>
     <color name="home_header_center">#5F5193</color>
+
+    <!-- Colors for Migrated UI Components -->
+    <color name="purple_gradient_start">#FF705697</color>
+    <color name="purple_gradient_end">#FF462E69</color>
+    <color name="purple_nav">#FF7D62A2</color>
+    <color name="purple_nav_dark">#FF3C2A54</color>
+    <color name="bg_light">#FFF6F6F6</color>
+    <color name="text_dark">#FF1A1A1A</color>
 </resources>
