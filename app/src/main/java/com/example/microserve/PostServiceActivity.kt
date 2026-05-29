@@ -29,6 +29,7 @@ class PostServiceActivity : AppCompatActivity() {
 
         applyWindowInsets()
         setupSpinner()
+        setupLocationSpinners()
         setupCounters()
         setupTimePickers()
         setupDaySelection()
@@ -43,6 +44,52 @@ class PostServiceActivity : AppCompatActivity() {
             footerBar = binding.footerBar.root
         )
     }
+
+    private val locationData = mapOf(
+        "Western" to mapOf(
+            "Colombo" to listOf("Colombo 01", "Colombo 02", "Dehiwala", "Moratuwa", "Maharagama"),
+            "Gampaha" to listOf("Gampaha", "Negombo", "Kelaniya", "Kadawatha"),
+            "Kalutara" to listOf("Kalutara", "Panadura", "Horana", "Matugama")
+        ),
+        "Central" to mapOf(
+            "Kandy" to listOf("Kandy", "Peradeniya", "Katugastota", "Gampola"),
+            "Matale" to listOf("Matale", "Dambulla", "Sigiriya"),
+            "Nuwara Eliya" to listOf("Nuwara Eliya", "Hatton", "Talawakelle")
+        ),
+        "Southern" to mapOf(
+            "Galle" to listOf("Galle", "Hikkaduwa", "Ambalangoda", "Elpitiya"),
+            "Matara" to listOf("Matara", "Weligama", "Dickwella", "Akuressa"),
+            "Hambantota" to listOf("Hambantota", "Tangalle", "Beliatta", "Ambalantota")
+        ),
+        "Northern" to mapOf(
+            "Jaffna" to listOf("Jaffna", "Chavakachcheri", "Point Pedro", "Nallur"),
+            "Kilinochchi" to listOf("Kilinochchi", "Pallai", "Paranthan"),
+            "Mannar" to listOf("Mannar", "Murunkan", "Pesalai"),
+            "Mullaitivu" to listOf("Mullaitivu", "Puthukkudiyiruppu", "Oddusuddan"),
+            "Vavuniya" to listOf("Vavuniya", "Cheddikulam", "Omanthai")
+        ),
+        "Eastern" to mapOf(
+            "Trincomalee" to listOf("Trincomalee", "Kinniya", "Mutur"),
+            "Batticaloa" to listOf("Batticaloa", "Kattankudy", "Eravur"),
+            "Ampara" to listOf("Ampara", "Kalmunai", "Akkaraipattu")
+        ),
+        "North Western" to mapOf(
+            "Kurunegala" to listOf("Kurunegala", "Kuliyapitiya", "Polgahawela", "Narammala"),
+            "Puttalam" to listOf("Puttalam", "Chilaw", "Wennappuwa")
+        ),
+        "North Central" to mapOf(
+            "Anuradhapura" to listOf("Anuradhapura", "Kekirawa", "Tambuttegama", "Eppawala"),
+            "Polonnaruwa" to listOf("Polonnaruwa", "Kaduruwela", "Medirigiriya")
+        ),
+        "Uva" to mapOf(
+            "Badulla" to listOf("Badulla", "Bandarawela", "Haputale", "Mahiyanganaya"),
+            "Monaragala" to listOf("Monaragala", "Wellawaya", "Bibile", "Kataragama")
+        ),
+        "Sabaragamuwa" to mapOf(
+            "Ratnapura" to listOf("Ratnapura", "Balangoda", "Pelmadulla", "Embilipitiya"),
+            "Kegalle" to listOf("Kegalle", "Mawanella", "Warakapola", "Rambukkana")
+        )
+    )
 
     private val categoryConfig = mapOf(
         "Painting" to listOf(
@@ -101,6 +148,58 @@ class PostServiceActivity : AppCompatActivity() {
         
         binding.txtInteriorLabel.text = "${fields[0].first}:\nM Points per ${fields[0].second}"
         binding.txtExteriorLabel.text = "${fields[1].first}:\nM Points per ${fields[1].second}"
+    }
+
+    private fun setupLocationSpinners() {
+        val provinces = listOf("-Select Province-") + locationData.keys.toList()
+        
+        val provinceAdapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, provinces)
+        provinceAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        binding.spinnerProvince.adapter = provinceAdapter
+
+        binding.spinnerProvince.onItemSelectedListener = object : android.widget.AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(parent: android.widget.AdapterView<*>?, view: View?, position: Int, id: Long) {
+                val selectedProvince = provinces[position]
+                if (selectedProvince == "-Select Province-") {
+                    updateDistrictSpinner(emptyList())
+                } else {
+                    val districts = locationData[selectedProvince]?.keys?.toList() ?: emptyList()
+                    updateDistrictSpinner(listOf("-Select District-") + districts)
+                }
+            }
+            override fun onNothingSelected(parent: android.widget.AdapterView<*>?) {}
+        }
+        
+        updateDistrictSpinner(emptyList())
+    }
+
+    private fun updateDistrictSpinner(districts: List<String>) {
+        val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, districts.ifEmpty { listOf("-Select District-") })
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        binding.spinnerDistrict.adapter = adapter
+
+        binding.spinnerDistrict.onItemSelectedListener = object : android.widget.AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(parent: android.widget.AdapterView<*>?, view: View?, position: Int, id: Long) {
+                if (districts.isEmpty() || districts[position] == "-Select District-") {
+                    updateCitySpinner(emptyList())
+                    return
+                }
+                val selectedProvince = binding.spinnerProvince.selectedItem.toString()
+                val selectedDistrict = districts[position]
+                
+                val cities = locationData[selectedProvince]?.get(selectedDistrict) ?: emptyList()
+                updateCitySpinner(listOf("-Select City-") + cities)
+            }
+            override fun onNothingSelected(parent: android.widget.AdapterView<*>?) {}
+        }
+        
+        updateCitySpinner(emptyList())
+    }
+
+    private fun updateCitySpinner(cities: List<String>) {
+        val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, cities.ifEmpty { listOf("-Select City-") })
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        binding.spinnerCity.adapter = adapter
     }
 
     private fun setupCounters() {
