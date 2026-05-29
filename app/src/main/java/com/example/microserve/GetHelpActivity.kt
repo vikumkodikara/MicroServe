@@ -50,7 +50,12 @@ class GetHelpActivity : AppCompatActivity() {
             Toast.makeText(this, "Live Chat coming soon", Toast.LENGTH_SHORT).show()
         }
         findViewById<View>(R.id.btn_call_hotline).setOnClickListener {
-            Toast.makeText(this, "Call Hotline coming soon", Toast.LENGTH_SHORT).show()
+            try {
+                val intent = Intent(Intent.ACTION_DIAL, Uri.parse("tel:+94773456881"))
+                startActivity(intent)
+            } catch (_: ActivityNotFoundException) {
+                Toast.makeText(this, "No dialer app found on your device", Toast.LENGTH_SHORT).show()
+            }
         }
     }
 
