@@ -44,11 +44,63 @@ class PostServiceActivity : AppCompatActivity() {
         )
     }
 
+    private val categoryConfig = mapOf(
+        "Painting" to listOf(
+            Pair("Interior Walls", "sq. ft."),
+            Pair("Exterior Walls", "sq. ft.")
+        ),
+        "Plumbing" to listOf(
+            Pair("Main Pipe Installation", "foot"),
+            Pair("Emergency Callout", "hour")
+        ),
+        "Gardening" to listOf(
+            Pair("Lawn Mowing", "sq. ft."),
+            Pair("Tree Trimming", "tree")
+        ),
+        "Cleaning" to listOf(
+            Pair("Area Size", "sq. ft."),
+            Pair("Deep Clean", "hours")
+        ),
+        "Electric Work" to listOf(
+            Pair("Circuit Repair", "unit"),
+            Pair("Wiring", "points")
+        ),
+        "Handyman" to listOf(
+            Pair("Assembly", "item"),
+            Pair("General Repair", "hour")
+        ),
+        "Carpentry" to listOf(
+            Pair("Custom Furniture", "piece"),
+            Pair("Wood Repair", "hour")
+        ),
+        "HVAC" to listOf(
+            Pair("AC Service", "unit"),
+            Pair("Duct Cleaning", "sq. ft.")
+        )
+    )
+
     private fun setupSpinner() {
-        val categories = arrayOf("-Select-", "Plumbing", "Electrical", "House Painting", "Carpentry", "Cleaning")
+        val categories = arrayOf("-Select-", "Painting", "Plumbing", "Gardening", "Cleaning", "Electric Work", "Handyman", "Carpentry", "HVAC")
         val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, categories)
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         binding.categorySpinner.adapter = adapter
+
+        binding.categorySpinner.onItemSelectedListener = object : android.widget.AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(parent: android.widget.AdapterView<*>?, view: View?, position: Int, id: Long) {
+                updateMeasurementLabels(categories[position])
+            }
+
+            override fun onNothingSelected(parent: android.widget.AdapterView<*>?) {}
+        }
+    }
+
+    private fun updateMeasurementLabels(category: String) {
+        if (category == "-Select-") return
+        
+        val fields = categoryConfig[category] ?: listOf(Pair("Measurement 1", "unit"), Pair("Measurement 2", "unit"))
+        
+        binding.txtInteriorLabel.text = "${fields[0].first}:\nM Points per ${fields[0].second}"
+        binding.txtExteriorLabel.text = "${fields[1].first}:\nM Points per ${fields[1].second}"
     }
 
     private fun setupCounters() {
