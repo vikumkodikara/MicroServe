@@ -40,7 +40,7 @@ class PostServiceActivity : AppCompatActivity() {
             activity = this,
             root = binding.main,
             headerView = binding.headerContainer,
-            footerBar = binding.footerBar
+            footerBar = binding.footerBar.root
         )
     }
 
