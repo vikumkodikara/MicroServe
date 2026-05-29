@@ -41,10 +41,21 @@ class CategoryDetailActivity : AppCompatActivity() {
 
         currentCategory = resolveInitialCategory()
 
+        setupWindowInsets()
+
         findViewById<View>(R.id.btn_back).setOnClickListener { finish() }
 
         bindCategoryHeader()
         buildChips()
+    }
+
+    private fun setupWindowInsets() {
+        SystemUiHelper.setupPurpleHeaderScreen(
+            activity = this,
+            root = findViewById(R.id.categoryDetailRoot),
+            headerView = findViewById(R.id.header_bg),
+            footerBar = findViewById(R.id.footerBar)
+        )
     }
 
     override fun onStart() {

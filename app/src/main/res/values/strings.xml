@@ -11,8 +11,9 @@
     <string name="home_ad_title_format">%1$s Service</string>
     <string name="post_ads_image_crop_hint">Choose a photo, then pinch and drag inside the square</string>
     <string name="post_ads_adjust_image_hint">Pinch to zoom · drag to move</string>
-    <string name="post_ads_use_photo">Use photo</string>
+    <string name="post_ads_use_photo">OK</string>
     <string name="post_ads_cancel_image">Cancel</string>
+    <string name="post_ads_image_load_failed">Could not load the selected image. Please try another photo.</string>
     <string name="home_job_service_format">Service: %1$s</string>
     <string name="home_job_name_format">Name: %1$s</string>
     <string name="home_job_contact_format">Contact: %1$s</string>
@@ -28,6 +29,7 @@
     <!-- Content Descriptions -->
     <string name="cd_settings">Settings</string>
     <string name="cd_back">Go back</string>
+    <string name="cd_service_category_image">Service category image</string>
     <string name="cd_delete">Delete</string>
     <string name="cd_category">Category</string>
 

@@ -218,6 +218,8 @@ class PostAdsActivity : AppCompatActivity() {
             cancelButton = binding.btnCancelImageAdjust,
             changeHint = binding.tvImageChangeHint,
             adjustHint = binding.tvAdjustImageHint,
+            imageContainer = binding.addImageBtn,
+            scrollParent = binding.postAdsScrollView,
             onImageSaved = { savedPath -> applySavedImage(savedPath) }
         )
     }
@@ -307,6 +309,7 @@ class PostAdsActivity : AppCompatActivity() {
             PostImageHelper.deletePostImage(this, previous)
         }
         selectedImagePath = savedPath
+        binding.imageActionText.text = getString(R.string.post_ads_image_selected)
     }
 
     private fun resetFormAfterPost() {

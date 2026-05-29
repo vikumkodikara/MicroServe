@@ -49,6 +49,8 @@ class EditPostActivity : AppCompatActivity() {
             cancelButton = binding.btnCancelImageAdjust,
             changeHint = binding.tvImageChangeHint,
             adjustHint = binding.tvAdjustImageHint,
+            imageContainer = binding.addImageBtn,
+            scrollParent = binding.editPostScrollView,
             onImageSaved = { savedPath -> applySavedImage(savedPath) }
         )
     }
