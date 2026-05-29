@@ -13,7 +13,7 @@
         android:id="@+id/headerContainer"
         android:layout_width="0dp"
         android:layout_height="200dp"
-        android:background="@drawable/header_gradient"
+        android:background="@drawable/bg_header"
         android:paddingHorizontal="20dp"
         android:paddingTop="16dp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -22,11 +22,11 @@
 
         <ImageView
             android:id="@+id/backBtn"
-            android:layout_width="34dp"
-            android:layout_height="34dp"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
             android:contentDescription="Back"
-            android:padding="6dp"
-            android:src="@drawable/back_arrow" />
+            android:padding="0dp"
+            android:src="@drawable/ic_back" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -35,7 +35,7 @@
             android:layout_marginTop="20dp"
             android:text="Post a\nService"
             android:textColor="@color/white"
-            android:textSize="35sp"
+            android:textSize="28sp"
             android:textStyle="bold" />
 
         <ImageView
@@ -103,6 +103,103 @@
                         android:paddingHorizontal="8dp" />
                 </LinearLayout>
 
+                <!-- Location Section -->
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:text="Location"
+                    android:textColor="@color/admin_text_primary"
+                    android:textSize="22sp"
+                    android:textStyle="bold" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:background="@drawable/white_card_bg"
+                    android:elevation="4dp"
+                    android:orientation="vertical"
+                    android:padding="20dp">
+
+                    <!-- Province -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal"
+                        android:layout_marginBottom="12dp">
+                        
+                        <TextView
+                            android:layout_width="70dp"
+                            android:layout_height="wrap_content"
+                            android:text="Province"
+                            android:textColor="@color/admin_text_primary"
+                            android:textSize="15sp"
+                            android:textStyle="bold" />
+
+                        <Spinner
+                            android:id="@+id/spinnerProvince"
+                            android:layout_width="0dp"
+                            android:layout_height="40dp"
+                            android:layout_marginStart="12dp"
+                            android:layout_weight="1"
+                            android:background="@drawable/edittext_bg"
+                            android:paddingHorizontal="8dp" />
+                    </LinearLayout>
+
+                    <!-- District -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal"
+                        android:layout_marginBottom="12dp">
+                        
+                        <TextView
+                            android:layout_width="70dp"
+                            android:layout_height="wrap_content"
+                            android:text="District"
+                            android:textColor="@color/admin_text_primary"
+                            android:textSize="15sp"
+                            android:textStyle="bold" />
+
+                        <Spinner
+                            android:id="@+id/spinnerDistrict"
+                            android:layout_width="0dp"
+                            android:layout_height="40dp"
+                            android:layout_marginStart="12dp"
+                            android:layout_weight="1"
+                            android:background="@drawable/edittext_bg"
+                            android:paddingHorizontal="8dp" />
+                    </LinearLayout>
+
+                    <!-- City -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
+                        
+                        <TextView
+                            android:layout_width="70dp"
+                            android:layout_height="wrap_content"
+                            android:text="City"
+                            android:textColor="@color/admin_text_primary"
+                            android:textSize="15sp"
+                            android:textStyle="bold" />
+
+                        <Spinner
+                            android:id="@+id/spinnerCity"
+                            android:layout_width="0dp"
+                            android:layout_height="40dp"
+                            android:layout_marginStart="12dp"
+                            android:layout_weight="1"
+                            android:background="@drawable/edittext_bg"
+                            android:paddingHorizontal="8dp" />
+                    </LinearLayout>
+                </LinearLayout>
+
                 <!-- Payment Measurement Section -->
                 <TextView
                     android:layout_width="wrap_content"
@@ -129,13 +226,14 @@
                         android:orientation="horizontal">
 
                         <TextView
+                            android:id="@+id/txtInteriorLabel"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_marginEnd="12dp"
                             android:layout_weight="1"
                             android:includeFontPadding="false"
                             android:lineSpacingExtra="2dp"
-                            android:text="Interior Walls:\nRs. per sq. ft."
+                            android:text="Interior Walls:\nM Points per sq. ft."
                             android:textColor="@color/admin_text_primary"
                             android:textSize="15sp"
                             android:textStyle="bold" />
@@ -195,13 +293,14 @@
                         android:orientation="horizontal">
 
                         <TextView
+                            android:id="@+id/txtExteriorLabel"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_marginEnd="12dp"
                             android:layout_weight="1"
                             android:includeFontPadding="false"
                             android:lineSpacingExtra="2dp"
-                            android:text="Exterior Walls:\nRs. per sq. ft."
+                            android:text="Exterior Walls:\nM Points per sq. ft."
                             android:textColor="@color/admin_text_primary"
                             android:textSize="15sp"
                             android:textStyle="bold" />
@@ -374,11 +473,11 @@
     </FrameLayout>
 
     <!-- Footer Bar -->
-    <View
+    <include
         android:id="@+id/footerBar"
+        layout="@layout/view_home_bottom_nav"
         android:layout_width="0dp"
-        android:layout_height="38dp"
-        android:background="@drawable/footer_gradient_bar"
+        android:layout_height="wrap_content"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />

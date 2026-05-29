@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.View
 import android.widget.EditText
 import android.widget.ImageView
+import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
@@ -61,8 +62,11 @@ class CreateFeedbackActivity : AppCompatActivity() {
         selectedRating = rating
         for (i in stars.indices) {
             stars[i].setColorFilter(
-                if (i < rating) 0xFF4a4458.toInt() else 0xFFCCCCCC.toInt()
+                if (i < rating) 0xFFFFD700.toInt() else 0xFFE0E0E0.toInt()
             )
         }
+        // Update rating hint label
+        val labels = arrayOf("Awful", "Poor", "Okay", "Good", "Excellent")
+        findViewById<TextView>(R.id.tvRatingHint).text = labels.getOrElse(rating - 1) { "" }
     }
 }
