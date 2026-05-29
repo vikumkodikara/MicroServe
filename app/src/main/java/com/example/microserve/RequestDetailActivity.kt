@@ -8,8 +8,6 @@ import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
 import com.example.microserve.databinding.ActivityRequestDetailBinding
 import com.example.microserve.databinding.ItemBidRowBinding
 import com.google.firebase.auth.FirebaseAuth
@@ -80,12 +78,12 @@ class RequestDetailActivity : AppCompatActivity() {
     }
 
     private fun setupWindowInsets() {
-        ViewCompat.setOnApplyWindowInsetsListener(binding.contentScrollView) { view, insets ->
-            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            view.setPadding(0, systemBars.top, 0, 0)
-            binding.footerBar.setPadding(0, 0, 0, systemBars.bottom)
-            insets
-        }
+        SystemUiHelper.setupPurpleHeaderScreen(
+            activity = this,
+            root = binding.requestDetailRoot,
+            headerView = binding.headerSection,
+            footerBar = binding.footerBar
+        )
     }
 
     private fun bindRequest(request: ServiceRequest) {
