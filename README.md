@@ -11,7 +11,8 @@
 [![Material Design](https://img.shields.io/badge/Material%20Design-1.12-757575?logo=materialdesign&logoColor=white)](https://m3.material.io/)
 [![License](https://img.shields.io/badge/License-Proprietary-red)](#license)
 
-[![GitHub](https://img.shields.io/badge/GitHub-vikumkodikara%2FMicroServe-181717?logo=github&logoColor=white)](https://github.com/vikumkodikara/MicroServe)
+[![GitHub stars](badges/stars.svg)](https://github.com/vikumkodikara/MicroServe/stargazers)
+[![GitHub forks](badges/forks.svg)](https://github.com/vikumkodikara/MicroServe/network/members)
 
 *Post jobs · Place bids · Pay with M-Points · Manage work — all from one Android app.*
 
