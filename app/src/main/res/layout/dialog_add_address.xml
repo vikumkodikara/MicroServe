@@ -76,19 +76,37 @@
         android:textColorHint="@color/admin_text_secondary"
         android:textSize="16sp" />
 
-    <!-- Pick on Map button -->
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/btn_pick_map"
-        style="@style/Widget.MaterialComponents.Button.TextButton"
-        android:layout_width="wrap_content"
+    <!-- Location Options Row -->
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="end"
-        android:layout_marginBottom="16dp"
-        android:text="📍 Pick on Map"
-        android:textAllCaps="false"
-        android:textColor="#4a4458"
-        android:textSize="13sp"
-        android:textStyle="bold" />
+        android:orientation="horizontal"
+        android:gravity="end"
+        android:layout_marginBottom="16dp">
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_use_current"
+            style="@style/Widget.MaterialComponents.Button.TextButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="🎯 Current Location"
+            android:textAllCaps="false"
+            android:textColor="#4a4458"
+            android:textSize="13sp"
+            android:textStyle="bold"
+            android:layout_marginEnd="8dp" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_pick_map"
+            style="@style/Widget.MaterialComponents.Button.TextButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="🗺️ Pick on Map"
+            android:textAllCaps="false"
+            android:textColor="#4a4458"
+            android:textSize="13sp"
+            android:textStyle="bold" />
+    </LinearLayout>
 
     <!-- Buttons row -->
     <LinearLayout

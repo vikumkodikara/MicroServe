@@ -1,7 +1,12 @@
 package com.example.microserve
 
+import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
+import android.location.Location
+import android.location.LocationManager
 import android.os.Bundle
+import android.os.Looper
 import android.view.View
 import android.widget.EditText
 import android.widget.ImageView
@@ -10,6 +15,8 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import com.google.android.material.button.MaterialButton
 
 class SavedAddressActivity : AppCompatActivity() {
@@ -102,13 +109,22 @@ class SavedAddressActivity : AppCompatActivity() {
         val etDetail = dialogView.findViewById<EditText>(R.id.et_address_detail)
         val btnCancel = dialogView.findViewById<View>(R.id.btn_cancel)
         val btnSave = dialogView.findViewById<View>(R.id.btn_save)
+        val btnUseCurrent = dialogView.findViewById<View>(R.id.btn_use_current)
         val btnPickMap = dialogView.findViewById<View>(R.id.btn_pick_map)
 
-        // Save reference to this text field to fill it in onActivityResult
+        // Save reference to this text field to fill it in dynamically
         activeDialogEditTextDetail = etDetail
 
         dialog.setOnDismissListener {
             activeDialogEditTextDetail = null
+        }
+
+        btnUseCurrent.setOnClickListener {
+            if (hasLocationPermission()) {
+                fetchCurrentLocation()
+            } else {
+                requestLocationPermission()
+            }
         }
 
         btnPickMap.setOnClickListener {
@@ -142,6 +158,130 @@ class SavedAddressActivity : AppCompatActivity() {
         }
 
         dialog.show()
+    }
+
+    private fun hasLocationPermission(): Boolean {
+        return ContextCompat.checkSelfPermission(
+            this,
+            android.Manifest.permission.ACCESS_FINE_LOCATION
+        ) == PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(
+            this,
+            android.Manifest.permission.ACCESS_COARSE_LOCATION
+        ) == PackageManager.PERMISSION_GRANTED
+    }
+
+    private fun requestLocationPermission() {
+        ActivityCompat.requestPermissions(
+            this,
+            arrayOf(
+                android.Manifest.permission.ACCESS_FINE_LOCATION,
+                android.Manifest.permission.ACCESS_COARSE_LOCATION
+            ),
+            REQUEST_CODE_LOCATION_PERMISSION
+        )
+    }
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        if (requestCode == REQUEST_CODE_LOCATION_PERMISSION) {
+            if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                fetchCurrentLocation()
+            } else {
+                Toast.makeText(this, "Location permission is required to fetch current location", Toast.LENGTH_LONG).show()
+            }
+        }
+    }
+
+    private fun fetchCurrentLocation() {
+        if (!hasLocationPermission()) return
+
+        val locationManager = getSystemService(Context.LOCATION_SERVICE) as LocationManager
+
+        // Check if GPS or Network Location Services are enabled
+        val isGpsEnabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)
+        val isNetworkEnabled = locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)
+
+        if (!isGpsEnabled && !isNetworkEnabled) {
+            Toast.makeText(this, "Please enable Location Services (GPS) in your phone settings", Toast.LENGTH_LONG).show()
+            return
+        }
+
+        var bestLocation: Location? = null
+        val providers = locationManager.getProviders(true)
+        for (provider in providers) {
+            try {
+                val l = locationManager.getLastKnownLocation(provider) ?: continue
+                if (bestLocation == null || l.accuracy < bestLocation.accuracy) {
+                    bestLocation = l
+                }
+            } catch (e: SecurityException) { }
+        }
+
+        if (bestLocation != null) {
+            onLocationFetched(bestLocation)
+        } else {
+            // Request single location update
+            val provider = when {
+                isGpsEnabled -> LocationManager.GPS_PROVIDER
+                isNetworkEnabled -> LocationManager.NETWORK_PROVIDER
+                else -> null
+            }
+            if (provider != null) {
+                try {
+                    Toast.makeText(this, "Fetching current location GPS coordinates...", Toast.LENGTH_SHORT).show()
+                    locationManager.requestSingleUpdate(provider, object : android.location.LocationListener {
+                        override fun onLocationChanged(location: Location) {
+                            onLocationFetched(location)
+                        }
+                        override fun onStatusChanged(provider: String?, status: Int, extras: Bundle?) {}
+                        override fun onProviderEnabled(provider: String) {}
+                        override fun onProviderDisabled(provider: String) {}
+                    }, Looper.getMainLooper())
+                } catch (e: SecurityException) {
+                    Toast.makeText(this, "Security error getting location", Toast.LENGTH_SHORT).show()
+                }
+            } else {
+                Toast.makeText(this, "Unable to find location provider", Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+
+    private fun onLocationFetched(location: Location) {
+        val lat = location.latitude
+        val lng = location.longitude
+
+        // Run blocking network Geocoder in a background thread to prevent NetworkOnMainThreadException crashes
+        Thread {
+            try {
+                val geocoder = android.location.Geocoder(this, java.util.Locale.getDefault())
+                val addresses = geocoder.getFromLocation(lat, lng, 1)
+                runOnUiThread {
+                    if (addresses != null && addresses.isNotEmpty()) {
+                        val address = addresses[0]
+                        val addressLines = mutableListOf<String>()
+                        for (i in 0..address.maxAddressLineIndex) {
+                            addressLines.add(address.getAddressLine(i))
+                        }
+                        val fullAddress = addressLines.joinToString(", ")
+                        activeDialogEditTextDetail?.setText(fullAddress)
+                    } else {
+                        // Fallback to coordinates
+                        activeDialogEditTextDetail?.setText("GPS: ${String.format("%.5f", lat)}, ${String.format("%.5f", lng)}")
+                    }
+                    Toast.makeText(this, "Location auto-filled successfully!", Toast.LENGTH_SHORT).show()
+                }
+            } catch (e: Exception) {
+                // Fallback to coordinates on Geocoder timeout or offline
+                runOnUiThread {
+                    activeDialogEditTextDetail?.setText("GPS: ${String.format("%.5f", lat)}, ${String.format("%.5f", lng)}")
+                    Toast.makeText(this, "Location coordinates auto-filled!", Toast.LENGTH_SHORT).show()
+                }
+            }
+        }.start()
     }
 
     private fun saveNewAddress(item: AddressItem) {
@@ -206,5 +346,6 @@ class SavedAddressActivity : AppCompatActivity() {
 
     companion object {
         private const val REQUEST_CODE_PICK_LOCATION = 1001
+        private const val REQUEST_CODE_LOCATION_PERMISSION = 1002
     }
 }
