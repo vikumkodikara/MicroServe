@@ -88,10 +88,7 @@ class PostAdsActivity : AppCompatActivity() {
     }
 
     private fun setupSpinner() {
-        val categories = arrayOf("-Select-", "Plumbing", "Electrical", "House Painting", "Carpentry", "Cleaning")
-        val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, categories)
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-        binding.categorySpinner.adapter = adapter
+        ServiceCategorySpinnerAdapter.attach(binding.categorySpinner, this)
     }
 
     private fun setupPreviousPostsList() {
@@ -255,13 +252,13 @@ class PostAdsActivity : AppCompatActivity() {
     }
 
     private fun postAd() {
-        val category = binding.categorySpinner.selectedItem?.toString().orEmpty()
+        val category = ServiceCategorySpinnerAdapter.selectedStoreKey(binding.categorySpinner)
         val providerName = binding.providerNameET.text.toString().trim()
         val contact = binding.contactET.text.toString().trim()
         val email = binding.emailET.text.toString().trim()
 
         when {
-            category == "-Select-" -> toast(getString(R.string.post_ads_select_category))
+            category.isNullOrBlank() -> toast(getString(R.string.post_ads_select_category))
             providerName.isBlank() -> toast(getString(R.string.post_ads_enter_provider))
             selectedLocation == null -> toast(getString(R.string.post_ads_pick_map_location))
             contact.isBlank() -> toast(getString(R.string.post_ads_enter_contact))
