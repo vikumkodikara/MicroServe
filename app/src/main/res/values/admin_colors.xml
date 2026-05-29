@@ -26,4 +26,8 @@
     
     <!-- Shadow tint -->
     <color name="shadow_dark">#1A000000</color>
+
+    <!-- Star rating colors -->
+    <color name="star_gold">#FFD700</color>
+    <color name="star_unselected">#E0E0E0</color>
 </resources>

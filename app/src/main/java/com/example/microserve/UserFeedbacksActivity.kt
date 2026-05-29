@@ -69,7 +69,7 @@ class UserFeedbacksActivity : AppCompatActivity() {
             )
             for (i in stars.indices) {
                 stars[i].setColorFilter(
-                    if (i < fb.rating) 0xFF4a4458.toInt() else 0xFFCCCCCC.toInt()
+                    if (i < fb.rating) 0xFFFFD700.toInt() else 0xFFE0E0E0.toInt()
                 )
             }
 
