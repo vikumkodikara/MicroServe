@@ -259,4 +259,70 @@
     <string name="card_number">**** **** **** 4589</string>
     <string name="card_expiry">Expires 12/26</string>
 
+    <!-- UI Buttons and Labels -->
+    <string name="btn_edit">Edit</string>
+    <string name="btn_requests">Requests</string>
+    <string name="edit">Edit</string>
+    <string name="delete_request">Delete Request</string>
+    <string name="submit_request">Submit Request</string>
+    <string name="action_ok">OK</string>
+
+    <!-- Post Ads (unique entries) -->
+    <string name="post_ads_cancel_image">Cancel</string>
+    <string name="post_ads_use_photo">Use Photo</string>
+    <string name="post_ads_image_load_failed">Failed to load image</string>
+    <string name="post_ads_adjust_image_hint">Pinch to zoom / Drag to move</string>
+
+    <!-- Categories -->
+    <string name="category_label">Service Category</string>
+    <string name="section_category">Category</string>
+    <string name="category_carpentry">Carpentry</string>
+    <string name="category_cleaning">Cleaning</string>
+    <string name="category_electric">Electric</string>
+    <string name="category_gardening">Gardening</string>
+    <string name="category_handyman">Handyman</string>
+    <string name="category_hvac">HVAC</string>
+    <string name="category_mechanic">Mechanic</string>
+    <string name="category_painting">Painting</string>
+    <string name="category_plumbing">Plumbing</string>
+
+    <!-- Help Section -->
+    <string name="get_help_title">Get Help</string>
+    <string name="help_subtitle">How can we help you?</string>
+    <string name="search_help_hint">Search help</string>
+    <string name="help_bookings">Bookings</string>
+    <string name="help_payments">Payments</string>
+    <string name="help_account">Account</string>
+    <string name="help_safety_legal">Safety &amp; Legal</string>
+    <string name="help_still_need">Still need help?</string>
+    <string name="help_call_hotline">Call Hotline</string>
+    <string name="help_live_chat">Live Chat</string>
+
+    <!-- Labels and Titles -->
+    <string name="personal_info_title">Personal Info</string>
+    <string name="enter_your_name_label">Name</string>
+    <string name="title_label">Title</string>
+    <string name="contact_label">Contact</string>
+    <string name="description_label">Description</string>
+    <string name="title_my_service">My Service</string>
+    <string name="service_main_title">Services</string>
+    <string name="title_requests">Requests</string>
+    <string name="request_main_title">Requests</string>
+    <string name="my_service_requests">My Service Requests</string>
+    <string name="section_my_requests">My Requests</string>
+    <string name="no_requests_yet">No requests yet</string>
+    <string name="services_at_door">Services at Door</string>
+    <string name="request_a_service">Request a Service</string>
+    <string name="request_service_title">Request a Service</string>
+    <string name="request_service_hint_name">Your name</string>
+    <string name="request_service_hint_title">Service title</string>
+    <string name="request_service_hint_contact">Contact number</string>
+    <string name="request_service_hint_location">Your location</string>
+    <string name="request_service_hint_description">Describe your need</string>
+
+    <!-- Policies -->
+    <string name="privacy_policy_title">Privacy Policy</string>
+    <string name="terms_of_service_title">Terms of Service</string>
+    <string name="i_agree">I agree</string>
+
 </resources>
