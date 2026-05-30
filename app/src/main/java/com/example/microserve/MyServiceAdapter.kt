@@ -44,8 +44,9 @@ class MyServiceAdapter(
             holder.txtServiceTitle.visibility = View.INVISIBLE
             holder.btnActivate.visibility = View.INVISIBLE
 
-            holder.itemView.setOnClickListener {
-                onItemClick(service)
+            holder.imgAdd.setOnClickListener {
+                val intent = android.content.Intent(context, PostServiceActivity::class.java)
+                context.startActivity(intent)
             }
         } else {
             // Show service card
