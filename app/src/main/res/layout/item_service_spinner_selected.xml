@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center_vertical"
+    android:minHeight="52dp"
+    android:orientation="horizontal"
+    android:paddingHorizontal="4dp">
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/spinnerItemIconCard"
+        android:layout_width="36dp"
+        android:layout_height="36dp"
+        app:cardBackgroundColor="#F3EEFC"
+        app:cardCornerRadius="10dp"
+        app:cardElevation="0dp"
+        app:strokeColor="#E0D6F5"
+        app:strokeWidth="1dp">
+
+        <ImageView
+            android:id="@+id/spinnerItemIcon"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:importantForAccessibility="no"
+            android:padding="6dp"
+            android:scaleType="fitCenter"
+            tools:src="@drawable/plumber" />
+    </com.google.android.material.card.MaterialCardView>
+
+    <TextView
+        android:id="@+id/spinnerItemLabel"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="12dp"
+        android:layout_weight="1"
+        android:ellipsize="end"
+        android:fontFamily="sans-serif-medium"
+        android:maxLines="1"
+        android:textColor="@color/admin_text_primary"
+        android:textSize="15sp"
+        tools:text="Plumbing" />
+
+</LinearLayout>
