@@ -87,7 +87,25 @@
                 android:layout_height="wrap_content"
                 android:background="@drawable/bg_card"
                 android:padding="12dp"
+                android:hint="Enter location or pick from map"
                 android:layout_marginTop="8dp" />
+
+            <!-- Map picker button — matches the UI mockup -->
+            <Button
+                android:id="@+id/btnSelectMap"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:layout_marginTop="8dp"
+                android:background="@drawable/bg_card"
+                android:drawableStart="@drawable/ic_location"
+                android:drawablePadding="8dp"
+                android:gravity="center"
+                android:paddingHorizontal="16dp"
+                android:text="Select exact place on map"
+                android:textAllCaps="false"
+                android:textColor="@color/purple_nav"
+                android:textSize="14sp"
+                style="?android:attr/borderlessButtonStyle" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -97,12 +115,18 @@
                 android:textColor="@color/black"
                 android:layout_marginTop="16dp"/>
 
+            <!-- Date field — click-only, DatePickerDialog opens on tap -->
             <EditText
                 android:id="@+id/etDate"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/bg_card"
                 android:padding="12dp"
+                android:hint="dd/MM/yyyy"
+                android:focusable="false"
+                android:focusableInTouchMode="false"
+                android:cursorVisible="false"
+                android:inputType="none"
                 android:layout_marginTop="8dp" />
 
             <TextView
