@@ -117,6 +117,7 @@ class MainActivity : AppCompatActivity() {
                     startActivity(Intent(this, PostServiceActivity::class.java))
                 } else {
                     val intent = Intent(this, EditServiceActivity::class.java)
+                    intent.putExtra("SERVICE_ID", selectedService.serviceId)
                     startActivity(intent)
                 }
             }
