@@ -190,6 +190,31 @@ object UserRepository {
             }
     }
 
+    fun getPhoneByUid(
+        uid: String,
+        onSuccess: (String) -> Unit,
+        onFailure: (String) -> Unit = {}
+    ) {
+        if (uid.isBlank()) {
+            onFailure("User not found")
+            return
+        }
+        firestore.collection(UserProfile.COLLECTION)
+            .document(uid)
+            .get()
+            .addOnSuccessListener { doc ->
+                val phone = doc.getString(UserProfile.FIELD_PHONE).orEmpty().trim()
+                if (phone.isBlank()) {
+                    onFailure("Phone not available")
+                } else {
+                    onSuccess(phone)
+                }
+            }
+            .addOnFailureListener { error ->
+                onFailure(error.localizedMessage ?: "Failed to load contact")
+            }
+    }
+
     fun syncProfileToUserStore(context: Context, profile: UserProfile) {
         val existing = UserStore.getAllUsers(context)
             .firstOrNull { it.email.equals(profile.email, ignoreCase = true) }

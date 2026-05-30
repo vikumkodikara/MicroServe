@@ -42,7 +42,7 @@ class RequestDetailActivity : AppCompatActivity() {
         setupWindowInsets()
         binding.backBtn.setOnClickListener { finish() }
         binding.bidButton.setOnClickListener { openPlaceBid() }
-        binding.proceedPaymentButton.setOnClickListener { proceedPayment() }
+        binding.proceedPaymentButton.setOnClickListener { openBill() }
         binding.finishedButton.setOnClickListener { markFinished() }
     }
 
@@ -190,7 +190,7 @@ class RequestDetailActivity : AppCompatActivity() {
             bid = bid,
             onSuccess = {
                 Toast.makeText(this, R.string.bid_selected_success, Toast.LENGTH_SHORT).show()
-                processPaymentForSelectedBid(request, bid, requesterUid)
+                openBill(bid.providerName, request.category)
             },
             onFailure = { message ->
                 Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
@@ -198,127 +198,13 @@ class RequestDetailActivity : AppCompatActivity() {
         )
     }
 
-    private fun processPaymentForSelectedBid(request: ServiceRequest, bid: Bid, requesterUid: String) {
-        PointsRepository.getBalance(
-            uid = requesterUid,
-            onSuccess = { balance ->
-                if (balance < bid.points) {
-                    Toast.makeText(this, R.string.insufficient_points, Toast.LENGTH_LONG).show()
-                    startActivity(Intent(this, WalletActivity::class.java))
-                    return@getBalance
-                }
-
-                PointsRepository.processEscrowPayment(
-                    requesterUid = requesterUid,
-                    amount = bid.points,
-                    onSuccess = {
-                        val transaction = ServiceTransaction(
-                            requestId = request.id,
-                            requestTitle = request.title,
-                            requesterUid = requesterUid,
-                            requesterName = request.requesterName,
-                            providerUid = bid.providerUid,
-                            providerName = bid.providerName,
-                            providerCode = ServiceTransaction.generateProviderCode(bid.providerUid),
-                            amount = bid.points
-                        )
-                        TransactionRepository.createEscrowTransaction(
-                            transaction = transaction,
-                            onSuccess = { created ->
-                                ServiceRequestRepository.update(
-                                    requestId = request.id,
-                                    fields = mapOf(
-                                        ServiceRequest.FIELD_STATUS to ServiceRequestStatus.IN_PROGRESS,
-                                        ServiceRequest.FIELD_TRANSACTION_ID to created.id
-                                    ),
-                                    onSuccess = {
-                                        Toast.makeText(
-                                            this,
-                                            R.string.provider_selected_payment_success,
-                                            Toast.LENGTH_LONG
-                                        ).show()
-                                    },
-                                    onFailure = { message ->
-                                        Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
-                                    }
-                                )
-                            },
-                            onFailure = { message ->
-                                Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
-                            }
-                        )
-                    },
-                    onFailure = { message ->
-                        Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
-                    }
-                )
-            },
-            onFailure = { message ->
-                Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
-            }
-        )
-    }
-
-    private fun proceedPayment() {
+    private fun openBill(providerName: String? = null, category: String? = null) {
         val request = currentRequest ?: return
-        if (request.acceptedPoints <= 0 || request.acceptedProviderUid.isBlank()) {
-            Toast.makeText(this, R.string.select_bid_first, Toast.LENGTH_SHORT).show()
-            return
-        }
-
-        val uid = auth.currentUser?.uid ?: return
-        PointsRepository.getBalance(
-            uid = uid,
-            onSuccess = { balance ->
-                if (balance < request.acceptedPoints) {
-                    Toast.makeText(this, R.string.insufficient_points, Toast.LENGTH_LONG).show()
-                    startActivity(Intent(this, WalletActivity::class.java))
-                    return@getBalance
-                }
-
-                PointsRepository.processEscrowPayment(
-                    requesterUid = uid,
-                    amount = request.acceptedPoints,
-                    onSuccess = {
-                        val transaction = ServiceTransaction(
-                            requestId = request.id,
-                            requestTitle = request.title,
-                            requesterUid = uid,
-                            requesterName = request.requesterName,
-                            providerUid = request.acceptedProviderUid,
-                            providerName = request.acceptedProviderName,
-                            providerCode = ServiceTransaction.generateProviderCode(request.acceptedProviderUid),
-                            amount = request.acceptedPoints
-                        )
-                        TransactionRepository.createEscrowTransaction(
-                            transaction = transaction,
-                            onSuccess = { created ->
-                                ServiceRequestRepository.update(
-                                    requestId = request.id,
-                                    fields = mapOf(
-                                        ServiceRequest.FIELD_STATUS to ServiceRequestStatus.IN_PROGRESS,
-                                        ServiceRequest.FIELD_TRANSACTION_ID to created.id
-                                    ),
-                                    onSuccess = {
-                                        Toast.makeText(this, R.string.payment_success, Toast.LENGTH_SHORT).show()
-                                    },
-                                    onFailure = { message ->
-                                        Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
-                                    }
-                                )
-                            },
-                            onFailure = { message ->
-                                Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
-                            }
-                        )
-                    },
-                    onFailure = { message ->
-                        Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
-                    }
-                )
-            },
-            onFailure = { message ->
-                Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
+        startActivity(
+            Intent(this, BillActivity::class.java).apply {
+                putExtra("REQUEST_ID", request.id)
+                putExtra("PROVIDER_NAME", providerName ?: request.acceptedProviderName)
+                putExtra("CATEGORY", category ?: request.category)
             }
         )
     }

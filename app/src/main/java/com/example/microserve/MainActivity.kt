@@ -202,42 +202,6 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setupBottomNavigation() {
-        val navRequest = findViewById<View>(R.id.navTabRequest)
-        val navService = findViewById<View>(R.id.navTabService)
-        val navHome = findViewById<View>(R.id.navTabHome)
-        val navPost = findViewById<View>(R.id.navTabPost)
-        val navProfile = findViewById<View>(R.id.navTabProfile)
-
-        navRequest?.setOnClickListener {
-            startActivity(Intent(this, RequestMainActivity::class.java).apply {
-                flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
-            })
-            @Suppress("DEPRECATION")
-            overridePendingTransition(0, 0)
-        }
-
-        navService?.setOnClickListener {
-            // Already in Service Activity (MainActivity)
-        }
-
-        navHome?.setOnClickListener {
-            navigateHome()
-        }
-
-        navPost?.setOnClickListener {
-            startActivity(Intent(this, PostAdsActivity::class.java).apply {
-                flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
-            })
-            @Suppress("DEPRECATION")
-            overridePendingTransition(0, 0)
-        }
-
-        navProfile?.setOnClickListener {
-            startActivity(Intent(this, PersonalInfoActivity::class.java).apply {
-                flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
-            })
-            @Suppress("DEPRECATION")
-            overridePendingTransition(0, 0)
-        }
+        HomeBottomNavHelper.setup(this, HomeBottomNavHelper.TAB_SERVICE)
     }
 }
