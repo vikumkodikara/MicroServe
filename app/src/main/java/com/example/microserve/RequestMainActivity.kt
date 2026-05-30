@@ -103,10 +103,23 @@ class RequestMainActivity : AppCompatActivity() {
                 "${req.city} • ${req.status.replace('_', ' ')}"
 
             item.setOnClickListener {
-                startActivity(
-                    Intent(this, RequestDetailActivity::class.java)
-                        .putExtra(RequestDetailActivity.EXTRA_REQUEST_ID, req.id)
-                )
+                when (req.status) {
+                    ServiceRequestStatus.BID_SELECTED,
+                    ServiceRequestStatus.IN_PROGRESS,
+                    ServiceRequestStatus.PROVIDER_DONE,
+                    ServiceRequestStatus.REQUESTER_CONFIRMED,
+                    ServiceRequestStatus.ADMIN_APPROVED -> startActivity(
+                        Intent(this, BillActivity::class.java).apply {
+                            putExtra("REQUEST_ID",    req.id)
+                            putExtra("PROVIDER_NAME", req.acceptedProviderName)
+                            putExtra("CATEGORY",      req.category.ifBlank { req.title })
+                        }
+                    )
+                    else -> startActivity(
+                        Intent(this, RequestDetailActivity::class.java)
+                            .putExtra(RequestDetailActivity.EXTRA_REQUEST_ID, req.id)
+                    )
+                }
             }
 
             val editButton = item.findViewById<View>(R.id.btn_edit)

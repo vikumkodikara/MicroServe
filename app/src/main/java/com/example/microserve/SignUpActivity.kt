@@ -1,5 +1,6 @@
 package com.example.microserve
 
+import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
 import android.util.Patterns
@@ -7,8 +8,6 @@ import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
 import com.example.microserve.databinding.ActivitySignUpBinding
 import com.google.firebase.FirebaseNetworkException
 import com.google.firebase.auth.FirebaseAuth
@@ -72,7 +71,7 @@ class SignUpActivity : AppCompatActivity() {
                 val user = result.user
                 if (user == null) {
                     setLoading(false)
-                    toast(getString(R.string.sign_up_error_generic))
+                    toast("Sign up failed")
                     return@addOnSuccessListener
                 }
 
@@ -87,10 +86,8 @@ class SignUpActivity : AppCompatActivity() {
                 UserRepository.saveProfile(
                     context = this,
                     profile = profile,
-                    persistSession = false,
                     onSuccess = { completeSignUpAndReturnToLogin(email) },
                     onFailure = {
-                        // Auth account exists; still send user to log in manually.
                         completeSignUpAndReturnToLogin(email)
                     }
                 )
@@ -100,9 +97,7 @@ class SignUpActivity : AppCompatActivity() {
                 val message = when (error) {
                     is FirebaseAuthUserCollisionException -> getString(R.string.sign_up_error_email_in_use)
                     is FirebaseNetworkException -> getString(R.string.sign_up_error_network)
-                    else -> AuthErrorHelper.loginMessage(this, error)
-                        .takeUnless { it == getString(R.string.login_error_wrong_credentials) }
-                        ?: getString(R.string.sign_up_error_generic)
+                    else -> error.localizedMessage ?: "Sign up failed"
                 }
                 toast(message)
             }
@@ -110,7 +105,6 @@ class SignUpActivity : AppCompatActivity() {
 
     private fun completeSignUpAndReturnToLogin(email: String) {
         auth.signOut()
-        SessionNavigator.clearAuth(this)
         setLoading(false)
         showAccountCreatedDialog(email)
     }
@@ -122,7 +116,7 @@ class SignUpActivity : AppCompatActivity() {
             .setTitle(R.string.sign_up_success_title)
             .setMessage(R.string.sign_up_success)
             .setCancelable(false)
-            .setPositiveButton(R.string.action_ok) { dialog, _ ->
+            .setPositiveButton(R.string.action_ok) { dialog: DialogInterface, _ ->
                 dialog.dismiss()
                 goToLogin(prefillEmail = email)
             }
@@ -133,7 +127,7 @@ class SignUpActivity : AppCompatActivity() {
         val intent = Intent(this, LoginActivity::class.java).apply {
             addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP)
             if (!prefillEmail.isNullOrBlank()) {
-                putExtra(LoginActivity.EXTRA_PREFILL_EMAIL, prefillEmail)
+                putExtra("prefill_email", prefillEmail)
             }
         }
         startActivity(intent)
