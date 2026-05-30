@@ -78,9 +78,6 @@ class Homepage : AppCompatActivity() {
         binding.homeJobsRecyclerView.visibility = if (hasJobs) View.VISIBLE else View.GONE
     }
 
-    /**
-     * Loads the logged-in user's name and profile photo from session.
-     */
     private fun setupUserProfile() {
         val name = AppPreferences.getSessionName(this)
         val displayName = if (name.isNotBlank()) name else "User"
@@ -111,9 +108,6 @@ class Homepage : AppCompatActivity() {
         }
     }
 
-    /**
-     * Creates a circular drawable with the user's initial letter.
-     */
     private fun buildInitialsDrawable(name: String): Drawable {
         val initial = name.firstOrNull()?.uppercaseChar()?.toString() ?: "U"
         val colors = intArrayOf(
@@ -153,9 +147,6 @@ class Homepage : AppCompatActivity() {
         }
     }
 
-    /**
-     * Blows up the soft tool watermark so it reads clearly in the shallow banner strip.
-     */
     private fun setupBannerToolsWatermarkScale() {
         binding.bannerToolsBackdrop.doOnLayout {
             val iv = binding.bannerToolsBackdrop
@@ -176,9 +167,18 @@ class Homepage : AppCompatActivity() {
     }
 
     private fun setupWindowInsets() {
-        binding.main.applyHorizontalSystemBarInsets()
-        binding.headerFrame.applyStatusBarTopInset()
-        applyNavBarSpacer(R.id.navSystemBarSpacer)
+        ViewCompat.setOnApplyWindowInsetsListener(binding.main) { v, insets ->
+            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
+            v.setPadding(systemBars.left, 0, systemBars.right, 0)
+            findViewById<View>(R.id.navSystemBarSpacer)?.let { spacer ->
+                val lp = spacer.layoutParams
+                if (lp.height != systemBars.bottom) {
+                    lp.height = systemBars.bottom
+                    spacer.layoutParams = lp
+                }
+            }
+            insets
+        }
     }
 
     private fun setupDate() {
@@ -272,7 +272,7 @@ class Homepage : AppCompatActivity() {
         if (!isMenuOpen) return
         isMenuOpen = false
 
-        window.decorView.setBackgroundColor(android.graphics.Color.parseColor("#F8F9FA"))
+        window.decorView.setBackgroundColor(android.graphics.Color.WHITE)
 
         val card = binding.mainContentCard
         val back = binding.backShadowCard
