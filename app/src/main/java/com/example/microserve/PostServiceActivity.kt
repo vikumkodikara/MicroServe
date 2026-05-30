@@ -40,8 +40,7 @@ class PostServiceActivity : AppCompatActivity() {
         SystemUiHelper.setupPurpleHeaderScreen(
             activity = this,
             root = binding.main,
-            headerView = binding.headerContainer,
-            footerBar = binding.footerBar.root
+            headerView = binding.headerContainer
         )
     }
 
