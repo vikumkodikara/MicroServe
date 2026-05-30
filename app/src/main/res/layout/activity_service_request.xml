@@ -73,24 +73,105 @@
                 android:padding="12dp"
                 android:layout_marginTop="8dp" />
 
+            <!-- ── Location Section — Province / District / City (same as PostServiceActivity) ── -->
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Location:"
+                android:text="Location"
                 android:textStyle="bold"
                 android:textColor="@color/black"
-                android:layout_marginTop="16dp"/>
+                android:textSize="16sp"
+                android:layout_marginTop="16dp" />
 
-            <EditText
-                android:id="@+id/etLocation"
+            <!-- White card containing the three cascading spinners -->
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
                 android:background="@drawable/bg_card"
-                android:padding="12dp"
-                android:hint="Enter location or pick from map"
-                android:layout_marginTop="8dp" />
+                android:elevation="2dp"
+                android:orientation="vertical"
+                android:padding="16dp">
 
-            <!-- Map picker button — outlined pill style matching the UI mockup -->
+                <!-- Province row -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:layout_marginBottom="12dp">
+
+                    <TextView
+                        android:layout_width="70dp"
+                        android:layout_height="wrap_content"
+                        android:text="Province"
+                        android:textColor="@color/black"
+                        android:textSize="14sp"
+                        android:textStyle="bold" />
+
+                    <Spinner
+                        android:id="@+id/spinnerProvince"
+                        android:layout_width="0dp"
+                        android:layout_height="40dp"
+                        android:layout_marginStart="12dp"
+                        android:layout_weight="1"
+                        android:background="@drawable/bg_card"
+                        android:paddingHorizontal="8dp" />
+                </LinearLayout>
+
+                <!-- District row -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:layout_marginBottom="12dp">
+
+                    <TextView
+                        android:layout_width="70dp"
+                        android:layout_height="wrap_content"
+                        android:text="District"
+                        android:textColor="@color/black"
+                        android:textSize="14sp"
+                        android:textStyle="bold" />
+
+                    <Spinner
+                        android:id="@+id/spinnerDistrict"
+                        android:layout_width="0dp"
+                        android:layout_height="40dp"
+                        android:layout_marginStart="12dp"
+                        android:layout_weight="1"
+                        android:background="@drawable/bg_card"
+                        android:paddingHorizontal="8dp" />
+                </LinearLayout>
+
+                <!-- City row -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="70dp"
+                        android:layout_height="wrap_content"
+                        android:text="City"
+                        android:textColor="@color/black"
+                        android:textSize="14sp"
+                        android:textStyle="bold" />
+
+                    <Spinner
+                        android:id="@+id/spinnerCity"
+                        android:layout_width="0dp"
+                        android:layout_height="40dp"
+                        android:layout_marginStart="12dp"
+                        android:layout_weight="1"
+                        android:background="@drawable/bg_card"
+                        android:paddingHorizontal="8dp" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <!-- Map button — outlined pill, sits below spinners (same position as PostServiceActivity) -->
             <Button
                 android:id="@+id/btnSelectMap"
                 android:layout_width="match_parent"
@@ -106,6 +187,22 @@
                 android:textColor="@color/purple_nav"
                 android:textSize="14sp"
                 style="?android:attr/borderlessButtonStyle" />
+
+            <!-- Hidden field: stores GPS/map-picked address to fill spinners or override location string -->
+            <EditText
+                android:id="@+id/etLocation"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/bg_card"
+                android:padding="12dp"
+                android:hint="Select province, district, and city first"
+                android:focusable="false"
+                android:focusableInTouchMode="false"
+                android:cursorVisible="false"
+                android:inputType="none"
+                android:layout_marginTop="4dp"
+                android:textColor="@color/black"
+                android:textSize="13sp" />
 
 
             <TextView
