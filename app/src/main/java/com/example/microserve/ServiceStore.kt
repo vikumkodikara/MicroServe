@@ -224,7 +224,7 @@ object ServiceStore {
         // Sync to Firestore
         firestore.collection(COLLECTION)
             .document(serviceId)
-            .set(newService.toMap())
+            .set(newService.toMap(), com.google.firebase.firestore.SetOptions.merge())
             .addOnSuccessListener { Log.d(TAG, "Service created in Firestore: $serviceId") }
             .addOnFailureListener { Log.w(TAG, "Failed to create service in Firestore", it) }
 
@@ -280,7 +280,7 @@ object ServiceStore {
             updatedService?.let { svc ->
                 firestore.collection(COLLECTION)
                     .document(serviceId)
-                    .set(svc.toMap())
+                    .set(svc.toMap(), com.google.firebase.firestore.SetOptions.merge())
                     .addOnSuccessListener { Log.d(TAG, "Service updated in Firestore: $serviceId") }
                     .addOnFailureListener { Log.w(TAG, "Failed to update service in Firestore", it) }
             }

@@ -301,7 +301,7 @@ class PostServiceActivity : AppCompatActivity() {
                     val userPhone = AppPreferences.getSessionPhone(this)
                     val location = "$city, $district, $province"
 
-                    ServiceStore.addService(
+                    val service = ServiceStore.addService(
                         context = this,
                         category = category,
                         providerName = userName,
@@ -310,6 +310,24 @@ class PostServiceActivity : AppCompatActivity() {
                         email = userEmail,
                         ownerUid = uid
                     )
+
+                    val selectedDays = listOf(
+                        binding.daySun, binding.dayMon, binding.dayTue,
+                        binding.dayWed, binding.dayThu, binding.dayFri, binding.daySat
+                    ).filter { it.isSelected }.joinToString(",") { it.text.toString() }
+
+                    val extraUpdates = mapOf(
+                        "interiorCount" to interiorCount,
+                        "exteriorCount" to exteriorCount,
+                        "startTime" to binding.startTimeBtn.text.toString(),
+                        "endTime" to binding.endTimeBtn.text.toString(),
+                        "selectedDays" to selectedDays
+                    )
+
+                    com.google.firebase.firestore.FirebaseFirestore.getInstance()
+                        .collection("services")
+                        .document(service.id)
+                        .set(extraUpdates, com.google.firebase.firestore.SetOptions.merge())
 
                     showToast("Service Posted Successfully!")
                     finish()
