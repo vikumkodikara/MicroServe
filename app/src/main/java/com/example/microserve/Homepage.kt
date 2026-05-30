@@ -17,13 +17,6 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
-<<<<<<< HEAD
-import com.example.microserve.databinding.ActivityAdminDashboardBinding
-
-class Homepage : AppCompatActivity() {
-
-    private lateinit var binding: ActivityAdminDashboardBinding
-=======
 import androidx.core.view.doOnLayout
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
@@ -38,35 +31,44 @@ class Homepage : AppCompatActivity() {
     private lateinit var homeJobAdapter: HomeJobDoneAdapter
     private var isMenuOpen = false
     private var screenWidth = 0f
->>>>>>> 7c9bacd239e9fa49224e9cf534725a6110a122fe
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
 
-        binding = ActivityAdminDashboardBinding.inflate(layoutInflater)
+        binding = ActivityHomeBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         screenWidth = resources.displayMetrics.widthPixels.toFloat()
 
         setupWindowInsets()
-<<<<<<< HEAD
-        setupQuickActions()
-        AdminBottomNavHelper.setup(this, AdminBottomNavHelper.TAB_HOME)
+        setupUserProfile()
+        setupJobsScroll()
+        setupPreviouslyDoneJobsList()
+        setupDate()
+        setupBannerToolsWatermarkScale()
+        setupClickListeners()
+        setupSideMenu()
+        loadPreviouslyDoneJobs()
+        HomeBottomNavHelper.setup(this, HomeBottomNavHelper.TAB_HOME)
 
-        // Seed dummy data and bind stats
+        // Seed dummy transaction data for admin dashboard demo
         seedDummyTransactionsIfNeeded()
-        bindDashboardStats()
     }
 
     override fun onResume() {
         super.onResume()
-        bindDashboardStats()
+        if (::binding.isInitialized) {
+            setupUserProfile()
+            loadPreviouslyDoneJobs()
+        }
     }
 
+    // ── Dummy Data Seeding ──────────────────────────────────────────────
+
     /**
-     * Seeds 5 dummy transactions (3 success + 2 pending) so the dashboard
-     * and Transactions page show working data out of the box.
+     * Seeds 5 dummy transactions (3 success + 2 pending) so the admin
+     * dashboard and Transactions page show working data out of the box.
      */
     private fun seedDummyTransactionsIfNeeded() {
         val existing = TransactionStore.getAllTransactions(this)
@@ -130,36 +132,7 @@ class Homepage : AppCompatActivity() {
         )
     }
 
-    /**
-     * Binds the Completed count and Revenue values to the dashboard stat cards.
-     */
-    private fun bindDashboardStats() {
-        val completedCount = TransactionStore.getSuccessCount(this)
-        val totalRevenue = TransactionStore.getTotalSuccessAmount(this)
-        val pendingCount = TransactionStore.getPendingTransactions(this).size
-
-        binding.completedCount.text = completedCount.toString()
-        binding.revenueCount.text = TransactionStore.formatAmount(totalRevenue)
-        binding.requestsCount.text = pendingCount.toString()
-=======
-        setupUserProfile()
-        setupJobsScroll()
-        setupPreviouslyDoneJobsList()
-        setupDate()
-        setupBannerToolsWatermarkScale()
-        setupClickListeners()
-        setupSideMenu()
-        loadPreviouslyDoneJobs()
-        HomeBottomNavHelper.setup(this, HomeBottomNavHelper.TAB_HOME)
-    }
-
-    override fun onResume() {
-        super.onResume()
-        if (::binding.isInitialized) {
-            setupUserProfile()
-            loadPreviouslyDoneJobs()
-        }
-    }
+    // ── Previously Done Jobs ────────────────────────────────────────────
 
     private fun setupPreviouslyDoneJobsList() {
         homeJobAdapter = HomeJobDoneAdapter()
@@ -177,6 +150,8 @@ class Homepage : AppCompatActivity() {
         binding.tvNoHomeJobs.visibility = if (hasJobs) View.GONE else View.VISIBLE
         binding.homeJobsRecyclerView.visibility = if (hasJobs) View.VISIBLE else View.GONE
     }
+
+    // ── User Profile ────────────────────────────────────────────────────
 
     private fun setupUserProfile() {
         val name = AppPreferences.getSessionName(this)
@@ -247,6 +222,8 @@ class Homepage : AppCompatActivity() {
         }
     }
 
+    // ── UI Setup ────────────────────────────────────────────────────────
+
     private fun setupBannerToolsWatermarkScale() {
         binding.bannerToolsBackdrop.doOnLayout {
             val iv = binding.bannerToolsBackdrop
@@ -264,16 +241,12 @@ class Homepage : AppCompatActivity() {
             binding.scrollView.dispatchTouchEvent(event)
             true
         }
->>>>>>> 7c9bacd239e9fa49224e9cf534725a6110a122fe
     }
 
     private fun setupWindowInsets() {
         ViewCompat.setOnApplyWindowInsetsListener(binding.main) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, 0, systemBars.right, 0)
-<<<<<<< HEAD
-            binding.headerFrame.setPadding(0, systemBars.top, 0, 0)
-=======
             findViewById<View>(R.id.navSystemBarSpacer)?.let { spacer ->
                 val lp = spacer.layoutParams
                 if (lp.height != systemBars.bottom) {
@@ -281,19 +254,10 @@ class Homepage : AppCompatActivity() {
                     spacer.layoutParams = lp
                 }
             }
->>>>>>> 7c9bacd239e9fa49224e9cf534725a6110a122fe
             insets
         }
     }
 
-<<<<<<< HEAD
-    private fun setupQuickActions() {
-        binding.quickRequestsBtn.setOnClickListener {
-            startActivity(Intent(this, RequestersActivity::class.java))
-        }
-        binding.quickServicesBtn.setOnClickListener {
-            startActivity(Intent(this, ServicesActivity::class.java))
-=======
     private fun setupDate() {
         val dateFormat = SimpleDateFormat("EEEE, dd MMM", Locale.getDefault())
         binding.dateText.text = dateFormat.format(Date())
@@ -306,18 +270,18 @@ class Homepage : AppCompatActivity() {
 
         binding.chipPostService.setOnClickListener {
             startActivity(Intent(this, PostServiceActivity::class.java))
->>>>>>> 7c9bacd239e9fa49224e9cf534725a6110a122fe
         }
-        binding.quickTransactionsBtn.setOnClickListener {
-            startActivity(Intent(this, TransactionsActivity::class.java))
+
+        binding.chipRequestService.setOnClickListener {
+            startActivity(Intent(this, RequestServiceActivity::class.java))
         }
-        binding.quickFeedbacksBtn.setOnClickListener {
-            startActivity(Intent(this, FeedbacksActivity::class.java))
-        }
-        binding.quickUsersBtn.setOnClickListener {
-            startActivity(Intent(this, UsersActivity::class.java))
+
+        binding.chipPostAds.setOnClickListener {
+            startActivity(Intent(this, PostAdsActivity::class.java))
         }
     }
+
+    // ── Side Menu ───────────────────────────────────────────────────────
 
     private fun setupSideMenu() {
         binding.menuBtn.setOnClickListener { openMenu() }
