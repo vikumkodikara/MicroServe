@@ -31,4 +31,29 @@ object CategoryCatalog {
             category.storeKeys.any { it.equals(key, ignoreCase = true) }
         }
     }
+
+    /** Display order and labels for Post Ads / form spinners (matches Request Main). */
+    val spinnerOrder: List<String> = listOf(
+        "plumbing", "gardening", "cleaning", "painting", "electric",
+        "handyman", "carpentry", "mechanic", "hvac"
+    )
+
+    fun categoriesForSpinner(): List<Category> =
+        spinnerOrder.mapNotNull { id -> findById(id) }
+
+    fun spinnerLabel(category: Category): String = when (category.id) {
+        "electric" -> "Electric"
+        "painting" -> "Painting"
+        else -> category.storeKeys.first()
+    }
+
+    fun storeKeyForSpinnerLabel(label: String): String? {
+        val trimmed = label.trim()
+        if (trimmed.isBlank() || trimmed.startsWith("-")) return null
+        return categoriesForSpinner()
+            .firstOrNull { spinnerLabel(it).equals(trimmed, ignoreCase = true) }
+            ?.storeKeys
+            ?.first()
+            ?: findByStoreKey(trimmed)?.storeKeys?.first()
+    }
 }

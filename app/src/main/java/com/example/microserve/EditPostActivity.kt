@@ -65,10 +65,7 @@ class EditPostActivity : AppCompatActivity() {
     }
 
     private fun setupSpinner() {
-        val categories = arrayOf("-Select-", "Plumbing", "Electrical", "House Painting", "Carpentry", "Cleaning")
-        val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, categories)
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-        binding.categorySpinner.adapter = adapter
+        ServiceCategorySpinnerAdapter.attach(binding.categorySpinner, this)
     }
 
     private fun prefillExistingData() {
@@ -94,9 +91,10 @@ class EditPostActivity : AppCompatActivity() {
             binding.imageActionText.text = getString(R.string.post_ads_image_selected)
         }
 
-        val categoryPosition = (0 until binding.categorySpinner.count)
-            .firstOrNull { binding.categorySpinner.getItemAtPosition(it) == defaultCategory }
-            ?: 0
+        val categoryPosition = ServiceCategorySpinnerAdapter.indexForStoreKey(
+            binding.categorySpinner,
+            defaultCategory
+        )
         binding.categorySpinner.setSelection(categoryPosition)
     }
 
@@ -125,7 +123,7 @@ class EditPostActivity : AppCompatActivity() {
                 finish()
                 return@setOnClickListener
             }
-            val category = binding.categorySpinner.selectedItem.toString()
+            val category = ServiceCategorySpinnerAdapter.selectedStoreKey(binding.categorySpinner).orEmpty()
             val name = binding.providerNameET.text.toString().trim()
             val location = binding.locationET.text.toString().trim()
             val contact = binding.contactET.text.toString().trim()
@@ -145,13 +143,13 @@ class EditPostActivity : AppCompatActivity() {
     }
 
     private fun validateFields(): Boolean {
-        val category = binding.categorySpinner.selectedItem.toString()
+        val category = ServiceCategorySpinnerAdapter.selectedStoreKey(binding.categorySpinner)
         val name = binding.providerNameET.text.toString().trim()
         val location = binding.locationET.text.toString().trim()
         val contact = binding.contactET.text.toString().trim()
 
         return when {
-            category == "-Select-" -> {
+            category.isNullOrBlank() -> {
                 showToast("Please select a category")
                 false
             }

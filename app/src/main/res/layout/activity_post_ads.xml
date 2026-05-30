@@ -84,7 +84,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Service Catagory"
+                    android:text="@string/category_label"
                     android:textColor="@color/admin_text_primary"
                     android:textSize="16sp"
                     android:textStyle="bold" />
@@ -92,10 +92,14 @@
                 <Spinner
                     android:id="@+id/categorySpinner"
                     android:layout_width="match_parent"
-                    android:layout_height="48dp"
+                    android:layout_height="52dp"
                     android:layout_marginTop="8dp"
-                    android:background="@drawable/edittext_bg"
-                    android:paddingHorizontal="8dp" />
+                    android:background="@drawable/spinner_service_field_bg"
+                    android:dropDownVerticalOffset="6dp"
+                    android:paddingStart="12dp"
+                    android:paddingEnd="40dp"
+                    android:popupBackground="@drawable/spinner_dropdown_popup_bg"
+                    android:spinnerMode="dropdown" />
 
                 <TextView
                     android:layout_width="wrap_content"
