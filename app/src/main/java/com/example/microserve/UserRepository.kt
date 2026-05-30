@@ -154,6 +154,8 @@ object UserRepository {
                     )
                     syncProfileToUserStore(context, profile)
                     AppPreferences.saveSession(context, profile)
+                    // Download profile photo from Firebase Storage to local cache
+                    ProfilePhotoHelper.downloadFromFirebaseStorage(context, profile.uid)
                     if (profile.role.equals(UserProfile.ROLE_ADMIN, ignoreCase = true)) {
                         onAdminRoute()
                     } else {
