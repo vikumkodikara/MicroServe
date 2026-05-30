@@ -85,7 +85,7 @@ data class ServiceTransaction(
 
         fun formatAmount(amount: Int): String {
             val formatter = DecimalFormat("#,##0")
-            return "Rs. ${formatter.format(amount)}"
+            return "${formatter.format(amount)} M Points"
         }
 
         fun generateProviderCode(userId: String): String {

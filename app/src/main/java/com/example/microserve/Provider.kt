@@ -10,5 +10,6 @@ data class Provider(
     val category: String,
     val services: String = "",
     val priceModel: String = "",
-    val schedule: String = ""
+    val schedule: String = "",
+    val serviceId: String = ""
 ): Serializable

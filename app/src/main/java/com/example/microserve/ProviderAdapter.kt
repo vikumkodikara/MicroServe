@@ -8,9 +8,14 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 
 class ProviderAdapter(
-    private val providers: List<Provider>,
+    private var providers: List<Provider>,
     private val onItemClick: (Provider) -> Unit
 ) : RecyclerView.Adapter<ProviderAdapter.ProviderViewHolder>() {
+
+    fun updateList(newProviders: List<Provider>) {
+        providers = newProviders
+        notifyDataSetChanged()
+    }
 
     class ProviderViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val txtName: TextView = itemView.findViewById(R.id.txtProviderName)
