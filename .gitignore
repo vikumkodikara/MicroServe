@@ -16,3 +16,7 @@ local.properties
 node_modules/
 package-lock.json
 app/google-services.json
+
+# Android Studio local configs
+/.idea/deploymentTargetSelector.xml
+/.idea/deviceManager.xml
