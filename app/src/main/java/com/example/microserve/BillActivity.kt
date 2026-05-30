@@ -1,46 +1,60 @@
 package com.example.microserve
 
 import android.content.Intent
-import android.graphics.Color
-import android.os.Build
+import android.graphics.drawable.GradientDrawable
+import android.net.Uri
 import android.os.Bundle
 import android.view.View
 import android.widget.Button
-import android.widget.CheckBox
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import android.util.Log
+import androidx.core.content.ContextCompat
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.ListenerRegistration
 
 class BillActivity : AppCompatActivity() {
 
     private var requestListener: ListenerRegistration? = null
+    private var balanceListener: ListenerRegistration? = null
+
+    private lateinit var txtBillProvider: TextView
+    private lateinit var txtBillProviderPhone: TextView
+    private lateinit var providerContactRow: View
+    private lateinit var btnCallProvider: View
+    private lateinit var txtBillService: TextView
+    private lateinit var txtBillDescription: TextView
+    private lateinit var txtBillClient: TextView
+    private lateinit var txtBillTotal: TextView
+    private lateinit var txtWalletBalance: TextView
+    private lateinit var walletStrip: View
+    private lateinit var btnNext: Button
+    private lateinit var stepDot1: View
+    private lateinit var stepDot2: View
+    private lateinit var stepDot3: View
+    private lateinit var stepLine1: View
+    private lateinit var stepLine2: View
+    private lateinit var stepLabel1: TextView
+    private lateinit var stepLabel2: TextView
+    private lateinit var stepLabel3: TextView
+
+    private var currentRequest: ServiceRequest? = null
+    private var walletBalance: Int = 0
+    private var cachedProviderPhoneUid: String? = null
+    private var cachedProviderPhone: String = ""
+    private var providerPhoneLoadInProgress = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-            window.setDecorFitsSystemWindows(false)
-            window.statusBarColor = Color.TRANSPARENT
-        } else {
-            @Suppress("DEPRECATION")
-            window.decorView.systemUiVisibility =
-                View.SYSTEM_UI_FLAG_LAYOUT_STABLE or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-            window.statusBarColor = Color.TRANSPARENT
-        }
-
         setContentView(R.layout.activity_bill)
 
-        val txtBillProvider:    TextView = findViewById(R.id.txtBillProvider)
-        val txtBillService:     TextView = findViewById(R.id.txtBillService)
-        val txtBillDescription: TextView = findViewById(R.id.txtBillDescription)
-        val txtBillClient:      TextView = findViewById(R.id.txtBillClient)
-        val txtBillTotal:       TextView = findViewById(R.id.txtBillTotal)
-        val chkPaid:            CheckBox = findViewById(R.id.chkPaid)
-        val chkComplete:        CheckBox = findViewById(R.id.chkComplete)
-        val btnNext:            Button   = findViewById(R.id.btnNext)
+        bindViews()
+        setupWindowInsets()
+
+        findViewById<View>(R.id.btnBack).setOnClickListener { finish() }
+        findViewById<View>(R.id.btnTopUp).setOnClickListener {
+            startActivity(Intent(this, WalletActivity::class.java))
+        }
 
         val requestId    = intent.getStringExtra("REQUEST_ID")    ?: ""
         val providerName = intent.getStringExtra("PROVIDER_NAME") ?: "Unknown Provider"
@@ -48,140 +62,320 @@ class BillActivity : AppCompatActivity() {
 
         val uid = FirebaseAuth.getInstance().currentUser?.uid ?: ""
 
-        // Fallback display while loading
-        txtBillProvider.text    = "Service Provider: $providerName"
-        txtBillService.text     = "Service: $category"
+        txtBillProvider.text    = providerName
+        txtBillService.text     = category
         txtBillDescription.text = ""
         txtBillClient.text      = ""
-        txtBillTotal.text       = "Total: — M Points"
-        chkPaid.isChecked       = false
-        chkComplete.isChecked   = false
-        chkPaid.isClickable     = false
-        chkComplete.isClickable = false
+        txtBillTotal.text       = getString(R.string.bill_m_points_format, getString(R.string.bill_loading_total))
         btnNext.visibility      = View.GONE
+        updateStatusStepper(ServiceRequestStatus.BID_SELECTED)
 
         if (requestId.isBlank()) {
-            // Legacy fallback: load from transactionId
             val transactionId = intent.getStringExtra("TRANSACTION_ID") ?: ""
             if (transactionId.isNotBlank()) {
-                loadFromTransaction(transactionId, txtBillProvider, txtBillService,
-                    txtBillDescription, txtBillClient, txtBillTotal,
-                    chkPaid, chkComplete, btnNext, uid)
+                loadFromTransaction(transactionId)
             }
             return
         }
 
-        // Real-time listener on the request
         requestListener = ServiceRequestRepository.listenById(
             requestId = requestId,
             onUpdate  = { request ->
-                txtBillService.text     = "Service: ${request.category.ifBlank { request.title }}"
-                txtBillDescription.text = "Description: ${request.description}"
-                txtBillClient.text      = "Client: ${request.requesterName}"
-                txtBillProvider.text    = "Service Provider: ${request.acceptedProviderName}"
-                txtBillTotal.text       = "Total: ${request.acceptedPoints} M Points"
-
-                val isPaid     = request.status == ServiceRequestStatus.IN_PROGRESS ||
-                                 request.status == ServiceRequestStatus.PROVIDER_DONE ||
-                                 request.status == ServiceRequestStatus.REQUESTER_CONFIRMED ||
-                                 request.status == ServiceRequestStatus.ADMIN_APPROVED
-                val isComplete = request.status == ServiceRequestStatus.REQUESTER_CONFIRMED ||
-                                 request.status == ServiceRequestStatus.ADMIN_APPROVED
-
-                chkPaid.isChecked     = isPaid
-                chkComplete.isChecked = isComplete
-
-                val isRequester = uid == request.requesterUid
-                val isProvider  = uid == request.acceptedProviderUid
-
-                // ── Pay button (customer only, when approved & not yet paid) ─────────
-                if (isRequester && request.status == ServiceRequestStatus.BID_SELECTED) {
-                    btnNext.visibility = View.VISIBLE
-                    btnNext.text       = "Pay Now"
-                    btnNext.setOnClickListener {
-                        handlePayment(request, uid)
-                    }
-                }
-                // ── Complete button (provider when paid) ──────────────────────────────
-                else if (isProvider && request.status == ServiceRequestStatus.IN_PROGRESS) {
-                    btnNext.visibility = View.VISIBLE
-                    btnNext.text       = "Mark Complete"
-                    btnNext.setOnClickListener {
-                        markProviderDone(request)
-                    }
-                }
-                // ── Confirm Complete (customer when provider marked done) ─────────────
-                else if (isRequester && request.status == ServiceRequestStatus.PROVIDER_DONE) {
-                    btnNext.visibility = View.VISIBLE
-                    btnNext.text       = "Confirm & Rate"
-                    btnNext.setOnClickListener {
-                        confirmAndRate(request)
-                    }
-                }
-                // ── Navigate to Rating after fully confirmed ──────────────────────────
-                else if (isRequester && (request.status == ServiceRequestStatus.REQUESTER_CONFIRMED ||
-                                         request.status == ServiceRequestStatus.ADMIN_APPROVED)) {
-                    btnNext.visibility = View.VISIBLE
-                    btnNext.text       = "Rate Provider"
-                    btnNext.setOnClickListener {
-                        startActivity(
-                            Intent(this, RatingActivity::class.java).apply {
-                                putExtra("PROVIDER_NAME", request.acceptedProviderName)
-                                putExtra("PROVIDER_UID",  request.acceptedProviderUid)
-                                putExtra("REQUEST_ID",    request.id)
-                            }
-                        )
-                    }
-                } else {
-                    btnNext.visibility = View.GONE
-                }
+                currentRequest = request
+                bindRequest(request, uid)
             },
             onError = { error ->
-                Toast.makeText(this, "Error: $error", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, error, Toast.LENGTH_SHORT).show()
             }
         )
     }
 
-    // ── Payment flow — delegated to Cloud Function ───────────────────────────
+    override fun onResume() {
+        super.onResume()
+        startBalanceListener()
+    }
 
-    private fun handlePayment(request: ServiceRequest, uid: String) {
-        // ── Debug: verify the ID before touching Firestore ──
-        Log.d("PaymentDebug", "Pay Now clicked — requestId='${request.id}' acceptedPoints=${request.acceptedPoints} providerUid='${request.acceptedProviderUid}'")
+    override fun onPause() {
+        super.onPause()
+        balanceListener?.remove()
+        balanceListener = null
+    }
 
+    override fun onDestroy() {
+        super.onDestroy()
+        requestListener?.remove()
+    }
+
+    private fun bindViews() {
+        txtBillProvider    = findViewById(R.id.txtBillProvider)
+        txtBillProviderPhone = findViewById(R.id.txtBillProviderPhone)
+        providerContactRow = findViewById(R.id.providerContactRow)
+        btnCallProvider    = findViewById(R.id.btnCallProvider)
+        txtBillService     = findViewById(R.id.txtBillService)
+        txtBillDescription = findViewById(R.id.txtBillDescription)
+        txtBillClient      = findViewById(R.id.txtBillClient)
+        txtBillTotal       = findViewById(R.id.txtBillTotal)
+        txtWalletBalance   = findViewById(R.id.txtWalletBalance)
+        walletStrip        = findViewById(R.id.walletStrip)
+        btnNext            = findViewById(R.id.btnNext)
+        stepDot1           = findViewById(R.id.stepDot1)
+        stepDot2           = findViewById(R.id.stepDot2)
+        stepDot3           = findViewById(R.id.stepDot3)
+        stepLine1          = findViewById(R.id.stepLine1)
+        stepLine2          = findViewById(R.id.stepLine2)
+        stepLabel1         = findViewById(R.id.stepLabel1)
+        stepLabel2         = findViewById(R.id.stepLabel2)
+        stepLabel3         = findViewById(R.id.stepLabel3)
+    }
+
+    private fun setupWindowInsets() {
+        SystemUiHelper.setupPurpleHeaderScreen(
+            activity = this,
+            root = findViewById(R.id.billRoot),
+            headerView = findViewById(R.id.headerSection),
+            footerBar = findViewById(R.id.footerBar)
+        )
+    }
+
+    private fun startBalanceListener() {
+        val uid = FirebaseAuth.getInstance().currentUser?.uid
+        if (uid.isNullOrBlank()) {
+            walletStrip.visibility = View.GONE
+            return
+        }
+
+        balanceListener?.remove()
+        balanceListener = PointsRepository.listenBalance(
+            uid = uid,
+            onUpdate = { balance ->
+                walletBalance = balance
+                updateWalletStrip()
+            },
+            onError = {
+                walletStrip.visibility = View.GONE
+            }
+        )
+    }
+
+    private fun updateWalletStrip() {
+        val request = currentRequest
+        val uid = FirebaseAuth.getInstance().currentUser?.uid
+        val isRequesterAwaitingPayment = request != null &&
+            uid == request.requesterUid &&
+            request.status == ServiceRequestStatus.BID_SELECTED
+
+        if (isRequesterAwaitingPayment) {
+            walletStrip.visibility = View.VISIBLE
+            txtWalletBalance.text = getString(
+                R.string.bill_your_balance
+            ) + ": " + MPointsPaymentHelper.formatMPoints(walletBalance)
+        } else {
+            walletStrip.visibility = View.GONE
+        }
+    }
+
+    private fun bindRequest(request: ServiceRequest, uid: String) {
+        txtBillService.text     = request.category.ifBlank { request.title }
+        txtBillDescription.text = request.description
+        txtBillClient.text      = request.requesterName
+        txtBillProvider.text    = request.acceptedProviderName
+        txtBillTotal.text       = MPointsPaymentHelper.formatMPoints(request.acceptedPoints)
+
+        updateStatusStepper(request.status)
+        updateWalletStrip()
+        updateProviderContact(request, uid)
+
+        val isRequester = uid == request.requesterUid
+        val isProvider  = uid == request.acceptedProviderUid
+
+        when {
+            isRequester && request.status == ServiceRequestStatus.BID_SELECTED -> {
+                btnNext.visibility = View.VISIBLE
+                btnNext.text       = getString(R.string.bill_pay_now)
+                btnNext.setOnClickListener { handlePayment(request) }
+            }
+            isProvider && request.status == ServiceRequestStatus.IN_PROGRESS -> {
+                btnNext.visibility = View.VISIBLE
+                btnNext.text       = getString(R.string.bill_mark_complete)
+                btnNext.setOnClickListener { markProviderDone(request) }
+            }
+            isRequester && request.status == ServiceRequestStatus.PROVIDER_DONE -> {
+                btnNext.visibility = View.VISIBLE
+                btnNext.text       = getString(R.string.bill_confirm_and_rate)
+                btnNext.setOnClickListener { confirmAndRate(request) }
+            }
+            isRequester && (request.status == ServiceRequestStatus.REQUESTER_CONFIRMED ||
+                request.status == ServiceRequestStatus.ADMIN_APPROVED) -> {
+                btnNext.visibility = View.VISIBLE
+                btnNext.text       = getString(R.string.bill_rate_provider)
+                btnNext.setOnClickListener {
+                    startActivity(
+                        Intent(this, RatingActivity::class.java).apply {
+                            putExtra("PROVIDER_NAME", request.acceptedProviderName)
+                            putExtra("PROVIDER_UID",  request.acceptedProviderUid)
+                            putExtra("REQUEST_ID",    request.id)
+                        }
+                    )
+                }
+            }
+            else -> {
+                btnNext.visibility = View.GONE
+            }
+        }
+    }
+
+    private fun updateProviderContact(request: ServiceRequest, uid: String) {
+        val isRequester = uid == request.requesterUid
+        val hasProvider = request.acceptedProviderUid.isNotBlank() &&
+            request.status != ServiceRequestStatus.OPEN
+
+        if (!isRequester || !hasProvider) {
+            providerContactRow.visibility = View.GONE
+            return
+        }
+
+        providerContactRow.visibility = View.VISIBLE
+        btnCallProvider.isEnabled = false
+        btnCallProvider.alpha = 0.5f
+        providerContactRow.setOnClickListener(null)
+
+        if (request.acceptedProviderUid != cachedProviderPhoneUid) {
+            cachedProviderPhone = ""
+            providerPhoneLoadInProgress = false
+        }
+
+        if (request.acceptedProviderUid == cachedProviderPhoneUid && cachedProviderPhone.isNotBlank()) {
+            showProviderPhone(cachedProviderPhone)
+            return
+        }
+
+        if (providerPhoneLoadInProgress && request.acceptedProviderUid == cachedProviderPhoneUid) {
+            txtBillProviderPhone.text = getString(R.string.bill_contact_loading)
+            return
+        }
+
+        providerPhoneLoadInProgress = true
+        cachedProviderPhoneUid = request.acceptedProviderUid
+        txtBillProviderPhone.text = getString(R.string.bill_contact_loading)
+
+        UserRepository.getPhoneByUid(
+            uid = request.acceptedProviderUid,
+            onSuccess = { phone ->
+                runOnUiThread {
+                    providerPhoneLoadInProgress = false
+                    cachedProviderPhone = phone
+                    showProviderPhone(phone)
+                }
+            },
+            onFailure = {
+                runOnUiThread {
+                    providerPhoneLoadInProgress = false
+                    cachedProviderPhone = ""
+                    txtBillProviderPhone.text = getString(R.string.bill_contact_unavailable)
+                    btnCallProvider.isEnabled = false
+                    btnCallProvider.alpha = 0.5f
+                    btnCallProvider.setOnClickListener(null)
+                }
+            }
+        )
+    }
+
+    private fun showProviderPhone(phone: String) {
+        txtBillProviderPhone.text = phone
+        btnCallProvider.isEnabled = true
+        btnCallProvider.alpha = 1f
+        btnCallProvider.setOnClickListener { dialPhoneNumber(phone) }
+        providerContactRow.setOnClickListener { dialPhoneNumber(phone) }
+    }
+
+    private fun dialPhoneNumber(phone: String) {
+        val normalized = phone.filter { it.isDigit() || it == '+' }
+        if (normalized.isBlank()) {
+            Toast.makeText(this, R.string.bill_contact_unavailable, Toast.LENGTH_SHORT).show()
+            return
+        }
+        startActivity(Intent(Intent.ACTION_DIAL, Uri.parse("tel:$normalized")))
+    }
+
+    private fun updateStatusStepper(status: String) {
+        val activeColor = ContextCompat.getColor(this, R.color.purple_nav)
+        val inactiveColor = 0xFFE0E0E0.toInt()
+        val activeLabelColor = ContextCompat.getColor(this, R.color.purple_dark)
+        val inactiveLabelColor = 0xFF888888.toInt()
+
+        val step = when (status) {
+            ServiceRequestStatus.BID_SELECTED -> 1
+            ServiceRequestStatus.IN_PROGRESS,
+            ServiceRequestStatus.PROVIDER_DONE -> 2
+            ServiceRequestStatus.REQUESTER_CONFIRMED,
+            ServiceRequestStatus.ADMIN_APPROVED -> 3
+            else -> 1
+        }
+
+        setStepDot(stepDot1, step >= 1, activeColor, inactiveColor)
+        setStepDot(stepDot2, step >= 2, activeColor, inactiveColor)
+        setStepDot(stepDot3, step >= 3, activeColor, inactiveColor)
+        stepLine1.setBackgroundColor(if (step >= 2) activeColor else inactiveColor)
+        stepLine2.setBackgroundColor(if (step >= 3) activeColor else inactiveColor)
+
+        stepLabel1.setTextColor(if (step >= 1) activeLabelColor else inactiveLabelColor)
+        stepLabel2.setTextColor(if (step >= 2) activeLabelColor else inactiveLabelColor)
+        stepLabel3.setTextColor(if (step >= 3) activeLabelColor else inactiveLabelColor)
+
+        val bold = android.graphics.Typeface.DEFAULT_BOLD
+        val normal = android.graphics.Typeface.DEFAULT
+        stepLabel1.typeface = if (step == 1) bold else normal
+        stepLabel2.typeface = if (step == 2) bold else normal
+        stepLabel3.typeface = if (step == 3) bold else normal
+    }
+
+    private fun setStepDot(dot: View, active: Boolean, activeColor: Int, inactiveColor: Int) {
+        val drawable = GradientDrawable()
+        drawable.shape = GradientDrawable.OVAL
+        drawable.setColor(if (active) activeColor else inactiveColor)
+        dot.background = drawable
+    }
+
+    private fun handlePayment(request: ServiceRequest) {
         if (request.id.isBlank()) {
-            Log.e("PaymentDebug", "requestId is BLANK — cannot proceed with payment")
-            Toast.makeText(this, "Error: request ID is missing. Please reopen this bill.", Toast.LENGTH_LONG).show()
+            Toast.makeText(this, R.string.bill_request_id_missing, Toast.LENGTH_LONG).show()
             return
         }
         if (request.acceptedPoints <= 0 || request.acceptedProviderUid.isBlank()) {
-            Toast.makeText(this, "Invalid payment details", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, R.string.bill_invalid_payment_details, Toast.LENGTH_SHORT).show()
             return
         }
 
-        val btnNext: Button = findViewById(R.id.btnNext)
-        btnNext.isEnabled = false
-        btnNext.text      = "Processing…"
+        MPointsPaymentHelper.showPaymentDialog(
+            activity = this,
+            amount = request.acceptedPoints,
+            providerName = request.acceptedProviderName
+        ) {
+            executeEscrowPayment(request)
+        }
+    }
 
-        // Cloud Function handles: balance check, deduction, escrow credit, status update
+    private fun executeEscrowPayment(request: ServiceRequest) {
+        btnNext.isEnabled = false
+        btnNext.text      = getString(R.string.bill_processing)
+
         CloudFunctions.processEscrowPayment(
             requestId = request.id,
-            onSuccess = { transactionId ->
+            onSuccess = {
                 runOnUiThread {
                     btnNext.isEnabled = true
                     Toast.makeText(
                         this,
-                        "Payment successful! M Points held in escrow.",
+                        R.string.bill_payment_success_escrow,
                         Toast.LENGTH_SHORT
                     ).show()
-                    // Status listener will automatically update the UI via real-time snapshot
                 }
             },
             onFailure = { error ->
                 runOnUiThread {
                     btnNext.isEnabled = true
-                    btnNext.text      = "Pay Now"
+                    btnNext.text      = getString(R.string.bill_pay_now)
                     Toast.makeText(this, error, Toast.LENGTH_LONG).show()
-                    // If insufficient points, send to wallet
                     if (error.contains("Insufficient", ignoreCase = true)) {
                         startActivity(Intent(this, WalletActivity::class.java))
                     }
@@ -189,8 +383,6 @@ class BillActivity : AppCompatActivity() {
             }
         )
     }
-
-    // ── Provider marks job done ───────────────────────────────────────────────
 
     private fun markProviderDone(request: ServiceRequest) {
         val transactionId = request.transactionId
@@ -202,7 +394,7 @@ class BillActivity : AppCompatActivity() {
                         requestId = request.id,
                         fields    = mapOf(ServiceRequest.FIELD_STATUS to ServiceRequestStatus.PROVIDER_DONE),
                         onSuccess = {
-                            Toast.makeText(this, "Marked as done. Waiting for customer confirmation.", Toast.LENGTH_SHORT).show()
+                            Toast.makeText(this, R.string.bill_mark_done_success, Toast.LENGTH_SHORT).show()
                         },
                         onFailure = { Toast.makeText(this, it, Toast.LENGTH_SHORT).show() }
                     )
@@ -212,24 +404,16 @@ class BillActivity : AppCompatActivity() {
         }
     }
 
-    // ── Customer confirms, Cloud Function releases escrow ─────────────────────
-
     private fun confirmAndRate(request: ServiceRequest) {
         val transactionId = request.transactionId
-        // ── Debug: verify IDs before calling Cloud Function ──
-        Log.d("PaymentDebug", "Confirm & Rate clicked — requestId='${request.id}' transactionId='$transactionId'")
-
         if (transactionId.isBlank()) {
-            Log.e("PaymentDebug", "transactionId is BLANK — cannot release escrow")
-            Toast.makeText(this, "Transaction not found", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, R.string.transaction_not_found, Toast.LENGTH_SHORT).show()
             return
         }
 
-        val btnNext: Button = findViewById(R.id.btnNext)
         btnNext.isEnabled = false
-        btnNext.text      = "Confirming…"
+        btnNext.text      = getString(R.string.bill_confirming)
 
-        // Cloud Function handles: escrow deduction, provider credit, status updates
         CloudFunctions.releaseEscrowToProvider(
             requestId     = request.id,
             transactionId = transactionId,
@@ -238,7 +422,7 @@ class BillActivity : AppCompatActivity() {
                     btnNext.isEnabled = true
                     Toast.makeText(
                         this,
-                        "Job complete! M Points released to provider.",
+                        R.string.bill_job_complete_released,
                         Toast.LENGTH_SHORT
                     ).show()
                     startActivity(
@@ -253,31 +437,40 @@ class BillActivity : AppCompatActivity() {
             onFailure = { error ->
                 runOnUiThread {
                     btnNext.isEnabled = true
-                    btnNext.text      = "Confirm & Rate"
+                    btnNext.text      = getString(R.string.bill_confirm_and_rate)
                     Toast.makeText(this, error, Toast.LENGTH_LONG).show()
                 }
             }
         )
     }
 
-    // ── Legacy: load from transaction ID ─────────────────────────────────────
-
-    private fun loadFromTransaction(
-        transactionId: String,
-        txtBillProvider: TextView, txtBillService: TextView,
-        txtBillDescription: TextView, txtBillClient: TextView, txtBillTotal: TextView,
-        chkPaid: CheckBox, chkComplete: CheckBox, btnNext: Button, uid: String
-    ) {
+    private fun loadFromTransaction(transactionId: String) {
         TransactionRepository.getById(
             transactionId = transactionId,
             onSuccess     = { transaction ->
-                txtBillProvider.text    = "Service Provider: ${transaction.providerName}"
-                txtBillService.text     = "Service: ${transaction.requestTitle}"
-                txtBillClient.text      = "Client: ${transaction.requesterName}"
-                txtBillTotal.text       = "Total: ${transaction.amount} M Points"
-                chkPaid.isChecked       = true
+                txtBillProvider.text    = transaction.providerName
+                txtBillService.text     = transaction.requestTitle
+                txtBillClient.text      = transaction.requesterName
+                txtBillTotal.text       = MPointsPaymentHelper.formatMPoints(transaction.amount)
+                updateStatusStepper(ServiceRequestStatus.ADMIN_APPROVED)
+                walletStrip.visibility  = View.GONE
+                providerContactRow.visibility = View.GONE
+
+                if (transaction.providerUid.isNotBlank()) {
+                    UserRepository.getPhoneByUid(
+                        uid = transaction.providerUid,
+                        onSuccess = { phone ->
+                            runOnUiThread {
+                                providerContactRow.visibility = View.VISIBLE
+                                showProviderPhone(phone)
+                            }
+                        },
+                        onFailure = { /* contact optional for legacy flow */ }
+                    )
+                }
 
                 btnNext.visibility = View.VISIBLE
+                btnNext.text       = getString(R.string.bill_rate_provider)
                 btnNext.setOnClickListener {
                     startActivity(
                         Intent(this, RatingActivity::class.java).apply {
@@ -289,13 +482,8 @@ class BillActivity : AppCompatActivity() {
                 }
             },
             onFailure = { error ->
-                Toast.makeText(this, "Error: $error", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, error, Toast.LENGTH_SHORT).show()
             }
         )
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        requestListener?.remove()
     }
 }
