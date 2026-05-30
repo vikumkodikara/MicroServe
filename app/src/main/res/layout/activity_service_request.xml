@@ -171,22 +171,26 @@
                 </LinearLayout>
             </LinearLayout>
 
-            <!-- Map button — outlined pill, sits below spinners (same position as PostServiceActivity) -->
-            <Button
+            <!-- Map button — MaterialButton OutlinedButton matches the purple-border pill in mockup -->
+            <com.google.android.material.button.MaterialButton
                 android:id="@+id/btnSelectMap"
+                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
                 android:layout_width="match_parent"
                 android:layout_height="48dp"
                 android:layout_marginTop="8dp"
-                android:background="@drawable/bg_btn_map_outlined"
-                android:drawableStart="@drawable/ic_location"
-                android:drawablePadding="8dp"
-                android:gravity="center"
-                android:paddingHorizontal="16dp"
                 android:text="Select exact place on map"
                 android:textAllCaps="false"
                 android:textColor="@color/purple_nav"
                 android:textSize="14sp"
-                style="?android:attr/borderlessButtonStyle" />
+                app:icon="@drawable/ic_location"
+                app:iconTint="@color/purple_nav"
+                app:iconGravity="textStart"
+                app:iconPadding="8dp"
+                app:strokeColor="@color/purple_nav"
+                app:strokeWidth="1.5dp"
+                app:cornerRadius="50dp"
+                app:backgroundTint="@android:color/white" />
+
 
             <!-- Hidden field: stores GPS/map-picked address to fill spinners or override location string -->
             <EditText
