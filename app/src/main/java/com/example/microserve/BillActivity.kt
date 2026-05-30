@@ -170,24 +170,25 @@ class BillActivity : AppCompatActivity() {
         )
     }
 
-    // ── Payment flow — direct Firestore (rules allow signed-in users) ──────────
+    // ── Payment flow — Cloud Function 'processPayment' ──────────────────────
 
     private fun handlePayment(request: ServiceRequest, uid: String) {
-        // Use requesterUid from the ServiceRequest itself as the authoritative user ID.
-        // This avoids any FirebaseAuth.currentUser timing issue, since the user's UID
-        // is already stored inside the document they own.
-        val requesterUid = request.requesterUid.ifBlank { uid }
+        // The authoritative customer UID comes from the ServiceRequest document itself.
+        // This survives any FirebaseAuth timing edge-case.
+        val customerId = request.requesterUid.ifBlank { uid }
+        val providerId = request.acceptedProviderUid
+        val cost       = request.acceptedPoints
 
-        Log.d("AuthCheck", "User ID: ${FirebaseAuth.getInstance().currentUser?.uid ?: "null (using requesterUid=$requesterUid)"}")
-        Log.d("PaymentDebug", "Pay Now — requestId='${request.id}' requesterUid='$requesterUid' points=${request.acceptedPoints}")
+        Log.d("AuthCheck", "User ID: ${com.google.firebase.auth.FirebaseAuth.getInstance().currentUser?.uid ?: "(no firebase user)"}")
+        Log.d("PaymentDebug", "Pay Now — requestId='${request.id}' customerId='$customerId' providerId='$providerId' cost=$cost")
 
         if (request.id.isBlank()) {
             Log.e("PaymentDebug", "requestId is BLANK — cannot proceed")
             Toast.makeText(this, "Error: request ID is missing. Please reopen this bill.", Toast.LENGTH_LONG).show()
             return
         }
-        if (request.acceptedPoints <= 0 || request.acceptedProviderUid.isBlank()) {
-            Toast.makeText(this, "Invalid payment details", Toast.LENGTH_SHORT).show()
+        if (cost <= 0 || providerId.isBlank() || customerId.isBlank()) {
+            Toast.makeText(this, "Invalid payment details. Please try again.", Toast.LENGTH_SHORT).show()
             return
         }
 
@@ -195,89 +196,34 @@ class BillActivity : AppCompatActivity() {
         btnNext.isEnabled = false
         btnNext.text      = "Processing…"
 
-        // Step 1: Check balance using requesterUid from the document
-        PointsRepository.getBalance(
-            uid       = requesterUid,
-            onSuccess = { balance ->
-                if (balance < request.acceptedPoints) {
-                    runOnUiThread {
-                        btnNext.isEnabled = true
-                        btnNext.text      = "Pay Now"
-                        Toast.makeText(this,
-                            "Insufficient M Points. You have $balance, need ${request.acceptedPoints}.",
-                            Toast.LENGTH_LONG).show()
-                        startActivity(Intent(this, WalletActivity::class.java))
-                    }
-                    return@getBalance
-                }
-
-                // Step 2: Deduct from customer and credit escrow
-                PointsRepository.processEscrowPayment(
-                    requesterUid = requesterUid,
-                    amount       = request.acceptedPoints,
-                    onSuccess    = {
-                        // Step 3: Create transaction record
-                        val txn = ServiceTransaction(
-                            requestId     = request.id,
-                            requestTitle  = request.title.ifBlank { request.category },
-                            requesterUid  = requesterUid,
-                            requesterName = request.requesterName,
-                            providerUid   = request.acceptedProviderUid,
-                            providerName  = request.acceptedProviderName,
-                            providerCode  = ServiceTransaction.generateProviderCode(request.acceptedProviderUid),
-                            amount        = request.acceptedPoints
-                        )
-                        TransactionRepository.createEscrowTransaction(
-                            transaction = txn,
-                            onSuccess   = { created ->
-                                // Step 4: Update request status
-                                ServiceRequestRepository.update(
-                                    requestId = request.id,
-                                    fields    = mapOf(
-                                        ServiceRequest.FIELD_STATUS         to ServiceRequestStatus.IN_PROGRESS,
-                                        ServiceRequest.FIELD_TRANSACTION_ID to created.id
-                                    ),
-                                    onSuccess = {
-                                        runOnUiThread {
-                                            btnNext.isEnabled = true
-                                            Toast.makeText(this,
-                                                "Payment successful! M Points held in escrow.",
-                                                Toast.LENGTH_SHORT).show()
-                                            // Real-time listener updates the UI automatically
-                                        }
-                                    },
-                                    onFailure = { err ->
-                                        runOnUiThread {
-                                            btnNext.isEnabled = true
-                                            btnNext.text = "Pay Now"
-                                            Toast.makeText(this, err, Toast.LENGTH_SHORT).show()
-                                        }
-                                    }
-                                )
-                            },
-                            onFailure = { err ->
-                                runOnUiThread {
-                                    btnNext.isEnabled = true
-                                    btnNext.text = "Pay Now"
-                                    Toast.makeText(this, err, Toast.LENGTH_SHORT).show()
-                                }
-                            }
-                        )
-                    },
-                    onFailure = { err ->
-                        runOnUiThread {
-                            btnNext.isEnabled = true
-                            btnNext.text = "Pay Now"
-                            Toast.makeText(this, err, Toast.LENGTH_LONG).show()
-                        }
-                    }
-                )
-            },
-            onFailure = { err ->
+        // ── Call processPayment Cloud Function ──────────────────────────────
+        // Runs with Admin SDK server-side — no PERMISSION_DENIED possible.
+        CloudFunctions.processPayment(
+            requestId  = request.id,
+            customerId = customerId,
+            providerId = providerId,
+            cost       = cost,
+            onSuccess  = { transactionId ->
                 runOnUiThread {
                     btnNext.isEnabled = true
-                    btnNext.text = "Pay Now"
-                    Toast.makeText(this, err, Toast.LENGTH_SHORT).show()
+                    Log.d("PaymentDebug", "Payment success — transactionId=$transactionId")
+                    Toast.makeText(
+                        this,
+                        "Payment successful! $cost M Points held in escrow.",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                    // Real-time snapshot listener will refresh the UI automatically
+                }
+            },
+            onFailure  = { error ->
+                runOnUiThread {
+                    btnNext.isEnabled = true
+                    btnNext.text      = "Pay Now"
+                    Log.e("PaymentDebug", "Payment failed: $error")
+                    Toast.makeText(this, error, Toast.LENGTH_LONG).show()
+                    if (error.contains("Insufficient", ignoreCase = true)) {
+                        startActivity(Intent(this, WalletActivity::class.java))
+                    }
                 }
             }
         )
@@ -305,7 +251,7 @@ class BillActivity : AppCompatActivity() {
         }
     }
 
-    // ── Customer confirms — direct Firestore escrow release ───────────────────
+    // ── Customer confirms — Cloud Function 'releasePayment' ──────────────────
 
     private fun confirmAndRate(request: ServiceRequest) {
         val transactionId = request.transactionId
@@ -321,69 +267,35 @@ class BillActivity : AppCompatActivity() {
         btnNext.isEnabled = false
         btnNext.text      = "Confirming…"
 
-        // Step 1: Mark requester confirmed in transaction record
-        TransactionRepository.markRequesterConfirmed(
+        // ── Call releasePayment Cloud Function ──────────────────────────────
+        // Runs with Admin SDK server-side — no PERMISSION_DENIED possible.
+        CloudFunctions.releasePayment(
+            requestId     = request.id,
             transactionId = transactionId,
             onSuccess = {
-                // Step 2: Fetch transaction to get provider UID and amount
-                TransactionRepository.getById(
-                    transactionId = transactionId,
-                    onSuccess = { txn ->
-                        // Step 3: Release escrow → provider balance
-                        TransactionRepository.approveTransaction(
-                            transaction = txn,
-                            onSuccess = {
-                                // Step 4: Update request status to admin_approved
-                                ServiceRequestRepository.update(
-                                    requestId = request.id,
-                                    fields    = mapOf(ServiceRequest.FIELD_STATUS to ServiceRequestStatus.ADMIN_APPROVED),
-                                    onSuccess = {
-                                        runOnUiThread {
-                                            btnNext.isEnabled = true
-                                            Toast.makeText(this,
-                                                "Job complete! M Points released to provider.",
-                                                Toast.LENGTH_SHORT).show()
-                                            startActivity(
-                                                Intent(this, RatingActivity::class.java).apply {
-                                                    putExtra("PROVIDER_NAME", request.acceptedProviderName)
-                                                    putExtra("PROVIDER_UID",  request.acceptedProviderUid)
-                                                    putExtra("REQUEST_ID",    request.id)
-                                                }
-                                            )
-                                        }
-                                    },
-                                    onFailure = { err ->
-                                        runOnUiThread {
-                                            btnNext.isEnabled = true
-                                            btnNext.text = "Confirm & Rate"
-                                            Toast.makeText(this, err, Toast.LENGTH_SHORT).show()
-                                        }
-                                    }
-                                )
-                            },
-                            onFailure = { err ->
-                                runOnUiThread {
-                                    btnNext.isEnabled = true
-                                    btnNext.text = "Confirm & Rate"
-                                    Toast.makeText(this, err, Toast.LENGTH_SHORT).show()
-                                }
-                            }
-                        )
-                    },
-                    onFailure = { err ->
-                        runOnUiThread {
-                            btnNext.isEnabled = true
-                            btnNext.text = "Confirm & Rate"
-                            Toast.makeText(this, err, Toast.LENGTH_SHORT).show()
-                        }
-                    }
-                )
-            },
-            onFailure = { err ->
                 runOnUiThread {
                     btnNext.isEnabled = true
-                    btnNext.text = "Confirm & Rate"
-                    Toast.makeText(this, err, Toast.LENGTH_SHORT).show()
+                    Log.d("PaymentDebug", "Release success")
+                    Toast.makeText(
+                        this,
+                        "Job complete! M Points released to provider.",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                    startActivity(
+                        Intent(this, RatingActivity::class.java).apply {
+                            putExtra("PROVIDER_NAME", request.acceptedProviderName)
+                            putExtra("PROVIDER_UID",  request.acceptedProviderUid)
+                            putExtra("REQUEST_ID",    request.id)
+                        }
+                    )
+                }
+            },
+            onFailure = { error ->
+                runOnUiThread {
+                    btnNext.isEnabled = true
+                    btnNext.text      = "Confirm & Rate"
+                    Log.e("PaymentDebug", "Release failed: $error")
+                    Toast.makeText(this, error, Toast.LENGTH_LONG).show()
                 }
             }
         )
