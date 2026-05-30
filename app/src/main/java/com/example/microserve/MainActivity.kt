@@ -13,6 +13,8 @@ import android.view.View
 
 class MainActivity : AppCompatActivity() {
 
+    private var ordersListener: com.google.firebase.firestore.ListenerRegistration? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         
@@ -65,6 +67,11 @@ class MainActivity : AppCompatActivity() {
         
         // Using Firebase data
         loadMyServices(rvMyServices)
+
+        // Setup My Orders Recycler View
+        val rvMyOrders: RecyclerView = findViewById(R.id.rvMyOrders)
+        rvMyOrders.layoutManager = LinearLayoutManager(this)
+        loadMyOrders(rvMyOrders)
 
         // Apply Navigation Bar Inset so it perfectly aligns with Home
         applyNavBarSpacer(R.id.navSystemBarSpacer)
@@ -129,6 +136,44 @@ class MainActivity : AppCompatActivity() {
         super.onResume()
         val rvMyServices: RecyclerView = findViewById(R.id.rvMyServices)
         loadMyServices(rvMyServices)
+
+        val rvMyOrders: RecyclerView = findViewById(R.id.rvMyOrders)
+        loadMyOrders(rvMyOrders)
+    }
+
+    private fun loadMyOrders(rvMyOrders: RecyclerView) {
+        val uid = com.google.firebase.auth.FirebaseAuth.getInstance().currentUser?.uid ?: return
+
+        ordersListener?.remove()
+        ordersListener = ServiceRequestRepository.listenByProvider(
+            providerUid = uid,
+            onUpdate = { jobs ->
+                val activeJobs = jobs.filter {
+                    val status = it.status.lowercase()
+                    status == "pending" || status == "active" ||
+                    status == ServiceRequestStatus.OPEN ||
+                    status == ServiceRequestStatus.IN_PROGRESS
+                }
+                val adapter = rvMyOrders.adapter as? MyOrdersAdapter
+                if (adapter == null) {
+                    rvMyOrders.adapter = MyOrdersAdapter(activeJobs) { selectedOrder ->
+                        val intent = Intent(this, RequestDetailActivity::class.java)
+                        intent.putExtra(RequestDetailActivity.EXTRA_REQUEST_ID, selectedOrder.id)
+                        startActivity(intent)
+                    }
+                } else {
+                    adapter.updateOrders(activeJobs)
+                }
+            },
+            onError = { error ->
+                Log.e("MainActivity", "Error loading orders: $error")
+            }
+        )
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        ordersListener?.remove()
     }
 
     private fun setupBottomNavigation() {
