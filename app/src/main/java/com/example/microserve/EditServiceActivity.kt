@@ -288,47 +288,100 @@ class EditServiceActivity : AppCompatActivity() {
 
     private fun populateData() {
         val id = serviceId ?: return
-        val service = ServiceStore.getServiceById(this, id) ?: return
 
-        // Populate Category
-        val categories = arrayOf("-Select-", "Painting", "Plumbing", "Gardening", "Cleaning", "Electric Work", "Handyman", "Carpentry", "HVAC")
-        val categoryIndex = categories.indexOf(service.category)
-        if (categoryIndex >= 0) {
-            binding.categorySpinner.setSelection(categoryIndex)
-        }
+        // Show loading state
+        binding.btnEdit.isEnabled = false
+        binding.btnDelete.isEnabled = false
+        showToast("Loading service details...")
 
-        // Populate Location
-        val locationParts = service.location.split(", ")
-        if (locationParts.size == 3) {
-            val city = locationParts[0].trim()
-            val district = locationParts[1].trim()
-            val province = locationParts[2].trim()
+        com.google.firebase.firestore.FirebaseFirestore.getInstance()
+            .collection("services")
+            .document(id)
+            .get()
+            .addOnSuccessListener { document ->
+                binding.btnEdit.isEnabled = true
+                binding.btnDelete.isEnabled = true
 
-            val provinceAdapter = binding.spinnerProvince.adapter as? ArrayAdapter<String>
-            val pIdx = provinceAdapter?.getPosition(province) ?: -1
-            if (pIdx >= 0) {
-                binding.spinnerProvince.setSelection(pIdx)
-                
-                binding.spinnerProvince.post {
-                    val districtAdapter = binding.spinnerDistrict.adapter as? ArrayAdapter<String>
-                    val dIdx = districtAdapter?.getPosition(district) ?: -1
-                    if (dIdx >= 0) {
-                        binding.spinnerDistrict.setSelection(dIdx)
+                if (!document.exists()) {
+                    showToast("Service not found")
+                    return@addOnSuccessListener
+                }
+
+                // Populate Category
+                val category = document.getString("category") ?: ""
+                val categories = arrayOf("-Select-", "Painting", "Plumbing", "Gardening", "Cleaning", "Electric Work", "Handyman", "Carpentry", "HVAC")
+                val categoryIndex = categories.indexOf(category)
+                if (categoryIndex >= 0) {
+                    binding.categorySpinner.setSelection(categoryIndex)
+                }
+
+                // Populate Location
+                val location = document.getString("location") ?: ""
+                val locationParts = location.split(", ")
+                if (locationParts.size == 3) {
+                    val city = locationParts[0].trim()
+                    val district = locationParts[1].trim()
+                    val province = locationParts[2].trim()
+
+                    val provinceAdapter = binding.spinnerProvince.adapter as? ArrayAdapter<String>
+                    val pIdx = provinceAdapter?.getPosition(province) ?: -1
+                    if (pIdx >= 0) {
+                        binding.spinnerProvince.setSelection(pIdx)
                         
-                        binding.spinnerDistrict.post {
-                            val cityAdapter = binding.spinnerCity.adapter as? ArrayAdapter<String>
-                            val cIdx = cityAdapter?.getPosition(city) ?: -1
-                            if (cIdx >= 0) {
-                                binding.spinnerCity.setSelection(cIdx)
+                        binding.spinnerProvince.post {
+                            val districtAdapter = binding.spinnerDistrict.adapter as? ArrayAdapter<String>
+                            val dIdx = districtAdapter?.getPosition(district) ?: -1
+                            if (dIdx >= 0) {
+                                binding.spinnerDistrict.setSelection(dIdx)
+                                
+                                binding.spinnerDistrict.post {
+                                    val cityAdapter = binding.spinnerCity.adapter as? ArrayAdapter<String>
+                                    val cIdx = cityAdapter?.getPosition(city) ?: -1
+                                    if (cIdx >= 0) {
+                                        binding.spinnerCity.setSelection(cIdx)
+                                    }
+                                }
                             }
                         }
                     }
                 }
+
+                // Populate Measurements
+                interiorCount = document.getLong("interiorCount")?.toInt() ?: 0
+                exteriorCount = document.getLong("exteriorCount")?.toInt() ?: 0
+                binding.interiorCount.text = interiorCount.toString()
+                binding.exteriorCount.text = exteriorCount.toString()
+
+                // Populate Time Scheduling
+                val startTime = document.getString("startTime")
+                if (!startTime.isNullOrBlank()) binding.startTimeBtn.text = startTime
+
+                val endTime = document.getString("endTime")
+                if (!endTime.isNullOrBlank()) binding.endTimeBtn.text = endTime
+
+                val selectedDaysStr = document.getString("selectedDays") ?: ""
+                val selectedDaysList = selectedDaysStr.split(",").map { it.trim() }
+                
+                val days = listOf(
+                    binding.daySun, binding.dayMon, binding.dayTue,
+                    binding.dayWed, binding.dayThu, binding.dayFri, binding.daySat
+                )
+                
+                days.forEach { dayView ->
+                    if (selectedDaysList.contains(dayView.text.toString())) {
+                        dayView.isSelected = true
+                        dayView.setTextColor(getColor(R.color.white))
+                    } else {
+                        dayView.isSelected = false
+                        dayView.setTextColor(getColor(R.color.black))
+                    }
+                }
             }
-        }
-        
-        // Note: Measurements and Time Scheduling are not currently stored in the Firebase Service model,
-        // so they cannot be populated here. They will remain at default states.
+            .addOnFailureListener {
+                binding.btnEdit.isEnabled = true
+                binding.btnDelete.isEnabled = true
+                showToast("Failed to load service details")
+            }
     }
 
     // ── Click Listeners ──────────────────────────────────────────
@@ -361,6 +414,7 @@ class EditServiceActivity : AppCompatActivity() {
                     val service = ServiceStore.getServiceById(this, id)
                     
                     if (service != null) {
+                        // Update cached schema using ServiceStore
                         ServiceStore.updateService(
                             context = this,
                             serviceId = id,
@@ -372,6 +426,25 @@ class EditServiceActivity : AppCompatActivity() {
                             imageUri = service.imageUri,
                             replaceImage = false
                         )
+                        
+                        // Update extra unmapped fields directly to Firestore
+                        val selectedDays = listOf(
+                            binding.daySun, binding.dayMon, binding.dayTue,
+                            binding.dayWed, binding.dayThu, binding.dayFri, binding.daySat
+                        ).filter { it.isSelected }.joinToString(",") { it.text.toString() }
+
+                        val extraUpdates = mapOf(
+                            "interiorCount" to interiorCount,
+                            "exteriorCount" to exteriorCount,
+                            "startTime" to binding.startTimeBtn.text.toString(),
+                            "endTime" to binding.endTimeBtn.text.toString(),
+                            "selectedDays" to selectedDays
+                        )
+                        com.google.firebase.firestore.FirebaseFirestore.getInstance()
+                            .collection("services")
+                            .document(id)
+                            .update(extraUpdates)
+
                         showToast("Service Updated Successfully!")
                         finish()
                     } else {
