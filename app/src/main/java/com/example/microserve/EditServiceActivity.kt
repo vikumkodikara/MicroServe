@@ -18,6 +18,7 @@ class EditServiceActivity : AppCompatActivity() {
     private lateinit var binding: ActivityEditServiceBinding
     private var interiorCount = 0
     private var exteriorCount = 0
+    private var serviceId: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -26,6 +27,8 @@ class EditServiceActivity : AppCompatActivity() {
         binding = ActivityEditServiceBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        serviceId = intent.getStringExtra("SERVICE_ID")
+
         applyWindowInsets()
         setupSpinner()
         setupLocationSpinners()
@@ -33,6 +36,8 @@ class EditServiceActivity : AppCompatActivity() {
         setupTimePickers()
         setupDaySelection()
         setupClickListeners()
+
+        populateData()
     }
 
     private fun applyWindowInsets() {
@@ -279,6 +284,53 @@ class EditServiceActivity : AppCompatActivity() {
         picker.show(supportFragmentManager, "TIME_PICKER")
     }
 
+    // ── Data Population ──────────────────────────────────────────
+
+    private fun populateData() {
+        val id = serviceId ?: return
+        val service = ServiceStore.getServiceById(this, id) ?: return
+
+        // Populate Category
+        val categories = arrayOf("-Select-", "Painting", "Plumbing", "Gardening", "Cleaning", "Electric Work", "Handyman", "Carpentry", "HVAC")
+        val categoryIndex = categories.indexOf(service.category)
+        if (categoryIndex >= 0) {
+            binding.categorySpinner.setSelection(categoryIndex)
+        }
+
+        // Populate Location
+        val locationParts = service.location.split(", ")
+        if (locationParts.size == 3) {
+            val city = locationParts[0].trim()
+            val district = locationParts[1].trim()
+            val province = locationParts[2].trim()
+
+            val provinceAdapter = binding.spinnerProvince.adapter as? ArrayAdapter<String>
+            val pIdx = provinceAdapter?.getPosition(province) ?: -1
+            if (pIdx >= 0) {
+                binding.spinnerProvince.setSelection(pIdx)
+                
+                binding.spinnerProvince.post {
+                    val districtAdapter = binding.spinnerDistrict.adapter as? ArrayAdapter<String>
+                    val dIdx = districtAdapter?.getPosition(district) ?: -1
+                    if (dIdx >= 0) {
+                        binding.spinnerDistrict.setSelection(dIdx)
+                        
+                        binding.spinnerDistrict.post {
+                            val cityAdapter = binding.spinnerCity.adapter as? ArrayAdapter<String>
+                            val cIdx = cityAdapter?.getPosition(city) ?: -1
+                            if (cIdx >= 0) {
+                                binding.spinnerCity.setSelection(cIdx)
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        
+        // Note: Measurements and Time Scheduling are not currently stored in the Firebase Service model,
+        // so they cannot be populated here. They will remain at default states.
+    }
+
     // ── Click Listeners ──────────────────────────────────────────
 
     private fun setupClickListeners() {
@@ -287,6 +339,12 @@ class EditServiceActivity : AppCompatActivity() {
         }
 
         binding.btnEdit.setOnClickListener {
+            val id = serviceId
+            if (id == null) {
+                showToast("Error: Service ID missing")
+                return@setOnClickListener
+            }
+
             val category = binding.categorySpinner.selectedItem.toString()
             val province = binding.spinnerProvince.selectedItem?.toString() ?: ""
             val district = binding.spinnerDistrict.selectedItem?.toString() ?: ""
@@ -299,17 +357,42 @@ class EditServiceActivity : AppCompatActivity() {
                 city == "-Select City-" || city.isBlank() -> showToast("Please select a city")
                 interiorCount == 0 && exteriorCount == 0 -> showToast("Please set at least one measurement")
                 else -> {
-                    showToast("Service Updated Successfully!")
-                    finish()
+                    val location = "$city, $district, $province"
+                    val service = ServiceStore.getServiceById(this, id)
+                    
+                    if (service != null) {
+                        ServiceStore.updateService(
+                            context = this,
+                            serviceId = id,
+                            category = category,
+                            providerName = service.providerName,
+                            contact = service.contact,
+                            location = location,
+                            email = service.email,
+                            imageUri = service.imageUri,
+                            replaceImage = false
+                        )
+                        showToast("Service Updated Successfully!")
+                        finish()
+                    } else {
+                        showToast("Failed to update service")
+                    }
                 }
             }
         }
 
         binding.btnDelete.setOnClickListener {
+            val id = serviceId
+            if (id == null) {
+                showToast("Error: Service ID missing")
+                return@setOnClickListener
+            }
+
             AlertDialog.Builder(this)
                 .setTitle("Delete Service")
-                .setMessage("Are you sure want to delete this service?")
+                .setMessage("Are you sure you want to delete this service?")
                 .setPositiveButton("Yes") { dialog, _ ->
+                    ServiceStore.deleteService(this, id)
                     showToast("Service Deleted")
                     dialog.dismiss()
                     finish()
