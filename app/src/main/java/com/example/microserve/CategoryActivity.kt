@@ -57,7 +57,8 @@ class CategoryActivity : AppCompatActivity() {
                     name = service.providerName,
                     location = service.location,
                     rating = 0f,  // Will be updated dynamically
-                    category = categoryName
+                    category = categoryName,
+                    serviceId = service.id
                 )
             }.distinctBy { it.id }
 

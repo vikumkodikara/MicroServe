@@ -261,7 +261,7 @@ object ServiceStore {
         }
         firestore.collection(COLLECTION)
             .document(serviceId)
-            .set(firestoreMap)
+            .set(firestoreMap, com.google.firebase.firestore.SetOptions.merge())
             .addOnSuccessListener {
                 Log.d(TAG, "Service created in Firestore: $serviceId")
                 // Upload image to Firebase Storage after Firestore doc is created
@@ -327,7 +327,7 @@ object ServiceStore {
                 }
                 firestore.collection(COLLECTION)
                     .document(serviceId)
-                    .set(firestoreMap)
+                    .set(firestoreMap, com.google.firebase.firestore.SetOptions.merge())
                     .addOnSuccessListener {
                         Log.d(TAG, "Service updated in Firestore: $serviceId")
                         // Upload new image if it changed
