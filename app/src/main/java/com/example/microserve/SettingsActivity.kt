@@ -38,6 +38,13 @@ class SettingsActivity : AppCompatActivity() {
         ViewCompat.setOnApplyWindowInsetsListener(binding.settingsRoot) { _, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             binding.settingsHeaderFrame.setPadding(0, systemBars.top, 0, 0)
+            findViewById<android.view.View>(R.id.adminNavSystemBarSpacer)?.let { spacer ->
+                val lp = spacer.layoutParams
+                if (lp.height != systemBars.bottom) {
+                    lp.height = systemBars.bottom
+                    spacer.layoutParams = lp
+                }
+            }
             insets
         }
     }
@@ -47,23 +54,7 @@ class SettingsActivity : AppCompatActivity() {
     }
 
     private fun setupBottomNavigation() {
-        binding.bottomNavigation.setOnItemSelectedListener { menuItem ->
-            when (menuItem.itemId) {
-                R.id.nav_home -> {
-                    startActivity(Intent(this, Homepage::class.java))
-                    finish()
-                    true
-                }
-                R.id.nav_profile -> {
-                    startActivity(Intent(this, AdminProfileActivity::class.java))
-                    finish()
-                    true
-                }
-                R.id.nav_settings -> true
-                else -> false
-            }
-        }
-        binding.bottomNavigation.selectedItemId = R.id.nav_settings
+        AdminBottomNavHelper.setup(this, AdminBottomNavHelper.TAB_SETTINGS)
     }
 
     private fun setupInitialState() {
@@ -122,10 +113,9 @@ class SettingsActivity : AppCompatActivity() {
         }
 
         binding.btnLogout.setOnClickListener {
+            SessionNavigator.clearAuth(this)
             Toast.makeText(this, "Logged out", Toast.LENGTH_SHORT).show()
-            startActivity(Intent(this, Homepage::class.java).apply {
-                flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-            })
+            startActivity(SessionNavigator.loginIntent(this))
             finish()
         }
     }
@@ -141,6 +131,16 @@ class SettingsActivity : AppCompatActivity() {
                 val language = languages[which]
                 AppPreferences.setLanguage(this, language)
                 binding.tvLanguageValue.text = language
+
+                val langCode = when (language) {
+                    "Sinhala" -> "si"
+                    "Tamil" -> "ta"
+                    else -> "en"
+                }
+                androidx.appcompat.app.AppCompatDelegate.setApplicationLocales(
+                    androidx.core.os.LocaleListCompat.forLanguageTags(langCode)
+                )
+
                 Toast.makeText(this, "Language set to $language", Toast.LENGTH_SHORT).show()
                 dialog.dismiss()
             }

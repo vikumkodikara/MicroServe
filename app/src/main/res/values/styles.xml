@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="AppTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
+        <item name="colorPrimary">@color/purple_primary</item>
+        <item name="colorPrimaryDark">@color/purple_dark</item>
+        <item name="colorAccent">@color/purple_button</item>
+    </style>
+    
+    <style name="CategoryText">
+        <!-- Fallback to system sans-serif medium to avoid missing font resource -->
+        <item name="android:fontFamily">sans-serif-medium</item>
+        <item name="android:textSize">@dimen/text_large</item>
+        <item name="android:textColor">@color/admin_text_primary</item>
+    </style>
+    
+    <style name="RequestTitleText">
+        <item name="android:fontFamily">sans-serif-medium</item>
+        <item name="android:textSize">@dimen/text_medium</item>
+        <item name="android:textColor">@color/admin_text_primary</item>
+    </style>
+    
+    <style name="RequestDescText">
+        <item name="android:fontFamily">sans-serif-light</item>
+        <item name="android:textSize">@dimen/text_medium</item>
+        <item name="android:textColor">@color/admin_text_secondary</item>
+    </style>
+    
+    <style name="NavText">
+        <item name="android:fontFamily">sans-serif-medium</item>
+        <item name="android:textSize">@dimen/text_small</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:gravity">center</item>
+    </style>
+    
+    <style name="EditButton">
+        <item name="android:background">@drawable/rounded_purple_24dp</item>
+        <item name="android:fontFamily">sans-serif-medium</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textSize">@dimen/text_medium</item>
+    </style>
+</resources>

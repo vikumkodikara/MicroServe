@@ -1,0 +1,108 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isAdmin() {
+      return isSignedIn()
+        && get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin';
+    }
+
+    match /users/{userId} {
+      allow read: if isSignedIn();
+      allow create: if isSignedIn() && request.auth.uid == userId;
+      allow update: if isSignedIn() && (request.auth.uid == userId || isAdmin());
+      allow delete: if isSignedIn() && request.auth.uid == userId;
+
+      // Cards subcollection (per-user)
+      match /cards/{cardId} {
+        allow read: if isSignedIn() && request.auth.uid == userId;
+        allow create: if isSignedIn() && request.auth.uid == userId;
+        allow update: if isSignedIn() && request.auth.uid == userId;
+        allow delete: if isSignedIn() && request.auth.uid == userId;
+      }
+    }
+
+    match /platform/{docId} {
+      allow read: if isSignedIn();
+      allow write: if isSignedIn();
+    }
+
+    // Service provider listings / advertisements
+    match /services/{serviceId} {
+      allow read: if isSignedIn();
+      allow create: if isSignedIn();
+      allow update: if isSignedIn() && (
+        resource.data.ownerUid == request.auth.uid
+        || isAdmin()
+      );
+      allow delete: if isSignedIn() && (
+        resource.data.ownerUid == request.auth.uid
+        || isAdmin()
+      );
+    }
+
+    match /service_requests/{requestId} {
+      allow read: if isSignedIn();
+      allow create: if isSignedIn()
+        && request.resource.data.requesterUid == request.auth.uid;
+      allow update: if isSignedIn() && (
+        resource.data.requesterUid == request.auth.uid
+        || resource.data.acceptedProviderUid == request.auth.uid
+        || isAdmin()
+      );
+      allow delete: if isSignedIn() && resource.data.requesterUid == request.auth.uid;
+
+      match /bids/{bidId} {
+        allow read: if isSignedIn();
+        allow create: if isSignedIn()
+          && request.resource.data.providerUid == request.auth.uid
+          && get(/databases/$(database)/documents/service_requests/$(requestId)).data.requesterUid != request.auth.uid;
+        allow update: if isSignedIn() && (
+          get(/databases/$(database)/documents/service_requests/$(requestId)).data.requesterUid == request.auth.uid
+          || (
+            resource.data.providerUid == request.auth.uid
+            && resource.data.status == 'pending'
+            && get(/databases/$(database)/documents/service_requests/$(requestId)).data.status == 'open'
+            && request.resource.data.providerUid == resource.data.providerUid
+            && request.resource.data.status == resource.data.status
+            && request.resource.data.requestId == resource.data.requestId
+          )
+          || isAdmin()
+        );
+      }
+    }
+
+    match /transactions/{transactionId} {
+      allow read: if isSignedIn() && (
+        resource.data.requesterUid == request.auth.uid
+        || resource.data.providerUid == request.auth.uid
+        || isAdmin()
+      );
+      allow create: if isSignedIn();
+      allow update: if isSignedIn() && (
+        resource.data.requesterUid == request.auth.uid
+        || resource.data.providerUid == request.auth.uid
+        || isAdmin()
+      );
+    }
+
+    match /feedbacks/{feedbackId} {
+      // Any authenticated user can read all feedbacks
+      allow read: if request.auth != null;
+      // Any authenticated user can create a feedback
+      allow create: if request.auth != null;
+      // Only the owner can update their own feedback
+      allow update: if request.auth != null
+        && resource.data.ownerUid == request.auth.uid;
+      // Owner can delete their own, or admin can delete any
+      allow delete: if request.auth != null
+        && (resource.data.ownerUid == request.auth.uid
+            || get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin');
+    }
+  }
+}

@@ -34,28 +34,19 @@ class AdminProfileActivity : AppCompatActivity() {
         ViewCompat.setOnApplyWindowInsetsListener(binding.adminProfileRoot) { _, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             binding.profileHeaderFrame.setPadding(0, systemBars.top, 0, 0)
+            findViewById<android.view.View>(R.id.adminNavSystemBarSpacer)?.let { spacer ->
+                val lp = spacer.layoutParams
+                if (lp.height != systemBars.bottom) {
+                    lp.height = systemBars.bottom
+                    spacer.layoutParams = lp
+                }
+            }
             insets
         }
     }
 
     private fun setupBottomNavigation() {
-        binding.bottomNavigation.setOnItemSelectedListener { menuItem ->
-            when (menuItem.itemId) {
-                R.id.nav_home -> {
-                    startActivity(Intent(this, Homepage::class.java))
-                    finish()
-                    true
-                }
-                R.id.nav_profile -> true
-                R.id.nav_settings -> {
-                    startActivity(Intent(this, SettingsActivity::class.java))
-                    finish()
-                    true
-                }
-                else -> false
-            }
-        }
-        binding.bottomNavigation.selectedItemId = R.id.nav_profile
+        AdminBottomNavHelper.setup(this, AdminBottomNavHelper.TAB_PROFILE)
     }
 
     private fun setupClickListeners() {

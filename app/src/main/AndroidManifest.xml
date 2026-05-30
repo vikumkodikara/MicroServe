@@ -2,6 +2,10 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+
     <application
         android:name=".MicroServeApp"
         android:allowBackup="true"
@@ -33,6 +37,9 @@
             android:name=".Homepage"
             android:exported="false" />
         <activity
+            android:name=".AdminDashboardActivity"
+            android:exported="false" />
+        <activity
             android:name=".PostServiceActivity"
             android:exported="false" />
         <activity
@@ -40,6 +47,9 @@
             android:exported="false" />
         <activity
             android:name=".PostAdsActivity"
+            android:exported="false" />
+        <activity
+            android:name=".PickLocationActivity"
             android:exported="false" />
         <activity
             android:name=".RequesterDetailsActivity"
@@ -80,6 +90,106 @@
         <activity
             android:name=".AdminProfileActivity"
             android:exported="false" />
+        <activity
+            android:name=".PersonalInfoActivity"
+            android:exported="false" />
+        <activity
+            android:name=".SavedAddressActivity"
+            android:exported="false" />
+        <activity
+            android:name=".WalletActivity"
+            android:exported="false" />
+        <activity
+            android:name=".SettingsFragmentActivity"
+            android:exported="false" />
+
+        <activity
+            android:name=".GetHelpActivity"
+            android:exported="false" />
+        <activity
+            android:name=".PrivacyPolicyActivity"
+            android:exported="false" />
+        <activity
+            android:name=".TermsOfServiceActivity"
+            android:exported="false" />
+        <activity
+            android:name=".UserFeedbacksActivity"
+            android:exported="false" />
+        <activity
+            android:name=".CreateFeedbackActivity"
+            android:exported="false" />
+        <activity
+            android:name=".EditFeedbackActivity"
+            android:exported="false" />
+        <activity
+            android:name=".AboutUsActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ContactUsActivity"
+            android:exported="false" />
+        <activity
+            android:name=".MyCardsActivity"
+            android:exported="false" />
+        <activity
+            android:name=".EditCardActivity"
+            android:exported="false" />
+        <activity
+            android:name=".RequestMainActivity"
+            android:exported="false" />
+        <activity
+            android:name=".CreateRequestActivity"
+            android:exported="false" />
+        <activity
+            android:name=".CategoryDetailActivity"
+            android:exported="false" />
+        <activity
+            android:name=".PlaceBidActivity"
+            android:exported="false" />
+        <activity
+            android:name=".RequestDetailActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ProviderJobsActivity"
+            android:exported="false" />
+        <activity
+            android:name=".JobSuccessActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ServiceMainActivity"
+            android:exported="false" />
+        <activity
+            android:name=".MainActivity"
+            android:exported="false" />
+        <activity
+            android:name=".CategoryActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ProfileActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ServiceRequestActivity"
+            android:exported="false" />
+        <activity
+            android:name=".AddNewCardActivity"
+            android:exported="false" />
+        <activity
+            android:name=".BillActivity"
+            android:exported="false" />
+        <activity
+            android:name=".RatingActivity"
+            android:exported="false" />
+        <activity
+            android:name=".EditServiceActivity"
+            android:exported="false" />
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="${applicationId}.fileprovider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths" />
+        </provider>
     </application>
 
 </manifest>

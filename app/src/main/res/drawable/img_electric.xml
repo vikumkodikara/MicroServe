@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="83dp"
+    android:height="63dp"
+    android:viewportWidth="83"
+    android:viewportHeight="63">
+    <!-- Background -->
+    <path
+        android:fillColor="#FFC107"
+        android:pathData="M0,0h83v63h-83z"/>
+    <!-- Lightning bolt icon -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M45,20h-8l-2,12h-4l11,18 -1,-12h6z"
+        android:translateX="0"
+        android:translateY="0"/>
+</vector>

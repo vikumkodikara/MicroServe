@@ -29,6 +29,7 @@ class PostServiceActivity : AppCompatActivity() {
 
         applyWindowInsets()
         setupSpinner()
+        setupLocationSpinners()
         setupCounters()
         setupTimePickers()
         setupDaySelection()
@@ -36,18 +37,169 @@ class PostServiceActivity : AppCompatActivity() {
     }
 
     private fun applyWindowInsets() {
-        ViewCompat.setOnApplyWindowInsetsListener(binding.main) { view, insets ->
-            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            view.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
-            insets
-        }
+        SystemUiHelper.setupPurpleHeaderScreen(
+            activity = this,
+            root = binding.main,
+            headerView = binding.headerContainer,
+            footerBar = binding.footerBar.root
+        )
     }
 
+    private val locationData = mapOf(
+        "Western" to mapOf(
+            "Colombo" to listOf("Colombo 01", "Colombo 02", "Dehiwala", "Moratuwa", "Maharagama"),
+            "Gampaha" to listOf("Gampaha", "Negombo", "Kelaniya", "Kadawatha"),
+            "Kalutara" to listOf("Kalutara", "Panadura", "Horana", "Matugama")
+        ),
+        "Central" to mapOf(
+            "Kandy" to listOf("Kandy", "Peradeniya", "Katugastota", "Gampola"),
+            "Matale" to listOf("Matale", "Dambulla", "Sigiriya"),
+            "Nuwara Eliya" to listOf("Nuwara Eliya", "Hatton", "Talawakelle")
+        ),
+        "Southern" to mapOf(
+            "Galle" to listOf("Galle", "Hikkaduwa", "Ambalangoda", "Elpitiya"),
+            "Matara" to listOf("Matara", "Weligama", "Dickwella", "Akuressa"),
+            "Hambantota" to listOf("Hambantota", "Tangalle", "Beliatta", "Ambalantota")
+        ),
+        "Northern" to mapOf(
+            "Jaffna" to listOf("Jaffna", "Chavakachcheri", "Point Pedro", "Nallur"),
+            "Kilinochchi" to listOf("Kilinochchi", "Pallai", "Paranthan"),
+            "Mannar" to listOf("Mannar", "Murunkan", "Pesalai"),
+            "Mullaitivu" to listOf("Mullaitivu", "Puthukkudiyiruppu", "Oddusuddan"),
+            "Vavuniya" to listOf("Vavuniya", "Cheddikulam", "Omanthai")
+        ),
+        "Eastern" to mapOf(
+            "Trincomalee" to listOf("Trincomalee", "Kinniya", "Mutur"),
+            "Batticaloa" to listOf("Batticaloa", "Kattankudy", "Eravur"),
+            "Ampara" to listOf("Ampara", "Kalmunai", "Akkaraipattu")
+        ),
+        "North Western" to mapOf(
+            "Kurunegala" to listOf("Kurunegala", "Kuliyapitiya", "Polgahawela", "Narammala"),
+            "Puttalam" to listOf("Puttalam", "Chilaw", "Wennappuwa")
+        ),
+        "North Central" to mapOf(
+            "Anuradhapura" to listOf("Anuradhapura", "Kekirawa", "Tambuttegama", "Eppawala"),
+            "Polonnaruwa" to listOf("Polonnaruwa", "Kaduruwela", "Medirigiriya")
+        ),
+        "Uva" to mapOf(
+            "Badulla" to listOf("Badulla", "Bandarawela", "Haputale", "Mahiyanganaya"),
+            "Monaragala" to listOf("Monaragala", "Wellawaya", "Bibile", "Kataragama")
+        ),
+        "Sabaragamuwa" to mapOf(
+            "Ratnapura" to listOf("Ratnapura", "Balangoda", "Pelmadulla", "Embilipitiya"),
+            "Kegalle" to listOf("Kegalle", "Mawanella", "Warakapola", "Rambukkana")
+        )
+    )
+
+    private val categoryConfig = mapOf(
+        "Painting" to listOf(
+            Pair("Interior Walls", "sq. ft."),
+            Pair("Exterior Walls", "sq. ft.")
+        ),
+        "Plumbing" to listOf(
+            Pair("Main Pipe Installation", "foot"),
+            Pair("Emergency Callout", "hour")
+        ),
+        "Gardening" to listOf(
+            Pair("Lawn Mowing", "sq. ft."),
+            Pair("Tree Trimming", "tree")
+        ),
+        "Cleaning" to listOf(
+            Pair("Area Size", "sq. ft."),
+            Pair("Deep Clean", "hours")
+        ),
+        "Electric Work" to listOf(
+            Pair("Circuit Repair", "unit"),
+            Pair("Wiring", "points")
+        ),
+        "Handyman" to listOf(
+            Pair("Assembly", "item"),
+            Pair("General Repair", "hour")
+        ),
+        "Carpentry" to listOf(
+            Pair("Custom Furniture", "piece"),
+            Pair("Wood Repair", "hour")
+        ),
+        "HVAC" to listOf(
+            Pair("AC Service", "unit"),
+            Pair("Duct Cleaning", "sq. ft.")
+        )
+    )
+
     private fun setupSpinner() {
-        val categories = arrayOf("-Select-", "Plumbing", "Electrical", "House Painting", "Carpentry", "Cleaning")
+        val categories = arrayOf("-Select-", "Painting", "Plumbing", "Gardening", "Cleaning", "Electric Work", "Handyman", "Carpentry", "HVAC")
         val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, categories)
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         binding.categorySpinner.adapter = adapter
+
+        binding.categorySpinner.onItemSelectedListener = object : android.widget.AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(parent: android.widget.AdapterView<*>?, view: View?, position: Int, id: Long) {
+                updateMeasurementLabels(categories[position])
+            }
+
+            override fun onNothingSelected(parent: android.widget.AdapterView<*>?) {}
+        }
+    }
+
+    private fun updateMeasurementLabels(category: String) {
+        if (category == "-Select-") return
+        
+        val fields = categoryConfig[category] ?: listOf(Pair("Measurement 1", "unit"), Pair("Measurement 2", "unit"))
+        
+        binding.txtInteriorLabel.text = "${fields[0].first}:\nM Points per ${fields[0].second}"
+        binding.txtExteriorLabel.text = "${fields[1].first}:\nM Points per ${fields[1].second}"
+    }
+
+    private fun setupLocationSpinners() {
+        val provinces = listOf("-Select Province-") + locationData.keys.toList()
+        
+        val provinceAdapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, provinces)
+        provinceAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        binding.spinnerProvince.adapter = provinceAdapter
+
+        binding.spinnerProvince.onItemSelectedListener = object : android.widget.AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(parent: android.widget.AdapterView<*>?, view: View?, position: Int, id: Long) {
+                val selectedProvince = provinces[position]
+                if (selectedProvince == "-Select Province-") {
+                    updateDistrictSpinner(emptyList())
+                } else {
+                    val districts = locationData[selectedProvince]?.keys?.toList() ?: emptyList()
+                    updateDistrictSpinner(listOf("-Select District-") + districts)
+                }
+            }
+            override fun onNothingSelected(parent: android.widget.AdapterView<*>?) {}
+        }
+        
+        updateDistrictSpinner(emptyList())
+    }
+
+    private fun updateDistrictSpinner(districts: List<String>) {
+        val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, districts.ifEmpty { listOf("-Select District-") })
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        binding.spinnerDistrict.adapter = adapter
+
+        binding.spinnerDistrict.onItemSelectedListener = object : android.widget.AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(parent: android.widget.AdapterView<*>?, view: View?, position: Int, id: Long) {
+                if (districts.isEmpty() || districts[position] == "-Select District-") {
+                    updateCitySpinner(emptyList())
+                    return
+                }
+                val selectedProvince = binding.spinnerProvince.selectedItem.toString()
+                val selectedDistrict = districts[position]
+                
+                val cities = locationData[selectedProvince]?.get(selectedDistrict) ?: emptyList()
+                updateCitySpinner(listOf("-Select City-") + cities)
+            }
+            override fun onNothingSelected(parent: android.widget.AdapterView<*>?) {}
+        }
+        
+        updateCitySpinner(emptyList())
+    }
+
+    private fun updateCitySpinner(cities: List<String>) {
+        val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, cities.ifEmpty { listOf("-Select City-") })
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        binding.spinnerCity.adapter = adapter
     }
 
     private fun setupCounters() {
@@ -129,14 +281,54 @@ class PostServiceActivity : AppCompatActivity() {
 
         binding.postBtn.setOnClickListener {
             val category = binding.categorySpinner.selectedItem.toString()
+            val province = binding.spinnerProvince.selectedItem?.toString() ?: ""
+            val district = binding.spinnerDistrict.selectedItem?.toString() ?: ""
+            val city = binding.spinnerCity.selectedItem?.toString() ?: ""
             val startTime = binding.startTimeBtn.text.toString()
             val endTime = binding.endTimeBtn.text.toString()
 
             when {
                 category == "-Select-" -> showToast("Please select a category")
+                province == "-Select Province-" || province.isBlank() -> showToast("Please select a province")
+                district == "-Select District-" || district.isBlank() -> showToast("Please select a district")
+                city == "-Select City-" || city.isBlank() -> showToast("Please select a city")
                 startTime == "Select Time" || endTime == "Select Time" -> showToast("Please select time scheduling")
                 interiorCount == 0 && exteriorCount == 0 -> showToast("Please set at least one measurement")
                 else -> {
+                    val uid = com.google.firebase.auth.FirebaseAuth.getInstance().currentUser?.uid ?: ""
+                    val userName = AppPreferences.getSessionName(this)
+                    val userEmail = AppPreferences.getSessionEmail(this)
+                    val userPhone = AppPreferences.getSessionPhone(this)
+                    val location = "$city, $district, $province"
+
+                    val service = ServiceStore.addService(
+                        context = this,
+                        category = category,
+                        providerName = userName,
+                        contact = userPhone,
+                        location = location,
+                        email = userEmail,
+                        ownerUid = uid
+                    )
+
+                    val selectedDays = listOf(
+                        binding.daySun, binding.dayMon, binding.dayTue,
+                        binding.dayWed, binding.dayThu, binding.dayFri, binding.daySat
+                    ).filter { it.isSelected }.joinToString(",") { it.text.toString() }
+
+                    val extraUpdates = mapOf(
+                        "interiorCount" to interiorCount,
+                        "exteriorCount" to exteriorCount,
+                        "startTime" to binding.startTimeBtn.text.toString(),
+                        "endTime" to binding.endTimeBtn.text.toString(),
+                        "selectedDays" to selectedDays
+                    )
+
+                    com.google.firebase.firestore.FirebaseFirestore.getInstance()
+                        .collection("services")
+                        .document(service.id)
+                        .set(extraUpdates, com.google.firebase.firestore.SetOptions.merge())
+
                     showToast("Service Posted Successfully!")
                     finish()
                 }

@@ -4,15 +4,14 @@ import android.animation.AnimatorSet
 import android.animation.ObjectAnimator
 import android.content.Intent
 import android.os.Bundle
-import android.view.animation.AccelerateDecelerateInterpolator
+import android.view.View
+import android.view.animation.AccelerateInterpolator
 import android.view.animation.DecelerateInterpolator
 import android.view.animation.OvershootInterpolator
-import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.example.microserve.databinding.ActivitySplashBinding
-
 class SplashActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivitySplashBinding
@@ -20,101 +19,120 @@ class SplashActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
-
         binding = ActivitySplashBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        SystemUiHelper.applySplashScreen(this)
+
         ViewCompat.setOnApplyWindowInsetsListener(binding.splashRoot) { view, insets ->
-            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            view.setPadding(0, systemBars.top, 0, systemBars.bottom)
+            val bars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
+            view.setPadding(0, bars.top, 0, bars.bottom)
             insets
         }
 
-        startSplashSequence()
+        binding.splashRoot.post { startSplashSequence() }
     }
 
     private fun startSplashSequence() {
-        val logo = binding.splashLogo
-        val glow = binding.splashGlow
+        val logoCard = binding.splashLogoCard
+        val circle = binding.purpleCircle
         val appName = binding.splashAppName
         val tagline = binding.splashTagline
         val progress = binding.splashProgress
 
-        logo.scaleX = 0.5f
-        logo.scaleY = 0.5f
-        glow.scaleX = 0.3f
-        glow.scaleY = 0.3f
-        appName.translationY = 30f
-        tagline.translationY = 20f
+        val screenW = resources.displayMetrics.widthPixels.toFloat()
+        val density = resources.displayMetrics.density
 
-        // Phase 1: Logo scales up with overshoot + fades in (0–800ms)
-        val logoFadeIn = ObjectAnimator.ofFloat(logo, "alpha", 0f, 1f).setDuration(600)
-        val logoScaleX = ObjectAnimator.ofFloat(logo, "scaleX", 0.5f, 1f).setDuration(800)
-        val logoScaleY = ObjectAnimator.ofFloat(logo, "scaleY", 0.5f, 1f).setDuration(800)
-        logoScaleX.interpolator = OvershootInterpolator(1.5f)
-        logoScaleY.interpolator = OvershootInterpolator(1.5f)
+        logoCard.scaleX = 0f
+        logoCard.scaleY = 0f
 
-        // Phase 2: Glow pulses in (200–900ms)
-        val glowFadeIn = ObjectAnimator.ofFloat(glow, "alpha", 0f, 0.8f).setDuration(700)
-        val glowScaleX = ObjectAnimator.ofFloat(glow, "scaleX", 0.3f, 1.1f).setDuration(900)
-        val glowScaleY = ObjectAnimator.ofFloat(glow, "scaleY", 0.3f, 1.1f).setDuration(900)
-        glowFadeIn.startDelay = 200
-        glowScaleX.startDelay = 200
-        glowScaleY.startDelay = 200
-        glowScaleX.interpolator = DecelerateInterpolator()
-        glowScaleY.interpolator = DecelerateInterpolator()
+        val shiftLeft = 70f * density
 
-        // Phase 3: App name slides up + fades in (500–1000ms)
-        val nameFadeIn = ObjectAnimator.ofFloat(appName, "alpha", 0f, 1f).setDuration(500)
-        val nameSlideUp = ObjectAnimator.ofFloat(appName, "translationY", 30f, 0f).setDuration(500)
-        nameFadeIn.startDelay = 500
-        nameSlideUp.startDelay = 500
-        nameSlideUp.interpolator = DecelerateInterpolator()
-
-        // Phase 4: Tagline fades in (700–1100ms)
-        val tagFadeIn = ObjectAnimator.ofFloat(tagline, "alpha", 0f, 1f).setDuration(400)
-        val tagSlideUp = ObjectAnimator.ofFloat(tagline, "translationY", 20f, 0f).setDuration(400)
-        tagFadeIn.startDelay = 700
-        tagSlideUp.startDelay = 700
-
-        // Phase 5: Progress bar fades in (900–1200ms)
-        val progressFadeIn = ObjectAnimator.ofFloat(progress, "alpha", 0f, 1f).setDuration(300)
-        progressFadeIn.startDelay = 900
-
-        // Glow breathing pulse after initial appear
-        val glowPulseX = ObjectAnimator.ofFloat(glow, "scaleX", 1.1f, 0.9f, 1.05f, 0.95f, 1f)
-        glowPulseX.duration = 2000
-        glowPulseX.startDelay = 1100
-        glowPulseX.interpolator = AccelerateDecelerateInterpolator()
-        val glowPulseY = ObjectAnimator.ofFloat(glow, "scaleY", 1.1f, 0.9f, 1.05f, 0.95f, 1f)
-        glowPulseY.duration = 2000
-        glowPulseY.startDelay = 1100
-
-        val allAnimations = AnimatorSet()
-        allAnimations.playTogether(
-            logoFadeIn, logoScaleX, logoScaleY,
-            glowFadeIn, glowScaleX, glowScaleY,
-            nameFadeIn, nameSlideUp,
-            tagFadeIn, tagSlideUp,
-            progressFadeIn,
-            glowPulseX, glowPulseY
+        // ── Phase 1: Logo pops up big in center ──
+        val phase1 = AnimatorSet()
+        phase1.playTogether(
+            ObjectAnimator.ofFloat(logoCard, "alpha", 0f, 1f).setDuration(300),
+            ObjectAnimator.ofFloat(logoCard, "scaleX", 0f, 1.12f).apply {
+                duration = 600; interpolator = OvershootInterpolator(2f)
+            },
+            ObjectAnimator.ofFloat(logoCard, "scaleY", 0f, 1.12f).apply {
+                duration = 600; interpolator = OvershootInterpolator(2f)
+            }
         )
-        allAnimations.start()
 
-        binding.splashRoot.postDelayed({ goToLogin() }, 3200)
+        // ── Phase 2: Logo settles back to normal size ──
+        val phase2 = AnimatorSet()
+        phase2.playTogether(
+            ObjectAnimator.ofFloat(logoCard, "scaleX", 1.12f, 1f).setDuration(350),
+            ObjectAnimator.ofFloat(logoCard, "scaleY", 1.12f, 1f).setDuration(350)
+        )
+        phase2.interpolator = DecelerateInterpolator()
+
+        // ── Phase 3: Purple circle expands to fill screen ──
+        val maxScale = (screenW * 3f) / (100f * density)
+        val phase3 = AnimatorSet()
+        phase3.playTogether(
+            ObjectAnimator.ofFloat(circle, "alpha", 0f, 1f).setDuration(200),
+            ObjectAnimator.ofFloat(circle, "scaleX", 1f, maxScale).setDuration(700),
+            ObjectAnimator.ofFloat(circle, "scaleY", 1f, maxScale).setDuration(700)
+        )
+        phase3.interpolator = AccelerateInterpolator(1.2f)
+
+        // ── Phase 4: Logo slides a little bit to the left ──
+        val phase4 = AnimatorSet()
+        phase4.playTogether(
+            ObjectAnimator.ofFloat(logoCard, "translationX", 0f, -shiftLeft).setDuration(500),
+            ObjectAnimator.ofFloat(appName, "translationX", 0f, -shiftLeft).setDuration(500),
+            ObjectAnimator.ofFloat(tagline, "translationX", 0f, -shiftLeft).setDuration(500)
+        )
+        phase4.interpolator = DecelerateInterpolator(1.5f)
+
+        // ── Phase 5: App name + tagline fade in to the right of logo ──
+        val phase5 = AnimatorSet()
+        phase5.playTogether(
+            ObjectAnimator.ofFloat(appName, "alpha", 0f, 1f).setDuration(400),
+            ObjectAnimator.ofFloat(appName, "translationY", 16f, 0f).apply {
+                duration = 450; interpolator = DecelerateInterpolator()
+            },
+            ObjectAnimator.ofFloat(tagline, "alpha", 0f, 1f).apply {
+                duration = 400; startDelay = 120
+            },
+            ObjectAnimator.ofFloat(tagline, "translationY", 16f, 0f).apply {
+                duration = 450; startDelay = 120; interpolator = DecelerateInterpolator()
+            }
+        )
+
+        // ── Phase 6: Loading bar appears ──
+        val phase6 = ObjectAnimator.ofFloat(progress, "alpha", 0f, 1f).setDuration(300)
+
+        val splashDelay = if (SessionNavigator.isLoggedIn(this)) 900L else 3200L
+        binding.splashRoot.postDelayed({ navigateNext() }, splashDelay)
+        val fullSequence = AnimatorSet()
+        fullSequence.playSequentially(phase1, phase2, phase3, phase4, phase5, phase6)
+        fullSequence.start()
     }
 
-    private fun goToLogin() {
+    /** Logged in → Home (or admin dashboard). Not logged in → Login only. */
+    private fun navigateNext() {
         if (navigated || isFinishing) return
         navigated = true
 
-        val root = binding.splashRoot
-        root.animate()
+        val nextIntent = if (SessionNavigator.isLoggedIn(this)) {
+            // Sync Firestore data to local cache on app restart
+            CardStore.syncOnLogin(this)
+            ServiceStore.loadFromFirestore(this)
+            FeedbackStore.loadFromFirestore(this) {}
+            SessionNavigator.mainIntent(this)
+        } else {
+            SessionNavigator.clearAuth(this)
+            SessionNavigator.loginIntent(this)
+        }
+
+        binding.splashRoot.animate()
             .alpha(0f)
             .setDuration(400)
             .withEndAction {
-                startActivity(Intent(this, LoginActivity::class.java))
+                startActivity(nextIntent)
                 overridePendingTransition(R.anim.splash_fade_in, R.anim.splash_fade_out)
                 finish()
             }
@@ -122,7 +140,9 @@ class SplashActivity : AppCompatActivity() {
     }
 
     override fun onDestroy() {
+        binding.splashRoot.handler?.removeCallbacksAndMessages(null)
         binding.splashRoot.animate().cancel()
         super.onDestroy()
     }
 }
+

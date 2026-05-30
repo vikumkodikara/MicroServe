@@ -34,13 +34,19 @@ class FeedbacksActivity : AppCompatActivity() {
         setupBackButton()
         setupRecycler()
         setupBottomNavigation()
-        initializeSampleFeedbacksIfNeeded()
+
+        FeedbackStore.startListening(this)
         loadFeedbacks()
     }
 
     override fun onResume() {
         super.onResume()
         loadFeedbacks()
+    }
+
+    override fun onDestroy() {
+        FeedbackStore.stopListening()
+        super.onDestroy()
     }
 
     private fun setupWindowInsets() {
@@ -69,47 +75,25 @@ class FeedbacksActivity : AppCompatActivity() {
     }
 
     private fun loadFeedbacks() {
-        val items = FeedbackStore.getAllFeedbacks(this)
-        if (items.isEmpty()) {
-            binding.rvFeedbacks.visibility = View.GONE
-            binding.emptyState.visibility = View.VISIBLE
-        } else {
-            binding.rvFeedbacks.visibility = View.VISIBLE
-            binding.emptyState.visibility = View.GONE
+        FeedbackStore.loadFromFirestore(this) { items ->
+            if (items.isEmpty()) {
+                binding.rvFeedbacks.visibility = View.GONE
+                binding.emptyState.visibility = View.VISIBLE
+            } else {
+                binding.rvFeedbacks.visibility = View.VISIBLE
+                binding.emptyState.visibility = View.GONE
+            }
+            feedbackAdapter.updateItems(items)
         }
-        feedbackAdapter.updateItems(items)
-    }
-
-    private fun initializeSampleFeedbacksIfNeeded() {
-        if (FeedbackStore.getAllFeedbacks(this).isNotEmpty()) return
-
-        FeedbackStore.addFeedback(
-            context = this,
-            userId = "USR-001",
-            userName = "Pasan Priyasanka",
-            message = "Very Good Service! Great Experience and fast Response",
-            rating = 5,
-            createdAt = 1766652900000L
-        )
-
-        FeedbackStore.addFeedback(
-            context = this,
-            userId = "USR-002",
-            userName = "Hiranya Pahasara",
-            message = "Service Was Okay but took a Little longer",
-            rating = 4,
-            createdAt = 1767606300000L
-        )
     }
 
     private fun setupBottomNavigation() {
         val homeTab = findViewById<android.widget.LinearLayout>(R.id.navTabHome)
         val profileTab = findViewById<android.widget.LinearLayout>(R.id.navTabProfile)
         val settingsTab = findViewById<android.widget.LinearLayout>(R.id.navTabSettings)
-        val bubbleIcon = findViewById<android.widget.ImageView>(R.id.navBubbleIcon)
 
         homeTab.setOnClickListener {
-            startActivity(Intent(this, Homepage::class.java))
+            startActivity(Intent(this, AdminDashboardActivity::class.java))
             finish()
         }
 
@@ -122,8 +106,6 @@ class FeedbacksActivity : AppCompatActivity() {
             startActivity(Intent(this, SettingsActivity::class.java))
             finish()
         }
-
-        bubbleIcon.setImageResource(R.drawable.ic_nav_home)
     }
 
     inner class FeedbackAdapter(
@@ -158,15 +140,15 @@ class FeedbacksActivity : AppCompatActivity() {
             holder.tvMessage.text = item.message
             holder.tvDate.text = formatDate(item.createdAt)
 
-            val filledColor = resources.getColor(R.color.admin_stat_orange, null)
-            val emptyColor = resources.getColor(R.color.admin_purple_light, null)
+            val filledColor = resources.getColor(R.color.star_gold, null)
+            val emptyColor = resources.getColor(R.color.star_unselected, null)
             holder.stars.forEachIndexed { index, imageView ->
                 if (index < item.rating) {
                     imageView.setColorFilter(filledColor)
                     imageView.alpha = 1f
                 } else {
                     imageView.setColorFilter(emptyColor)
-                    imageView.alpha = 0.6f
+                    imageView.alpha = 1f
                 }
             }
 

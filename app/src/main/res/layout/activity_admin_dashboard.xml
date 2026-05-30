@@ -7,7 +7,6 @@
     android:layout_height="match_parent"
     android:background="@color/admin_bg_light"
     android:orientation="vertical"
-    android:clipChildren="false"
     tools:context=".Homepage">
 
     <!-- ═══════════ HEADER ═══════════ -->

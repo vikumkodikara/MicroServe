@@ -42,32 +42,45 @@ object AdminBottomNavHelper {
         val labelProfile = activity.findViewById<TextView>(R.id.navLabelProfile) ?: return
         val labelSettings = activity.findViewById<TextView>(R.id.navLabelSettings) ?: return
 
-        // We must wait for layout to get measured positions
-        root.post {
-            applyBubbleState(
-                currentTab, bubble, bubbleIcon,
-                tabHome, tabProfile, tabSettings,
-                iconHome, iconProfile, iconSettings,
-                labelHome, labelProfile, labelSettings
-            )
-
-            // Entrance animation: scale in with overshoot
-            bubble.scaleX = 0f
-            bubble.scaleY = 0f
-            bubble.animate()
-                .scaleX(1f)
-                .scaleY(1f)
-                .setDuration(400)
-                .setStartDelay(100)
-                .setInterpolator(OvershootInterpolator(2f))
-                .start()
+        val targetTab: View = when (currentTab) {
+            TAB_HOME -> tabHome
+            TAB_PROFILE -> tabProfile
+            TAB_SETTINGS -> tabSettings
+            else -> tabHome
         }
+
+        val listener = object : android.view.ViewTreeObserver.OnGlobalLayoutListener {
+            override fun onGlobalLayout() {
+                if (targetTab.width > 0) {
+                    root.viewTreeObserver.removeOnGlobalLayoutListener(this)
+                    applyBubbleState(
+                        currentTab, bubble, bubbleIcon,
+                        tabHome, tabProfile, tabSettings,
+                        iconHome, iconProfile, iconSettings,
+                        labelHome, labelProfile, labelSettings
+                    )
+
+                    // Entrance animation: scale in with overshoot
+                    bubble.visibility = View.VISIBLE
+                    bubble.scaleX = 0f
+                    bubble.scaleY = 0f
+                    bubble.animate()
+                        .scaleX(1f)
+                        .scaleY(1f)
+                        .setDuration(400)
+                        .setStartDelay(100)
+                        .setInterpolator(OvershootInterpolator(2f))
+                        .start()
+                }
+            }
+        }
+        root.viewTreeObserver.addOnGlobalLayoutListener(listener)
 
         // Click listeners
         tabHome.setOnClickListener {
             if (currentTab != TAB_HOME) {
                 activity.startActivity(
-                    Intent(activity, Homepage::class.java)
+                    Intent(activity, AdminDashboardActivity::class.java)
                         .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP)
                 )
                 activity.finish()

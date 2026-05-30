@@ -1,16 +1,26 @@
 package com.example.microserve
 
 import android.content.Context
+import android.net.Uri
+import android.util.Log
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.ListenerRegistration
+import com.google.firebase.storage.FirebaseStorage
 import org.json.JSONArray
 import org.json.JSONObject
+import java.io.File
 import java.util.UUID
 
 /**
- * Lightweight local persistence for service provider listings.
- * Services transition: Active (Current) → Pending → Completed
- * Replace with Room/Firebase when backend integration is ready.
+ * Service provider listings backed by Firebase Firestore with a local
+ * SharedPreferences cache for offline access.
  */
 object ServiceStore {
+
+    private const val TAG = "ServiceStore"
+    const val EXTRA_SERVICE_ID = "service_id"
+    private const val COLLECTION = "services"
 
     data class Service(
         val id: String,
@@ -19,7 +29,11 @@ object ServiceStore {
         val providerName: String,
         val contact: String,
         val location: String,
-        val status: String = STATUS_ACTIVE
+        val status: String = STATUS_ACTIVE,
+        val email: String = "",
+        val imageUri: String? = null,
+        val ownerUid: String = "",
+        val isActive: Boolean = true
     )
 
     private const val PREF_NAME = "service_store"
@@ -28,6 +42,120 @@ object ServiceStore {
     const val STATUS_ACTIVE = "Active"
     const val STATUS_PENDING = "Pending Approval"
     const val STATUS_COMPLETED = "Completed"
+
+    private val firestore: FirebaseFirestore
+        get() = FirebaseFirestore.getInstance()
+
+    private var snapshotListener: ListenerRegistration? = null
+
+    // ── Firestore Real-time Sync ────────────────────────────────
+
+    fun startListening(context: Context) {
+        if (snapshotListener != null) return
+
+        snapshotListener = firestore.collection(COLLECTION)
+            .addSnapshotListener { snapshot, error ->
+                if (error != null) {
+                    Log.w(TAG, "Firestore listen failed", error)
+                    return@addSnapshotListener
+                }
+                if (snapshot == null) return@addSnapshotListener
+
+                val services = snapshot.documents.mapNotNull { doc ->
+                    try {
+                        Service(
+                            id = doc.id,
+                            title = doc.getString("title") ?: "Untitled Service",
+                            category = doc.getString("category") ?: "General",
+                            providerName = doc.getString("providerName") ?: "Unknown",
+                            contact = doc.getString("contact") ?: "N/A",
+                            location = doc.getString("location") ?: "N/A",
+                            status = doc.getString("status") ?: STATUS_ACTIVE,
+                            email = doc.getString("email") ?: "",
+                            imageUri = doc.getString("imageUri")?.takeIf { it.isNotBlank() },
+                            ownerUid = doc.getString("ownerUid") ?: "",
+                            isActive = doc.getBoolean("isActive") ?: true
+                        )
+                    } catch (e: Exception) {
+                        Log.w(TAG, "Error parsing service doc", e)
+                        null
+                    }
+                }
+                // Preserve local image paths when Firestore hasn't received
+                // the download URL yet (upload still in progress).
+                val localCache = getAllServices(context).associateBy { it.id }
+                val merged = services.map { svc ->
+                    if (svc.imageUri.isNullOrBlank()) {
+                        val localImage = localCache[svc.id]?.imageUri
+                        if (!localImage.isNullOrBlank() && !localImage.startsWith("http")) {
+                            svc.copy(imageUri = localImage)
+                        } else {
+                            svc
+                        }
+                    } else {
+                        svc
+                    }
+                }
+                saveAllLocally(context, merged)
+            }
+    }
+
+    fun stopListening() {
+        snapshotListener?.remove()
+        snapshotListener = null
+    }
+
+    /**
+     * Loads all services from Firestore once (non-realtime).
+     * Updates local cache and invokes the callback on the main thread.
+     */
+    fun loadFromFirestore(context: Context, onComplete: ((List<Service>) -> Unit)? = null) {
+        firestore.collection(COLLECTION)
+            .get()
+            .addOnSuccessListener { snapshot ->
+                val services = snapshot.documents.mapNotNull { doc ->
+                    try {
+                        Service(
+                            id = doc.id,
+                            title = doc.getString("title") ?: "Untitled Service",
+                            category = doc.getString("category") ?: "General",
+                            providerName = doc.getString("providerName") ?: "Unknown",
+                            contact = doc.getString("contact") ?: "N/A",
+                            location = doc.getString("location") ?: "N/A",
+                            status = doc.getString("status") ?: STATUS_ACTIVE,
+                            email = doc.getString("email") ?: "",
+                            imageUri = doc.getString("imageUri")?.takeIf { it.isNotBlank() },
+                            ownerUid = doc.getString("ownerUid") ?: "",
+                            isActive = doc.getBoolean("isActive") ?: true
+                        )
+                    } catch (e: Exception) {
+                        Log.w(TAG, "Error parsing service doc", e)
+                        null
+                    }
+                }
+                val localCache = getAllServices(context).associateBy { it.id }
+                val merged = services.map { svc ->
+                    if (svc.imageUri.isNullOrBlank()) {
+                        val localImage = localCache[svc.id]?.imageUri
+                        if (!localImage.isNullOrBlank() && !localImage.startsWith("http")) {
+                            svc.copy(imageUri = localImage)
+                        } else {
+                            svc
+                        }
+                    } else {
+                        svc
+                    }
+                }
+                saveAllLocally(context, merged)
+                onComplete?.invoke(merged)
+            }
+            .addOnFailureListener { error ->
+                Log.w(TAG, "Failed to load services from Firestore", error)
+                onComplete?.invoke(getAllServices(context))
+            }
+    }
+
+    // ── Read ────────────────────────────────────────────────────
 
     fun getActiveServices(context: Context): List<Service> {
         return getAllServices(context).filter { it.status.equals(STATUS_ACTIVE, ignoreCase = true) }
@@ -59,25 +187,158 @@ object ServiceStore {
         }
     }
 
+    /** All active advertisements shown on the home feed. */
+    fun getHomeAdvertisements(context: Context): List<Service> {
+        return getAllServices(context).filter {
+            it.status.equals(STATUS_ACTIVE, ignoreCase = true)
+        }
+    }
+
+    /** Posts created by the currently logged-in service provider. */
+    fun getMyPosts(context: Context): List<Service> {
+        val uid = AppPreferences.getSessionUid(context)
+        val sessionName = AppPreferences.getSessionName(context).trim()
+        val sessionPhone = normalizePhone(AppPreferences.getSessionPhone(context))
+        val sessionEmail = AppPreferences.getSessionEmail(context).trim().lowercase()
+
+        return getAllServices(context).filter { service ->
+            val owner = service.ownerUid.trim()
+            val postEmail = service.email.trim().lowercase()
+            when {
+                uid.isNotBlank() && (owner == uid || owner.equals(sessionEmail, ignoreCase = true)) -> true
+                sessionEmail.isNotBlank() && (postEmail == sessionEmail || owner.equals(sessionEmail, ignoreCase = true)) -> true
+                owner.isBlank() -> matchesLegacyOwner(service, sessionName, sessionPhone)
+                else -> false
+            }
+        }
+    }
+
+    fun getServiceById(context: Context, serviceId: String): Service? {
+        return getAllServices(context).firstOrNull { it.id == serviceId }
+    }
+
+    // ── Create ──────────────────────────────────────────────────
+
     fun addService(
         context: Context,
         category: String,
         providerName: String,
         contact: String,
-        location: String
-    ) {
+        location: String,
+        email: String = "",
+        imageUri: String? = null,
+        ownerUid: String = resolveOwnerKey(context, email)
+    ): Service {
+        val serviceId = UUID.randomUUID().toString()
+        val persistedImage = imageUri?.let { path ->
+            PostImageHelper.attachToServiceId(context, path, serviceId)
+                ?: persistImageUri(context, serviceId, path)
+        }
+
         val newService = Service(
-            id = UUID.randomUUID().toString(),
+            id = serviceId,
             title = "New $category Service",
             category = category.trim(),
             providerName = providerName.trim(),
             contact = contact.trim(),
             location = location.trim(),
-            status = STATUS_ACTIVE
+            status = STATUS_ACTIVE,
+            email = email.trim(),
+            imageUri = persistedImage,
+            ownerUid = ownerUid
         )
 
         val updated = getAllServices(context).toMutableList().apply { add(0, newService) }
-        saveAll(context, updated)
+        saveAllLocally(context, updated)
+
+        // Sync to Firestore – use an empty imageUri in the initial doc;
+        // the real download URL is set by uploadImageToStorage after upload.
+        val firestoreMap = newService.toMap().toMutableMap().apply {
+            val img = this["imageUri"] as? String
+            if (img != null && !img.startsWith("http://") && !img.startsWith("https://")) {
+                this["imageUri"] = ""
+            }
+        }
+        firestore.collection(COLLECTION)
+            .document(serviceId)
+            .set(firestoreMap, com.google.firebase.firestore.SetOptions.merge())
+            .addOnSuccessListener {
+                Log.d(TAG, "Service created in Firestore: $serviceId")
+                // Upload image to Firebase Storage after Firestore doc is created
+                uploadImageToStorage(context, serviceId, persistedImage)
+            }
+            .addOnFailureListener { Log.w(TAG, "Failed to create service in Firestore", it) }
+
+        return newService
+    }
+
+    // ── Update ──────────────────────────────────────────────────
+
+    fun updateService(
+        context: Context,
+        serviceId: String,
+        category: String,
+        providerName: String,
+        contact: String,
+        location: String,
+        email: String = "",
+        imageUri: String? = null,
+        replaceImage: Boolean = false
+    ): Boolean {
+        val current = getAllServices(context)
+        var changed = false
+        var updatedService: Service? = null
+        val updated = current.map { service ->
+            if (service.id == serviceId) {
+                changed = true
+                val nextImage = when {
+                    !replaceImage -> service.imageUri
+                    imageUri.isNullOrBlank() -> service.imageUri
+                    else -> {
+                        PostImageHelper.deletePostImage(context, service.imageUri)
+                        PostImageHelper.attachToServiceId(context, imageUri, serviceId)
+                            ?: persistImageUri(context, serviceId, imageUri)
+                            ?: service.imageUri
+                    }
+                }
+                service.copy(
+                    category = category.trim(),
+                    providerName = providerName.trim(),
+                    contact = contact.trim(),
+                    location = location.trim(),
+                    email = email.trim(),
+                    imageUri = nextImage,
+                    title = "New ${category.trim()} Service"
+                ).also { updatedService = it }
+            } else {
+                service
+            }
+        }
+        if (changed) {
+            saveAllLocally(context, updated)
+
+            // Sync to Firestore
+            updatedService?.let { svc ->
+                val firestoreMap = svc.toMap().toMutableMap().apply {
+                    val img = this["imageUri"] as? String
+                    if (img != null && !img.startsWith("http://") && !img.startsWith("https://")) {
+                        this["imageUri"] = ""
+                    }
+                }
+                firestore.collection(COLLECTION)
+                    .document(serviceId)
+                    .set(firestoreMap, com.google.firebase.firestore.SetOptions.merge())
+                    .addOnSuccessListener {
+                        Log.d(TAG, "Service updated in Firestore: $serviceId")
+                        // Upload new image if it changed
+                        if (replaceImage && !imageUri.isNullOrBlank()) {
+                            uploadImageToStorage(context, serviceId, svc.imageUri)
+                        }
+                    }
+                    .addOnFailureListener { Log.w(TAG, "Failed to update service in Firestore", it) }
+            }
+        }
+        return changed
     }
 
     fun updateServiceStatus(context: Context, serviceId: String, newStatus: String): Boolean {
@@ -92,28 +353,190 @@ object ServiceStore {
             }
         }
 
-        if (changed) saveAll(context, updated)
+        if (changed) {
+            saveAllLocally(context, updated)
+
+            // Sync to Firestore
+            firestore.collection(COLLECTION)
+                .document(serviceId)
+                .update("status", newStatus)
+                .addOnSuccessListener { Log.d(TAG, "Service status updated in Firestore: $serviceId") }
+                .addOnFailureListener { Log.w(TAG, "Failed to update service status in Firestore", it) }
+        }
         return changed
     }
 
+    // ── Toggle Active ────────────────────────────────────────────
+
+    fun toggleServiceActive(
+        context: Context,
+        serviceId: String,
+        onComplete: ((Boolean) -> Unit)? = null
+    ) {
+        val current = getAllServices(context)
+        val service = current.firstOrNull { it.id == serviceId }
+        if (service == null) {
+            onComplete?.invoke(false)
+            return
+        }
+
+        val newActiveState = !service.isActive
+        val updated = current.map {
+            if (it.id == serviceId) it.copy(isActive = newActiveState) else it
+        }
+        saveAllLocally(context, updated)
+
+        // Sync to Firestore
+        firestore.collection(COLLECTION)
+            .document(serviceId)
+            .update("isActive", newActiveState)
+            .addOnSuccessListener {
+                Log.d(TAG, "Service isActive toggled to $newActiveState: $serviceId")
+                onComplete?.invoke(true)
+            }
+            .addOnFailureListener {
+                Log.w(TAG, "Failed to toggle service active state", it)
+                onComplete?.invoke(false)
+            }
+    }
+
+    // ── Delete ──────────────────────────────────────────────────
+
     fun deleteService(context: Context, serviceId: String): Boolean {
-        val updated = getAllServices(context).filterNot { it.id == serviceId }
-        val deleted = updated.size != getAllServices(context).size
-        if (deleted) saveAll(context, updated)
+        val current = getAllServices(context)
+        val removed = current.firstOrNull { it.id == serviceId }
+        val updated = current.filterNot { it.id == serviceId }
+        val deleted = updated.size != current.size
+        if (deleted) {
+            PostImageHelper.deletePostImage(context, removed?.imageUri)
+            saveAllLocally(context, updated)
+
+            // Sync to Firestore
+            firestore.collection(COLLECTION)
+                .document(serviceId)
+                .delete()
+                .addOnSuccessListener {
+                    Log.d(TAG, "Service deleted from Firestore: $serviceId")
+                    deleteImageFromStorage(serviceId)
+                }
+                .addOnFailureListener { Log.w(TAG, "Failed to delete service from Firestore", it) }
+        }
         return deleted
     }
 
-    private fun saveAll(context: Context, services: List<Service>) {
+    // ── Helpers ─────────────────────────────────────────────────
+
+    private fun resolveOwnerKey(context: Context, email: String): String {
+        val uid = AppPreferences.getSessionUid(context)
+        if (uid.isNotBlank()) return uid
+        return email.trim().lowercase()
+    }
+
+    private fun persistImageUri(context: Context, serviceId: String, imageUri: String): String? {
+        if (imageUri.startsWith("content://", ignoreCase = true)) {
+            return PostImageHelper.savePostImageFromUri(context, Uri.parse(imageUri), serviceId)
+        }
+        if (imageUri.startsWith(context.filesDir.absolutePath)) {
+            return imageUri
+        }
+        return imageUri.takeIf { it.isNotBlank() }
+    }
+
+    private fun matchesLegacyOwner(
+        service: Service,
+        sessionName: String,
+        sessionPhone: String
+    ): Boolean {
+        val nameMatch = sessionName.isNotBlank() &&
+            service.providerName.equals(sessionName, ignoreCase = true)
+        val phoneMatch = sessionPhone.isNotBlank() &&
+            normalizePhone(service.contact) == sessionPhone
+        return nameMatch || phoneMatch
+    }
+
+    private fun normalizePhone(value: String): String {
+        return value.filter { it.isDigit() }
+    }
+
+    // ── Firebase Storage ─────────────────────────────────────────
+
+    private const val STORAGE_PATH = "service_images"
+
+    /**
+     * Uploads the local image file to Firebase Storage, then updates the
+     * Firestore document's imageUri with the public download URL.
+     */
+    private fun uploadImageToStorage(context: Context, serviceId: String, localPath: String?) {
+        if (localPath.isNullOrBlank()) return
+        // Skip if it's already a cloud URL
+        if (localPath.startsWith("http://") || localPath.startsWith("https://")) return
+
+        val file = File(localPath)
+        if (!file.exists()) return
+
+        val storageRef = FirebaseStorage.getInstance()
+            .reference
+            .child("$STORAGE_PATH/$serviceId.jpg")
+
+        storageRef.putFile(Uri.fromFile(file))
+            .addOnSuccessListener {
+                storageRef.downloadUrl.addOnSuccessListener { downloadUrl ->
+                    val url = downloadUrl.toString()
+                    Log.d(TAG, "Image uploaded to Storage: $url")
+
+                    // Update Firestore doc with download URL
+                    firestore.collection(COLLECTION)
+                        .document(serviceId)
+                        .update("imageUri", url)
+                        .addOnSuccessListener {
+                            Log.d(TAG, "Firestore imageUri updated for $serviceId")
+                            // Also update local cache
+                            updateLocalImageUri(context, serviceId, url)
+                        }
+                        .addOnFailureListener { e ->
+                            Log.w(TAG, "Failed to update imageUri in Firestore", e)
+                        }
+                }
+            }
+            .addOnFailureListener { e ->
+                Log.w(TAG, "Failed to upload image to Storage", e)
+            }
+    }
+
+    private fun deleteImageFromStorage(serviceId: String) {
+        val storageRef = FirebaseStorage.getInstance()
+            .reference
+            .child("$STORAGE_PATH/$serviceId.jpg")
+
+        storageRef.delete()
+            .addOnSuccessListener { Log.d(TAG, "Image deleted from Storage: $serviceId") }
+            .addOnFailureListener { Log.w(TAG, "Failed to delete image from Storage", it) }
+    }
+
+    private fun updateLocalImageUri(context: Context, serviceId: String, newUri: String) {
+        val services = getAllServices(context)
+        val updated = services.map { svc ->
+            if (svc.id == serviceId) svc.copy(imageUri = newUri) else svc
+        }
+        saveAllLocally(context, updated)
+    }
+
+    // ── Local cache ─────────────────────────────────────────────
+
+    private fun saveAllLocally(context: Context, services: List<Service>) {
         val jsonArray = JSONArray()
         services.forEach { service -> jsonArray.put(service.toJson()) }
 
         context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE)
             .edit()
             .putString(KEY_SERVICES, jsonArray.toString())
-            .apply()
+            .commit()
     }
 
+    // ── JSON conversion ─────────────────────────────────────────
+
     private fun JSONObject.toService(): Service {
+        val image = optString("imageUri", "").takeIf { it.isNotBlank() }
         return Service(
             id = optString("id", UUID.randomUUID().toString()),
             title = optString("title", "Untitled Service"),
@@ -121,7 +544,11 @@ object ServiceStore {
             providerName = optString("providerName", "Unknown"),
             contact = optString("contact", "N/A"),
             location = optString("location", "N/A"),
-            status = optString("status", STATUS_ACTIVE)
+            status = optString("status", STATUS_ACTIVE),
+            email = optString("email", ""),
+            imageUri = image,
+            ownerUid = optString("ownerUid", ""),
+            isActive = optBoolean("isActive", true)
         )
     }
 
@@ -134,6 +561,26 @@ object ServiceStore {
             put("contact", contact)
             put("location", location)
             put("status", status)
+            put("email", email)
+            put("imageUri", imageUri.orEmpty())
+            put("ownerUid", ownerUid)
+            put("isActive", isActive)
         }
+    }
+
+    private fun Service.toMap(): Map<String, Any> {
+        return mapOf(
+            "id" to id,
+            "title" to title,
+            "category" to category,
+            "providerName" to providerName,
+            "contact" to contact,
+            "location" to location,
+            "status" to status,
+            "email" to email,
+            "imageUri" to imageUri.orEmpty(),
+            "ownerUid" to ownerUid,
+            "isActive" to isActive
+        )
     }
 }

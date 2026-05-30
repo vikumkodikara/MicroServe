@@ -13,10 +13,20 @@
     <color name="light_background">#F8F9FA</color>
     <color name="text_gray">#757575</color>
 
+    <!-- Service Request App Colors -->
+    <color name="purple_primary">#8778BF</color>
+    <color name="purple_dark">#483C72</color>
+    <color name="purple_medium">#7A6BB3</color>
+    <color name="purple_button">#7B6DB1</color>
+    <color name="off_white">#FFFCFC</color>
+    <color name="shadow">#40000000</color>
+
+    <!-- Main branch user app colors -->
     <color name="brand_purple">#9C27B0</color>
     <color name="chip_gray">#E0E0E0</color>
     <color name="header_start">#483C72</color>
     <color name="header_end">#7A6BB3</color>
+
     <!-- Discover Screen Colors -->
     <color name="discover_bg_start">#1A1A2E</color>
     <color name="discover_bg_end">#0A0A10</color>
@@ -24,11 +34,24 @@
     <color name="dark_gray_search">#2A2A3E</color>
     <color name="search_hint">#888899</color>
 
-    <!-- Matches bottom of rectanglenav — system-bar spacer under home nav -->
-    <color name="home_nav_inset_fill">#483C72</color>
+    <!-- Match exactly with home_nav_bar_shape fillColor (#5F4B8A). -->
+    <color name="home_nav_inset_fill">#5F4B8A</color>
     <color name="login_button_lavender">#D199FF</color>
     <color name="login_hint_gray">#B0B0B0</color>
     <color name="login_link_gray">#B0B0B0</color>
     <color name="login_auth_purple_top">#8778BF</color>
     <color name="login_auth_purple_bottom">#483C72</color>
+    <color name="google_button_text">#3C4043</color>
+    <color name="google_button_stroke">#DADCE0</color>
+    <color name="white_card_bg">#FFFFFF</color>
+    <color name="home_header_center">#5F5193</color>
+
+    <!-- Colors for Migrated UI Components -->
+    <color name="purple_gradient_start">#FF705697</color>
+    <color name="purple_gradient_end">#FF462E69</color>
+    <color name="purple_nav">#FF7D62A2</color>
+    <color name="purple_nav_dark">#FF3C2A54</color>
+    <color name="bg_light">#FFF6F6F6</color>
+    <color name="text_dark">#FF1A1A1A</color>
+    <color name="text_secondary">#FF757575</color>
 </resources>

@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Base background color for pages -->
+    <color name="admin_bg_light">#12121A</color>
+    <color name="light_background">#12121A</color>
+    
+    <!-- White card backgrounds turn into premium dark purple-blue card bg -->
+    <color name="white_card_bg">#1E1F38</color>
+    <color name="off_white">#151522</color>
+    
+    <!-- Text Colors -->
+    <color name="admin_text_primary">#EAEAEA</color>
+    <color name="admin_text_secondary">#A5A6C2</color>
+    <color name="admin_icon_color">#EAEAEA</color>
+    <color name="text_dark">#EAEAEA</color>
+    
+    <!-- Quick actions background -->
+    <color name="admin_quick_action_bg">#25263F</color>
+    
+    <!-- Other components -->
+    <color name="login_button_lavender">#8F75E0</color>
+    <color name="google_button_text">#FFFFFF</color>
+    <color name="google_button_stroke">#3D3D52</color>
+    
+    <!-- Chip background color override -->
+    <color name="chip_gray">#2C2D4A</color>
+    
+    <!-- Glowing Neon Purple Accents for Buttons & Highlights -->
+    <color name="brand_purple">#BB86FC</color>
+    <color name="primary_purple">#BB86FC</color>
+    <color name="purple_button">#BB86FC</color>
+    <color name="admin_primary_purple">#BB86FC</color>
+    <color name="admin_purple_light">#D0C4FF</color>
+    
+    <!-- Majestic Plum Night Sky Gradient Colors -->
+    <color name="purple_dark">#1A1430</color>
+    <color name="home_header_center">#2E2354</color>
+    <color name="purple_medium">#46387D</color>
+    <color name="purple_primary">#5B48A3</color>
+    <color name="admin_purple_dark">#9E82F0</color>
+    
+    <!-- Balanced Bottom Spacers -->
+    <color name="home_nav_inset_fill">#1A1430</color>
+    
+    <!-- Shadow tint for dark mode -->
+    <color name="shadow_dark">#33000000</color>
+    
+    <!-- Divider for dark mode settings -->
+    <color name="white">#FFFFFFFF</color>
+    <color name="bg_light">#25263F</color>
+</resources>
