@@ -174,6 +174,7 @@
     <string name="notifications">Notifications</string>
     <string name="dark_mode">Dark Mode</string>
     <string name="language">Language</string>
+    <string name="select_language">Select Language</string>
     <string name="get_help">Get Help</string>
     <string name="privacy_policy">Privacy Policy</string>
     <string name="terms_of_services">Terms of Services</string>
@@ -319,6 +320,40 @@
     <string name="request_service_hint_contact">Contact number</string>
     <string name="request_service_hint_location">Your location</string>
     <string name="request_service_hint_description">Describe your need</string>
+
+    <!-- Bill -->
+    <string name="bill_title">Bill</string>
+    <string name="bill_details_title">Invoice Details</string>
+    <string name="bill_client_label">Client</string>
+    <string name="bill_provider_label">Service Provider</string>
+    <string name="bill_total_label">Total Amount</string>
+    <string name="bill_m_points_format">M %1$s</string>
+    <string name="bill_payment_method_label">Payment Method</string>
+    <string name="bill_m_points_wallet">M Points Wallet</string>
+    <string name="bill_your_balance">Your balance</string>
+    <string name="bill_top_up">Top Up</string>
+    <string name="bill_status_title">Order Status</string>
+    <string name="bill_step_awaiting_payment">Awaiting Payment</string>
+    <string name="bill_step_paid_escrow">Paid (Escrow)</string>
+    <string name="bill_step_complete">Complete</string>
+    <string name="bill_pay_now">Pay Now</string>
+    <string name="bill_mark_complete">Mark Complete</string>
+    <string name="bill_confirm_and_rate">Confirm &amp; Rate</string>
+    <string name="bill_rate_provider">Rate Provider</string>
+    <string name="bill_processing">Processing…</string>
+    <string name="bill_confirming">Confirming…</string>
+    <string name="bill_payment_success_escrow">Payment successful! M Points held in escrow.</string>
+    <string name="bill_mark_done_success">Marked as done. Waiting for customer confirmation.</string>
+    <string name="bill_job_complete_released">Job complete! M Points released to provider.</string>
+    <string name="bill_request_id_missing">Request ID is missing. Please reopen this bill.</string>
+    <string name="bill_invalid_payment_details">Invalid payment details</string>
+    <string name="bill_loading_total">—</string>
+    <string name="bill_top_up_wallet">Top Up Wallet</string>
+    <string name="bill_confirm_payment_to">Pay %1$s to %2$s</string>
+    <string name="bill_provider_mobile">Provider Mobile</string>
+    <string name="bill_call_provider">Call</string>
+    <string name="bill_contact_unavailable">Contact number not available</string>
+    <string name="bill_contact_loading">Loading contact…</string>
 
     <!-- Policies -->
     <string name="privacy_policy_title">Privacy Policy</string>
