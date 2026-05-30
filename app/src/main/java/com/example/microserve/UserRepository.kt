@@ -6,6 +6,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseAuthUserCollisionException
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.ListenerRegistration
 
 object UserRepository {
 
@@ -187,6 +188,69 @@ object UserRepository {
                 AppPreferences.saveSession(context, profile)
                 onError(error.localizedMessage ?: "Unable to load profile")
                 if (isAdmin) onAdminRoute() else onUserRoute()
+            }
+    }
+
+    fun listenAllUsers(
+        onUpdate: (List<UserProfile>) -> Unit,
+        onError: (String) -> Unit
+    ): ListenerRegistration {
+        return firestore.collection(UserProfile.COLLECTION)
+            .addSnapshotListener { snapshot, error ->
+                if (error != null) {
+                    onError(error.localizedMessage ?: "Failed to load users")
+                    return@addSnapshotListener
+                }
+                val profiles = snapshot?.documents?.mapNotNull { doc ->
+                    val data = doc.data.orEmpty()
+                    UserProfile(
+                        uid = doc.id,
+                        name = data[UserProfile.FIELD_NAME] as? String ?: "",
+                        email = data[UserProfile.FIELD_EMAIL] as? String ?: "",
+                        phone = data[UserProfile.FIELD_PHONE] as? String ?: "",
+                        location = data[UserProfile.FIELD_LOCATION] as? String ?: "",
+                        photoUrl = data[UserProfile.FIELD_PHOTO_URL] as? String ?: "",
+                        role = data[UserProfile.FIELD_ROLE] as? String ?: UserProfile.ROLE_USER,
+                        cashPoints = (data[UserProfile.FIELD_CASH_POINTS] as? Number)?.toInt() ?: 0,
+                        createdAt = (data[UserProfile.FIELD_CREATED_AT] as? Number)?.toLong()
+                            ?: System.currentTimeMillis()
+                    )
+                }.orEmpty().sortedByDescending { it.createdAt }
+                onUpdate(profiles)
+            }
+    }
+
+    fun getProfileById(
+        uid: String,
+        onSuccess: (UserProfile) -> Unit,
+        onFailure: (String) -> Unit
+    ) {
+        firestore.collection(UserProfile.COLLECTION)
+            .document(uid)
+            .get()
+            .addOnSuccessListener { doc ->
+                if (!doc.exists()) {
+                    onFailure("User not found")
+                    return@addOnSuccessListener
+                }
+                val data = doc.data.orEmpty()
+                onSuccess(
+                    UserProfile(
+                        uid = doc.id,
+                        name = data[UserProfile.FIELD_NAME] as? String ?: "",
+                        email = data[UserProfile.FIELD_EMAIL] as? String ?: "",
+                        phone = data[UserProfile.FIELD_PHONE] as? String ?: "",
+                        location = data[UserProfile.FIELD_LOCATION] as? String ?: "",
+                        photoUrl = data[UserProfile.FIELD_PHOTO_URL] as? String ?: "",
+                        role = data[UserProfile.FIELD_ROLE] as? String ?: UserProfile.ROLE_USER,
+                        cashPoints = (data[UserProfile.FIELD_CASH_POINTS] as? Number)?.toInt() ?: 0,
+                        createdAt = (data[UserProfile.FIELD_CREATED_AT] as? Number)?.toLong()
+                            ?: System.currentTimeMillis()
+                    )
+                )
+            }
+            .addOnFailureListener { error ->
+                onFailure(error.localizedMessage ?: "Failed to load user")
             }
     }
 
