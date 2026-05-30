@@ -9,15 +9,18 @@ initializeApp();
 
 const db = getFirestore();
 
-// ─── Collection / field constants (must match Android app) ───────────────────
-const COL_USERS        = "UserProfiles";   // UserProfile.COLLECTION
-const COL_REQUESTS     = "ServiceRequests";
-const COL_TRANSACTIONS = "ServiceTransactions";
+// ─── Collection / field constants (must match Android app exactly) ──────────
+//   ServiceRequest.COLLECTION  = "service_requests"
+//   UserProfile.COLLECTION     = "users"
+//   ServiceTransaction (see TransactionRepository) = "transactions"
+const COL_USERS        = "users";            // UserProfile.COLLECTION
+const COL_REQUESTS     = "service_requests"; // ServiceRequest.COLLECTION
+const COL_TRANSACTIONS = "transactions";     // TransactionRepository collection
 const COL_PLATFORM     = "platform";
 
 const DOC_ESCROW       = "escrow";
 
-const F_POINTS         = "cashPoints";     // UserProfile.FIELD_CASH_POINTS
+const F_POINTS         = "cashPoints";       // UserProfile.FIELD_CASH_POINTS
 const F_ESCROW_POINTS  = "escrowPoints";
 
 const STATUS_IN_PROGRESS = "in_progress";

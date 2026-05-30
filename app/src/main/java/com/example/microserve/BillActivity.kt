@@ -10,6 +10,7 @@ import android.widget.CheckBox
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import android.util.Log
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.ListenerRegistration
 
@@ -144,6 +145,14 @@ class BillActivity : AppCompatActivity() {
     // ── Payment flow — delegated to Cloud Function ───────────────────────────
 
     private fun handlePayment(request: ServiceRequest, uid: String) {
+        // ── Debug: verify the ID before touching Firestore ──
+        Log.d("PaymentDebug", "Pay Now clicked — requestId='${request.id}' acceptedPoints=${request.acceptedPoints} providerUid='${request.acceptedProviderUid}'")
+
+        if (request.id.isBlank()) {
+            Log.e("PaymentDebug", "requestId is BLANK — cannot proceed with payment")
+            Toast.makeText(this, "Error: request ID is missing. Please reopen this bill.", Toast.LENGTH_LONG).show()
+            return
+        }
         if (request.acceptedPoints <= 0 || request.acceptedProviderUid.isBlank()) {
             Toast.makeText(this, "Invalid payment details", Toast.LENGTH_SHORT).show()
             return
@@ -207,7 +216,11 @@ class BillActivity : AppCompatActivity() {
 
     private fun confirmAndRate(request: ServiceRequest) {
         val transactionId = request.transactionId
+        // ── Debug: verify IDs before calling Cloud Function ──
+        Log.d("PaymentDebug", "Confirm & Rate clicked — requestId='${request.id}' transactionId='$transactionId'")
+
         if (transactionId.isBlank()) {
+            Log.e("PaymentDebug", "transactionId is BLANK — cannot release escrow")
             Toast.makeText(this, "Transaction not found", Toast.LENGTH_SHORT).show()
             return
         }
