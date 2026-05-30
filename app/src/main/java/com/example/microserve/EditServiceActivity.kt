@@ -1,17 +1,99 @@
 package com.example.microserve
 
 import android.app.AlertDialog
-import android.graphics.Color
-import android.os.Build
 import android.os.Bundle
-import android.view.Gravity
 import android.view.View
-import android.widget.*
+import android.widget.ArrayAdapter
+import android.widget.TextView
+import android.widget.Toast
+import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
+import com.example.microserve.databinding.ActivityEditServiceBinding
+import com.google.android.material.timepicker.MaterialTimePicker
+import com.google.android.material.timepicker.TimeFormat
+import java.util.Locale
 
 class EditServiceActivity : AppCompatActivity() {
 
-    // Dynamic Configuration Map (Kotlin equivalent to the requested TypeScript/Dart map)
+    private lateinit var binding: ActivityEditServiceBinding
+    private var interiorCount = 0
+    private var exteriorCount = 0
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        enableEdgeToEdge()
+
+        binding = ActivityEditServiceBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+
+        applyWindowInsets()
+        setupSpinner()
+        setupLocationSpinners()
+        setupCounters()
+        setupTimePickers()
+        setupDaySelection()
+        setupClickListeners()
+    }
+
+    private fun applyWindowInsets() {
+        SystemUiHelper.setupPurpleHeaderScreen(
+            activity = this,
+            root = binding.main,
+            headerView = binding.headerContainer,
+            footerBar = binding.footerBar.root
+        )
+    }
+
+    // ── Location Data ──────────────────────────────────────────────
+
+    private val locationData = mapOf(
+        "Western" to mapOf(
+            "Colombo" to listOf("Colombo 01", "Colombo 02", "Dehiwala", "Moratuwa", "Maharagama"),
+            "Gampaha" to listOf("Gampaha", "Negombo", "Kelaniya", "Kadawatha"),
+            "Kalutara" to listOf("Kalutara", "Panadura", "Horana", "Matugama")
+        ),
+        "Central" to mapOf(
+            "Kandy" to listOf("Kandy", "Peradeniya", "Katugastota", "Gampola"),
+            "Matale" to listOf("Matale", "Dambulla", "Sigiriya"),
+            "Nuwara Eliya" to listOf("Nuwara Eliya", "Hatton", "Talawakelle")
+        ),
+        "Southern" to mapOf(
+            "Galle" to listOf("Galle", "Hikkaduwa", "Ambalangoda", "Elpitiya"),
+            "Matara" to listOf("Matara", "Weligama", "Dickwella", "Akuressa"),
+            "Hambantota" to listOf("Hambantota", "Tangalle", "Beliatta", "Ambalantota")
+        ),
+        "Northern" to mapOf(
+            "Jaffna" to listOf("Jaffna", "Chavakachcheri", "Point Pedro", "Nallur"),
+            "Kilinochchi" to listOf("Kilinochchi", "Pallai", "Paranthan"),
+            "Mannar" to listOf("Mannar", "Murunkan", "Pesalai"),
+            "Mullaitivu" to listOf("Mullaitivu", "Puthukkudiyiruppu", "Oddusuddan"),
+            "Vavuniya" to listOf("Vavuniya", "Cheddikulam", "Omanthai")
+        ),
+        "Eastern" to mapOf(
+            "Trincomalee" to listOf("Trincomalee", "Kinniya", "Mutur"),
+            "Batticaloa" to listOf("Batticaloa", "Kattankudy", "Eravur"),
+            "Ampara" to listOf("Ampara", "Kalmunai", "Akkaraipattu")
+        ),
+        "North Western" to mapOf(
+            "Kurunegala" to listOf("Kurunegala", "Kuliyapitiya", "Polgahawela", "Narammala"),
+            "Puttalam" to listOf("Puttalam", "Chilaw", "Wennappuwa")
+        ),
+        "North Central" to mapOf(
+            "Anuradhapura" to listOf("Anuradhapura", "Kekirawa", "Tambuttegama", "Eppawala"),
+            "Polonnaruwa" to listOf("Polonnaruwa", "Kaduruwela", "Medirigiriya")
+        ),
+        "Uva" to mapOf(
+            "Badulla" to listOf("Badulla", "Bandarawela", "Haputale", "Mahiyanganaya"),
+            "Monaragala" to listOf("Monaragala", "Wellawaya", "Bibile", "Kataragama")
+        ),
+        "Sabaragamuwa" to mapOf(
+            "Ratnapura" to listOf("Ratnapura", "Balangoda", "Pelmadulla", "Embilipitiya"),
+            "Kegalle" to listOf("Kegalle", "Mawanella", "Warakapola", "Rambukkana")
+        )
+    )
+
+    // ── Category Config ──────────────────────────────────────────
+
     private val categoryConfig = mapOf(
         "Painting" to listOf(
             Pair("Interior Walls", "sq. ft."),
@@ -47,38 +129,188 @@ class EditServiceActivity : AppCompatActivity() {
         )
     )
 
-    private lateinit var measurementContainer: LinearLayout
+    // ── Setup Methods ────────────────────────────────────────────
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-            window.setDecorFitsSystemWindows(false)
-            window.statusBarColor = Color.TRANSPARENT
-        } else {
-            @Suppress("DEPRECATION")
-            window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LAYOUT_STABLE or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-            window.statusBarColor = Color.TRANSPARENT
+    private fun setupSpinner() {
+        val categories = arrayOf("-Select-", "Painting", "Plumbing", "Gardening", "Cleaning", "Electric Work", "Handyman", "Carpentry", "HVAC")
+        val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, categories)
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        binding.categorySpinner.adapter = adapter
+
+        binding.categorySpinner.onItemSelectedListener = object : android.widget.AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(parent: android.widget.AdapterView<*>?, view: View?, position: Int, id: Long) {
+                updateMeasurementLabels(categories[position])
+            }
+
+            override fun onNothingSelected(parent: android.widget.AdapterView<*>?) {}
+        }
+    }
+
+    private fun updateMeasurementLabels(category: String) {
+        if (category == "-Select-") return
+
+        val fields = categoryConfig[category] ?: listOf(Pair("Measurement 1", "unit"), Pair("Measurement 2", "unit"))
+
+        binding.txtInteriorLabel.text = "${fields[0].first}:\nM Points per ${fields[0].second}"
+        binding.txtExteriorLabel.text = "${fields[1].first}:\nM Points per ${fields[1].second}"
+    }
+
+    private fun setupLocationSpinners() {
+        val provinces = listOf("-Select Province-") + locationData.keys.toList()
+
+        val provinceAdapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, provinces)
+        provinceAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        binding.spinnerProvince.adapter = provinceAdapter
+
+        binding.spinnerProvince.onItemSelectedListener = object : android.widget.AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(parent: android.widget.AdapterView<*>?, view: View?, position: Int, id: Long) {
+                val selectedProvince = provinces[position]
+                if (selectedProvince == "-Select Province-") {
+                    updateDistrictSpinner(emptyList())
+                } else {
+                    val districts = locationData[selectedProvince]?.keys?.toList() ?: emptyList()
+                    updateDistrictSpinner(listOf("-Select District-") + districts)
+                }
+            }
+            override fun onNothingSelected(parent: android.widget.AdapterView<*>?) {}
         }
 
-        setContentView(R.layout.activity_edit_service)
+        updateDistrictSpinner(emptyList())
+    }
 
-        val btnBack: ImageView = findViewById(R.id.btnBack)
-        btnBack.setOnClickListener { finish() }
+    private fun updateDistrictSpinner(districts: List<String>) {
+        val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, districts.ifEmpty { listOf("-Select District-") })
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        binding.spinnerDistrict.adapter = adapter
 
-        val btnEdit: Button = findViewById(R.id.btnEdit)
-        btnEdit.setOnClickListener {
-            Toast.makeText(this, "Service Saved!", Toast.LENGTH_SHORT).show()
+        binding.spinnerDistrict.onItemSelectedListener = object : android.widget.AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(parent: android.widget.AdapterView<*>?, view: View?, position: Int, id: Long) {
+                if (districts.isEmpty() || districts[position] == "-Select District-") {
+                    updateCitySpinner(emptyList())
+                    return
+                }
+                val selectedProvince = binding.spinnerProvince.selectedItem.toString()
+                val selectedDistrict = districts[position]
+
+                val cities = locationData[selectedProvince]?.get(selectedDistrict) ?: emptyList()
+                updateCitySpinner(listOf("-Select City-") + cities)
+            }
+            override fun onNothingSelected(parent: android.widget.AdapterView<*>?) {}
+        }
+
+        updateCitySpinner(emptyList())
+    }
+
+    private fun updateCitySpinner(cities: List<String>) {
+        val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, cities.ifEmpty { listOf("-Select City-") })
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        binding.spinnerCity.adapter = adapter
+    }
+
+    private fun setupCounters() {
+        binding.interiorPlus.setOnClickListener {
+            interiorCount++
+            binding.interiorCount.text = interiorCount.toString()
+        }
+        binding.interiorMinus.setOnClickListener {
+            if (interiorCount > 0) {
+                interiorCount--
+                binding.interiorCount.text = interiorCount.toString()
+            }
+        }
+
+        binding.exteriorPlus.setOnClickListener {
+            exteriorCount++
+            binding.exteriorCount.text = exteriorCount.toString()
+        }
+        binding.exteriorMinus.setOnClickListener {
+            if (exteriorCount > 0) {
+                exteriorCount--
+                binding.exteriorCount.text = exteriorCount.toString()
+            }
+        }
+    }
+
+    private fun setupTimePickers() {
+        binding.startTimeBtn.setOnClickListener {
+            showTimePicker { time -> binding.startTimeBtn.text = time }
+        }
+
+        binding.endTimeBtn.setOnClickListener {
+            showTimePicker { time -> binding.endTimeBtn.text = time }
+        }
+    }
+
+    private fun setupDaySelection() {
+        val days = listOf(
+            binding.daySun, binding.dayMon, binding.dayTue,
+            binding.dayWed, binding.dayThu, binding.dayFri, binding.daySat
+        )
+
+        val dayClickListener = View.OnClickListener { view ->
+            view.isSelected = !view.isSelected
+            if (view is TextView) {
+                if (view.isSelected) {
+                    view.setTextColor(getColor(R.color.white))
+                } else {
+                    view.setTextColor(getColor(R.color.black))
+                }
+            }
+        }
+
+        days.forEach { it.setOnClickListener(dayClickListener) }
+    }
+
+    private fun showTimePicker(onTimeSelected: (String) -> Unit) {
+        val picker = MaterialTimePicker.Builder()
+            .setTimeFormat(TimeFormat.CLOCK_12H)
+            .setHour(12)
+            .setMinute(0)
+            .setTitleText("Select Time")
+            .build()
+
+        picker.addOnPositiveButtonClickListener {
+            val hour = if (picker.hour > 12) picker.hour - 12 else if (picker.hour == 0) 12 else picker.hour
+            val amPm = if (picker.hour >= 12) "PM" else "AM"
+            val formattedTime = String.format(Locale.getDefault(), "%02d:%02d %s", hour, picker.minute, amPm)
+            onTimeSelected(formattedTime)
+        }
+
+        picker.show(supportFragmentManager, "TIME_PICKER")
+    }
+
+    // ── Click Listeners ──────────────────────────────────────────
+
+    private fun setupClickListeners() {
+        binding.backBtn.setOnClickListener {
             finish()
         }
 
-        val btnDelete: ImageView = findViewById(R.id.btnDelete)
-        btnDelete.setOnClickListener {
+        binding.btnEdit.setOnClickListener {
+            val category = binding.categorySpinner.selectedItem.toString()
+            val province = binding.spinnerProvince.selectedItem?.toString() ?: ""
+            val district = binding.spinnerDistrict.selectedItem?.toString() ?: ""
+            val city = binding.spinnerCity.selectedItem?.toString() ?: ""
+
+            when {
+                category == "-Select-" -> showToast("Please select a category")
+                province == "-Select Province-" || province.isBlank() -> showToast("Please select a province")
+                district == "-Select District-" || district.isBlank() -> showToast("Please select a district")
+                city == "-Select City-" || city.isBlank() -> showToast("Please select a city")
+                interiorCount == 0 && exteriorCount == 0 -> showToast("Please set at least one measurement")
+                else -> {
+                    showToast("Service Updated Successfully!")
+                    finish()
+                }
+            }
+        }
+
+        binding.btnDelete.setOnClickListener {
             AlertDialog.Builder(this)
                 .setTitle("Delete Service")
                 .setMessage("Are you sure want to delete this service?")
                 .setPositiveButton("Yes") { dialog, _ ->
-                    Toast.makeText(this, "Service Deleted", Toast.LENGTH_SHORT).show()
+                    showToast("Service Deleted")
                     dialog.dismiss()
                     finish()
                 }
@@ -88,98 +320,9 @@ class EditServiceActivity : AppCompatActivity() {
                 .create()
                 .show()
         }
-
-        measurementContainer = findViewById(R.id.measurementContainer)
-        setupSpinner()
     }
 
-    private fun setupSpinner() {
-        val spinnerCategory: Spinner = findViewById(R.id.spinnerCategory)
-        val categories = arrayOf("-Select-", "Painting", "Plumbing", "Gardening", "Cleaning", "Electric Work", "Handyman", "Carpentry", "HVAC")
-        val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, categories)
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-        spinnerCategory.adapter = adapter
-
-        spinnerCategory.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(parent: AdapterView<*>, view: View?, position: Int, id: Long) {
-                val selectedCategory = categories[position]
-                renderMeasurementFields(selectedCategory)
-            }
-            override fun onNothingSelected(parent: AdapterView<*>) {}
-        }
-        
-        spinnerCategory.setSelection(1) // Select Painting by default to match screenshot
-    }
-
-    private fun renderMeasurementFields(category: String) {
-        measurementContainer.removeAllViews()
-
-        val fields = categoryConfig[category] ?: return
-
-        for ((label, unit) in fields) {
-            val fieldLayout = LinearLayout(this).apply {
-                orientation = LinearLayout.HORIZONTAL
-                layoutParams = LinearLayout.LayoutParams(
-                    LinearLayout.LayoutParams.MATCH_PARENT,
-                    LinearLayout.LayoutParams.WRAP_CONTENT
-                ).apply {
-                    topMargin = dpToPx(12)
-                }
-                gravity = Gravity.CENTER_VERTICAL
-            }
-
-            val tvLabel = TextView(this).apply {
-                // Formatting to use 'Points' instead of 'Rs.'
-                text = "$label: Points per $unit"
-                textSize = 13f
-                setTextColor(Color.BLACK)
-                layoutParams = LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1f)
-            }
-
-            var count = 0
-            val tvCount = TextView(this).apply {
-                text = count.toString()
-                textSize = 14f
-                setPadding(dpToPx(16), 0, dpToPx(16), 0)
-                setTextColor(Color.BLACK)
-            }
-
-            val btnMinus = TextView(this).apply {
-                text = "✖"
-                textSize = 14f
-                setTypeface(null, android.graphics.Typeface.BOLD)
-                setTextColor(androidx.core.content.ContextCompat.getColor(this@EditServiceActivity, R.color.purple_nav))
-                setPadding(dpToPx(12), dpToPx(8), dpToPx(12), dpToPx(8))
-                setOnClickListener {
-                    if (count > 0) {
-                        count--
-                        tvCount.text = count.toString()
-                    }
-                }
-            }
-
-            val btnPlus = TextView(this).apply {
-                text = "➕"
-                textSize = 14f
-                setTypeface(null, android.graphics.Typeface.BOLD)
-                setTextColor(androidx.core.content.ContextCompat.getColor(this@EditServiceActivity, R.color.purple_nav))
-                setPadding(dpToPx(12), dpToPx(8), dpToPx(12), dpToPx(8))
-                setOnClickListener {
-                    count++
-                    tvCount.text = count.toString()
-                }
-            }
-
-            fieldLayout.addView(tvLabel)
-            fieldLayout.addView(btnMinus)
-            fieldLayout.addView(tvCount)
-            fieldLayout.addView(btnPlus)
-
-            measurementContainer.addView(fieldLayout)
-        }
-    }
-
-    private fun dpToPx(dp: Int): Int {
-        return (dp * resources.displayMetrics.density).toInt()
+    private fun showToast(message: String) {
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
     }
 }
