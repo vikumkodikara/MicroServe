@@ -45,6 +45,15 @@ class ProfileActivity : AppCompatActivity() {
             ratingBarHeader.rating = provider.rating
             txtProfileLocation.text = provider.location
             txtServices.text = provider.category
+
+            // Load live average rating from Firebase
+            if (provider.id.isNotBlank()) {
+                RatingRepository.getProviderAverage(
+                    providerUid = provider.id,
+                    onSuccess   = { avg, _ -> ratingBarHeader.rating = avg },
+                    onFailure   = { /* keep default */ }
+                )
+            }
             
             // Set initial defaults before load
             txtPrice.text = "Loading price..."
@@ -103,7 +112,9 @@ class ProfileActivity : AppCompatActivity() {
             val intent = Intent(this, ServiceRequestActivity::class.java)
             if (provider != null) {
                 intent.putExtra("PROVIDER_NAME", provider.name)
+                intent.putExtra("PROVIDER_UID", provider.id)
                 intent.putExtra("CATEGORY", provider.category)
+                intent.putExtra("SERVICE_ID", provider.serviceId)
             }
             startActivity(intent)
         }

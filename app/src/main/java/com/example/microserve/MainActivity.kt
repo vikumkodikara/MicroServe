@@ -13,7 +13,12 @@ import android.view.View
 
 class MainActivity : AppCompatActivity() {
 
-    private var ordersListener: com.google.firebase.firestore.ListenerRegistration? = null
+    private var ordersListener:    com.google.firebase.firestore.ListenerRegistration? = null
+    private var requesterListener: com.google.firebase.firestore.ListenerRegistration? = null
+
+    // Merged lists from both provider + customer queries
+    private var providerOrders:  List<ServiceRequest> = emptyList()
+    private var customerOrders:  List<ServiceRequest> = emptyList()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -144,29 +149,48 @@ class MainActivity : AppCompatActivity() {
     private fun loadMyOrders(rvMyOrders: RecyclerView) {
         val uid = com.google.firebase.auth.FirebaseAuth.getInstance().currentUser?.uid ?: return
 
+        Log.d("MyOrders", "Setting up listeners for uid=$uid")
+
+        // Helper to push merged list to adapter
+        fun pushToAdapter(list: List<ServiceRequest>) {
+            val filtered = list
+                .filter { it.status != "declined" }
+                .distinctBy { it.id }
+                .sortedByDescending { it.updatedAt }
+            Log.d("MyOrders", "Merged list size=${filtered.size}, statuses=${filtered.map { it.status }}")
+            val adapter = rvMyOrders.adapter as? MyOrdersAdapter
+            if (adapter == null) {
+                rvMyOrders.adapter = MyOrdersAdapter(filtered, this)
+            } else {
+                adapter.updateOrders(filtered)
+            }
+        }
+
+        // ── Listener 1: provider view (orders sent TO this user as provider) ──
         ordersListener?.remove()
         ordersListener = ServiceRequestRepository.listenByProvider(
             providerUid = uid,
             onUpdate = { jobs ->
-                val activeJobs = jobs.filter {
-                    val status = it.status.lowercase()
-                    status == "pending" || status == "active" ||
-                    status == ServiceRequestStatus.OPEN ||
-                    status == ServiceRequestStatus.IN_PROGRESS
-                }
-                val adapter = rvMyOrders.adapter as? MyOrdersAdapter
-                if (adapter == null) {
-                    rvMyOrders.adapter = MyOrdersAdapter(activeJobs) { selectedOrder ->
-                        val intent = Intent(this, RequestDetailActivity::class.java)
-                        intent.putExtra(RequestDetailActivity.EXTRA_REQUEST_ID, selectedOrder.id)
-                        startActivity(intent)
-                    }
-                } else {
-                    adapter.updateOrders(activeJobs)
-                }
+                Log.d("MyOrders", "[Provider] received ${jobs.size} jobs: ${jobs.map { it.status }}")
+                providerOrders = jobs
+                pushToAdapter(providerOrders + customerOrders)
             },
             onError = { error ->
-                Log.e("MainActivity", "Error loading orders: $error")
+                Log.e("MyOrders", "Provider listener error: $error")
+            }
+        )
+
+        // ── Listener 2: customer view (requests SENT BY this user) ──
+        requesterListener?.remove()
+        requesterListener = ServiceRequestRepository.listenByRequester(
+            requesterUid = uid,
+            onUpdate = { reqs ->
+                Log.d("MyOrders", "[Customer] received ${reqs.size} requests: ${reqs.map { it.status }}")
+                customerOrders = reqs
+                pushToAdapter(providerOrders + customerOrders)
+            },
+            onError = { error ->
+                Log.e("MyOrders", "Customer listener error: $error")
             }
         )
     }
@@ -174,6 +198,7 @@ class MainActivity : AppCompatActivity() {
     override fun onDestroy() {
         super.onDestroy()
         ordersListener?.remove()
+        requesterListener?.remove()
     }
 
     private fun setupBottomNavigation() {
