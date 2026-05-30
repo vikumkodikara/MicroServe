@@ -71,6 +71,10 @@
     <string name="post_ads_add_image_label">Add Image (optional)</string>
     <string name="post_ads_deleted">Post deleted</string>
     <string name="post_ads_updated">Post updated successfully</string>
+    <string name="post_ads_adjust_image_hint">Pinch to zoom / Drag to move</string>
+    <string name="post_ads_cancel_image">Cancel</string>
+    <string name="post_ads_use_photo">Use Photo</string>
+    <string name="post_ads_image_load_failed">Failed to load image</string>
     <string name="pick_location_title">Pin exact location</string>
     <string name="pick_location_subtitle">Mark where you will provide the service</string>
     <string name="pick_location_hint">Tap the map or drag the purple pin to set your exact place</string>
@@ -93,7 +97,7 @@
     <string name="request_not_found">Request not found</string>
     <string name="detail_row_format">%1$s: %2$s</string>
     <string name="status_label">Status</string>
-    <string name="login_required">Please log in first</string>
+    <string name="login_required">Please log in to continue</string>
     <string name="select_bid">Select</string>
     <string name="bid_selected">Selected</string>
     <string name="bid_selected_success">Bid selected</string>
@@ -120,6 +124,7 @@
     <string name="create_request_post">Post</string>
     <string name="create_request_location_pinned">Location pinned on map</string>
     <string name="ok">OK</string>
+    <string name="action_ok">OK</string>
     <string name="request_list_subtitle">By %1$s • %2$s</string>
     <string name="invalid_bid_amount">Enter a valid bid amount in M Points</string>
     <string name="agree_terms_required">Please agree to terms</string>
@@ -204,7 +209,6 @@
     <string name="login_reset_email_sent">Password reset email sent.</string>
     <string name="cd_login_logo">MicroServe logo</string>
     <string name="login_google_not_configured">Google Sign-In is not configured correctly</string>
-    <string name="login_required">Please log in to continue</string>
 
     <!-- Sign up -->
     <string name="sign_up_title">Create Account</string>
@@ -248,7 +252,7 @@
     <string name="dummy_group_name">The Book Club</string>
     <string name="dummy_members_count">25.2k Members</string>
 
-    <!-- Saved Address & Payment Methods Strings -->
+    <!-- Saved Address and Payment Methods -->
     <string name="saved_address_title">Saved Address</string>
     <string name="payment_methods_title">Payment Methods</string>
     <string name="add_new_address">Add New Address</string>
@@ -266,48 +270,8 @@
     <string name="edit">Edit</string>
     <string name="delete_request">Delete Request</string>
     <string name="submit_request">Submit Request</string>
-    <string name="bid_button">Place Bid</string>
-    <string name="purchase_button">Purchase</string>
-    <string name="action_ok">OK</string>
-    <string name="status_label">Status</string>
-    <string name="proceed_payment">Proceed Payment</string>
-    <string name="finished_button">Finished</string>
-    <string name="select_button">Select</string>
-    <string name="ok">OK</string>
 
-    <!-- Post Ads / Edit Post -->
-    <string name="post_ads_add_image_label">Service Image</string>
-    <string name="post_ads_add_image">Add Image</string>
-    <string name="post_ads_change_image">Change Image</string>
-    <string name="post_ads_cancel_image">Cancel</string>
-    <string name="post_ads_use_photo">Use Photo</string>
-    <string name="post_ads_province_label">Province</string>
-    <string name="post_ads_district_label">District</string>
-    <string name="post_ads_city_label">City</string>
-    <string name="pick_on_map">Pick on Map</string>
-    <string name="post_ads_location_not_selected">No location selected</string>
-    <string name="post_ads_previous_posts">Your Previous Advertisements</string>
-    <string name="post_ads_no_previous_posts">No previous advertisements found</string>
-    <string name="post_ads_post_image">Advertisement Image</string>
-    <string name="post_ads_edit">Edit Ad</string>
-    <string name="post_ads_image_save_failed">Failed to save image</string>
-    <string name="post_ads_image_selected">Image selected</string>
-    <string name="post_ads_image_load_failed">Failed to load image</string>
-    <string name="post_ads_deleted">Post deleted successfully</string>
-    <string name="post_ads_updated">Post updated successfully</string>
-    <string name="post_ads_select_option">Please select %1$s</string>
-    <string name="post_ads_location_pending_map">Location pending on map</string>
-    <string name="post_ads_select_location_first">Please select location first</string>
-    <string name="post_ads_select_category">Please select a category</string>
-    <string name="post_ads_enter_provider">Please enter provider name</string>
-    <string name="post_ads_pick_map_location">Please pick location on map</string>
-    <string name="post_ads_enter_contact">Please enter contact number</string>
-    <string name="post_ads_enter_email">Please enter email address</string>
-    <string name="post_ads_posted_title">Post Successful</string>
-    <string name="post_ads_posted_success_stay">Your advertisement has been posted successfully.</string>
-    <string name="post_ads_adjust_image_hint">Pinch to zoom / Drag to move</string>
-
-    <!-- Categories (from main) -->
+    <!-- Categories -->
     <string name="category_label">Service Category</string>
     <string name="section_category">Category</string>
     <string name="category_carpentry">Carpentry</string>
@@ -337,7 +301,6 @@
     <string name="enter_your_name_label">Name</string>
     <string name="title_label">Title</string>
     <string name="contact_label">Contact</string>
-    <string name="location_label">Location</string>
     <string name="description_label">Description</string>
     <string name="title_my_service">My Service</string>
     <string name="service_main_title">Services</string>
@@ -347,80 +310,16 @@
     <string name="section_my_requests">My Requests</string>
     <string name="no_requests_yet">No requests yet</string>
     <string name="services_at_door">Services at Door</string>
-    <string name="service_request_details">Service Request Details</string>
-    <string name="previous_bids">Previous Bids</string>
     <string name="request_a_service">Request a Service</string>
-    <string name="request_not_found">Request not found</string>
     <string name="request_service_title">Request a Service</string>
     <string name="request_service_hint_name">Your name</string>
     <string name="request_service_hint_title">Service title</string>
     <string name="request_service_hint_contact">Contact number</string>
     <string name="request_service_hint_location">Your location</string>
     <string name="request_service_hint_description">Describe your need</string>
-    <string name="age_label_format">Age: %1$d</string>
-    <string name="detail_row_format">%1$s: %2$s</string>
-    <string name="job_label">Job</string>
-    <string name="service_label">Service</string>
-    <string name="bid_price_format">Rs. %1$.2f</string>
-    <string name="purchase_confirmed_toast">Purchase confirmed from %1$s</string>
-    <string name="no_open_requests_category">No open requests in this category</string>
-    <string name="request_list_subtitle">By %1$s · %2$s</string>
-    <string name="create_request_location_pinned">Location pinned</string>
-    <string name="create_request_post_failed">Failed to post request</string>
-    <string name="create_request_posting">Posting...</string>
-    <string name="create_request_post">Post</string>
-    <string name="request_success_updated">Request updated</string>
-    <string name="request_success_added">Request added</string>
-    <string name="create_request_success_title">Success</string>
-    <string name="create_request_failed_title">Failed</string>
-    <string name="invalid_bid_amount">Invalid amount</string>
-    <string name="agree_terms_required">Please agree to terms</string>
-    <string name="cannot_bid_own_request">Cannot bid on own request</string>
-    <string name="request_not_open">Request is not open</string>
-    <string name="bid_placed_success">Bid placed</string>
-    <string name="bid_updated_success">Bid updated</string>
-    <string name="bid_selected_success">Bid selected</string>
-    <string name="select_provider_title">Select Provider</string>
-    <string name="select_provider_message">Select this provider?</string>
-    <string name="bid_selection_restricted">Restricted action</string>
-    <string name="insufficient_points">Insufficient points</string>
-    <string name="provider_selected_payment_success">Payment success</string>
-    <string name="select_bid_first">Select a bid</string>
-    <string name="payment_success">Payment success</string>
-    <string name="transaction_not_found">Transaction not found</string>
-    <string name="job_success_requester">Job finished</string>
-    <string name="request_deleted">Request deleted</string>
-    <string name="view_jobs">View Jobs</string>
-    <string name="transaction_success_title">Success</string>
-    <string name="approve_payout_title">Approve Payout</string>
-    <string name="transfer_money_title">Transfer Money</string>
-    <string name="approve_transfer">Approve</string>
-    <string name="transaction_not_ready">Not ready</string>
-
-    <!-- Job Success and Provider Jobs -->
-    <string name="job_success_default">Job completed successfully!</string>
-    <string name="job_success_provider">Task marked as done successfully.</string>
-    <string name="back_to_home">Back to Home</string>
-    <string name="my_jobs_title">My Jobs</string>
-    <string name="no_provider_jobs">No active jobs assigned to you.</string>
-    <string name="provider_job_subtitle">Client: %1$s | City: %2$s | Points: %3$d</string>
-    <string name="work_done_button">Mark Work Done</string>
-    <string name="work_done_success">Work marked as done!</string>
-
-    <!-- Edit Bid Dialog -->
-    <string name="edit_bid_title">Edit Bid</string>
-    <string name="bid_amount_label">Bid Amount (Rs.)</string>
-    <string name="bid_amount_hint">Enter amount</string>
-    <string name="completion_time_label">Completion Time</string>
-    <string name="completion_time_hint">e.g., 2 hours</string>
-    <string name="edit_bid_cancel">Cancel</string>
-    <string name="edit_bid_save">Save Changes</string>
 
     <!-- Policies -->
     <string name="privacy_policy_title">Privacy Policy</string>
     <string name="terms_of_service_title">Terms of Service</string>
     <string name="i_agree">I agree</string>
-
-    <!-- Accessibility -->
-    <string name="cd_back">Back</string>
 </resources>
