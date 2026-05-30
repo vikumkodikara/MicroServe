@@ -27,6 +27,83 @@ class AdminDashboardActivity : AppCompatActivity() {
         setupQuickActions()
         AdminBottomNavHelper.setup(this, AdminBottomNavHelper.TAB_HOME)
         bindStatsFromFirestore()
+        
+        // Temporarily seed data if empty
+        seedDummyTransactionsIfNeeded()
+    }
+
+    private fun seedDummyTransactionsIfNeeded() {
+        val firestore = FirebaseFirestore.getInstance()
+        firestore.collection(ServiceTransaction.COLLECTION).get().addOnSuccessListener { snapshot ->
+            if (snapshot.isEmpty) {
+                Log.d("AdminDashboard", "Seeding dummy transactions...")
+                val dummyData = listOf(
+                    ServiceTransaction(
+                        id = "seed1",
+                        transactionCode = "TX-301",
+                        requestId = "req1",
+                        requestTitle = "Plumbing Repair",
+                        requesterUid = "userA",
+                        requesterName = "John Doe",
+                        providerUid = "userB",
+                        providerName = "Mike Smith",
+                        providerCode = "P1000001",
+                        amount = 2500,
+                        status = ServiceTransactionStatus.SUCCESS,
+                        paidAt = System.currentTimeMillis() - 86400000,
+                        providerDoneAt = System.currentTimeMillis() - 80000000,
+                        requesterConfirmedAt = System.currentTimeMillis() - 70000000,
+                        adminApprovedAt = System.currentTimeMillis() - 60000000,
+                        createdAt = System.currentTimeMillis() - 90000000
+                    ),
+                    ServiceTransaction(
+                        id = "seed2",
+                        transactionCode = "TX-302",
+                        requestId = "req2",
+                        requestTitle = "Garden Cleanup",
+                        requesterUid = "userC",
+                        requesterName = "Alice Silva",
+                        providerUid = "userD",
+                        providerName = "Green Thumbs",
+                        providerCode = "P1000002",
+                        amount = 4000,
+                        status = ServiceTransactionStatus.SUCCESS,
+                        paidAt = System.currentTimeMillis() - 172800000,
+                        providerDoneAt = System.currentTimeMillis() - 160000000,
+                        requesterConfirmedAt = System.currentTimeMillis() - 150000000,
+                        adminApprovedAt = System.currentTimeMillis() - 140000000,
+                        createdAt = System.currentTimeMillis() - 180000000
+                    ),
+                    ServiceTransaction(
+                        id = "seed3",
+                        transactionCode = "TX-303",
+                        requestId = "req3",
+                        requestTitle = "Electrical Fix",
+                        requesterUid = "userE",
+                        requesterName = "Bob Perera",
+                        providerUid = "userF",
+                        providerName = "ElectricPro",
+                        providerCode = "P1000003",
+                        amount = 1500,
+                        status = ServiceTransactionStatus.ESCROW,
+                        paidAt = System.currentTimeMillis() - 3600000,
+                        providerDoneAt = null,
+                        requesterConfirmedAt = null,
+                        adminApprovedAt = null,
+                        createdAt = System.currentTimeMillis() - 4000000
+                    )
+                )
+
+                firestore.runBatch { batch ->
+                    dummyData.forEach { tx ->
+                        val docRef = firestore.collection(ServiceTransaction.COLLECTION).document(tx.id)
+                        batch.set(docRef, tx.toMap())
+                    }
+                }.addOnSuccessListener {
+                    Log.d("AdminDashboard", "Dummy transactions seeded successfully.")
+                }
+            }
+        }
     }
 
     override fun onResume() {
