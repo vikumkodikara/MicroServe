@@ -80,19 +80,27 @@ object PointsRepository {
         }
 
         firestore.runTransaction { transaction ->
-            val userSnap = transaction.get(userRef(requesterUid))
+            // ── STEP 1: ALL READS FIRST ──────────────────────────────────
+            val userSnap   = transaction.get(userRef(requesterUid))
+            val escrowSnap = transaction.get(escrowRef())
+
+            // ── STEP 2: ALL CALCULATIONS ─────────────────────────────────
             val current = userSnap.getLong(UserProfile.FIELD_CASH_POINTS)?.toInt() ?: 0
             if (current < amount) {
                 throw IllegalStateException("Insufficient M Points balance")
             }
-            transaction.update(userRef(requesterUid), UserProfile.FIELD_CASH_POINTS, current - amount)
-
-            val escrowSnap = transaction.get(escrowRef())
             val escrow = if (escrowSnap.exists()) {
                 escrowSnap.getLong(FIELD_ESCROW_POINTS)?.toInt() ?: 0
             } else {
                 0
             }
+
+            // ── STEP 3: ALL WRITES LAST ──────────────────────────────────
+            transaction.update(
+                userRef(requesterUid),
+                UserProfile.FIELD_CASH_POINTS,
+                current - amount
+            )
             transaction.set(
                 escrowRef(),
                 mapOf(FIELD_ESCROW_POINTS to escrow + amount),
@@ -117,16 +125,20 @@ object PointsRepository {
         }
 
         firestore.runTransaction { transaction ->
-            val escrowSnap = transaction.get(escrowRef())
+            // ── STEP 1: ALL READS FIRST ──────────────────────────────────
+            val escrowSnap   = transaction.get(escrowRef())
+            val providerSnap = transaction.get(userRef(providerUid))
+
+            // ── STEP 2: ALL CALCULATIONS ─────────────────────────────────
             val escrow = escrowSnap.getLong(FIELD_ESCROW_POINTS)?.toInt() ?: 0
             if (escrow < amount) {
                 throw IllegalStateException("Insufficient escrow balance")
             }
-            transaction.update(escrowRef(), FIELD_ESCROW_POINTS, escrow - amount)
-
-            val providerSnap = transaction.get(userRef(providerUid))
             val providerPoints = providerSnap.getLong(UserProfile.FIELD_CASH_POINTS)?.toInt() ?: 0
-            transaction.update(userRef(providerUid), UserProfile.FIELD_CASH_POINTS, providerPoints + amount)
+
+            // ── STEP 3: ALL WRITES LAST ──────────────────────────────────
+            transaction.update(escrowRef(),          FIELD_ESCROW_POINTS,              escrow - amount)
+            transaction.update(userRef(providerUid), UserProfile.FIELD_CASH_POINTS,    providerPoints + amount)
             null
         }.addOnSuccessListener { onSuccess() }
             .addOnFailureListener { onFailure(it.localizedMessage ?: "Payout failed") }
