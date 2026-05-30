@@ -1,9 +1,13 @@
 package com.example.microserve
 
+import android.Manifest
 import android.app.Activity
 import android.app.DatePickerDialog
+import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.graphics.Color
+import android.location.Geocoder
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
@@ -13,14 +17,24 @@ import android.widget.EditText
 import android.widget.ImageView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
+import com.google.android.gms.location.LocationServices
+import com.google.android.gms.location.Priority
+import com.google.android.gms.tasks.CancellationTokenSource
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import java.util.Calendar
+import java.util.Locale
 
 class ServiceRequestActivity : AppCompatActivity() {
 
     private lateinit var etLocation: EditText
     private lateinit var etDate:     EditText
+    private var _autoFilledPhone:    String = ""
+
+    companion object {
+        private const val LOCATION_PERMISSION_REQUEST = 1001
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -37,7 +51,7 @@ class ServiceRequestActivity : AppCompatActivity() {
 
         setContentView(R.layout.activity_service_request)
 
-        // ── Provider info passed from ProfileActivity ─────────────────────────
+        // ── Provider info from previous screen ────────────────────────────────
         val providerName = intent.getStringExtra("PROVIDER_NAME") ?: "Unknown Provider"
         val providerUid  = intent.getStringExtra("PROVIDER_UID")  ?: ""
         val category     = intent.getStringExtra("CATEGORY")      ?: "Service"
@@ -55,24 +69,25 @@ class ServiceRequestActivity : AppCompatActivity() {
         // ── Pre-fill name from session ────────────────────────────────────────
         etName.setText(AppPreferences.getSessionName(this))
 
-        // ── Enhancement 3: Auto-fill phone from Firestore ─────────────────────
+        // ── Auto-fill phone from Firestore ────────────────────────────────────
         autoFillPhoneFromFirestore()
 
-        // ── Enhancement 2: DatePickerDialog on date field click ───────────────
-        val dateClickListener = View.OnClickListener { showDatePicker() }
-        etDate.setOnClickListener(dateClickListener)
+        // ── Auto-detect GPS location via FusedLocationProviderClient ─────────
+        autoDetectCurrentLocation()
+
+        // ── DatePickerDialog on date field tap ────────────────────────────────
+        etDate.setOnClickListener      { showDatePicker() }
         etDate.setOnFocusChangeListener { _, hasFocus -> if (hasFocus) showDatePicker() }
 
-        // ── Enhancement 1: Map picker button ─────────────────────────────────
+        // ── Manual map selection ──────────────────────────────────────────────
         btnSelectMap.setOnClickListener {
             MapPickerActivity.launch(this)
         }
 
-        // ── Send (unchanged logic) ────────────────────────────────────────────
+        // ── Send (logic unchanged) ────────────────────────────────────────────
         btnSend.setOnClickListener {
             val name        = etName.text.toString().trim()
             val location    = etLocation.text.toString().trim()
-            val date        = etDate.text.toString().trim()
             val description = etDescription.text.toString().trim()
 
             if (name.isBlank()) {
@@ -118,63 +133,151 @@ class ServiceRequestActivity : AppCompatActivity() {
         }
     }
 
-    // ── Enhancement 2: DatePickerDialog ──────────────────────────────────────
+    // ─────────────────────────────────────────────────────────────────────────
+    // Enhancement: Auto-detect GPS location with FusedLocationProviderClient
+    // ─────────────────────────────────────────────────────────────────────────
+
+    private fun autoDetectCurrentLocation() {
+        // Check permissions first
+        if (ActivityCompat.checkSelfPermission(
+                this, Manifest.permission.ACCESS_FINE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED &&
+            ActivityCompat.checkSelfPermission(
+                this, Manifest.permission.ACCESS_COARSE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            // Request permission — result handled in onRequestPermissionsResult
+            ActivityCompat.requestPermissions(
+                this,
+                arrayOf(
+                    Manifest.permission.ACCESS_FINE_LOCATION,
+                    Manifest.permission.ACCESS_COARSE_LOCATION
+                ),
+                LOCATION_PERMISSION_REQUEST
+            )
+            return
+        }
+
+        fetchFusedLocation()
+    }
+
+    private fun fetchFusedLocation() {
+        val fusedClient = LocationServices.getFusedLocationProviderClient(this)
+
+        if (ActivityCompat.checkSelfPermission(
+                this, Manifest.permission.ACCESS_FINE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED
+        ) return
+
+        // Use getCurrentLocation for an accurate fresh fix
+        val cts = CancellationTokenSource()
+        fusedClient.getCurrentLocation(Priority.PRIORITY_HIGH_ACCURACY, cts.token)
+            .addOnSuccessListener { location ->
+                if (location != null) {
+                    Log.d("LocationDebug", "GPS fix: lat=${location.latitude} lng=${location.longitude}")
+                    val address = reverseGeocode(location.latitude, location.longitude)
+                    if (!address.isNullOrBlank()) {
+                        etLocation.setText(address)
+                        Log.d("LocationDebug", "Auto-filled location: $address")
+                    }
+                } else {
+                    // No fresh fix — fall back to last known location
+                    Log.w("LocationDebug", "getCurrentLocation returned null, trying lastLocation")
+                    fusedClient.lastLocation.addOnSuccessListener { last ->
+                        if (last != null) {
+                            val address = reverseGeocode(last.latitude, last.longitude)
+                            if (!address.isNullOrBlank()) etLocation.setText(address)
+                        }
+                    }
+                }
+            }
+            .addOnFailureListener { e ->
+                Log.e("LocationDebug", "Location fetch failed: ${e.message}")
+            }
+    }
+
+    /** Android Geocoder: converts lat/lng → readable address string. */
+    private fun reverseGeocode(lat: Double, lng: Double): String? {
+        return try {
+            val geocoder   = Geocoder(this, Locale.getDefault())
+            val addresses  = geocoder.getFromLocation(lat, lng, 1)
+            if (!addresses.isNullOrEmpty()) {
+                val addr = addresses[0]
+                buildString {
+                    addr.subLocality?.let    { append("$it, ") }
+                    addr.locality?.let       { append("$it") }
+                    if (isEmpty()) addr.adminArea?.let { append(it) }
+                }.trimEnd(',', ' ').ifBlank { null }
+            } else null
+        } catch (e: Exception) {
+            Log.e("LocationDebug", "Geocoder error: ${e.message}")
+            null
+        }
+    }
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int, permissions: Array<out String>, grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        if (requestCode == LOCATION_PERMISSION_REQUEST &&
+            grantResults.isNotEmpty() &&
+            grantResults[0] == PackageManager.PERMISSION_GRANTED
+        ) {
+            // Permission granted — now fetch location
+            fetchFusedLocation()
+        } else {
+            Log.w("LocationDebug", "Location permission denied by user")
+        }
+    }
+
+    // ─────────────────────────────────────────────────────────────────────────
+    // DatePickerDialog
+    // ─────────────────────────────────────────────────────────────────────────
 
     private fun showDatePicker() {
         val calendar = Calendar.getInstance()
-        val year  = calendar.get(Calendar.YEAR)
-        val month = calendar.get(Calendar.MONTH)
-        val day   = calendar.get(Calendar.DAY_OF_MONTH)
-
-        DatePickerDialog(this, { _, y, m, d ->
-            // Format: dd/MM/yyyy
-            val formatted = "%02d/%02d/%04d".format(d, m + 1, y)
-            etDate.setText(formatted)
-        }, year, month, day).apply {
-            // Prevent selecting past dates
-            datePicker.minDate = calendar.timeInMillis
+        DatePickerDialog(
+            this,
+            { _, year, month, day ->
+                etDate.setText("%02d/%02d/%04d".format(day, month + 1, year))
+            },
+            calendar.get(Calendar.YEAR),
+            calendar.get(Calendar.MONTH),
+            calendar.get(Calendar.DAY_OF_MONTH)
+        ).apply {
+            datePicker.minDate = calendar.timeInMillis   // block past dates
             show()
         }
     }
 
-    // ── Enhancement 3: Auto-fill phone number from Firestore ─────────────────
+    // ─────────────────────────────────────────────────────────────────────────
+    // Phone auto-fill from Firestore
+    // ─────────────────────────────────────────────────────────────────────────
 
     private fun autoFillPhoneFromFirestore() {
         val uid = FirebaseAuth.getInstance().currentUser?.uid
             ?: AppPreferences.getSessionUid(this)
 
-        if (uid.isBlank()) {
-            Log.w("ServiceRequest", "Cannot auto-fill phone — UID is empty")
-            return
-        }
+        if (uid.isBlank()) return
 
         FirebaseFirestore.getInstance()
-            .collection(UserProfile.COLLECTION)   // "users"
+            .collection(UserProfile.COLLECTION)
             .document(uid)
             .get()
             .addOnSuccessListener { doc ->
-                val phone = doc.getString("phoneNumber")
+                _autoFilledPhone = doc.getString("phoneNumber")
                     ?: doc.getString("phone")
                     ?: ""
-                if (phone.isNotBlank()) {
-                    Log.d("ServiceRequest", "Auto-filled phone: $phone")
-                    // Phone is stored internally; shown in description hint for context
-                    // (no dedicated phone field in this layout per user spec)
-                    // Store it on the activity so Send logic can use it if needed
-                    _autoFilledPhone = phone
-                } else {
-                    Log.d("ServiceRequest", "No phone number found in Firestore document")
-                }
+                Log.d("ServiceRequest", "Auto-filled phone: '$_autoFilledPhone'")
             }
             .addOnFailureListener { e ->
-                Log.e("ServiceRequest", "Failed to fetch phone: ${e.message}")
+                Log.e("ServiceRequest", "Phone fetch error: ${e.message}")
             }
     }
 
-    // Stores auto-filled phone for use in any future send-logic extension
-    private var _autoFilledPhone: String = ""
-
-    // ── Enhancement 1: Handle map result ─────────────────────────────────────
+    // ─────────────────────────────────────────────────────────────────────────
+    // Map picker result handler
+    // ─────────────────────────────────────────────────────────────────────────
 
     @Deprecated("Using legacy startActivityForResult")
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -186,12 +289,7 @@ class ServiceRequestActivity : AppCompatActivity() {
             val lng     = data?.getDoubleExtra(MapPickerActivity.EXTRA_LNG, 0.0) ?: 0.0
 
             Log.d("MapPicker", "Selected: '$address'  lat=$lat  lng=$lng")
-
-            if (address.isNotBlank()) {
-                etLocation.setText(address)
-            } else {
-                etLocation.setText("%.5f, %.5f".format(lat, lng))
-            }
+            etLocation.setText(address.ifBlank { "%.5f, %.5f".format(lat, lng) })
         }
     }
 }

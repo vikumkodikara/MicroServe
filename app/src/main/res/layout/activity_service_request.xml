@@ -90,13 +90,13 @@
                 android:hint="Enter location or pick from map"
                 android:layout_marginTop="8dp" />
 
-            <!-- Map picker button — matches the UI mockup -->
+            <!-- Map picker button — outlined pill style matching the UI mockup -->
             <Button
                 android:id="@+id/btnSelectMap"
                 android:layout_width="match_parent"
                 android:layout_height="48dp"
                 android:layout_marginTop="8dp"
-                android:background="@drawable/bg_card"
+                android:background="@drawable/bg_btn_map_outlined"
                 android:drawableStart="@drawable/ic_location"
                 android:drawablePadding="8dp"
                 android:gravity="center"
@@ -106,6 +106,7 @@
                 android:textColor="@color/purple_nav"
                 android:textSize="14sp"
                 style="?android:attr/borderlessButtonStyle" />
+
 
             <TextView
                 android:layout_width="wrap_content"
