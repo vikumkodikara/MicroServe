@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/login_field_bg"
+    android:orientation="vertical"
+    android:paddingHorizontal="24dp"
+    android:paddingTop="20dp"
+    android:paddingBottom="28dp">
+
+    <!-- Handle bar -->
+    <View
+        android:layout_width="40dp"
+        android:layout_height="4dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginBottom="20dp"
+        android:background="#D8D1E8" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="sans-serif-bold"
+        android:text="Add New Address"
+        android:textColor="@color/admin_text_primary"
+        android:textSize="20sp"
+        android:layout_marginBottom="16dp" />
+
+    <!-- Title Label -->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:text="Address Label / Type"
+        android:textColor="@color/admin_text_primary"
+        android:textSize="14sp"
+        android:textStyle="bold" />
+
+    <!-- Title input field -->
+    <EditText
+        android:id="@+id/et_address_title"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:layout_marginBottom="16dp"
+        android:background="@drawable/edittext_bg"
+        android:fontFamily="sans-serif-medium"
+        android:gravity="center_vertical"
+        android:hint="e.g., Home, Work Office, Mom's House"
+        android:paddingHorizontal="12dp"
+        android:textColor="@color/admin_text_primary"
+        android:textColorHint="@color/admin_text_secondary"
+        android:textSize="16sp" />
+
+    <!-- Detail Label -->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:text="Address details"
+        android:textColor="@color/admin_text_primary"
+        android:textSize="14sp"
+        android:textStyle="bold" />
+
+    <!-- Detail input field -->
+    <EditText
+        android:id="@+id/et_address_detail"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:layout_marginBottom="8dp"
+        android:background="@drawable/edittext_bg"
+        android:fontFamily="sans-serif-medium"
+        android:gravity="center_vertical"
+        android:hint="e.g., No. 12/B, Main Street, Colombo 03"
+        android:paddingHorizontal="12dp"
+        android:textColor="@color/admin_text_primary"
+        android:textColorHint="@color/admin_text_secondary"
+        android:textSize="16sp" />
+
+    <!-- Location Options Row -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="end"
+        android:layout_marginBottom="16dp">
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_use_current"
+            style="@style/Widget.MaterialComponents.Button.TextButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="🎯 Current Location"
+            android:textAllCaps="false"
+            android:textColor="#4a4458"
+            android:textSize="13sp"
+            android:textStyle="bold"
+            android:layout_marginEnd="8dp" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_pick_map"
+            style="@style/Widget.MaterialComponents.Button.TextButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="🗺️ Pick on Map"
+            android:textAllCaps="false"
+            android:textColor="#4a4458"
+            android:textSize="13sp"
+            android:textStyle="bold" />
+    </LinearLayout>
+
+    <!-- Buttons row -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:weightSum="2">
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_cancel"
+            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+            android:layout_width="0dp"
+            android:layout_height="48dp"
+            android:layout_weight="1"
+            android:layout_marginEnd="8dp"
+            android:text="Cancel"
+            android:textAllCaps="false"
+            android:textColor="#4a4458"
+            app:cornerRadius="24dp"
+            app:strokeColor="#4a4458" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_save"
+            android:layout_width="0dp"
+            android:layout_height="48dp"
+            android:layout_weight="1"
+            android:layout_marginStart="8dp"
+            android:text="Save"
+            android:textAllCaps="false"
+            android:textColor="@color/white"
+            app:backgroundTint="#4a4458"
+            app:cornerRadius="24dp" />
+    </LinearLayout>
+
+</LinearLayout>

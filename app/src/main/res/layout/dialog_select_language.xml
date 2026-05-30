@@ -23,7 +23,7 @@
         android:layout_gravity="start"
         android:layout_marginBottom="20dp"
         android:fontFamily="sans-serif-medium"
-        android:text="Select Language"
+        android:text="@string/select_language"
         android:textColor="#1A1A1A"
         android:textSize="18sp" />
 
@@ -42,6 +42,7 @@
         app:strokeWidth="1dp">
 
         <TextView
+            android:id="@+id/tv_english"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
@@ -66,6 +67,7 @@
         app:strokeWidth="1dp">
 
         <TextView
+            android:id="@+id/tv_sinhala"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
@@ -89,6 +91,7 @@
         app:strokeWidth="1dp">
 
         <TextView
+            android:id="@+id/tv_tamil"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"

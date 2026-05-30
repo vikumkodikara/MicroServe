@@ -48,6 +48,7 @@
     <string name="notifications">அறிவிப்புகள்</string>
     <string name="dark_mode">டார்க் மோட்</string>
     <string name="language">மொழி</string>
+    <string name="select_language">மொழியைத் தேர்ந்தெடுக்கவும்</string>
     <string name="get_help">உதவி பெற</string>
     <string name="privacy_policy">தனியுரிமைக் கொள்கை</string>
     <string name="terms_of_services">சேவை விதிமுறைகள்</string>

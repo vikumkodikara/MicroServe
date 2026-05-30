@@ -10,6 +10,7 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
+import com.google.android.material.bottomsheet.BottomSheetDialog
 
 class SettingsFragment : Fragment() {
 
@@ -89,27 +90,60 @@ class SettingsFragment : Fragment() {
     }
 
     private fun showLanguageDialog() {
-        val dialog = android.app.AlertDialog.Builder(requireContext(), com.google.android.material.R.style.Theme_MaterialComponents_Light_Dialog_MinWidth)
-            .create()
+        val context = requireContext()
+        val dialog = BottomSheetDialog(context)
+        val dialogView = LayoutInflater.from(context).inflate(R.layout.dialog_select_language, null)
+        dialog.setContentView(dialogView)
 
-        val dialogView = LayoutInflater.from(requireContext()).inflate(R.layout.dialog_select_language, null)
-        dialog.setView(dialogView)
-        dialog.window?.setBackgroundDrawableResource(android.R.color.transparent)
+        // Make parent wrapper container transparent so custom rounded corners display correctly without clipping
+        val bottomSheet = dialog.findViewById<View>(com.google.android.material.R.id.design_bottom_sheet)
+        bottomSheet?.setBackgroundResource(android.R.color.transparent)
+
+        // Identify current language selection (handle legacy/inconsistent preference storage)
+        val rawLanguage = AppPreferences.getLanguage(context)
+        val currentLanguage = when (rawLanguage) {
+            "en", "English" -> "English"
+            "si", "Sinhala" -> "Sinhala"
+            "ta", "Tamil" -> "Tamil"
+            else -> "English"
+        }
+
+        // Style helper to highlight selected language with premium black background and white text
+        fun highlightButton(cardId: Int, textId: Int, isSelected: Boolean) {
+            val card = dialogView.findViewById<com.google.android.material.card.MaterialCardView>(cardId)
+            val text = dialogView.findViewById<TextView>(textId)
+            if (isSelected) {
+                card.setCardBackgroundColor(android.content.res.ColorStateList.valueOf(Color.BLACK))
+                card.strokeColor = Color.BLACK
+                text.setTextColor(Color.WHITE)
+            } else {
+                card.setCardBackgroundColor(android.content.res.ColorStateList.valueOf(Color.parseColor("#F5F5F5")))
+                card.strokeColor = Color.parseColor("#E0E0E0")
+                text.setTextColor(Color.parseColor("#1A1A1A"))
+            }
+        }
+
+        highlightButton(R.id.btn_english, R.id.tv_english, currentLanguage == "English")
+        highlightButton(R.id.btn_sinhala, R.id.tv_sinhala, currentLanguage == "Sinhala")
+        highlightButton(R.id.btn_tamil, R.id.tv_tamil, currentLanguage == "Tamil")
+
+        fun applyLanguage(language: String, langCode: String) {
+            AppPreferences.setLanguage(context, language)
+            androidx.appcompat.app.AppCompatDelegate.setApplicationLocales(
+                androidx.core.os.LocaleListCompat.forLanguageTags(langCode)
+            )
+            dialog.dismiss()
+            requireActivity().recreate()
+        }
 
         dialogView.findViewById<View>(R.id.btn_english).setOnClickListener {
-            AppPreferences.setLanguage(requireContext(), "en")
-            Toast.makeText(requireContext(), "Language set to English", Toast.LENGTH_SHORT).show()
-            dialog.dismiss()
+            applyLanguage("English", "en")
         }
         dialogView.findViewById<View>(R.id.btn_sinhala).setOnClickListener {
-            AppPreferences.setLanguage(requireContext(), "si")
-            Toast.makeText(requireContext(), "Language set to Sinhala", Toast.LENGTH_SHORT).show()
-            dialog.dismiss()
+            applyLanguage("Sinhala", "si")
         }
         dialogView.findViewById<View>(R.id.btn_tamil).setOnClickListener {
-            AppPreferences.setLanguage(requireContext(), "ta")
-            Toast.makeText(requireContext(), "Language set to Tamil", Toast.LENGTH_SHORT).show()
-            dialog.dismiss()
+            applyLanguage("Tamil", "ta")
         }
 
         dialog.show()
