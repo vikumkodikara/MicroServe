@@ -30,7 +30,8 @@ object ServiceStore {
         val status: String = STATUS_ACTIVE,
         val email: String = "",
         val imageUri: String? = null,
-        val ownerUid: String = ""
+        val ownerUid: String = "",
+        val isActive: Boolean = true
     )
 
     private const val PREF_NAME = "service_store"
@@ -70,7 +71,8 @@ object ServiceStore {
                             status = doc.getString("status") ?: STATUS_ACTIVE,
                             email = doc.getString("email") ?: "",
                             imageUri = doc.getString("imageUri")?.takeIf { it.isNotBlank() },
-                            ownerUid = doc.getString("ownerUid") ?: ""
+                            ownerUid = doc.getString("ownerUid") ?: "",
+                            isActive = doc.getBoolean("isActive") ?: true
                         )
                     } catch (e: Exception) {
                         Log.w(TAG, "Error parsing service doc", e)
@@ -106,7 +108,8 @@ object ServiceStore {
                             status = doc.getString("status") ?: STATUS_ACTIVE,
                             email = doc.getString("email") ?: "",
                             imageUri = doc.getString("imageUri")?.takeIf { it.isNotBlank() },
-                            ownerUid = doc.getString("ownerUid") ?: ""
+                            ownerUid = doc.getString("ownerUid") ?: "",
+                            isActive = doc.getBoolean("isActive") ?: true
                         )
                     } catch (e: Exception) {
                         Log.w(TAG, "Error parsing service doc", e)
@@ -310,6 +313,40 @@ object ServiceStore {
         return changed
     }
 
+    // ── Toggle Active ────────────────────────────────────────────
+
+    fun toggleServiceActive(
+        context: Context,
+        serviceId: String,
+        onComplete: ((Boolean) -> Unit)? = null
+    ) {
+        val current = getAllServices(context)
+        val service = current.firstOrNull { it.id == serviceId }
+        if (service == null) {
+            onComplete?.invoke(false)
+            return
+        }
+
+        val newActiveState = !service.isActive
+        val updated = current.map {
+            if (it.id == serviceId) it.copy(isActive = newActiveState) else it
+        }
+        saveAllLocally(context, updated)
+
+        // Sync to Firestore
+        firestore.collection(COLLECTION)
+            .document(serviceId)
+            .update("isActive", newActiveState)
+            .addOnSuccessListener {
+                Log.d(TAG, "Service isActive toggled to $newActiveState: $serviceId")
+                onComplete?.invoke(true)
+            }
+            .addOnFailureListener {
+                Log.w(TAG, "Failed to toggle service active state", it)
+                onComplete?.invoke(false)
+            }
+    }
+
     // ── Delete ──────────────────────────────────────────────────
 
     fun deleteService(context: Context, serviceId: String): Boolean {
@@ -391,7 +428,8 @@ object ServiceStore {
             status = optString("status", STATUS_ACTIVE),
             email = optString("email", ""),
             imageUri = image,
-            ownerUid = optString("ownerUid", "")
+            ownerUid = optString("ownerUid", ""),
+            isActive = optBoolean("isActive", true)
         )
     }
 
@@ -407,6 +445,7 @@ object ServiceStore {
             put("email", email)
             put("imageUri", imageUri.orEmpty())
             put("ownerUid", ownerUid)
+            put("isActive", isActive)
         }
     }
 
@@ -421,7 +460,8 @@ object ServiceStore {
             "status" to status,
             "email" to email,
             "imageUri" to imageUri.orEmpty(),
-            "ownerUid" to ownerUid
+            "ownerUid" to ownerUid,
+            "isActive" to isActive
         )
     }
 }

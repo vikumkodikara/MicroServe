@@ -101,15 +101,24 @@ class MainActivity : AppCompatActivity() {
             val myServiceItems = myPosts.map { service ->
                 val catalog = CategoryCatalog.findByStoreKey(service.category)
                 val iconRes = catalog?.imageRes ?: R.drawable.img_plumber
-                MyService(service.category, iconRes, true)
+                MyService(
+                    title = service.category,
+                    imageResId = iconRes,
+                    isActive = service.isActive,
+                    serviceId = service.id
+                )
             }.toMutableList()
 
             // Always add the "Add" card at the end
             myServiceItems.add(MyService("Add", 0, false))
 
             val adapter = MyServiceAdapter(myServiceItems) { selectedService ->
-                val intent = Intent(this, EditServiceActivity::class.java)
-                startActivity(intent)
+                if (selectedService.title == "Add") {
+                    startActivity(Intent(this, PostServiceActivity::class.java))
+                } else {
+                    val intent = Intent(this, EditServiceActivity::class.java)
+                    startActivity(intent)
+                }
             }
             rvMyServices.adapter = adapter
         }

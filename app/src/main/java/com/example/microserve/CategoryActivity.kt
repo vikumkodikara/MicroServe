@@ -49,6 +49,7 @@ class CategoryActivity : AppCompatActivity() {
             val categoryServices = allServices
                 .filter { it.category.equals(categoryName, ignoreCase = true) }
                 .filter { it.status == ServiceStore.STATUS_ACTIVE }
+                .filter { it.isActive }
 
             val providers = categoryServices.map { service ->
                 Provider(
