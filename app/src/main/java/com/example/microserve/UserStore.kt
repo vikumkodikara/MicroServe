@@ -110,6 +110,42 @@ object UserStore {
         return newUser
     }
 
+    fun upsertFromProfile(context: Context, profile: UserProfile, type: String = TYPE_REQUESTER): User {
+        val current = getAllUsers(context).toMutableList()
+        val byUid = current.indexOfFirst { it.id == profile.uid }
+        val byEmail = current.indexOfFirst { it.email.equals(profile.email, ignoreCase = true) }
+
+        val synced = User(
+            id = profile.uid,
+            name = profile.name.ifBlank { "Unknown User" },
+            email = profile.email,
+            phone = profile.phone,
+            type = type,
+            status = STATUS_ACTIVE,
+            createdAt = profile.createdAt,
+            cashPoints = profile.cashPoints
+        )
+
+        when {
+            byUid >= 0 -> current[byUid] = current[byUid].copy(
+                name = synced.name,
+                email = synced.email,
+                phone = synced.phone,
+                cashPoints = synced.cashPoints
+            )
+            byEmail >= 0 -> current[byEmail] = current[byEmail].copy(
+                id = profile.uid,
+                name = synced.name,
+                phone = synced.phone,
+                cashPoints = synced.cashPoints
+            )
+            else -> current.add(0, synced)
+        }
+
+        saveAll(context, current)
+        return synced
+    }
+
     fun updateUserStatus(context: Context, userId: String, newStatus: String): Boolean {
         val current = getAllUsers(context)
         var changed = false

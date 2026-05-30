@@ -28,9 +28,10 @@ data class UserProfile(
         )
     }
 
-    fun toAdminListUser(): UserStore.User {
+    fun toAdminListUser(providerUids: Set<String> = emptySet()): UserStore.User {
         val type = when {
             role.equals(ROLE_ADMIN, ignoreCase = true) -> UserStore.TYPE_ADMIN
+            uid in providerUids -> UserStore.TYPE_PROVIDER
             else -> UserStore.TYPE_REQUESTER
         }
         return UserStore.User(

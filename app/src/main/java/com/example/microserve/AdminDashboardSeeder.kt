@@ -135,10 +135,55 @@ object AdminDashboardSeeder {
         batch.commit()
             .addOnSuccessListener {
                 Log.d(TAG, "Demo transactions seeded")
-                onComplete()
+                writeDemoFeedbacks(onComplete)
             }
             .addOnFailureListener { error ->
                 Log.w(TAG, "Failed to seed demo transactions", error)
+            }
+    }
+
+    private fun writeDemoFeedbacks(onComplete: () -> Unit) {
+        val now = System.currentTimeMillis()
+        val day = 86_400_000L
+
+        val demoFeedbacks = listOf(
+            mapOf(
+                "ownerUid" to "demo-feedback-1",
+                "userName" to "Nimali Peris",
+                "message" to "Quick and professional plumbing service.",
+                "rating" to 5,
+                "createdAt" to now - day * 4
+            ),
+            mapOf(
+                "ownerUid" to "demo-feedback-2",
+                "userName" to "Sarah Silva",
+                "message" to "AC installation was done perfectly.",
+                "rating" to 4,
+                "createdAt" to now - day * 2
+            ),
+            mapOf(
+                "ownerUid" to "demo-feedback-3",
+                "userName" to "Thakshila Jayaweera",
+                "message" to "Garden work exceeded expectations.",
+                "rating" to 5,
+                "createdAt" to now - day
+            )
+        )
+
+        val batch = firestore.batch()
+        demoFeedbacks.forEach { feedback ->
+            val docRef = firestore.collection("feedbacks").document()
+            batch.set(docRef, feedback)
+        }
+
+        batch.commit()
+            .addOnSuccessListener {
+                Log.d(TAG, "Demo feedbacks seeded")
+                onComplete()
+            }
+            .addOnFailureListener { error ->
+                Log.w(TAG, "Failed to seed demo feedbacks", error)
+                onComplete()
             }
     }
 }

@@ -44,6 +44,7 @@ class TransactionsActivity : AppCompatActivity() {
         setupTabs()
         setupRecycler()
         setupBottomNavigation()
+        AdminDashboardSeeder.seedIfNeeded(this)
     }
 
     override fun onStart() {

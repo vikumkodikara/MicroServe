@@ -27,6 +27,7 @@ class UsersActivity : AppCompatActivity() {
     private var currentFilter = FILTER_ALL
     private var usersListener: ListenerRegistration? = null
     private var firestoreUsers: List<UserStore.User> = emptyList()
+    private var providerUids: Set<String> = emptySet()
 
     companion object {
         private const val FILTER_ALL = 0
@@ -51,10 +52,16 @@ class UsersActivity : AppCompatActivity() {
     override fun onStart() {
         super.onStart()
         usersListener?.remove()
+        UserRepository.loadProviderUids(
+            onSuccess = { uids ->
+                providerUids = uids
+                refreshCurrentFilter()
+            }
+        )
         usersListener = UserRepository.listenAllUsers(
             onUpdate = { profiles ->
                 firestoreUsers = profiles
-                    .map { it.toAdminListUser() }
+                    .map { it.toAdminListUser(providerUids) }
                     .filterNot { it.type.equals(UserStore.TYPE_ADMIN, ignoreCase = true) }
                 refreshCurrentFilter()
             },

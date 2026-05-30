@@ -254,19 +254,31 @@ object UserRepository {
             }
     }
 
-    fun syncProfileToUserStore(context: Context, profile: UserProfile) {
-        val existing = UserStore.getAllUsers(context)
-            .firstOrNull { it.email.equals(profile.email, ignoreCase = true) }
+    fun loadProviderUids(
+        onSuccess: (Set<String>) -> Unit,
+        onFailure: () -> Unit = {}
+    ) {
+        firestore.collection("services")
+            .get()
+            .addOnSuccessListener { snapshot ->
+                val uids = snapshot.documents
+                    .mapNotNull { it.getString("ownerUid")?.trim()?.takeIf { uid -> uid.isNotEmpty() } }
+                    .toSet()
+                onSuccess(uids)
+            }
+            .addOnFailureListener {
+                onFailure()
+            }
+    }
 
-        if (existing == null) {
-            UserStore.addUser(
-                context = context,
-                name = profile.name,
-                email = profile.email,
-                phone = profile.phone,
-                type = UserStore.TYPE_REQUESTER
-            )
-        }
+    fun syncProfileToUserStore(context: Context, profile: UserProfile) {
+        if (profile.uid.isBlank()) return
+
+        UserStore.upsertFromProfile(
+            context = context,
+            profile = profile,
+            type = UserStore.TYPE_REQUESTER
+        )
     }
 
     private fun buildProfile(user: FirebaseUser, fallbackName: String?): UserProfile {
