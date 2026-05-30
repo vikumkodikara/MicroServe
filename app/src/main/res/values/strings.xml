@@ -97,7 +97,6 @@
     <string name="request_not_found">Request not found</string>
     <string name="detail_row_format">%1$s: %2$s</string>
     <string name="status_label">Status</string>
-    <string name="login_required">Please log in to continue</string>
     <string name="select_bid">Select</string>
     <string name="bid_selected">Selected</string>
     <string name="bid_selected_success">Bid selected</string>
@@ -210,6 +209,7 @@
     <string name="login_reset_email_sent">Password reset email sent.</string>
     <string name="cd_login_logo">MicroServe logo</string>
     <string name="login_google_not_configured">Google Sign-In is not configured correctly</string>
+    <string name="login_required">Please log in to continue</string>
 
     <!-- Sign up -->
     <string name="sign_up_title">Create Account</string>
@@ -265,7 +265,7 @@
     <string name="card_number">**** **** **** 4589</string>
     <string name="card_expiry">Expires 12/26</string>
 
-    <!-- UI Buttons and Labels -->
+    <!-- UI Buttons and Labels (unique) -->
     <string name="btn_edit">Edit</string>
     <string name="btn_requests">Requests</string>
     <string name="edit">Edit</string>
@@ -297,7 +297,7 @@
     <string name="help_call_hotline">Call Hotline</string>
     <string name="help_live_chat">Live Chat</string>
 
-    <!-- Labels and Titles -->
+    <!-- Request flow labels -->
     <string name="personal_info_title">Personal Info</string>
     <string name="enter_your_name_label">Name</string>
     <string name="title_label">Title</string>

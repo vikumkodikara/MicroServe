@@ -26,6 +26,7 @@ class AdminDashboardActivity : AppCompatActivity() {
         setupWindowInsets()
         setupQuickActions()
         AdminBottomNavHelper.setup(this, AdminBottomNavHelper.TAB_HOME)
+        AdminDashboardSeeder.seedIfNeeded(this)
         bindStatsFromFirestore()
         
         // Temporarily seed data if empty

@@ -9,22 +9,25 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
 import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.microserve.databinding.ActivityUsersBinding
+import com.google.firebase.firestore.ListenerRegistration
 
 /**
  * Admin Users Management screen with tab filtering.
- * Shows All users, Providers, Requesters, Active, Inactive.
+ * Loads registered users from Firestore in real time.
  */
 class UsersActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityUsersBinding
     private lateinit var userAdapter: UserAdapter
     private var currentFilter = FILTER_ALL
+    private var usersListener: ListenerRegistration? = null
+    private var firestoreUsers: List<UserStore.User> = emptyList()
+    private var providerUids: Set<String> = emptySet()
 
     companion object {
         private const val FILTER_ALL = 0
@@ -41,16 +44,38 @@ class UsersActivity : AppCompatActivity() {
 
         setupWindowInsets()
         setupBackButton()
-        initializeSampleDataIfNeeded()
         setupTabButtons()
         setupRecyclerView()
         setupBottomNavigation()
-        loadAllUsers()
     }
 
-    override fun onResume() {
-        super.onResume()
-        refreshCurrentFilter()
+    override fun onStart() {
+        super.onStart()
+        usersListener?.remove()
+        UserRepository.loadProviderUids(
+            onSuccess = { uids ->
+                providerUids = uids
+                refreshCurrentFilter()
+            }
+        )
+        usersListener = UserRepository.listenAllUsers(
+            onUpdate = { profiles ->
+                firestoreUsers = profiles
+                    .map { it.toAdminListUser(providerUids) }
+                    .filterNot { it.type.equals(UserStore.TYPE_ADMIN, ignoreCase = true) }
+                refreshCurrentFilter()
+            },
+            onError = { message ->
+                Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
+                loadLocalFallback()
+            }
+        )
+    }
+
+    override fun onStop() {
+        usersListener?.remove()
+        usersListener = null
+        super.onStop()
     }
 
     private fun setupWindowInsets() {
@@ -65,16 +90,10 @@ class UsersActivity : AppCompatActivity() {
         binding.btnBack.setOnClickListener { finish() }
     }
 
-    private fun initializeSampleDataIfNeeded() {
-        val allUsers = UserStore.getAllUsers(this)
-        if (allUsers.isEmpty()) {
-            // Add sample users for demo
-            UserStore.addUser(this, "Kamal Gunarathne", "kamal@example.com", "+94 70 111 2222", UserStore.TYPE_PROVIDER)
-            UserStore.addUser(this, "Nimali Peris", "nimali@example.com", "+94 71 333 4444", UserStore.TYPE_REQUESTER)
-            UserStore.addUser(this, "Thakshila Jayaweera", "thakshila@example.com", "+94 72 555 6666", UserStore.TYPE_REQUESTER)
-            UserStore.addUser(this, "Sampath Dahanayake", "sampath@example.com", "+94 73 777 8888", UserStore.TYPE_PROVIDER)
-            UserStore.addUser(this, "Sarah Silva", "sarah@example.com", "+94 74 999 0000", UserStore.TYPE_REQUESTER)
-        }
+    private fun loadLocalFallback() {
+        firestoreUsers = UserStore.getAllUsers(this)
+            .filterNot { it.type.equals(UserStore.TYPE_ADMIN, ignoreCase = true) }
+        refreshCurrentFilter()
     }
 
     private fun setupTabButtons() {
@@ -88,13 +107,7 @@ class UsersActivity : AppCompatActivity() {
     private fun setFilter(filter: Int) {
         currentFilter = filter
         updateTabStyles()
-        when (filter) {
-            FILTER_ALL -> loadAllUsers()
-            FILTER_PROVIDERS -> loadProviders()
-            FILTER_REQUESTERS -> loadRequesters()
-            FILTER_ACTIVE -> loadActiveUsers()
-            FILTER_INACTIVE -> loadInactiveUsers()
-        }
+        refreshCurrentFilter()
     }
 
     private fun updateTabStyles() {
@@ -142,29 +155,34 @@ class UsersActivity : AppCompatActivity() {
         binding.rvUsers.adapter = userAdapter
     }
 
-    private fun loadAllUsers() {
-        val users = UserStore.getAllUsers(this)
-        updateList(users, "All Users")
-    }
+    private fun refreshCurrentFilter() {
+        val users = when (currentFilter) {
+            FILTER_ALL -> firestoreUsers
+            FILTER_PROVIDERS -> firestoreUsers.filter {
+                it.type.equals(UserStore.TYPE_PROVIDER, ignoreCase = true)
+            }
+            FILTER_REQUESTERS -> firestoreUsers.filter {
+                it.type.equals(UserStore.TYPE_REQUESTER, ignoreCase = true)
+            }
+            FILTER_ACTIVE -> firestoreUsers.filter {
+                it.status.equals(UserStore.STATUS_ACTIVE, ignoreCase = true)
+            }
+            FILTER_INACTIVE -> firestoreUsers.filter {
+                it.status.equals(UserStore.STATUS_BANNED, ignoreCase = true) ||
+                    it.status.equals(UserStore.STATUS_INACTIVE, ignoreCase = true)
+            }
+            else -> firestoreUsers
+        }
 
-    private fun loadProviders() {
-        val users = UserStore.getProviders(this)
-        updateList(users, "Providers")
-    }
-
-    private fun loadRequesters() {
-        val users = UserStore.getRequesters(this)
-        updateList(users, "Requesters")
-    }
-
-    private fun loadActiveUsers() {
-        val users = UserStore.getActiveUsers(this)
-        updateList(users, "Active Users")
-    }
-
-    private fun loadInactiveUsers() {
-        val users = UserStore.getInactiveUsers(this)
-        updateList(users, "Inactive/Banned Users")
+        val label = when (currentFilter) {
+            FILTER_ALL -> "All Users"
+            FILTER_PROVIDERS -> "Providers"
+            FILTER_REQUESTERS -> "Requesters"
+            FILTER_ACTIVE -> "Active Users"
+            FILTER_INACTIVE -> "Inactive/Banned Users"
+            else -> "Users"
+        }
+        updateList(users, label)
     }
 
     private fun updateList(users: List<UserStore.User>, label: String) {
@@ -177,10 +195,6 @@ class UsersActivity : AppCompatActivity() {
             binding.emptyState.visibility = View.GONE
         }
         userAdapter.updateItems(users)
-    }
-
-    private fun refreshCurrentFilter() {
-        setFilter(currentFilter)
     }
 
     private fun setupBottomNavigation() {
@@ -204,7 +218,6 @@ class UsersActivity : AppCompatActivity() {
         bubbleIcon.setImageResource(R.drawable.ic_nav_profile)
     }
 
-    // ── User Adapter ────────────────────────────────────────────────────
     inner class UserAdapter(
         private var items: List<UserStore.User>,
         private val onUserClick: (UserStore.User) -> Unit
@@ -229,7 +242,6 @@ class UsersActivity : AppCompatActivity() {
             holder.tvEmail.text = item.email
             holder.tvStatus.text = item.status
 
-            // Set status badge color
             val statusBg = when (item.status) {
                 UserStore.STATUS_ACTIVE -> R.drawable.active_tag_bg
                 UserStore.STATUS_BANNED -> R.drawable.delete_user_button_bg

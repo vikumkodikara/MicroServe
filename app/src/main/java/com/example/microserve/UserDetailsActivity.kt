@@ -46,23 +46,37 @@ class UserDetailsActivity : AppCompatActivity() {
             val type = getStringExtra("USER_TYPE") ?: "User"
             val status = getStringExtra("USER_STATUS") ?: "Active"
 
-            val freshUser = userId?.let { UserStore.getUserById(this@UserDetailsActivity, it) }
-            val cashPoints = freshUser?.cashPoints ?: 0
-
             binding.tvUserName.text = userName ?: "Unknown"
             binding.tvUserEmail.text = email
             binding.tvUserPhone.text = phone
             binding.tvUserType.text = type
             binding.tvUserStatus.text = status
-            binding.tvUserCashPoints.text = cashPoints.toString()
 
-            // Set status badge background color
             val statusBg = when (status) {
                 "Active" -> R.drawable.active_tag_bg
                 "Banned" -> R.drawable.delete_user_button_bg
                 else -> R.drawable.tab_inactive_bg
             }
             binding.tvUserStatus.setBackgroundResource(statusBg)
+
+            val localUser = userId?.let { UserStore.getUserById(this@UserDetailsActivity, it) }
+            if (localUser != null) {
+                binding.tvUserCashPoints.text = localUser.cashPoints.toString()
+            } else {
+                userId?.let { uid ->
+                    UserRepository.getProfileById(
+                        uid = uid,
+                        onSuccess = { profile ->
+                            binding.tvUserCashPoints.text = profile.cashPoints.toString()
+                        },
+                        onFailure = {
+                            binding.tvUserCashPoints.text = "0"
+                        }
+                    )
+                } ?: run {
+                    binding.tvUserCashPoints.text = "0"
+                }
+            }
         }
     }
 

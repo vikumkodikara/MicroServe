@@ -28,6 +28,24 @@ data class UserProfile(
         )
     }
 
+    fun toAdminListUser(providerUids: Set<String> = emptySet()): UserStore.User {
+        val type = when {
+            role.equals(ROLE_ADMIN, ignoreCase = true) -> UserStore.TYPE_ADMIN
+            uid in providerUids -> UserStore.TYPE_PROVIDER
+            else -> UserStore.TYPE_REQUESTER
+        }
+        return UserStore.User(
+            id = uid,
+            name = name.ifBlank { "Unknown User" },
+            email = email,
+            phone = phone,
+            type = type,
+            status = UserStore.STATUS_ACTIVE,
+            createdAt = createdAt,
+            cashPoints = cashPoints
+        )
+    }
+
     companion object {
         const val COLLECTION = "users"
 
