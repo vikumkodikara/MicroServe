@@ -18,6 +18,23 @@ class BillActivity : AppCompatActivity() {
 
     private var requestListener: ListenerRegistration? = null
 
+    /**
+     * Resolves the current user's UID using three layers:
+     *  1. FirebaseAuth.currentUser  (normal case)
+     *  2. AppPreferences session    (fallback if Auth hasn't restored yet)
+     *  3. Empty string              (triggers login-required guard)
+     */
+    private fun resolveUid(): String {
+        val firebaseUid = FirebaseAuth.getInstance().currentUser?.uid ?: ""
+        if (firebaseUid.isNotBlank()) {
+            Log.d("AuthDebug", "UID from FirebaseAuth: $firebaseUid")
+            return firebaseUid
+        }
+        val sessionUid = AppPreferences.getSessionUid(this)
+        Log.w("AuthDebug", "FirebaseAuth returned null — falling back to AppPreferences uid='$sessionUid'")
+        return sessionUid
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -46,7 +63,9 @@ class BillActivity : AppCompatActivity() {
         val providerName = intent.getStringExtra("PROVIDER_NAME") ?: "Unknown Provider"
         val category     = intent.getStringExtra("CATEGORY")      ?: "Service"
 
-        val uid = FirebaseAuth.getInstance().currentUser?.uid ?: ""
+        // Log auth state at startup so we can diagnose null-uid issues
+        val startupUid = resolveUid()
+        Log.d("AuthDebug", "BillActivity started — uid='$startupUid' requestId='$requestId'")
 
         // Fallback display while loading
         txtBillProvider.text    = "Service Provider: $providerName"
@@ -66,7 +85,7 @@ class BillActivity : AppCompatActivity() {
             if (transactionId.isNotBlank()) {
                 loadFromTransaction(transactionId, txtBillProvider, txtBillService,
                     txtBillDescription, txtBillClient, txtBillTotal,
-                    chkPaid, chkComplete, btnNext, uid)
+                    chkPaid, chkComplete, btnNext, resolveUid())
             }
             return
         }
@@ -91,18 +110,27 @@ class BillActivity : AppCompatActivity() {
                 chkPaid.isChecked     = isPaid
                 chkComplete.isChecked = isComplete
 
-                val isRequester = uid == request.requesterUid
-                val isProvider  = uid == request.acceptedProviderUid
+                // ── Resolve UID fresh on every snapshot update ───────────────────────
+                // This avoids the stale-null problem when FirebaseAuth restores async.
+                val currentUid  = resolveUid()
+                val isRequester = currentUid == request.requesterUid
+                val isProvider  = currentUid == request.acceptedProviderUid
 
-                // ── Pay button (customer only, when approved & not yet paid) ─────────
+                Log.d("AuthDebug", "Snapshot update — currentUid='$currentUid' " +
+                    "requesterUid='${request.requesterUid}' " +
+                    "providerUid='${request.acceptedProviderUid}' " +
+                    "status='${request.status}' " +
+                    "isRequester=$isRequester isProvider=$isProvider")
+
+                // ── Pay button (customer only, when bid selected & not yet paid) ──────
                 if (isRequester && request.status == ServiceRequestStatus.BID_SELECTED) {
                     btnNext.visibility = View.VISIBLE
                     btnNext.text       = "Pay Now"
                     btnNext.setOnClickListener {
-                        handlePayment(request, uid)
+                        handlePayment(request, currentUid)
                     }
                 }
-                // ── Complete button (provider when paid) ──────────────────────────────
+                // ── Complete button (provider when paid) ──────────────────────────
                 else if (isProvider && request.status == ServiceRequestStatus.IN_PROGRESS) {
                     btnNext.visibility = View.VISIBLE
                     btnNext.text       = "Mark Complete"
@@ -110,7 +138,7 @@ class BillActivity : AppCompatActivity() {
                         markProviderDone(request)
                     }
                 }
-                // ── Confirm Complete (customer when provider marked done) ─────────────
+                // ── Confirm Complete (customer when provider marked done) ────────────
                 else if (isRequester && request.status == ServiceRequestStatus.PROVIDER_DONE) {
                     btnNext.visibility = View.VISIBLE
                     btnNext.text       = "Confirm & Rate"
@@ -118,7 +146,7 @@ class BillActivity : AppCompatActivity() {
                         confirmAndRate(request)
                     }
                 }
-                // ── Navigate to Rating after fully confirmed ──────────────────────────
+                // ── Navigate to Rating after fully confirmed ─────────────────────
                 else if (isRequester && (request.status == ServiceRequestStatus.REQUESTER_CONFIRMED ||
                                          request.status == ServiceRequestStatus.ADMIN_APPROVED)) {
                     btnNext.visibility = View.VISIBLE
