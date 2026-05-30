@@ -63,6 +63,12 @@ class BillActivity : AppCompatActivity() {
         val providerName = intent.getStringExtra("PROVIDER_NAME") ?: "Unknown Provider"
         val category     = intent.getStringExtra("CATEGORY")      ?: "Service"
 
+        // ── Intent verification: print raw extras so we can spot null/empty IDs ──
+        Log.d("DEBUG_ID", "Intent extras — REQUEST_ID raw  : '${intent.getStringExtra("REQUEST_ID")}'")
+        Log.d("DEBUG_ID", "Intent extras — requestId final : '$requestId'")
+        Log.d("DEBUG_ID", "Intent extras — PROVIDER_NAME   : '$providerName'")
+        Log.d("DEBUG_ID", "Intent extras — CATEGORY        : '$category'")
+
         // Log auth state at startup so we can diagnose null-uid issues
         val startupUid = resolveUid()
         Log.d("AuthDebug", "BillActivity started — uid='$startupUid' requestId='$requestId'")
@@ -170,20 +176,21 @@ class BillActivity : AppCompatActivity() {
         )
     }
 
-    // ── Payment flow — Cloud Function 'processPayment' ──────────────────────
+    // ── Payment flow — pre-check existence, then Cloud Function 'processPayment' ──
 
     private fun handlePayment(request: ServiceRequest, uid: String) {
-        // The authoritative customer UID comes from the ServiceRequest document itself.
-        // This survives any FirebaseAuth timing edge-case.
         val customerId = request.requesterUid.ifBlank { uid }
         val providerId = request.acceptedProviderUid
         val cost       = request.acceptedPoints
+        val requestId  = request.id
 
-        Log.d("AuthCheck", "User ID: ${com.google.firebase.auth.FirebaseAuth.getInstance().currentUser?.uid ?: "(no firebase user)"}")
-        Log.d("PaymentDebug", "Pay Now — requestId='${request.id}' customerId='$customerId' providerId='$providerId' cost=$cost")
+        // ── LOG 1: ID at the exact moment Pay Now is clicked ─────────────────────
+        Log.d("DEBUG_ID",     "Processing Request ID: $requestId")
+        Log.d("AuthCheck",    "User ID: ${com.google.firebase.auth.FirebaseAuth.getInstance().currentUser?.uid ?: "(no firebase user)"}")
+        Log.d("PaymentDebug", "Pay Now — customerId='$customerId' providerId='$providerId' cost=$cost")
 
-        if (request.id.isBlank()) {
-            Log.e("PaymentDebug", "requestId is BLANK — cannot proceed")
+        if (requestId.isBlank()) {
+            Log.e("DEBUG_ID", "requestId is BLANK — cannot proceed")
             Toast.makeText(this, "Error: request ID is missing. Please reopen this bill.", Toast.LENGTH_LONG).show()
             return
         }
@@ -194,39 +201,78 @@ class BillActivity : AppCompatActivity() {
 
         val btnNext: Button = findViewById(R.id.btnNext)
         btnNext.isEnabled = false
-        btnNext.text      = "Processing…"
+        btnNext.text      = "Verifying…"
 
-        // ── Call processPayment Cloud Function ──────────────────────────────
-        // Runs with Admin SDK server-side — no PERMISSION_DENIED possible.
-        CloudFunctions.processPayment(
-            requestId  = request.id,
-            customerId = customerId,
-            providerId = providerId,
-            cost       = cost,
-            onSuccess  = { transactionId ->
-                runOnUiThread {
-                    btnNext.isEnabled = true
-                    Log.d("PaymentDebug", "Payment success — transactionId=$transactionId")
-                    Toast.makeText(
-                        this,
-                        "Payment successful! $cost M Points held in escrow.",
-                        Toast.LENGTH_SHORT
-                    ).show()
-                    // Real-time snapshot listener will refresh the UI automatically
+        // ── PRE-CHECK: Verify the Firestore document exists before calling the function ──
+        // Collection: ServiceRequest.COLLECTION = "service_requests" (exact, case-sensitive)
+        // NOTE: The collection is 'service_requests' (lowercase), NOT 'ServiceRequests'.
+        //       This matches the constant defined in ServiceRequest.kt.
+        com.google.firebase.firestore.FirebaseFirestore.getInstance()
+            .collection(ServiceRequest.COLLECTION)   // → "service_requests"
+            .document(requestId)
+            .get()
+            .addOnSuccessListener { snapshot ->
+                if (!snapshot.exists()) {
+                    // Document missing in Firestore — show clear error
+                    Log.e("DEBUG_ID", "PRE-CHECK FAILED: document '$requestId' does NOT exist in '${ServiceRequest.COLLECTION}'")
+                    runOnUiThread {
+                        btnNext.isEnabled = true
+                        btnNext.text      = "Pay Now"
+                        Toast.makeText(
+                            this,
+                            "Request record missing in database. Please go back and reopen.",
+                            Toast.LENGTH_LONG
+                        ).show()
+                    }
+                    return@addOnSuccessListener
                 }
-            },
-            onFailure  = { error ->
+
+                // Document confirmed to exist — proceed to Cloud Function
+                Log.d("DEBUG_ID", "PRE-CHECK PASSED: document '$requestId' found in '${ServiceRequest.COLLECTION}'")
+                Log.d("DEBUG_ID", "Document status field = '${snapshot.getString("status")}'")
+
+                runOnUiThread { btnNext.text = "Processing…" }
+
+                // ── Call processPayment Cloud Function ───────────────────────────
+                // Admin SDK on the server — bypasses all Firestore security rules.
+                CloudFunctions.processPayment(
+                    requestId  = requestId,
+                    customerId = customerId,
+                    providerId = providerId,
+                    cost       = cost,
+                    onSuccess  = { transactionId ->
+                        runOnUiThread {
+                            btnNext.isEnabled = true
+                            Log.d("PaymentDebug", "Payment success — transactionId=$transactionId")
+                            Toast.makeText(
+                                this,
+                                "Payment successful! $cost M Points held in escrow.",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                            // Real-time snapshot listener refreshes the UI automatically
+                        }
+                    },
+                    onFailure  = { error ->
+                        runOnUiThread {
+                            btnNext.isEnabled = true
+                            btnNext.text      = "Pay Now"
+                            Log.e("PaymentDebug", "Cloud Function error: $error")
+                            Toast.makeText(this, error, Toast.LENGTH_LONG).show()
+                            if (error.contains("Insufficient", ignoreCase = true)) {
+                                startActivity(Intent(this, WalletActivity::class.java))
+                            }
+                        }
+                    }
+                )
+            }
+            .addOnFailureListener { e ->
+                Log.e("DEBUG_ID", "PRE-CHECK network error: ${e.message}")
                 runOnUiThread {
                     btnNext.isEnabled = true
                     btnNext.text      = "Pay Now"
-                    Log.e("PaymentDebug", "Payment failed: $error")
-                    Toast.makeText(this, error, Toast.LENGTH_LONG).show()
-                    if (error.contains("Insufficient", ignoreCase = true)) {
-                        startActivity(Intent(this, WalletActivity::class.java))
-                    }
+                    Toast.makeText(this, "Network error: ${e.localizedMessage}", Toast.LENGTH_SHORT).show()
                 }
             }
-        )
     }
 
     // ── Provider marks job done ───────────────────────────────────────────────
