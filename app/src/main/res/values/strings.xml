@@ -71,6 +71,10 @@
     <string name="post_ads_add_image_label">Add Image (optional)</string>
     <string name="post_ads_deleted">Post deleted</string>
     <string name="post_ads_updated">Post updated successfully</string>
+    <string name="post_ads_adjust_image_hint">Pinch to zoom / Drag to move</string>
+    <string name="post_ads_cancel_image">Cancel</string>
+    <string name="post_ads_use_photo">Use Photo</string>
+    <string name="post_ads_image_load_failed">Failed to load image</string>
     <string name="pick_location_title">Pin exact location</string>
     <string name="pick_location_subtitle">Mark where you will provide the service</string>
     <string name="pick_location_hint">Tap the map or drag the purple pin to set your exact place</string>
@@ -119,6 +123,7 @@
     <string name="create_request_post">Post</string>
     <string name="create_request_location_pinned">Location pinned on map</string>
     <string name="ok">OK</string>
+    <string name="action_ok">OK</string>
     <string name="request_list_subtitle">By %1$s • %2$s</string>
     <string name="invalid_bid_amount">Enter a valid bid amount in M Points</string>
     <string name="agree_terms_required">Please agree to terms</string>
@@ -248,7 +253,7 @@
     <string name="dummy_group_name">The Book Club</string>
     <string name="dummy_members_count">25.2k Members</string>
 
-    <!-- Saved Address & Payment Methods Strings -->
+    <!-- Saved Address and Payment Methods -->
     <string name="saved_address_title">Saved Address</string>
     <string name="payment_methods_title">Payment Methods</string>
     <string name="add_new_address">Add New Address</string>
@@ -266,13 +271,6 @@
     <string name="edit">Edit</string>
     <string name="delete_request">Delete Request</string>
     <string name="submit_request">Submit Request</string>
-    <string name="action_ok">OK</string>
-
-    <!-- Post Ads extras -->
-    <string name="post_ads_cancel_image">Cancel</string>
-    <string name="post_ads_use_photo">Use Photo</string>
-    <string name="post_ads_image_load_failed">Failed to load image</string>
-    <string name="post_ads_adjust_image_hint">Pinch to zoom / Drag to move</string>
 
     <!-- Categories -->
     <string name="category_label">Service Category</string>

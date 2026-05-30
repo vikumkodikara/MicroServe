@@ -144,12 +144,32 @@
         android:id="@+id/tv_insufficient"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp"
+        android:layout_marginBottom="8dp"
         android:gravity="center"
         android:text="⚠️ Insufficient M Points! Please top up your wallet."
         android:textColor="#FFB347"
         android:textSize="13sp"
         android:visibility="gone" />
+
+    <FrameLayout
+        android:id="@+id/btn_top_up_wallet"
+        android:layout_width="match_parent"
+        android:layout_height="44dp"
+        android:layout_marginBottom="16dp"
+        android:background="@drawable/wallet_input_bg"
+        android:clickable="true"
+        android:focusable="true"
+        android:visibility="gone">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:fontFamily="sans-serif-bold"
+            android:text="@string/bill_top_up_wallet"
+            android:textColor="#FFD700"
+            android:textSize="14sp" />
+    </FrameLayout>
 
     <!-- Buttons row -->
     <LinearLayout

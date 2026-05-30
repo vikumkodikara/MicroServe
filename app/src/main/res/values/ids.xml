@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <item name="navTabRequest" type="id" />
+    <item name="navTabService" type="id" />
+    <item name="navTabHome" type="id" />
+    <item name="navTabPost" type="id" />
+    <item name="navTabProfile" type="id" />
+</resources>

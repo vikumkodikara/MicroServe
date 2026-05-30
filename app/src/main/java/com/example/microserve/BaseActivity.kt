@@ -18,33 +18,14 @@ abstract class BaseActivity : AppCompatActivity() {
     }
 
     private fun setupBottomNavigation() {
-        // Find the navigation views. If they are null, it means the current
-        // activity doesn't include the bottom navigation layout, which is fine.
-        val navRequest = findViewById<View>(R.id.navTabRequest)
-        val navService = findViewById<View>(R.id.navTabService)
-        val navHome = findViewById<View>(R.id.navTabHome)
-        val navPost = findViewById<View>(R.id.navTabPost)
-        val navProfile = findViewById<View>(R.id.navTabProfile)
-
-        if (navHome == null) return // Bottom nav not present in this layout
-
-        navRequest?.setOnClickListener { navigateTo(RequestMainActivity::class.java) }
-        navService?.setOnClickListener { navigateTo(MainActivity::class.java) } // MainActivity acts as Service tab
-        navHome?.setOnClickListener { navigateTo(Homepage::class.java) }
-        navPost?.setOnClickListener { navigateTo(PostAdsActivity::class.java) }
-        navProfile?.setOnClickListener { navigateTo(PersonalInfoActivity::class.java) }
-    }
-
-    private fun navigateTo(targetActivity: Class<out AppCompatActivity>) {
-        // Prevent launching the same activity if we are already on it
-        if (this::class.java == targetActivity) return
-
-        val intent = Intent(this, targetActivity)
-        // Ensure activities don't stack infinitely
-        intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
-        startActivity(intent)
-        // Removes transition animation for a smoother tab-switch feel
-        @Suppress("DEPRECATION")
-        overridePendingTransition(0, 0)
+        val currentTabName = when (this) {
+            is RequestMainActivity -> HomeBottomNavHelper.TAB_REQUEST
+            is MainActivity -> HomeBottomNavHelper.TAB_SERVICE
+            is Homepage -> HomeBottomNavHelper.TAB_HOME
+            is PostAdsActivity -> HomeBottomNavHelper.TAB_POST
+            is PersonalInfoActivity -> HomeBottomNavHelper.TAB_PROFILE
+            else -> HomeBottomNavHelper.TAB_HOME
+        }
+        HomeBottomNavHelper.setup(this, currentTabName)
     }
 }
