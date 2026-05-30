@@ -124,12 +124,20 @@ class EditProfileActivity : AppCompatActivity() {
                     profile = updated,
                     onSuccess = {
                         AppPreferences.saveSession(this, updated)
+                        // Upload profile photo to Firebase Storage
+                        if (ProfilePhotoHelper.hasLocalPhoto(this) && uid.isNotBlank()) {
+                            ProfilePhotoHelper.uploadToFirebaseStorage(this, uid)
+                        }
                         setResult(RESULT_OK)
                         Toast.makeText(this, R.string.profile_saved, Toast.LENGTH_SHORT).show()
                         finish()
                     },
                     onFailure = { message ->
                         AppPreferences.saveSession(this, updated)
+                        // Still attempt upload even if Firestore profile save had issues
+                        if (ProfilePhotoHelper.hasLocalPhoto(this) && uid.isNotBlank()) {
+                            ProfilePhotoHelper.uploadToFirebaseStorage(this, uid)
+                        }
                         setResult(RESULT_OK)
                         Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
                         finish()

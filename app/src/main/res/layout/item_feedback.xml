@@ -50,7 +50,7 @@
                 android:layout_height="22dp"
                 android:layout_marginEnd="4dp"
                 android:src="@android:drawable/btn_star_big_on"
-                app:tint="@color/admin_stat_orange" />
+                app:tint="@color/star_gold" />
 
             <ImageView
                 android:id="@+id/star2"
@@ -58,7 +58,7 @@
                 android:layout_height="22dp"
                 android:layout_marginEnd="4dp"
                 android:src="@android:drawable/btn_star_big_on"
-                app:tint="@color/admin_stat_orange" />
+                app:tint="@color/star_gold" />
 
             <ImageView
                 android:id="@+id/star3"
@@ -66,7 +66,7 @@
                 android:layout_height="22dp"
                 android:layout_marginEnd="4dp"
                 android:src="@android:drawable/btn_star_big_on"
-                app:tint="@color/admin_stat_orange" />
+                app:tint="@color/star_gold" />
 
             <ImageView
                 android:id="@+id/star4"
@@ -74,14 +74,14 @@
                 android:layout_height="22dp"
                 android:layout_marginEnd="4dp"
                 android:src="@android:drawable/btn_star_big_on"
-                app:tint="@color/admin_stat_orange" />
+                app:tint="@color/star_gold" />
 
             <ImageView
                 android:id="@+id/star5"
                 android:layout_width="22dp"
                 android:layout_height="22dp"
                 android:src="@android:drawable/btn_star_big_on"
-                app:tint="@color/admin_purple_light" />
+                app:tint="@color/star_unselected" />
 
         </LinearLayout>
 

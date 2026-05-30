@@ -121,7 +121,7 @@ object TransactionStore {
 
     fun formatAmount(amount: Double): String {
         val formatter = DecimalFormat("#,##0.00")
-        return "Rs. ${formatter.format(amount)}"
+        return "${formatter.format(amount)} M Points"
     }
 
     fun estimateAmountForService(category: String): Double {

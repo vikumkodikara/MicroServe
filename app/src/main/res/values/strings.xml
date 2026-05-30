@@ -9,11 +9,7 @@
     <string name="home_ad_label_name_value">Name: %1$s</string>
     <string name="home_ad_label_contact_value">Contact: %1$s</string>
     <string name="home_ad_title_format">%1$s Service</string>
-    <string name="post_ads_image_crop_hint">Choose a photo, then pinch and drag inside the square</string>
-    <string name="post_ads_adjust_image_hint">Pinch to zoom · drag to move</string>
-    <string name="post_ads_use_photo">OK</string>
-    <string name="post_ads_cancel_image">Cancel</string>
-    <string name="post_ads_image_load_failed">Could not load the selected image. Please try another photo.</string>
+    <string name="post_ads_image_crop_hint">Photo fills the card — tap again to change image</string>
     <string name="home_job_service_format">Service: %1$s</string>
     <string name="home_job_name_format">Name: %1$s</string>
     <string name="home_job_contact_format">Contact: %1$s</string>
@@ -45,6 +41,8 @@
     <string name="post_ads_district_label">District</string>
     <string name="post_ads_city_label">City</string>
     <string name="post_ads_select_option">-Select-</string>
+    <string name="post_ads_select_service">Select a service</string>
+    <string name="post_ads_select_service_hint">Plumbing, Gardening, Cleaning &amp; more</string>
     <string name="pick_on_map">Select exact place on map</string>
     <string name="post_ads_location_not_selected">Select province, district, and city first</string>
     <string name="post_ads_location_pending_map">%1$s, %2$s, %3$s — tap map to pin exact place</string>
@@ -73,6 +71,10 @@
     <string name="post_ads_add_image_label">Add Image (optional)</string>
     <string name="post_ads_deleted">Post deleted</string>
     <string name="post_ads_updated">Post updated successfully</string>
+    <string name="post_ads_adjust_image_hint">Pinch to zoom / Drag to move</string>
+    <string name="post_ads_cancel_image">Cancel</string>
+    <string name="post_ads_use_photo">Use Photo</string>
+    <string name="post_ads_image_load_failed">Failed to load image</string>
     <string name="pick_location_title">Pin exact location</string>
     <string name="pick_location_subtitle">Mark where you will provide the service</string>
     <string name="pick_location_hint">Tap the map or drag the purple pin to set your exact place</string>
@@ -95,7 +97,7 @@
     <string name="request_not_found">Request not found</string>
     <string name="detail_row_format">%1$s: %2$s</string>
     <string name="status_label">Status</string>
-    <string name="login_required">Please log in first</string>
+    <string name="login_required">Please log in to continue</string>
     <string name="select_bid">Select</string>
     <string name="bid_selected">Selected</string>
     <string name="bid_selected_success">Bid selected</string>
@@ -122,6 +124,7 @@
     <string name="create_request_post">Post</string>
     <string name="create_request_location_pinned">Location pinned on map</string>
     <string name="ok">OK</string>
+    <string name="action_ok">OK</string>
     <string name="request_list_subtitle">By %1$s • %2$s</string>
     <string name="invalid_bid_amount">Enter a valid bid amount in M Points</string>
     <string name="agree_terms_required">Please agree to terms</string>
@@ -198,13 +201,12 @@
     <string name="login_error_username">Please enter your email</string>
     <string name="login_error_invalid_email">Please enter a valid email</string>
     <string name="login_error_password">Please enter your password</string>
-    <string name="login_error_wrong_credentials">Wrong email or password. Use the same email you registered with and check for typos.</string>
-    <string name="login_error_no_account">No account found for this email. Please sign up first.</string>
-    <string name="login_error_generic">Could not sign in. Please try again.</string>
-    <string name="login_error_user_disabled">This account has been disabled. Contact support.</string>
-    <string name="login_error_too_many_requests">Too many attempts. Please wait a moment and try again.</string>
-    <string name="login_reset_email_sent">Password reset link sent to your email</string>
-    <string name="login_reset_email_failed">Could not send reset email. Check the address and try again.</string>
+    <string name="login_error_wrong_credentials">Wrong email or password.</string>
+    <string name="login_error_no_account">No account found for this email.</string>
+    <string name="login_error_generic">Could not sign in.</string>
+    <string name="login_error_user_disabled">This account has been disabled.</string>
+    <string name="login_error_too_many_requests">Too many attempts. Please try again later.</string>
+    <string name="login_reset_email_sent">Password reset email sent.</string>
     <string name="cd_login_logo">MicroServe logo</string>
     <string name="login_google_not_configured">Google Sign-In is not configured correctly</string>
 
@@ -219,9 +221,8 @@
     <string name="sign_up_error_email">Please enter your e-mail</string>
     <string name="sign_up_error_mobile">Please enter your mobile number</string>
     <string name="sign_up_error_password_length">Password must be at least 6 characters</string>
-    <string name="sign_up_success_title">Account created</string>
-    <string name="sign_up_success">Your account was created. Please log in with your email and password.</string>
-    <string name="action_ok">OK</string>
+    <string name="sign_up_success_title">Success</string>
+    <string name="sign_up_success">Account created successfully</string>
     <string name="sign_up_error_email_in_use">Email already in use</string>
     <string name="sign_up_error_check_email">Error checking email</string>
     <string name="sign_up_error_network">Network error</string>
@@ -251,7 +252,7 @@
     <string name="dummy_group_name">The Book Club</string>
     <string name="dummy_members_count">25.2k Members</string>
 
-    <!-- Saved Address & Payment Methods Strings -->
+    <!-- Saved Address and Payment Methods -->
     <string name="saved_address_title">Saved Address</string>
     <string name="payment_methods_title">Payment Methods</string>
     <string name="add_new_address">Add New Address</string>
@@ -263,15 +264,15 @@
     <string name="card_number">**** **** **** 4589</string>
     <string name="card_expiry">Expires 12/26</string>
 
-    <!-- UI Buttons and Labels (from main) -->
+    <!-- UI Buttons and Labels -->
     <string name="btn_edit">Edit</string>
     <string name="btn_requests">Requests</string>
     <string name="edit">Edit</string>
     <string name="delete_request">Delete Request</string>
     <string name="submit_request">Submit Request</string>
 
-    <!-- Categories (from main) -->
-    <string name="category_label">Category</string>
+    <!-- Categories -->
+    <string name="category_label">Service Category</string>
     <string name="section_category">Category</string>
     <string name="category_carpentry">Carpentry</string>
     <string name="category_cleaning">Cleaning</string>
@@ -283,50 +284,42 @@
     <string name="category_painting">Painting</string>
     <string name="category_plumbing">Plumbing</string>
 
-    <!-- Get Help Screen -->
-    <string name="help_subtitle">Hello %1$s, how can we help ?</string>
+    <!-- Help Section -->
     <string name="get_help_title">Get Help</string>
-    <string name="search_help_hint">Search for issues, topics.....</string>
+    <string name="help_subtitle">How can we help you?</string>
+    <string name="search_help_hint">Search help</string>
     <string name="help_bookings">Bookings</string>
     <string name="help_payments">Payments</string>
     <string name="help_account">Account</string>
     <string name="help_safety_legal">Safety &amp; Legal</string>
-    <string name="help_still_need">Still need help ?</string>
-    <string name="help_live_chat">Live Chat</string>
+    <string name="help_still_need">Still need help?</string>
     <string name="help_call_hotline">Call Hotline</string>
+    <string name="help_live_chat">Live Chat</string>
 
-    <!-- Labels and Titles (from main) -->
+    <!-- Labels and Titles -->
     <string name="personal_info_title">Personal Info</string>
-    <string name="enter_your_name_label">Enter Your name</string>
+    <string name="enter_your_name_label">Name</string>
     <string name="title_label">Title</string>
     <string name="contact_label">Contact</string>
     <string name="description_label">Description</string>
-    <string name="title_my_service">Service Provider</string>
-    <string name="service_main_title">Service\nProvider</string>
+    <string name="title_my_service">My Service</string>
+    <string name="service_main_title">Services</string>
     <string name="title_requests">Requests</string>
-    <string name="my_service_requests">Service Request</string>
-    <string name="request_main_title">Service\nRequest</string>
+    <string name="request_main_title">Requests</string>
+    <string name="my_service_requests">My Service Requests</string>
     <string name="section_my_requests">My Requests</string>
     <string name="no_requests_yet">No requests yet</string>
     <string name="services_at_door">Services at Door</string>
+    <string name="request_a_service">Request a Service</string>
+    <string name="request_service_title">Request a Service</string>
+    <string name="request_service_hint_name">Your name</string>
+    <string name="request_service_hint_title">Service title</string>
+    <string name="request_service_hint_contact">Contact number</string>
+    <string name="request_service_hint_location">Your location</string>
+    <string name="request_service_hint_description">Describe your need</string>
 
-    <!-- Privacy Policy Screen -->
+    <!-- Policies -->
     <string name="privacy_policy_title">Privacy Policy</string>
-    <string name="i_agree">I Agree</string>
-
-    <!-- Terms of Service Screen -->
     <string name="terms_of_service_title">Terms of Service</string>
-
-    <!-- Request Service Screen -->
-    <string name="request_a_service">Request a\nService</string>
-    <string name="request_service_title">Request Service</string>
-    <string name="request_service_subtitle">Describe what you need — providers can respond</string>
-    <string name="request_service_hint_name">Enter your name</string>
-    <string name="request_service_hint_title">Enter service title</string>
-    <string name="request_service_hint_contact">Enter contact number</string>
-    <string name="request_service_hint_location">Enter your area or address</string>
-    <string name="request_service_hint_description">Describe your service request…</string>
-    <string name="request_service_select_category">Please select a service category</string>
-    <string name="request_service_fill_required">Please fill all required fields</string>
-    <string name="request_service_success">Service request submitted successfully!</string>
+    <string name="i_agree">I agree</string>
 </resources>
